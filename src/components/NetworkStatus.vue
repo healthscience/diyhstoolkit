@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <header>Network Status</header>
+    <div id="connection-status">{{ msg }}</div>
   </div>
 </template>
 
