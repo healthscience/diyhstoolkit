@@ -40,7 +40,7 @@
               @click="close"
               aria-label="Close modal"
             >
-              Close me!
+              Close
             </button>
           </slot>
         </footer>
@@ -52,9 +52,20 @@
 <script>
 export default {
   name: 'modal',
+  computed: {
+  },
+  mounted () {
+  },
+  data () {
+    return {
+    }
+  },
   methods: {
     close () {
       this.$emit('close')
+    },
+    routerStatus () {
+      // console.log(this.$router.currentRoute)
     }
   }
 }
@@ -79,6 +90,7 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-direction: column;
+    width: 80%;
   }
 
   .modal-header,

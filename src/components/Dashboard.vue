@@ -8,6 +8,14 @@
 export default {
   name: 'dashboard-page',
   components: {},
+  created () {
+  },
+  mounted () {
+  },
+  data () {
+    return {
+    }
+  },
   methods: {
   }
 }

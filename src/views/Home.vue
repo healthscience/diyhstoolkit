@@ -1,67 +1,41 @@
 <template>
   <div class="home">
-    <div class="help-info">
-      <button type="button" class="btn" @click="showModal">
-        Help
-      </button>
-      <help-modal v-show="isModalVisible" @close="closeModal">
-        <template v-slot:header>
-        <!-- The code below goes into the header slot -->
-          Start learning for dynamic help
-        </template>
-        <template v-slot:body>
-        <!-- The code below goes into the header slot -->
-          Help on starting using the toolkit and connecting to the network.
-        </template>
-      </help-modal>
-    </div>
     <div class="diy-settings">
       <div class="diy-info" id="diy-summary">
-        <header>Welcome, the DIY HealthScience toolkit</header>
-        <p>1. learn & particpate in Experiments</p>
+        <header>Welcome, to the DIY HealthScience Toolkit</header>
+        <p>1. join a N=1 network experiment</p>
         <p>2. contribute science</p>
-        <p>3. build your own dashboards</p>
+        <p>3. build dashboards</p>
       </div>
       <div class="diy-info" id="diy-introduction">
         <NetworkStatus msg="not connected"></NetworkStatus>
       </div>
     </div>
     <div class="network-experiments">
-      <div class="experiment-info" id="start-network-experiment">
-        <img alt="start" src="../assets/start.png">
-        Start Network Experiment Wizard Devices, Data, Compute, Toolkit visualisation
-      </div>
-      <div class="experiment-info" id="live-network-experiment">
-        Live Network
-      </div>
+      <!-- <start-network-experiment></start-network-experiment> -->
+      <live-network></live-network>
     </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import NetworkStatus from '@/components/NetworkStatus.vue'
-import HelpModal from '@/components/HelpModal.vue'
+import NetworkStatus from '@/components/home/NetworkStatus.vue'
+// import StartNetworkExperiment from '@/components/home/StartNetworkExperiment.vue'
+import LiveNetwork from '@/components/home/LiveNetwork.vue'
 
 export default {
   name: 'home',
   components: {
-    HelpModal,
-    NetworkStatus
+    NetworkStatus,
+    // StartNetworkExperiment,
+    LiveNetwork
   },
   data () {
     return {
-      isModalVisible: false
     }
   },
   methods: {
-    showModal () {
-      console.log('show modal click')
-      this.isModalVisible = true
-    },
-    closeModal () {
-      this.isModalVisible = false
-    }
   }
 }
 </script>
@@ -84,16 +58,15 @@ export default {
   float: left;
 }
 
+#diy-summary header {
+  font-weight: bold;
+}
+
 /* Clear floats after the columns */
 .diy-settings:after {
   content: "";
   display: table;
   clear: both;
-}
-
-.experiment-info {
-  border: 1px solid grey;
-  width: 80%;
 }
 
 .network-info {
