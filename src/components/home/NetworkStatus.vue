@@ -2,6 +2,9 @@
   <div class="hello">
     <header>Network Status</header>
     <div id="connection-status">{{ msg }}</div>
+    <button type="button" class="btn" @click="connectNetwork()">Connect</button>
+    <button type="button" class="btn" @click="connectNetwork()">New account</button>
+    <button type="button" class="btn" @click="connectNetwork()">Self sign-in</button>
   </div>
 </template>
 
@@ -10,6 +13,11 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  methods: {
+    connectNetwork () {
+      console.log('connect to network')
+    }
   }
 }
 </script>

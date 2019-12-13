@@ -2,7 +2,7 @@
   <div class="home">
     <div class="diy-settings">
       <div class="diy-info" id="diy-summary">
-        <header>Welcome, to the DIY HealthScience Toolkit</header>
+        <header>{{ $t('welcome') }} to the DIY HealthScience Toolkit</header>
         <p>1. join a N=1 network experiment</p>
         <p>2. contribute science</p>
         <p>3. build dashboards</p>
@@ -12,7 +12,6 @@
       </div>
     </div>
     <div class="network-experiments">
-      <!-- <start-network-experiment></start-network-experiment> -->
       <live-network></live-network>
     </div>
   </div>

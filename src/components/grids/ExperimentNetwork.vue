@@ -108,9 +108,6 @@ export default {
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
     joinExperiment (expCNRL, KBundle) {
-      console.log('join experiment wizard or modal?')
-      console.log(expCNRL)
-      console.log(KBundle)
       this.joinKBundle = KBundle
       this.isModalJoinVisible = true
     },
@@ -122,6 +119,13 @@ export default {
 </script>
 
 <style>
+
+#live-network-grid {
+  border: 0px solid blue;
+  margin: auto;
+  text-align: center;
+}
+
 body {
   font-family: Helvetica Neue, Arial, sans-serif;
   font-size: 14px;

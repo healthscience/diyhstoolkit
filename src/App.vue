@@ -15,13 +15,17 @@
         </button>
       </div>
       <div class="toolkit-settings" id="help-info">
+        <header class="toolbar-top">CALE</header>
+        <button type="button" class="btn" @click="caleAIStatus">
+          {{ statusCALE.text }}
+        </button>
         <button type="button" class="btn" @click="showModal">
-          Help
+          {{ $t('help') }}
         </button>
         <help-modal v-show="isModalVisible" @close="closeModal">
           <template v-slot:header>
           <!-- The code below goes into the header slot -->
-            Help for -- {{ helpContext }}
+            {{ $t('help') }} for -- {{ helpContext }}
           </template>
           <template v-slot:body>
           <!-- The code below goes into the header slot -->
@@ -50,13 +54,16 @@ export default {
       languages: [
         { flag: 'en', language: 'en', title: 'English' },
         { flag: 'zh', language: 'zh', title: '普通话' } // 普通话
-      ]
+      ],
+      statusCALE:
+      {
+        text: 'off',
+        active: false
+      }
     }
   },
   methods: {
     showModal () {
-      console.log('show modal click')
-      console.log(this.$router.currentRoute)
       this.isModalVisible = true
       this.helpContext = this.$router.currentRoute.name
     },
@@ -64,10 +71,11 @@ export default {
       this.isModalVisible = false
     },
     changeLocale (locale) {
-      console.log('language')
-      console.log(locale)
-      console.log(this.$i18n)
       this.$i18n.locale = locale
+    },
+    caleAIStatus () {
+      console.log('CALE on or off')
+      this.statusCALE.text = 'ON'
     }
   }
 }
@@ -95,11 +103,16 @@ export default {
 }
 
 .toolkit-settings {
-  border: 1px solid grey;
   float: right;
+}
+
+.toolbar-top {
+  display: inline-block;
+  padding-right: 10px;
 }
 
 img {
   width: 120px;
 }
+
 </style>

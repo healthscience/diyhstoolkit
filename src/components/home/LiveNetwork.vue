@@ -1,16 +1,26 @@
 <template>
     <div class="experiment-info" id="live-network-experiment">
-      <!-- demo root element -->
-      <div id="demo">
-        <form id="search">
-          Search <input name="query" v-model="searchQuery">
-        </form>
-        <experiment-network
-          :experiments="gridData"
-          :columns="gridColumns"
-          :filter-key="searchQuery">
-        </experiment-network>
+      <div class="live-network-header">
+        <ul>
+          <li class="network-toolbar">
+            Live network experiments
+          </li>
+          <li class="network-toolbar">
+            <form id="search">
+              Search <input name="query" v-model="searchQuery">
+            </form>
+          </li>
+          <li class="network-toolbar">
+            <button type="button" class="btn" @click="newExperiment()">new</button>
+          </li>
+        </ul>
       </div>
+      <experiment-network
+        class="experiment-info"
+        :experiments="gridData"
+        :columns="gridColumns"
+        :filter-key="searchQuery">
+      </experiment-network>
     </div>
 </template>
 
@@ -35,6 +45,11 @@ export default {
         { id: 4, name: 'Food', description: 'Intermitting fasting optimisation', time: 8000, dapps: 'DripX', device: 'Yes', join: 'JOIN' }
       ]
     }
+  },
+  methods: {
+    newExperiment () {
+      console.log('start new n=1 network experiment')
+    }
   }
 }
 </script>
@@ -42,7 +57,14 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .experiment-info {
-  border: 1px solid grey;
-  width: 80%;
+  border: 0px solid grey;
+  width: 98%;
+  margin: auto;
+  text-align: center;
+}
+
+.network-toolbar {
+  display: inline-block;
+  padding-left: 10px;
 }
 </style>
