@@ -30,6 +30,15 @@
           <template v-slot:body>
           <!-- The code below goes into the header slot -->
             {{ helpContext }} sections are:
+            <div class="help-section">
+              Custom content for page help button clicked
+            </div>
+            <div class="help-section">
+              What is CALE?  An AI that helps manage the toolkit.
+            </div>
+            <div class="help-section">
+              Where is the data store?  Data is secured on the SAFEnetwork.
+            </div>
           </template>
         </help-modal>
       </div>
@@ -74,7 +83,6 @@ export default {
       this.$i18n.locale = locale
     },
     caleAIStatus () {
-      console.log('CALE on or off')
       this.statusCALE.text = 'ON'
     }
   }
@@ -115,4 +123,8 @@ img {
   width: 120px;
 }
 
+.help-section {
+  margin: 4em;
+  text-align: left;
+}
 </style>

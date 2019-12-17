@@ -6,6 +6,9 @@
         aria-labelledby="modalTitle"
         aria-describedby="modalDescription"
       >
+      <div>
+        <img id="setup-flow" alt="new experiment setup status" src="../../assets/newn1experiment.png">
+      </div>
         <header
           class="modal-header"
           id="modalTitle"
@@ -162,6 +165,10 @@ export default {
 .network-dashboard {
   margin: 20px;
   border: 1px solid blue;
+}
+
+#setup-flow {
+  width: 600px;
 }
 
 </style>

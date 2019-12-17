@@ -4,8 +4,8 @@
       <div class="diy-info" id="diy-summary">
         <header>{{ $t('welcome') }} to the DIY HealthScience Toolkit</header>
         <p>1. join a N=1 network experiment</p>
-        <p>2. contribute science</p>
-        <p>3. build dashboards</p>
+        <p>2. build scientific evidence</p>
+        <p>3. personalise dashboards</p>
       </div>
       <div class="diy-info" id="diy-introduction">
         <NetworkStatus msg="not connected"></NetworkStatus>

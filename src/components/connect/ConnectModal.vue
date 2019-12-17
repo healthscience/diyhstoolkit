@@ -11,46 +11,28 @@
           id="modalTitle"
         >
           <slot name="header">
-            This is the default tile!
-
-            <button
-              type="button"
-              class="btn-close"
-              @click="close"
-              aria-label="Close modal"
-            >
-              x
-            </button>
+            Network Connection
           </slot>
         </header>
-        <section
-          class="modal-body"
-          id="modalDescription"
-        >
-          <div class="network-experiment">
-            <slot name="body">
-              N=1 network experiment summary
+        <form>
+          <div id="form-title">
+            <slot name="title-form">
+              <!-- no default title for form -->
             </slot>
           </div>
-          <div class="network-connect">
-            <slot name="connect">
-              I'm the default body!
+          <div id="form-input">
+            <slot name="input-form">
+              <!-- No default input -->
             </slot>
           </div>
-          <div class="network-dashboard">
-            <slot name="dashboard">
-              I'm the default body!
-            </slot>
-          </div>
-          <div id="join-submit">
-            <slot name="submit-join">
+          <div id="form-submit">
+            <slot name="submit-form">
               <!-- no default button -->
             </slot>
           </div>
-        </section>
+        </form>
         <footer class="modal-footer">
           <slot name="footer">
-
             <button
               type="button"
               class="btn-green"
@@ -68,7 +50,7 @@
 
 <script>
 export default {
-  name: 'modal',
+  name: 'connect-modal',
   computed: {
   },
   mounted () {
@@ -80,9 +62,6 @@ export default {
   methods: {
     close () {
       this.$emit('close')
-    },
-    routerStatus () {
-      // console.log(this.$router.currentRoute)
     }
   }
 }
@@ -107,7 +86,7 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    width: 80%;
+    width: 40%;
   }
 
   .modal-header,
@@ -148,20 +127,4 @@ export default {
     border: 1px solid #4AAE9B;
     border-radius: 2px;
   }
-
-.network-experiment {
-  margin: 20px;
-  border: 1px solid blue;
-}
-
-.network-connect {
-  margin: 20px;
-  border: 1px solid blue;
-}
-
-.network-dashboard {
-  margin: 20px;
-  border: 1px solid blue;
-}
-
 </style>

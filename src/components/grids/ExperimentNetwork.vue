@@ -42,7 +42,14 @@
         <template v-slot:dashboard>
           <div>
             DASHBOARD preview - other templates
+            <button type="button" class="btn" @click="viewDashboard">
+              View
+            </button>
+            <img id="preview-width" v-if="previewSeen" alt="dashboard-example" src="../../assets/preview-dashboard.png">
           </div>
+        </template>
+        <template v-slot:submit-join>
+          <button>Yes, join this netwokr experiment</button>
         </template>
       </join-experiment>
     </div>
@@ -71,7 +78,8 @@ export default {
       sortKey: '',
       sortOrders: sortOrders,
       isModalJoinVisible: false,
-      joinKBundle: {}
+      joinKBundle: {},
+      previewSeen: false
     }
   },
   computed: {
@@ -113,6 +121,9 @@ export default {
     },
     closeModalJoin () {
       this.isModalJoinVisible = false
+    },
+    viewDashboard () {
+      this.previewSeen = true
     }
   }
 }
@@ -184,5 +195,9 @@ th.active .arrow {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid #fff;
+}
+
+#preview-width {
+  width: 200px;
 }
 </style>

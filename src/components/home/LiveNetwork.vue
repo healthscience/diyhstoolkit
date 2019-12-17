@@ -12,6 +12,27 @@
           </li>
           <li class="network-toolbar">
             <button type="button" class="btn" @click="newExperiment()">new</button>
+            <new-networkexperiment v-show="isModalNewNetworkExperiment" @close="closeModalNewN1">
+              <template v-slot:header>
+              <!-- The code below goes into the header slot -->
+                NEW N=1 Network Experiment
+              </template>
+              <template v-slot:body>
+              <!-- The code below goes into the header slot -->
+                <header>DOWNLOAD MOBILE APPLICACTION & CONNECT DEVICE</header>
+              </template>
+              <template v-slot:connect>
+                <div> Compatible Devices: </div>
+              </template>
+              <template v-slot:dashboard>
+                <div>
+                Dashboard Layout
+                </div>
+              </template>
+              <template v-slot:submit-join>
+                <button>Submit new N=1 exerpiment to network</button>
+              </template>
+            </new-networkexperiment>
           </li>
         </ul>
       </div>
@@ -26,11 +47,13 @@
 
 <script>
 import ExperimentNetwork from '@/components/grids/ExperimentNetwork.vue'
+import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
 
 export default {
   name: 'LiveNetwork',
   components: {
-    ExperimentNetwork
+    ExperimentNetwork,
+    NewNetworkexperiment
   },
   props: {
   },
@@ -43,12 +66,16 @@ export default {
         { id: 2, name: 'Environment', description: 'air quality', time: 9000, dapps: 'luftdaten.info', device: 'Yes', join: 'JOIN' },
         { id: 3, name: 'Sleep', description: 'How to maximise sleep quality', time: 7000, dapps: 'Gadgetbridge', device: 'Yes', join: 'JOIN' },
         { id: 4, name: 'Food', description: 'Intermitting fasting optimisation', time: 8000, dapps: 'DripX', device: 'Yes', join: 'JOIN' }
-      ]
+      ],
+      isModalNewNetworkExperiment: false
     }
   },
   methods: {
     newExperiment () {
-      console.log('start new n=1 network experiment')
+      this.isModalNewNetworkExperiment = true
+    },
+    closeModalNewN1 () {
+      this.isModalNewNetworkExperiment = false
     }
   }
 }

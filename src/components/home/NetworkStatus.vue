@@ -2,21 +2,67 @@
   <div class="hello">
     <header>Network Status</header>
     <div id="connection-status">{{ msg }}</div>
-    <button type="button" class="btn" @click="connectNetwork()">Connect</button>
-    <button type="button" class="btn" @click="connectNetwork()">New account</button>
-    <button type="button" class="btn" @click="connectNetwork()">Self sign-in</button>
+    <button type="button" class="btn" @click="connectNetwork('connect')">Connect</button>
+    <button type="button" class="btn" @click="connectNetwork('new-connect')">New account</button>
+    <button type="button" class="btn" @click="connectNetwork('self-connect')">Self sign-in</button>
+    <connect-modal v-show="isModalVisible" @close="closeModal">
+      <template v-slot:header>
+      <!-- The code below goes into the header slot -->
+        CONNECT
+      </template>
+      <template v-slot:title-form>
+        {{ connectContext.message }}
+      </template>
+      <template v-slot:input-form>
+        <input v-model="secretPeer" placeholder="secret peer">
+        <input v-model="passwordPeer" placeholder="password">
+      </template>
+      <template v-slot:submit-form>
+        <button>{{ buttonName }}</button>
+      </template>
+    </connect-modal>
   </div>
 </template>
 
 <script>
+import ConnectModal from '@/components/connect/ConnectModal.vue'
+
 export default {
-  name: 'HelloWorld',
+  name: 'Network-Connect',
+  components: {
+    ConnectModal
+  },
   props: {
     msg: String
   },
+  data () {
+    return {
+      isModalVisible: false,
+      connectContext:
+      {
+        message: '',
+        footer: ''
+      },
+      buttonName: 'Connect',
+      secretPeer: '',
+      passwordPeer: ''
+    }
+  },
   methods: {
-    connectNetwork () {
-      console.log('connect to network')
+    connectNetwork (typeConnect) {
+      this.isModalVisible = true
+      if (typeConnect === 'connect') {
+        this.connectContext.message = 'please connect to the network'
+      } else if (typeConnect === 'new-connect') {
+        this.connectContext.message = 'first time new connection setup'
+        this.buttonName = 'Submit'
+      } else if (typeConnect === 'self-connect') {
+        this.connectContext.message = 'Self sign-in'
+        this.buttonName = 'Self Sign-in'
+      }
+    },
+    closeModal () {
+      this.isModalVisible = false
     }
   }
 }
