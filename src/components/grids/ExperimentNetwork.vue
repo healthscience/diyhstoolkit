@@ -69,19 +69,6 @@ export default {
     columns: Array,
     filterKey: String
   },
-  data: function () {
-    var sortOrders = {}
-    this.columns.forEach(function (key) {
-      sortOrders[key] = 1
-    })
-    return {
-      sortKey: '',
-      sortOrders: sortOrders,
-      isModalJoinVisible: false,
-      joinKBundle: {},
-      previewSeen: false
-    }
-  },
   computed: {
     filteredExperiments: function () {
       var sortKey = this.sortKey
@@ -108,6 +95,19 @@ export default {
   filters: {
     capitalize: function (str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
+    }
+  },
+  data: function () {
+    var sortOrders = {}
+    this.columns.forEach(function (key) {
+      sortOrders[key] = 1
+    })
+    return {
+      sortKey: '',
+      sortOrders: sortOrders,
+      isModalJoinVisible: false,
+      joinKBundle: {},
+      previewSeen: false
     }
   },
   methods: {

@@ -15,16 +15,16 @@
         >
           <slot name="header">
             This is the default tile!
-
-            <button
-              type="button"
-              class="btn-close"
-              @click="close"
-              aria-label="Close modal"
-            >
-              x
-            </button>
           </slot>
+
+        <button
+          type="button"
+          class="btn-close"
+          @click="close"
+          aria-label="Close modal"
+        >
+          x
+        </button>
         </header>
         <section
           class="modal-body"

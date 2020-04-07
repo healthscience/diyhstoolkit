@@ -83,7 +83,13 @@ export default {
       this.$i18n.locale = locale
     },
     caleAIStatus () {
-      this.statusCALE.text = 'ON'
+      if (this.statusCALE.active === false) {
+        this.statusCALE.active = true
+        this.statusCALE.text = 'off'
+      } else {
+        this.statusCALE.active = false
+        this.statusCALE.text = 'ON'
+      }
     }
   }
 }

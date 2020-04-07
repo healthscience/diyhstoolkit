@@ -1,4 +1,4 @@
-<template>
+m <template>
     <div class="experiment-info" id="live-network-experiment">
       <div class="live-network-header">
         <ul>
@@ -36,10 +36,17 @@
           </li>
         </ul>
       </div>
-      <experiment-network
+      <experiment-network v-if="peerNXPListlive.data"
         class="experiment-info"
-        :experiments="gridData"
-        :columns="gridColumns"
+        :experiments="peerNXPListlive.data"
+        :columns="peerNXPListlive.columns"
+        :filter-key="searchQuery">
+      </experiment-network>
+      NETWORK
+      <experiment-network
+        class="experiment-info" v-if="networkNXPListlive.data"
+        :experiments="networkNXPListlive.data"
+        :columns="networkNXPListlive.columns"
         :filter-key="searchQuery">
       </experiment-network>
     </div>
@@ -57,16 +64,21 @@ export default {
   },
   props: {
   },
+  computed: {
+    peerNXPListlive: function () {
+      console.log('nxp list')
+      console.log(this.$store.state.experimentList)
+      return this.$store.state.experimentList
+    },
+    networkNXPListlive: function () {
+      console.log('network nxp list')
+      console.log(this.$store.state.NXPexperimentList)
+      return this.$store.state.NXPexperimentList
+    }
+  },
   data () {
     return {
       searchQuery: '',
-      gridColumns: ['id', 'name', 'description', 'time', 'dapps', 'device', 'join'],
-      gridData: [
-        { id: 1, name: 'Exercise', description: 'plan actitivies', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', join: 'JOIN' },
-        { id: 2, name: 'Environment', description: 'air quality', time: 9000, dapps: 'luftdaten.info', device: 'Yes', join: 'JOIN' },
-        { id: 3, name: 'Sleep', description: 'How to maximise sleep quality', time: 7000, dapps: 'Gadgetbridge', device: 'Yes', join: 'JOIN' },
-        { id: 4, name: 'Food', description: 'Intermitting fasting optimisation', time: 8000, dapps: 'DripX', device: 'Yes', join: 'JOIN' }
-      ],
       isModalNewNetworkExperiment: false
     }
   },

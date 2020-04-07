@@ -5,6 +5,7 @@
     <button type="button" class="btn" @click="connectNetwork('connect')">Connect</button>
     <button type="button" class="btn" @click="connectNetwork('new-connect')">New account</button>
     <button type="button" class="btn" @click="connectNetwork('self-connect')">Self sign-in</button>
+    <button type="button" class="btn" @click="connectNetwork('self-testnetwork')">Testnetwork sign-in</button>
     <connect-modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
       <!-- The code below goes into the header slot -->
@@ -14,8 +15,9 @@
         {{ connectContext.message }}
       </template>
       <template v-slot:input-form>
-        <input v-model="secretPeer" placeholder="secret peer">
-        <input v-model="passwordPeer" placeholder="password">
+        <token-reader></token-reader>
+        <input v-model="secretPeer" placeholder="public key">
+        <input v-model="passwordPeer" placeholder="token">
       </template>
       <template v-slot:submit-form>
         <button>{{ buttonName }}</button>
@@ -26,11 +28,13 @@
 
 <script>
 import ConnectModal from '@/components/connect/ConnectModal.vue'
+import TokenReader from '@/components/connect/token-reader.vue'
 
 export default {
   name: 'Network-Connect',
   components: {
-    ConnectModal
+    ConnectModal,
+    TokenReader
   },
   props: {
     msg: String
@@ -59,6 +63,8 @@ export default {
       } else if (typeConnect === 'self-connect') {
         this.connectContext.message = 'Self sign-in'
         this.buttonName = 'Self Sign-in'
+      } else if (typeConnect === 'self-testnetwork') {
+        this.buttonName = 'Testnetwork self-signin'
       }
     },
     closeModal () {
