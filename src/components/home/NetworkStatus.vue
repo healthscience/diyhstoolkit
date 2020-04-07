@@ -15,9 +15,11 @@
         {{ connectContext.message }}
       </template>
       <template v-slot:input-form>
-        <token-reader></token-reader>
-        <input v-model="secretPeer" placeholder="public key">
-        <input v-model="passwordPeer" placeholder="token">
+        <token-reader v-if="connectContext.type === 'testnetwork'"></token-reader>
+        <div id="self-in" v-if="connectContext.type === 'selfsign'">
+          <input v-model="secretPeer" placeholder="public key">
+          <input v-model="passwordPeer" placeholder="token">
+        </div>
       </template>
       <template v-slot:submit-form>
         <button>{{ buttonName }}</button>
@@ -44,6 +46,7 @@ export default {
       isModalVisible: false,
       connectContext:
       {
+        type: '',
         message: '',
         footer: ''
       },
@@ -56,15 +59,22 @@ export default {
     connectNetwork (typeConnect) {
       this.isModalVisible = true
       if (typeConnect === 'connect') {
-        this.connectContext.message = 'please connect to the network'
+        this.connectContext.type = 'connect'
+        this.connectContext.message = 'Anno. connect to network'
+        this.buttonName = 'Annon. connect'
+        this.$store.dispatch('annonconnectNSnetwork')
       } else if (typeConnect === 'new-connect') {
+        this.connectContext.type = 'firsttime'
         this.connectContext.message = 'first time new connection setup'
         this.buttonName = 'Submit'
       } else if (typeConnect === 'self-connect') {
+        this.connectContext.type = 'selfsign'
         this.connectContext.message = 'Self sign-in'
         this.buttonName = 'Self Sign-in'
       } else if (typeConnect === 'self-testnetwork') {
-        this.buttonName = 'Testnetwork self-signin'
+        this.connectContext.type = 'testnetwork'
+        this.connectContext.message = 'TestNetwork'
+        this.buttonName = ''
       }
     },
     closeModal () {

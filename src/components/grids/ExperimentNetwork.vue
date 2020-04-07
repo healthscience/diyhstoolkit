@@ -17,27 +17,28 @@
         <tbody>
           <tr v-for="entry in filteredExperiments" :key="entry.id">
             <td v-for="key in columns" :key="key.id">
-              <div v-if="key !== 'join'">
+              <div v-if="key !== 'action'">
               {{entry[key]}}
               </div>
               <div v-else>
-                <button type="button" class="btn" @click="joinExperiment(entry.id, entry)">{{ entry[key] }}</button>
+                <button type="button" class="btn" @click="actionExperiment(entry.id, entry)">{{ entry[key] }}</button>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
+      <dash-board v-if="isModalDashboardVisible" :shellCNRL="shellID"></dash-board>
       <join-experiment v-show="isModalJoinVisible" @close="closeModalJoin">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
-          N=1 Network Experiment {{ joinKBundle.name }} {{ joinKBundle.description }}
+          N=1 Network Experiment {{ actionKBundle.name }} {{ actionKBundle.description }}
         </template>
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
           <header>DOWNLOAD MOBILE APPLICACTION & CONNECT DEVICE</header>
         </template>
         <template v-slot:connect>
-          <div>Devices required: {{ joinKBundle.dapps }}  Compatible Devices: {{ joinKBundle.device }}</div>
+          <div>Devices required: {{ actionKBundle.dapps }}  Compatible Devices: {{ actionKBundle.device }}</div>
         </template>
         <template v-slot:dashboard>
           <div>
@@ -57,11 +58,13 @@
 </template>
 
 <script>
+import DashBoard from '@/components/experiments/edashBoard.vue'
 import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
 
 export default {
   name: 'ExperimentNetwork',
   components: {
+    DashBoard,
     JoinExperiment
   },
   props: {
@@ -70,6 +73,11 @@ export default {
     filterKey: String
   },
   computed: {
+    NXPstatusData: function () {
+      console.log('state.experimentStatus')
+      console.log(this.$store.state.experimentStatus)
+      return this.$store.state.experimentStatus
+    },
     filteredExperiments: function () {
       var sortKey = this.sortKey
       var filterKey = this.filterKey && this.filterKey.toLowerCase()
@@ -103,10 +111,12 @@ export default {
       sortOrders[key] = 1
     })
     return {
+      shellID: '',
       sortKey: '',
       sortOrders: sortOrders,
+      isModalDashboardVisible: false,
       isModalJoinVisible: false,
-      joinKBundle: {},
+      actionKBundle: {},
       previewSeen: false
     }
   },
@@ -115,9 +125,19 @@ export default {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    joinExperiment (expCNRL, KBundle) {
-      this.joinKBundle = KBundle
-      this.isModalJoinVisible = true
+    actionExperiment (shellCNRL, KBundle) {
+      // view or joing a NXP?
+      console.log('action for experiment???')
+      console.log(shellCNRL)
+      console.log(KBundle)
+      this.shellID = shellCNRL
+      this.actionKBundle = KBundle
+      if (KBundle.action === 'View') {
+        this.$store.dispatch('actionDashboardState', shellCNRL)
+        this.isModalDashboardVisible = true
+      } else {
+        this.isModalJoinVisible = true
+      }
     },
     closeModalJoin () {
       this.isModalJoinVisible = false

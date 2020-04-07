@@ -25,24 +25,13 @@ export default new Vuex.Store({
       state.authorised = true
     },
     setExperimentList: (state, inVerified) => {
-      let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'join']
+      let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
       let gridData = [
-        { id: 1, name: 'Exercise', description: 'plan actitivies', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', join: 'View' }
+        { id: 'cnrl-848388553323', name: 'Exercise', description: 'plan actitivies', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'View' }
       ]
-      let gridData2 = [
-        { id: 1, name: 'Exercise', description: 'plan actitivies', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', join: 'JOIN' },
-        { id: 2, name: 'Environment', description: 'air quality', time: 9000, dapps: 'luftdaten.info', device: 'Yes', join: 'JOIN' },
-        { id: 3, name: 'Sleep', description: 'How to maximise sleep quality', time: 7000, dapps: 'Gadgetbridge', device: 'Yes', join: 'JOIN' },
-        { id: 4, name: 'Food', description: 'Intermitting fasting optimisation', time: 8000, dapps: 'DripX', device: 'Yes', join: 'JOIN' }
-      ]
-      let gridTest = {}
-      gridTest.columns = gridColumns
-      gridTest.data = gridData
       let gridTest2 = {}
       gridTest2.columns = gridColumns
-      gridTest2.data = gridData2
-      state.experimentList = gridTest
-      state.NXPexperimentList = gridTest2
+      gridTest2.data = gridData
       for (let exl of inVerified) {
         let experBundle = {}
         experBundle.cnrl = exl.prime.cnrl
@@ -53,16 +42,49 @@ export default new Vuex.Store({
         Vue.set(state.experimentStatus, objectPropC, experBundle)
       }
       console.log('complete nxp grid setup')
+      state.experimentList = gridTest2
+    },
+    setNetworkExperimentList: (state, inVerified) => {
+      let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
+      let gridData = [
+        { id: 1, name: 'Exercise', description: 'plan actitivies', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'join' },
+        { id: 2, name: 'Environment', description: 'air quality', time: 9000, dapps: 'luftdaten.info', device: 'Yes', action: 'join' },
+        { id: 3, name: 'Sleep', description: 'How to maximise sleep quality', time: 7000, dapps: 'Gadgetbridge', device: 'Yes', action: 'join' },
+        { id: 4, name: 'Food', description: 'Intermitting fasting optimisation', time: 8000, dapps: 'DripX', device: 'Yes', action: 'join' }
+      ]
+      let gridTest = {}
+      gridTest.columns = gridColumns
+      gridTest.data = gridData
+      state.NXPexperimentList = gridTest
     }
   },
   actions: {
     async startconnectNSnetwork (context, update) {
       let NXPstart = await safeAPI.connectNSnetwork(update.network, update.settings)
+      console.log('nps peer kbl')
+      console.log(NXPstart)
       context.commit('setAuthorisation', true)
       context.commit('setExperimentList', NXPstart)
       // ask for devices (api source etc) for NXP list
       // let deviceList = await safeAPI.deviceGetter(NXPstart)
       // context.commit('setDevice', deviceList)
+    },
+    annonconnectNSnetwork (context, update) {
+      console.log('annon connect')
+      context.commit('setNetworkExperimentList')
+    },
+    async actionDashboardState (context, update) {
+      let inputBundle = this.state.experimentStatus[update]
+      let entityReturn = await safeAPI.ECSinput(inputBundle)
+      if (entityReturn !== 'failed') {
+        // go ahead and get data and display modules and set listeniners for changes in entity
+        context.commit('setDashboardNXP', update)
+        let dataFlow = await safeAPI.displayFilter(entityReturn)
+        let Dholder = {}
+        Dholder.cnrl = update
+        Dholder.modules = dataFlow
+        context.commit('setLiveNXPModules', Dholder)
+      }
     }
   },
   modules,
