@@ -56,6 +56,14 @@ export default new Vuex.Store({
       gridTest.columns = gridColumns
       gridTest.data = gridData
       state.NXPexperimentList = gridTest
+    },
+    setDashboardNXP: (state, inVerified) => {
+      let dStatus = state.experimentStatus[inVerified].active
+      dStatus = !dStatus
+      Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
+    },
+    setLiveNXPModules: (state, inVerified) => {
+      Vue.set(state.NXPexperimentStatus, inVerified.cnrl, inVerified)
     }
   },
   actions: {

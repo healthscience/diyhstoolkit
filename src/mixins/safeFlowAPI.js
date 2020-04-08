@@ -71,6 +71,8 @@ safeFlowAPI.prototype.startCycle = async function (authIN) {
   if (authStatus === true) {
     // What network experiments entries are indexed in KBLedger?
     entityData = await this.SAPI.startFlow()
+    console.log('start NXP')
+    console.log(entityData)
   }
   return entityData
 }
@@ -81,6 +83,9 @@ safeFlowAPI.prototype.startCycle = async function (authIN) {
 *
 */
 safeFlowAPI.prototype.checkAuthorisation = function (defaultAPI, authBundle) {
+  console.log('checkA')
+  console.log(defaultAPI)
+  console.log(authBundle)
   let auth = false
   auth = this.SAPI.networkAuthorisation(defaultAPI, authBundle)
   return auth

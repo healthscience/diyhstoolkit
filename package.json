@@ -21,7 +21,7 @@
     "core-js": "^3.4.3",
     "csv-parser": "^2.3.2",
     "moment-range": "^4.0.2",
-    "node-safeflow": "^0.5.0",
+    "node-safeflow": "0.5.0",
     "vue": "^2.6.10",
     "vue-i18n": "^8.0.0",
     "vue-password-strength-meter": "^1.7.1",

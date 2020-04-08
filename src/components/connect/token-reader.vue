@@ -77,6 +77,8 @@ export default {
         let authBundle = {}
         authBundle.network = 'cloud'
         authBundle.settings = tokenJSON
+        console.log('token read')
+        console.log(authBundle)
         localthis.$store.dispatch('startconnectNSnetwork', authBundle)
       }
       reader.readAsText(file)
