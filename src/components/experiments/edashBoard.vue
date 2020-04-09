@@ -1,6 +1,6 @@
 <template>
   <div id="dashboard-holder" v-if="moduleContent">
-    <div id="dash-modules">
+    <div id="dash-modules"> {{ moduleContent }}
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
@@ -34,7 +34,7 @@
                          :i='item.i'
                       >
                   <span class='text'>box{{itemTitle(item)}}</span>
-                  <!-- <component v-bind:is="moduleContent.prime.vistype" :moduleCNRL="moduleContent.prime.cnrl" :mData="moduleContent.data[item.i]"></component> -->
+                  <component v-bind:is="moduleContent.prime.vistype" :moduleCNRL="moduleContent.prime.cnrl" :mData="moduleContent.data[item.i]"></component>
                   <!-- <nxp-visualise :moduleCNRL="mod"></nxp-visualise> -->
                   {{ item.i }} --
               </grid-item>
@@ -52,8 +52,8 @@ import VueGridLayout from 'vue-grid-layout'
 // import progressMessage from '@/components/toolbar/inProgress'
 // import learnReport from '@/components/reports/LearnReport'
 // import learnAction from '@/components/reports/LearnAction'
-// import nxpVisualise from '@/components/healthscience/nxp/nxpVisualise.vue'
-// import nxpPlain from '@/components/visualise/plainBoard.vue'
+import nxpVisualise from '@/components/visualise/nxpVisualise.vue'
+import nxpPlain from '@/components/visualise/plainBoard.vue'
 // const moment = require('moment')
 
 export default {
@@ -61,15 +61,16 @@ export default {
   components: {
     ModuleBoard,
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem
-    // nxpVisualise,
-    // nxpPlain
+    GridItem: VueGridLayout.GridItem,
+    nxpVisualise,
+    nxpPlain
     // progressMessage,
     // learnReport,
     // learnAction
   },
   props: {
-    shellCNRL: String
+    shellCNRL: String,
+    moduleCNRL: String
   },
   computed: {
     dashState: function () {
@@ -77,7 +78,7 @@ export default {
       return dashStateNXP[this.shellCNRL]
     },
     moduleContent: function () {
-      let contentModule = this.$store.state.experimentStatus[this.shellCNRL]
+      let contentModule = this.$store.state.NXPexperimentData[this.shellCNRL]
       if (contentModule === undefined) {
         return false
       } else {

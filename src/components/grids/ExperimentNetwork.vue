@@ -27,7 +27,12 @@
           </tr>
         </tbody>
       </table>
-      <dash-board v-if="isModalDashboardVisible" :shellCNRL="shellID"></dash-board>
+      <!-- loop over the different modules included -->
+      <div id="module-list" v-if="NXPstatusData[shellID]" >
+        <ul v-for="modI in NXPstatusData[shellID].modules" :key="modI.id">
+          <dash-board v-if="isModalDashboardVisible" :shellCNRL="shellID" :moduleCNRL="modI"></dash-board>
+        </ul>
+      </div>
       <join-experiment v-show="isModalJoinVisible" @close="closeModalJoin">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->

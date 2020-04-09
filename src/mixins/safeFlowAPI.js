@@ -83,9 +83,6 @@ safeFlowAPI.prototype.startCycle = async function (authIN) {
 *
 */
 safeFlowAPI.prototype.checkAuthorisation = function (defaultAPI, authBundle) {
-  console.log('checkA')
-  console.log(defaultAPI)
-  console.log(authBundle)
   let auth = false
   auth = this.SAPI.networkAuthorisation(defaultAPI, authBundle)
   return auth
@@ -119,8 +116,6 @@ safeFlowAPI.prototype.moduleKBID = async function (cnrl) {
 safeFlowAPI.prototype.displayFilter = async function (shellID) {
   // setup return vis Object
   let entityData = await this.SAPI.entityGetter(shellID)
-  console.log('display filter data prepared')
-  console.log(entityData)
   return entityData
 }
 

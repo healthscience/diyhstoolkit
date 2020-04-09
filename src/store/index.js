@@ -17,11 +17,11 @@ export default new Vuex.Store({
     dashboardNXP: {},
     experimentList: {},
     NXPexperimentList: {},
-    experimentStatus: {}
+    experimentStatus: {},
+    NXPexperimentData: {}
   },
   mutations: {
     setAuthorisation: (state, inVerified) => {
-      console.log('authorisation')
       state.authorised = true
     },
     setExperimentList: (state, inVerified) => {
@@ -41,7 +41,6 @@ export default new Vuex.Store({
         let objectPropC = exl.prime.cnrl
         Vue.set(state.experimentStatus, objectPropC, experBundle)
       }
-      console.log('complete nxp grid setup')
       state.experimentList = gridTest2
     },
     setNetworkExperimentList: (state, inVerified) => {
@@ -63,14 +62,12 @@ export default new Vuex.Store({
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
     },
     setLiveNXPModules: (state, inVerified) => {
-      Vue.set(state.NXPexperimentStatus, inVerified.cnrl, inVerified)
+      Vue.set(state.NXPexperimentData, inVerified.cnrl, inVerified)
     }
   },
   actions: {
     async startconnectNSnetwork (context, update) {
       let NXPstart = await safeAPI.connectNSnetwork(update.network, update.settings)
-      console.log('nps peer kbl')
-      console.log(NXPstart)
       context.commit('setAuthorisation', true)
       context.commit('setExperimentList', NXPstart)
       // ask for devices (api source etc) for NXP list
