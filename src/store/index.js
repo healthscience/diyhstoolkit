@@ -81,10 +81,15 @@ export default new Vuex.Store({
     async actionDashboardState (context, update) {
       let inputBundle = this.state.experimentStatus[update]
       let entityReturn = await safeAPI.ECSinput(inputBundle)
-      if (entityReturn !== 'failed') {
+      console.log('entity complete')
+      console.log(entityReturn)
+      if (entityReturn[update].status !== 'failed') {
         // go ahead and get data and display modules and set listeniners for changes in entity
         context.commit('setDashboardNXP', update)
-        let dataFlow = await safeAPI.displayFilter(entityReturn)
+        // what data does the PLX (peer learning experience) require?
+        console.log('modules list dispaly')
+        console.log(entityReturn[update].modules)
+        let dataFlow = await safeAPI.displayFilter(update, entityReturn)
         let Dholder = {}
         Dholder.cnrl = update
         Dholder.modules = dataFlow

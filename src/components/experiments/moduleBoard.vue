@@ -69,21 +69,25 @@ export default {
 </script>
 
 <style>
-  .btn-close {
-    border: none;
-    font-size: 20px;
-    padding: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #4AAE9B;
-    background: transparent;
-  }
+#module-board {
+  border: 1px solid grey;
+  background-color: #E9EDF0;
+}
 
-  .btn-green {
-    color: white;
-    background: #4AAE9B;
-    border: 1px solid #4AAE9B;
-    border-radius: 2px;
-  }
+.btn-close {
+  border: none;
+  font-size: 20px;
+  padding: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #4AAE9B;
+  background: transparent;
+}
 
+.btn-green {
+  color: white;
+  background: #4AAE9B;
+  border: 1px solid #4AAE9B;
+  border-radius: 2px;
+}
 </style>

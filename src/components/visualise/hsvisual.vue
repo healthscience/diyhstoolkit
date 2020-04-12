@@ -1,7 +1,7 @@
 <template>
-  <div id="visual-view">PAST
+  <div id="visual-view">
     <div id="diy-science">
-      <div id="charts-live">
+      <div id="charts-live"> chart prep. {{ datacollection }} {{ options }}
         <reactive :chartData="datacollection" :options="options" :width="1200" :height="600"></reactive>
       </div>
       <!-- <calendar-tool></calendar-tool>
@@ -11,85 +11,85 @@
 </template>
 
 <script>
-  // import LineChart from '@/components/charts/LineChart'
-  // import BarChart from '@/components/charts/BarChart'
-  // import BubbleChart from '@/components/charts/BubbleChart'
-  import Reactive from '@/components/visualise/charts/Reactive'
-  // import Reactivestats from '@/components/visualise/charts/Reactivestats'
-  // import calendarTool from '@/components/visualise/tools/calendarTool'
-  // import multiChart from '@/components/visualise/multiChart'
-  // const moment = require('moment')
+// import LineChart from '@/components/charts/LineChart'
+// import BarChart from '@/components/charts/BarChart'
+// import BubbleChart from '@/components/charts/BubbleChart'
+import Reactive from '@/components/visualise/charts/Reactive'
+// import Reactivestats from '@/components/visualise/charts/Reactivestats'
+// import calendarTool from '@/components/visualise/tools/calendarTool'
+// import multiChart from '@/components/visualise/multiChart'
+// const moment = require('moment')
 
-  export default {
-    name: 'visual-liveview',
-    components: {
-      Reactive
-      // Reactivestats,
-      // calendarTool,
-      // multiChart
+export default {
+  name: 'visual-liveview',
+  components: {
+    Reactive
+    // Reactivestats,
+    // calendarTool,
+    // multiChart
+  },
+  props: {
+    datacollection: {
+      type: Object
     },
-    props: {
-      datacollection: {
-        type: Object
-      },
-      options: {
-        type: Object
-      },
-      navTime: {
-        type: Array
-      },
-      makeTimeBundles: {
-        type: Array
-      },
-      displayTime: '',
-      tablecollection: {
-        type: Object
-      }
+    options: {
+      type: Object
     },
-    data () {
-      return {
-        toolbarData: {},
-        recoveryData: {},
-        datastatistics: null,
-        liveChartoptions: null,
-        visChartview: true,
-        liveTime: '',
-        timeVis: [],
-        selectedExperiment: '',
-        confirmAddE: '---'
-      }
+    navTime: {
+      type: Array
     },
-    computed: {
+    makeTimeBundles: {
+      type: Array
     },
-    created () {
-    },
-    mounted () {
-    },
-    methods: {
-      toolsSwitch (ts) {
-        ts.active = !ts.active
-        if (ts.active === true) {
-          this.toolbar.text = 'on'
-          // need to add annotation to chart OPTIONS
-          // this.$emit('toolsStatus', true)
-        } else {
-          this.toolbar.text = 'off'
-          // remove the annotation from the chart OPTIONS
-          // this.$emit('toolsStatus', false)
-        }
-      },
-      recoveryStatus () {
+    displayTime: String,
+    tablecollection: {
+      type: Object
+    }
+  },
+  data () {
+    return {
+      toolbarData: {},
+      recoveryData: {},
+      datastatistics: null,
+      liveChartoptions: null,
+      visChartview: true,
+      liveTime: '',
+      timeVis: [],
+      selectedExperiment: '',
+      confirmAddE: '---'
+    }
+  },
+  computed: {
+  },
+  created () {
+  },
+  mounted () {
+  },
+  methods: {
+    toolsSwitch (ts) {
+      ts.active = !ts.active
+      if (ts.active === true) {
+        this.toolbar.text = 'on'
+        // need to add annotation to chart OPTIONS
+        // this.$emit('toolsStatus', true)
+      } else {
         this.toolbar.text = 'off'
-      },
-      closeAvgSummary () {
-        this.averageSeen = false
-      },
-      setTimeData (seg) {
-        // back and forward and time
-        this.$emit('updateLearn', seg)
+        // remove the annotation from the chart OPTIONS
+        // this.$emit('toolsStatus', false)
       }
+    },
+    recoveryStatus () {
+      this.toolbar.text = 'off'
+    },
+    closeAvgSummary () {
+      this.averageSeen = false
+    },
+    setTimeData (seg) {
+      // back and forward and time
+      this.$emit('updateLearn', seg)
     }
   }
+}
 </script>
 
 <style>

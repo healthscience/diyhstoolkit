@@ -1,9 +1,9 @@
 <template>
   <div id="visualise-nxp">
-    <header>VISUALISE:</header>kbid {{ moduleCNRL }} vmdata {{ mData }}
+    <header>VISUALISE:</header>
     <div id="prime-visualise">
         <!-- <progress-Message :progressMessage="entityPrepareStatus"></progress-Message> -->
-      <component v-bind:is="moduleVisType"></component>
+      <component v-bind:is="moduleVisType" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></component>
     </div>
   </div>
 </template>
@@ -23,8 +23,10 @@ export default {
     // simulationView
   },
   props: {
+    shellID: String,
     moduleCNRL: String,
-    mData: {}
+    moduleType: String,
+    mData: String
   },
   computed: {
     moduleVisType: function () {
@@ -32,11 +34,6 @@ export default {
     }
   },
   data: () => ({
-    visualise:
-    {
-      text: '',
-      forum: ''
-    },
     entityPrepareStatus:
     {
       active: false,

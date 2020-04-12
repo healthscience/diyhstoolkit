@@ -66,13 +66,9 @@ export default {
   },
   computed: {
     peerNXPListlive: function () {
-      console.log('nxp list')
-      console.log(this.$store.state.experimentList)
       return this.$store.state.experimentList
     },
     networkNXPListlive: function () {
-      console.log('network nxp list')
-      console.log(this.$store.state.NXPexperimentList)
       return this.$store.state.NXPexperimentList
     }
   },

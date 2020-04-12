@@ -1,15 +1,15 @@
 <template>
   <div id="dashboard-holder" v-if="moduleContent">
-    <div id="dash-modules"> {{ moduleContent }}
+    <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
-          MODULE {{ moduleContent.prime.text }}
+          {{ moduleContent.prime.text }}
         </template>
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
           <div id="module-toolbar">
-            <header>TOOLBAR---</header>
+            <header>Toolbar---</header>
             <!-- <button @click='decreaseWidth'>Decrease Width</button>
             <button @click='increaseWidth'>Increase Width</button> -->
             <button @click='addItem'>Add an item</button>
@@ -33,9 +33,8 @@
                          :h='item.h'
                          :i='item.i'
                       >
-                  <span class='text'>box{{itemTitle(item)}}</span>
-                  <component v-bind:is="moduleContent.prime.vistype" :moduleCNRL="moduleContent.prime.cnrl" :mData="moduleContent.data[item.i]"></component>
-                  <!-- <nxp-visualise :moduleCNRL="mod"></nxp-visualise> -->
+                  <!-- <span class='text'>box{{itemTitle(item)}}</span> --> {{ moduleCNRL }}
+                  <component v-bind:is="moduleContent.prime.vistype" :shellID="shellCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
                   {{ item.i }} --
               </grid-item>
             </grid-layout>
@@ -49,11 +48,14 @@
 <script>
 import ModuleBoard from './moduleBoard.vue'
 import VueGridLayout from 'vue-grid-layout'
+// need to dynamically plug in modules required into toolkit see https://itnext.io/create-a-vue-js-component-library-part-2-c92a42af84e9
+import nxpDevice from '@/components/visualise/nxpDevice.vue'
+import nxpDapp from '@/components/visualise/nxpDapp.vue'
+import nxpPlain from '@/components/visualise/plainBoard.vue'
+import nxpVisualise from '@/components/visualise/nxpVisualise.vue'
 // import progressMessage from '@/components/toolbar/inProgress'
 // import learnReport from '@/components/reports/LearnReport'
 // import learnAction from '@/components/reports/LearnAction'
-import nxpVisualise from '@/components/visualise/nxpVisualise.vue'
-import nxpPlain from '@/components/visualise/plainBoard.vue'
 // const moment = require('moment')
 
 export default {
@@ -62,6 +64,8 @@ export default {
     ModuleBoard,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
+    nxpDevice,
+    nxpDapp,
     nxpVisualise,
     nxpPlain
     // progressMessage,
@@ -84,11 +88,6 @@ export default {
       } else {
         return contentModule.modules[this.moduleCNRL]
       }
-    },
-    kBundles: function () {
-      console.log('kbids per module')
-      let cnrlKBIDS = this.$store.state.NXPexperimentKBundles
-      return cnrlKBIDS[this.moduleCNRL]
     }
   },
   data () {
@@ -181,7 +180,7 @@ header {
 }
 
 .vue-grid-layout {
-    border: 1px solid black;
+    border: 0px solid black;
     background: #eee;
 }
 

@@ -66,13 +66,9 @@ safeFlowAPI.prototype.startCycle = async function (authIN) {
   // AUTHORISATION KLB entry or non for network KBLedger
   let defaultAPI = '33221100'
   let authStatus = this.checkAuthorisation(defaultAPI, authIN)
-  console.log('auth passed?')
-  console.log(authStatus)
   if (authStatus === true) {
     // What network experiments entries are indexed in KBLedger?
     entityData = await this.SAPI.startFlow()
-    console.log('start NXP')
-    console.log(entityData)
   }
   return entityData
 }
@@ -94,8 +90,8 @@ safeFlowAPI.prototype.checkAuthorisation = function (defaultAPI, authBundle) {
 *
 */
 safeFlowAPI.prototype.ECSinput = async function (cnrl) {
-  let modules = this.SAPI.liveEManager.peerInput(cnrl)
-  return modules
+  let entityComplete = await this.SAPI.liveEManager.peerInput(cnrl)
+  return entityComplete
 }
 
 /**
@@ -113,9 +109,11 @@ safeFlowAPI.prototype.moduleKBID = async function (cnrl) {
 * @method diplayFilter
 *
 */
-safeFlowAPI.prototype.displayFilter = async function (shellID) {
+safeFlowAPI.prototype.displayFilter = async function (shellID, modBundle) {
   // setup return vis Object
-  let entityData = await this.SAPI.entityGetter(shellID)
+  console.log('dispaly filater start data ask')
+  console.log(shellID)
+  let entityData = await this.SAPI.entityGetter(shellID, modBundle)
   return entityData
 }
 

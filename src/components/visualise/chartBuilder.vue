@@ -1,5 +1,5 @@
 <template>
-  <div id="k-toolkit">chart
+  <div id="k-toolkit">
     Charts:
     <div id="chart-type">
       <ul>
@@ -17,7 +17,8 @@
         </li>
       </ul>
     </div>
-    <hsvisual :datacollection="liveData.Collection" :options="liveData.Options" :displayTime="liveData.TimeV" :navTime="liveData.NavTime" :makeTimeBundles="liveData.buildTimeBundles"></hsvisual>
+    <hsvisual :datacollection="liveData.chartPackage" :options="liveData.chartOptions" ></hsvisual>
+    <!--:displayTime="liveData.TimeV" :navTime="liveData.NavTime" :makeTimeBundles="liveData.buildTimeBundles" -->
     <!-- <div id="add-experiment">
       <div v-if="timeSelect" id="time-select" >
         <div id="start-point" class="context-selecttime">Start: {{ kContext.analysisStart }}</div>
@@ -34,36 +35,40 @@
 </template>
 
 <script>
-  import hsvisual from '@/components/visualise/hsvisual'
-  // import hsfuturevisual from '@/components/visualise/hsfuturevisual'
+import hsvisual from '@/components/visualise/hsvisual'
+// import hsfuturevisual from '@/components/visualise/hsfuturevisual'
 
-  export default {
-    name: 'module-visualise',
-    components: {
-      hsvisual
-    },
-    created () {
-    },
-    mounted () {
-    },
-    computed: {
-      liveData: function () {
-        console.log('live data vis')
-        console.log(this.$store.state.NXPexperimentStatus)
-        return this.$store.state.NXPexperimentStatus
-      }
-    },
-    data: () => ({
-      timeSelect: true,
-      kContext: {},
-      saveStatusEK: {}
-    }),
-    methods: {
-      chartSelect () {
-        console.log('chart select type bar line mixed')
-      }
+export default {
+  name: 'module-visualise',
+  components: {
+    hsvisual
+  },
+  created () {
+  },
+  mounted () {
+  },
+  props: {
+    shellID: String,
+    moduleCNRL: String,
+    moduleType: String,
+    mData: String
+  },
+  computed: {
+    liveData: function () {
+      return this.$store.state.NXPexperimentData[this.shellID].modules[this.moduleCNRL].data[this.mData]
+    }
+  },
+  data: () => ({
+    timeSelect: true,
+    kContext: {},
+    saveStatusEK: {}
+  }),
+  methods: {
+    chartSelect () {
+      console.log('chart select type bar line mixed')
     }
   }
+}
 </script>
 
 <style>
