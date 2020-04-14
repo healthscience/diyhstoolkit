@@ -1,5 +1,6 @@
 <template>
   <div id="plain-nxp">PainBoard
+    {{ liveData }} ll
   </div>
 </template>
 
@@ -9,10 +10,14 @@ export default {
   components: {
   },
   props: {
-    moduleCNRL: '',
-    mData: {}
+    shellID: String,
+    moduleCNRL: String,
+    mData: String
   },
   computed: {
+    liveData: function () {
+      return this.$store.state.NXPexperimentData[this.shellID].modules[this.moduleCNRL].data
+    }
   },
   data: () => ({
   }),

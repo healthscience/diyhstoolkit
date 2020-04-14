@@ -80,6 +80,7 @@ export default {
         console.log('token read')
         console.log(authBundle)
         localthis.$store.dispatch('startconnectNSnetwork', authBundle)
+        localthis.$emit('closeTreader')
       }
       reader.readAsText(file)
       // Specify a data directory (optional; defaults to ~/.ethereum)

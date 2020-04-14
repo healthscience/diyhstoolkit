@@ -15,7 +15,7 @@
         {{ connectContext.message }}
       </template>
       <template v-slot:input-form>
-        <token-reader v-if="connectContext.type === 'testnetwork'"></token-reader>
+        <token-reader v-if="connectContext.type === 'testnetwork'" @closeTreader="closeModal"></token-reader>
         <div id="self-in" v-if="connectContext.type === 'selfsign'">
           <input v-model="secretPeer" placeholder="public key">
           <input v-model="passwordPeer" placeholder="token">
