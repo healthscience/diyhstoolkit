@@ -124,7 +124,7 @@ safeFlowAPI.prototype.displayFilter = async function (shellID, modBundle) {
     } else if (mod.prime.text === 'Dapp') {
       TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true }, 'grid': mod.grid, 'data': [{ 'content': 'Gadgetbridge android' }, { 'content2': 'Xdrip android' }], 'message': 'compute-complete'}
     } else if (mod.prime.text === 'Compute') {
-       TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Results', 'active': true }, 'grid': mod.grid, 'data': [{ 'chartPackage': [{ '1': '2' }, { '2': '4' }, { '3': '6' }], 'chartOptions': {} }, { 'chartPackage': [{ '1': '2' }, { '2': '4' }, { '3': '6' }], 'chartOptions': {} }], 'message': 'compute-complete'}
+       TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Results', 'active': true }, 'grid': mod.grid, 'data': [{ 'chartPackage': [{ '1': '2' }, { '2': '4' }, { '3': '6' }], 'chartOptions': {} }, { 'chartPackage': [{ '1': '2' }, { '2': '4' }, { '3': '6' }], 'chartOptions': { } }], 'message': 'compute-complete'}
     } else if (mod.prime.text === 'Errors') {
     }
   }

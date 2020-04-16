@@ -130,14 +130,14 @@ export default {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    actionExperiment (shellCNRL, KBundle) {
+    actionExperiment (shellCNRL, NXPcontract) {
       // view or joing a NXP?
       console.log('action for experiment???')
       console.log(shellCNRL)
-      console.log(KBundle)
+      console.log(NXPcontract)
       this.shellID = shellCNRL
-      this.actionKBundle = KBundle
-      if (KBundle.action === 'View') {
+      this.actionKBundle = NXPcontract
+      if (NXPcontract.action === 'View') {
         this.$store.dispatch('actionDashboardState', shellCNRL)
         this.isModalDashboardVisible = true
       } else {
