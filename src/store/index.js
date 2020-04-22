@@ -28,7 +28,8 @@ export default new Vuex.Store({
       let gridData = []
       let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
       for (let nxp of inVerified) {
-        gridData.push({ id: nxp.prime.cnrl, name: nxp.prime.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'View' })
+        console.log(nxp.contract)
+        gridData.push({ id: nxp.contract.prime.cnrl, name: nxp.contract.prime.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'View' })
       }
       let gridTest2 = {}
       gridTest2.columns = gridColumns
@@ -38,26 +39,24 @@ export default new Vuex.Store({
     setExperimentStatus: (state, inVerified) => {
       for (let exl of inVerified) {
         let experBundle = {}
-        experBundle.cnrl = exl.prime.cnrl
+        experBundle.cnrl = exl.contract.prime.cnrl
         experBundle.status = false
-        experBundle.contract = exl
-        experBundle.modules = exl.modules
-        let objectPropC = exl.prime.cnrl
+        experBundle.contract = exl.contract
+        experBundle.modules = exl.contract.modules
+        let objectPropC = exl.contract.prime.cnrl
         Vue.set(state.experimentStatus, objectPropC, experBundle)
       }
     },
     setNetworkExperimentList: (state, inVerified) => {
       let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
-      let gridData = [
-        { id: 1, name: 'Exercise', description: 'plan actitivies', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'join' },
-        { id: 2, name: 'Environment', description: 'air quality', time: 9000, dapps: 'luftdaten.info', device: 'Yes', action: 'join' },
-        { id: 3, name: 'Sleep', description: 'How to maximise sleep quality', time: 7000, dapps: 'Gadgetbridge', device: 'Yes', action: 'join' },
-        { id: 4, name: 'Food', description: 'Intermitting fasting optimisation', time: 8000, dapps: 'DripX', device: 'Yes', action: 'join' }
-      ]
-      let gridTest = {}
-      gridTest.columns = gridColumns
-      gridTest.data = gridData
-      state.NXPexperimentList = gridTest
+      let gridData = []
+      for (let nxp of inVerified) {
+        gridData.push({ id: nxp.prime.cnrl, name: nxp.prime.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })
+      }
+      let gridAnnon = {}
+      gridAnnon.columns = gridColumns
+      gridAnnon.data = gridData
+      state.NXPexperimentList = gridAnnon
     },
     setDashboardNXP: (state, inVerified) => {
       let dStatus = state.experimentStatus[inVerified].active
@@ -70,7 +69,9 @@ export default new Vuex.Store({
   },
   actions: {
     async startconnectNSnetwork (context, update) {
-      let NXPstart = await safeAPI.connectNSnetwork(update.network, update.settings)
+      let NXPstart = await safeAPI.connectPeerNSnetwork(update.network, update.settings)
+      console.log('peer star returned')
+      console.log(NXPstart)
       context.commit('setAuthorisation', true)
       context.commit('setExperimentList', NXPstart)
       context.commit('setExperimentStatus', NXPstart)
@@ -78,9 +79,10 @@ export default new Vuex.Store({
       // let deviceList = await safeAPI.deviceGetter(NXPstart)
       // context.commit('setDevice', deviceList)
     },
-    annonconnectNSnetwork (context, update) {
+    async annonconnectNSnetwork (context, update) {
       console.log('annon connect')
-      context.commit('setNetworkExperimentList')
+      let nsNXPlive = await safeAPI.connectNSnetwork()
+      context.commit('setNetworkExperimentList', nsNXPlive)
     },
     async actionDashboardState (context, update) {
       let inputContract = this.state.experimentStatus[update]

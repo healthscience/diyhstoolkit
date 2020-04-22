@@ -27,22 +27,38 @@ util.inherits(safeFlowAPI, events.EventEmitter)
 
 /**
 * Network Authorisation & CONNECT
-* @method connectNSnetwork
+* @method connectPeerNSnetwork
 *
 */
-safeFlowAPI.prototype.connectNSnetwork = async function (authNetwork, authBundle) {
+safeFlowAPI.prototype.connectPeerNSnetwork = async function (authNetwork, authBundle) {
   console.log('ask connect to HS NETWORK')
   let startNXP = {}
-  // offline
-  // connected annon
-  // first time setup self verification
   // connect self verified
   if (authNetwork === 'safenetwork') {
     // implement in network release see DIY repo on github.
   } else if (authNetwork === 'cloud') {
-    startNXP = await this.startCycle(authBundle)
+    startNXP = await this.startPeerCycle(authBundle)
   }
   return startNXP
+}
+
+/**
+* Network Authorisation & CONNECT
+* @method connectNSnetwork
+*
+*/
+safeFlowAPI.prototype.connectNSnetwork = async function () {
+  console.log('ask connect to HS NETWORK')
+  let network = 'cloud'
+  let starthsNXP = {}
+  // connected annon
+  if (network === 'safenetwork') {
+    // implement in network release see DIY repo on github.
+  } else if (network === 'cloud') {
+    let readOnly = { 'publickey': 'e97bd0056edae2a5da49b7868167b6c9d13bc3d5', 'token': 'CVUbN3zCmvubqNpJ3ru6YLtwLRMv6kfa9NmRAzTGSiUQ', 'cnrl': 'cnrl-33221101' }
+    starthsNXP = await this.startannonCycle(readOnly)
+  }
+  return starthsNXP
 }
 
 /**
@@ -61,6 +77,23 @@ safeFlowAPI.prototype.deviceGetter = async function (NXPlist) {
 * @method
 *
 */
+safeFlowAPI.prototype.startannonCycle = async function (authIN) {
+  let entityData = {}
+  // AUTHORISATION KLB entry or non for network KBLedger
+  let defaultAPI = '33221100'
+  let authStatus = this.checkAuthorisation(defaultAPI, authIN)
+  if (authStatus === true) {
+    // What network experiments entries are indexed in KBLedger?
+    entityData = await this.SAPI.startFlow(defaultAPI)
+  }
+  return entityData
+}
+
+/**
+*
+* @method startCycle
+*
+*/
 safeFlowAPI.prototype.startCycle = async function (authIN) {
   let entityData = {}
   // AUTHORISATION KLB entry or non for network KBLedger
@@ -69,6 +102,23 @@ safeFlowAPI.prototype.startCycle = async function (authIN) {
   if (authStatus === true) {
     // What network experiments entries are indexed in KBLedger?
     entityData = await this.SAPI.startFlow(defaultAPI)
+  }
+  return entityData
+}
+
+/**
+*
+* @method startPeerCycle
+*
+*/
+safeFlowAPI.prototype.startPeerCycle = async function (authIN) {
+  let entityData = {}
+  // AUTHORISATION KLB entry or non for network KBLedger
+  let defaultAPI = '33221100'
+  let authStatus = this.checkAuthorisation(defaultAPI, authIN)
+  if (authStatus === true) {
+    // What network experiments entries are indexed in KBLedger?
+    entityData = await this.SAPI.startPeerFlow(defaultAPI)
   }
   return entityData
 }
@@ -122,9 +172,9 @@ safeFlowAPI.prototype.displayFilter = async function (shellID, modBundle) {
     } else if (mod.prime.text === 'Device') {
       TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': mod.grid, 'data': entityData.liveDeviceC.devices, 'message': 'compute-complete' }
     } else if (mod.prime.text === 'Dapp') {
-      TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true }, 'grid': mod.grid, 'data': [{ 'content': 'Gadgetbridge android' }, { 'content2': 'Xdrip android' }], 'message': 'compute-complete'}
+      TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true }, 'grid': mod.grid, 'data': [{ 'content': 'Gadgetbridge android' }, { 'content2': 'Xdrip android' }], 'message': 'compute-complete' }
     } else if (mod.prime.text === 'Compute') {
-       TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Results', 'active': true }, 'grid': mod.grid, 'data': [{ 'chartPackage': [{ '1': '2' }, { '2': '4' }, { '3': '6' }], 'chartOptions': {} }, { 'chartPackage': [{ '1': '2' }, { '2': '4' }, { '3': '6' }], 'chartOptions': { } }], 'message': 'compute-complete'}
+      TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Results', 'active': true }, 'grid': mod.grid, 'data': [{ 'chartPackage': [{ '1': '2' }, { '2': '4' }, { '3': '6' }], 'chartOptions': {} }, { 'chartPackage': [{ '1': '2' }, { '2': '4' }, { '3': '6' }], 'chartOptions': { } }], 'message': 'compute-complete' }
     } else if (mod.prime.text === 'Errors') {
     }
   }
