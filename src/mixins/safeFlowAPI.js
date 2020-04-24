@@ -163,7 +163,8 @@ safeFlowAPI.prototype.displayFilter = async function (shellID, modBundle) {
   // setup return vis Object
   let entityID = modBundle[shellID].status
   let entityData = await this.SAPI.entityGetter(entityID)
-  // let entityID = modBundle[shellID].status
+  console.log('dataBACK ECS--up to UI to use')
+  console.log(entityData)
   let TestDataBundle = {}
   for (let mod of modBundle[shellID].modules) {
     // need to match each modules to Component Data
@@ -174,22 +175,16 @@ safeFlowAPI.prototype.displayFilter = async function (shellID, modBundle) {
     } else if (mod.prime.text === 'Dapp') {
       TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true }, 'grid': mod.grid, 'data': [{ 'content': 'Gadgetbridge android' }, { 'content2': 'Xdrip android' }], 'message': 'compute-complete' }
     } else if (mod.prime.text === 'Compute') {
-      TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Results', 'active': true }, 'grid': mod.grid, 'data': [{ 'chartPackage': [{ '1': '2' }, { '2': '4' }, { '3': '6' }], 'chartOptions': {} }, { 'chartPackage': [{ '1': '2' }, { '2': '4' }, { '3': '6' }], 'chartOptions': { } }], 'message': 'compute-complete' }
+      TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-compute', 'text': 'Compute', 'active': true }, 'grid': mod.grid, 'message': 'compute-complete' }
     } else if (mod.prime.text === 'Errors') {
+      // [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} }], '1': { 'chartPackage': { 'labels': [2, 4] }, { 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} } }, 'message': 'compute-complete'
+    } else if (mod.prime.text === 'Visualise') {
+      TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': { '0': entityData.liveVisualC.visualData, '1': { 'chartPackage': { 'labels': [2, 4], 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': { }, 'message': 'compute-complete' } } }
     }
   }
+  console.log('mock XLP data bundle')
+  console.log(TestDataBundle)
   return TestDataBundle
-// TestDataBundle['cnrl-001234543212'] = {'prime': {'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }], 'data': {'form': ['a', 'b', 'c'], 'content': [1, 2, 3]}, 'message': 'compute-complete'}
-// TestDataBundle['cnrl-001234543303'] = {'prime': {'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }], 'data': [{'form': 'miBand3', 'content': [1, 2, 3]}, {'form': 'amazfit', 'content': [1, 2, 3]}], 'message': 'compute-complete'}
-// TestDataBundle['cnrl-001234543303'] = {'prime': {'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }], 'data': this.liveSEntities[entityID].liveDeviceC.devices, 'message': 'compute-complete'}
-// TestDataBundle['cnrl-001234543304'] = {'prime': {'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }], 'data': [{'form': 'gadgetbridge', 'content': [1, 2, 3]}, {'form': 'Xdrip', 'content': [1, 2, 3]}], 'message': 'compute-complete'}
-// TestDataBundle['cnrl-001234543214'] = {'prime': {'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Results', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': '1', static: false }], 'data': [{'chartPackage': [{'1': '2'}, {'2': '4'}, {'3': '6'}], 'chartOptions': {}}, {'chartPackage': [{'1': '2'}, {'2': '4'}, {'3': '6'}], 'chartOptions': {}}], 'message': 'compute-complete'}
-// TestDataBundle['cnrl-001234543213'] = {'prime': {'cnrl': 'cnrl-113', 'vistype': 'nxp-plain', 'text': 'Controls', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }], 'data': {'form': ['a', 'b', 'c'], 'content': [1, 2, 3]}, 'message': 'compute-complete'}
-// TestDataBundle['cnrl-001234543215'] = {'prime': {'cnrl': 'cnrl-115', 'vistype': 'nxp-plain', 'text': 'Errors', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }], 'data': {'form': ['a', 'b', 'c'], 'content': [1, 2, 3]}, 'message': 'compute-complete'}
-// TestDataBundle['cnrl-001234543216'] = {'prime': {'cnrl': 'cnrl-116', 'vistype': 'nxp-plain', 'text': 'Lifestyle Medicine', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }], 'data': {'form': ['a', 'b', 'c'], 'content': [1, 2, 3]}, 'message': 'compute-complete'}
-// TestDataBundle['cnrl-001234543217'] = {'prime': {'cnrl': 'cnrl-117', 'vistype': 'nxp-plain', 'text': 'Educate', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }], 'data': {'form': ['a', 'b', 'c'], 'content': [1, 2, 3]}, 'message': 'compute-complete'}
-// TestDataBundle['cnrl-001234543218'] = {'prime': {'cnrl': 'cnrl-1118', 'vistype': 'nxp-plain', 'text': 'Evovle', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }], 'data': {'form': ['a', 'b', 'c'], 'content': [1, 2, 3]}, 'message': 'compute-complete'}
-// TestDataBundle['cnrl-001234543219'] = {'prime': {'cnrl': 'cnrl-119', 'vistype': 'nxp-plain', 'text': 'Communicate', 'active': true}, 'grid': [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }], 'data': {'form': ['a', 'b', 'c'], 'content': [1, 2, 3]}, 'message': 'compute-complete'}
 }
 
 export default safeFlowAPI

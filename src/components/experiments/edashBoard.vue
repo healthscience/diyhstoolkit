@@ -52,6 +52,7 @@ import VueGridLayout from 'vue-grid-layout'
 import nxpDevice from '@/components/visualise/nxpDevice.vue'
 import nxpDapp from '@/components/visualise/nxpDapp.vue'
 import nxpPlain from '@/components/visualise/plainBoard.vue'
+import nxpCompute from '@/components/visualise/nxpCompute.vue'
 import nxpVisualise from '@/components/visualise/nxpVisualise.vue'
 // import progressMessage from '@/components/toolbar/inProgress'
 // import learnReport from '@/components/reports/LearnReport'
@@ -66,6 +67,7 @@ export default {
     GridItem: VueGridLayout.GridItem,
     nxpDevice,
     nxpDapp,
+    nxpCompute,
     nxpVisualise,
     nxpPlain
     // progressMessage,
