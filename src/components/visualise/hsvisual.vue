@@ -1,7 +1,7 @@
 <template>
   <div id="visual-view">
     <div id="diy-science">
-      <div id="charts-live"> chart prep. {{ datacollection }} {{ options }}
+      <div id="charts-live"> chart prep. {{ datacollection }} -- {{ options }}
         <reactive :chartData="datacollection" :options="options" :width="1200" :height="600"></reactive>
       </div>
       <!-- <calendar-tool></calendar-tool>

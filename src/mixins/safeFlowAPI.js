@@ -165,6 +165,8 @@ safeFlowAPI.prototype.displayFilter = async function (shellID, modBundle) {
   let entityData = await this.SAPI.entityGetter(entityID)
   console.log('dataBACK ECS--up to UI to use')
   console.log(entityData)
+  console.log('chart data')
+  console.log(entityData.liveVisualC.visualData)
   let TestDataBundle = {}
   for (let mod of modBundle[shellID].modules) {
     // need to match each modules to Component Data
@@ -182,6 +184,7 @@ safeFlowAPI.prototype.displayFilter = async function (shellID, modBundle) {
       TestDataBundle[mod.prime.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': { '0': entityData.liveVisualC.visualData, '1': { 'chartPackage': { 'labels': [2, 4], 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': { }, 'message': 'compute-complete' } } }
     }
   }
+  // { 'labels': [2, 4], 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }
   console.log('mock XLP data bundle')
   console.log(TestDataBundle)
   return TestDataBundle
