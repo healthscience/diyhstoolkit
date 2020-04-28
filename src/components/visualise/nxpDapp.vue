@@ -1,6 +1,10 @@
 <template>
   <div id="dapp-nxp">Dapp
-    {{ liveData }}
+    <ul>
+      <li>
+        {{ liveData.content }}
+      </li>
+    </ul>
   </div>
 </template>
 

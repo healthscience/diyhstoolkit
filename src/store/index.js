@@ -28,7 +28,7 @@ export default new Vuex.Store({
       let gridData = []
       let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
       for (let nxp of inVerified) {
-        console.log(nxp.contract)
+        // console.log(nxp.contract)
         gridData.push({ id: nxp.contract.prime.cnrl, name: nxp.contract.prime.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'View' })
       }
       let gridTest2 = {}
@@ -70,8 +70,8 @@ export default new Vuex.Store({
   actions: {
     async startconnectNSnetwork (context, update) {
       let NXPstart = await safeAPI.connectPeerNSnetwork(update.network, update.settings)
-      console.log('peer star returned')
-      console.log(NXPstart)
+      // console.log('peer star returned')
+      // console.log(NXPstart)
       context.commit('setAuthorisation', true)
       context.commit('setExperimentList', NXPstart)
       context.commit('setExperimentStatus', NXPstart)

@@ -1,6 +1,6 @@
 <template>
   <div id="plain-nxp">PainBoard
-    {{ liveData }} ll
+    {{ liveData[1].content }}
   </div>
 </template>
 

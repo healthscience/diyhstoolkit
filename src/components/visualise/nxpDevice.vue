@@ -1,6 +1,13 @@
 <template>
-  <div id="device-nxp">Device
-    {{ liveData }} ==
+  <div id="device-nxp">Device --
+    <ul>
+      <li>
+        {{ liveData.device_name }}
+      </li>
+      <li>
+        {{ liveData.device_mac }}
+      </li>
+    </ul>
   </div>
 </template>
 
