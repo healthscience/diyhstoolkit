@@ -181,10 +181,14 @@ safeFlowAPI.prototype.displayFilter = async function (shellID, modBundle) {
     } else if (mod.type === 'Errors') {
       // [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} }], '1': { 'chartPackage': { 'labels': [2, 4] }, { 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} } }, 'message': 'compute-complete'
     } else if (mod.type === 'Visualise') {
-      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': { '0': entityData.liveVisualC.visualData, '1': { 'chartPackage': { 'labels': [2, 4], 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': { }, 'message': 'compute-complete' } } }
+      // loop over data vis read
+      console.log('vis mod')
+      console.log(mod)
+      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': entityData.liveVisualC.visualData }
+      /* { '0': entityData.liveVisualC.visualData, '1': entityData.liveVisualC.visualData } { 'chartPackage': { 'labels': [2, 4], 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': { }, 'message': 'compute-complete' } */
     }
   }
-  console.log('mock XLP data bundle')
+  console.log('TIMEPLATE DATA XLP')
   console.log(TestDataBundle)
   return TestDataBundle
 }

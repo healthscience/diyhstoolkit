@@ -1,6 +1,6 @@
 <template>
   <div id="k-toolkit">
-    Charts:
+    Charts: {{ mData }}
     <div id="chart-type">
       <ul>
         <li>
