@@ -1,47 +1,43 @@
 <template>
   <div id="k-toolkit">
-    Charts: {{ mData }}
-    <div id="chart-type">
-      <ul>
-        <li>
-          <button @click.prevent="chartSelect()">Bar</button>
-        </li>
-        <li>
-          <button @click.prevent="chartSelect()">Line</button>
-        </li>
-        <li>
-          <button @click.prevent="chartSelect()">Mixed</button>
-        </li>
-        <li>
-          <button @click.prevent="chartSelect()">Tools</button>
-        </li>
-      </ul>
+    <div id="diy-tools" v-if="toolbarStatusLive.active">
+      <div id="chart-type">
+        <ul>
+          <li>
+            <div class="style-tools">
+              <li>
+                <button @click.prevent="chartSelect()">Bar</button>
+              </li>
+              <li>
+                <button @click.prevent="chartSelect()">Line</button>
+              </li>
+              <li>
+                <button @click.prevent="chartSelect()">Mixed</button>
+              </li>
+              <li>
+                <button @click.prevent="chartSelect()">Tools</button>
+              </li>
+            </div>
+          <li>
+            <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
+          </li>
+        </ul>
+      </div>
     </div>
     <hsvisual :datacollection="liveData.chartPackage" :options="liveData.chartOptions" ></hsvisual>
-    <!--:displayTime="liveData.TimeV" :navTime="liveData.NavTime" :makeTimeBundles="liveData.buildTimeBundles" -->
-    <!-- <div id="add-experiment">
-      <div v-if="timeSelect" id="time-select" >
-        <div id="start-point" class="context-selecttime">Start: {{ kContext.analysisStart }}</div>
-        <div id="end-point" class="context-selecttime">End: {{ kContext.analysisEnd }}</div>
-      </div>
-      <div id="save-component">
-          <button @click.prevent="startStatusSave()">SAVE</button>
-          <transition name="fade" >
-            <div v-if="saveStatusEK.active === true" id="confirm-add-experiment">{{ saveStatusEK.text }}</div>
-          </transition>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
+import CalendarTool from '@/components/visualise/tools/calendarTool'
 import hsvisual from '@/components/visualise/hsvisual'
 // import hsfuturevisual from '@/components/visualise/hsfuturevisual'
 
 export default {
   name: 'module-visualise',
   components: {
-    hsvisual
+    hsvisual,
+    CalendarTool
   },
   created () {
   },
@@ -54,8 +50,11 @@ export default {
     mData: String
   },
   computed: {
+    toolbarStatusLive: function () {
+      return this.$store.state.toolbarStatus[this.moduleCNRL]
+    },
     liveData: function () {
-      return this.$store.state.NXPexperimentData[this.shellID].modules[this.moduleCNRL].data[this.mData]
+      return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
     }
   },
   data: () => ({
@@ -72,4 +71,20 @@ export default {
 </script>
 
 <style>
+#k-toolkit {
+  border: 0px solid red;
+  height: 100%;
+  overflow: hidden;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
 </style>

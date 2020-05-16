@@ -1,6 +1,5 @@
 <template>
   <div id="visualise-nxp">
-    <header>VISUALISE:</header>
     <div id="prime-visualise">
         <!-- <progress-Message :progressMessage="entityPrepareStatus"></progress-Message> -->
       <component v-bind:is="moduleVisType" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></component>
@@ -136,8 +135,9 @@ export default {
 
 <style>
 #visualise-nxp {
-  margin: 1em;
-  border: 1px solid grey;
+  border: 2px solid blue;
+  height: 100%;
+  overflow: auto;
 }
 
 #visualise-nxp header{
@@ -145,7 +145,8 @@ export default {
 }
 
 #prime-visualise {
-  margin: 1em;
+  height: 100%;
+  overflow: hidden;
 }
 
 .visualisation-type {

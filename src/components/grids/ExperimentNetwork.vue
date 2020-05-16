@@ -28,9 +28,10 @@
         </tbody>
       </table>
       <!-- loop over the different modules included -->
-      <div id="module-list" v-if="NXPstatusData[shellID]" >
-        <ul v-for="modI in NXPstatusData[shellID].modules" :key="modI.id">
-          <dash-board v-if="isModalDashboardVisible" :shellCNRL="shellID" :moduleCNRL="modI"></dash-board>
+      <div id="module-list" v-if="NXPstatusData[shellContract]" > {{ NXPprogress.active }}
+        <progress-message v-if="NXPprogress.active === true"></progress-message>
+        <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">nnmmm {{ shellContract }} {{ modI }}
+          <dash-board v-if="isModalDashboardVisible" :shellCNRL="shellContract" :moduleCNRL="modI"></dash-board>
         </ul>
       </div>
       <join-experiment v-show="isModalJoinVisible" @close="closeModalJoin">
@@ -64,12 +65,14 @@
 
 <script>
 import DashBoard from '@/components/experiments/edashBoard.vue'
+import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
 import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
 
 export default {
   name: 'ExperimentNetwork',
   components: {
     DashBoard,
+    ProgressMessage,
     JoinExperiment
   },
   props: {
@@ -82,6 +85,11 @@ export default {
       console.log('state.experimentStatus')
       console.log(this.$store.state.experimentStatus)
       return this.$store.state.experimentStatus
+    },
+    NXPprogress: function () {
+      console.log('this.$store.state.nxpProgress')
+      console.log(this.$store.state.nxpProgress)
+      return this.$store.state.nxpProgress[this.shellContract]
     },
     filteredExperiments: function () {
       var sortKey = this.sortKey
@@ -116,7 +124,7 @@ export default {
       sortOrders[key] = 1
     })
     return {
-      shellID: '',
+      shellContract: '',
       sortKey: '',
       sortOrders: sortOrders,
       isModalDashboardVisible: false,
@@ -135,10 +143,11 @@ export default {
       console.log('action for experiment???')
       console.log(shellCNRL)
       console.log(NXPcontract)
-      this.shellID = shellCNRL
+      this.shellContract = shellCNRL
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
         this.$store.dispatch('actionDashboardState', shellCNRL)
+        // this.$store.dispatch('actionDisplay', shellCNRL)
         this.isModalDashboardVisible = true
       } else {
         this.isModalJoinVisible = true

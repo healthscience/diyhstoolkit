@@ -1,11 +1,11 @@
 <template>
   <div class="hello">
     <header>Network Status</header>
-    <div id="connection-status">{{ msg }}</div>
+    <div id="connection-status">{{ msg }} ssss{{ authState }}</div>
     <button type="button" class="btn" @click="connectNetwork('connect')">Connect</button>
     <button type="button" class="btn" @click="connectNetwork('new-connect')">New account</button>
-    <button type="button" class="btn" @click="connectNetwork('self-connect')">Self sign-in</button>
-    <button type="button" class="btn" @click="connectNetwork('self-testnetwork')">Testnetwork sign-in</button>
+    <button type="button" class="btn" @click="connectNetwork('self-connect')">{{ connectBut.text }}</button>
+    <button type="button" class="btn" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
     <connect-modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
       <!-- The code below goes into the header slot -->
@@ -38,11 +38,21 @@ export default {
     ConnectModal,
     TokenReader
   },
+  computed: {
+    authState: function () {
+      return this.$store.state.authorised
+    }
+  },
   props: {
     msg: String
   },
   data () {
     return {
+      connectBut: {
+        active: false,
+        type: 'self-testnetwork',
+        text: 'Testnetwork sign-in'
+      },
       isModalVisible: false,
       connectContext:
       {
@@ -71,7 +81,16 @@ export default {
         this.connectContext.type = 'selfsign'
         this.connectContext.message = 'Self sign-in'
         this.buttonName = 'Self Sign-in'
-      } else if (typeConnect === 'self-testnetwork') {
+      } else if (typeConnect.type === 'self-testnetwork') {
+        this.connectBut.text = 'disconnect testnetwork'
+        this.connectBut.type = 'disconnectTestnetwork'
+        this.connectContext.type = 'testnetwork'
+        this.connectContext.message = 'TestNetwork'
+        this.buttonName = ''
+      } else if (typeConnect.type === 'disconnectTestnetwork') {
+        this.isModalVisible = false
+        this.connectBut.text = 'Sign-in to Testnetwork'
+        this.connectBut.type = 'self-testnetwork'
         this.connectContext.type = 'testnetwork'
         this.connectContext.message = 'TestNetwork'
         this.buttonName = ''

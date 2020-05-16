@@ -7,7 +7,15 @@ const safeAPI = new LiveMixinSAFEflow()
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+// listeners
+safeAPI.on('safeflowUpdate', (data) => {
+  // console.log('safeflowUpate--0099999')
+  // console.log(data)
+  // const listenStore = store
+  store.dispatch('actionDisplay', data)
+})
+
+const store = new Vuex.Store({
   state: {
     authorised: false,
     devices: [],
@@ -18,11 +26,29 @@ export default new Vuex.Store({
     experimentList: {},
     NXPexperimentList: {},
     experimentStatus: {},
-    NXPexperimentData: {}
+    NXPexperimentData: {},
+    entityUUIDReturn: {},
+    moduleGrid: {},
+    toolbarStatus:
+    {
+      'default': {
+        text: 'show',
+        active: false
+      }
+    },
+    nxpProgress: {}
+  },
+  getters: {
+    // liveSafeFlow: state => state.safeFlow
+    liveGrid: state => state.moduleGrid,
+    watchFlow: state => function (state) { return state.experimentStatus }
   },
   mutations: {
     setAuthorisation: (state, inVerified) => {
       state.authorised = true
+    },
+    setLiveNXP: (state, inVerified) => {
+      state.liveNXP = inVerified
     },
     setExperimentList: (state, inVerified) => {
       let gridData = []
@@ -47,6 +73,12 @@ export default new Vuex.Store({
         Vue.set(state.experimentStatus, objectPropC, experBundle)
       }
     },
+    setOutflowWatch: (state, inVerified) => {
+      console.log('##################commit watchflow')
+      console.log(inVerified)
+      Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
+      console.log(state.experimentStatus)
+    },
     setNetworkExperimentList: (state, inVerified) => {
       let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
       let gridData = []
@@ -63,44 +95,107 @@ export default new Vuex.Store({
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
     },
-    setLiveNXPModules: (state, inVerified) => {
-      Vue.set(state.NXPexperimentData, inVerified.cnrl, inVerified)
+    setLiveDisplayNXPModules: (state, inVerified) => {
+      state.moduleGrid = inVerified.grid
+      Vue.set(state.NXPexperimentData, state.liveNXP, inVerified.data)
+      // state.NXPexperimentData = inVerified
+      console.log('grid')
+      console.log(state.moduleGrid)
+    },
+    setentityReturn: (state, inVerified) => {
+      state.entityUUIDReturn = inVerified
+      // Vue.set(state.entityUUIDReturn, , inVerified)
+    },
+    setUpdateGrid: (state, inVerified) => {
+      state.moduleGrid = inVerified
+    },
+    setVistoolbar: (state, inVerified) => {
+      if (inVerified.state === false) {
+        let setToolbar = { text: 'hide', active: true }
+        Vue.set(state.toolbarStatus, inVerified.module, setToolbar)
+      } else {
+        let setToolbarOff = { text: 'show', active: false }
+        Vue.set(state.toolbarStatus, inVerified.module, setToolbarOff)
+      }
+    },
+    setToolbarState: (state, inVerified) => {
+      for (let mod of inVerified) {
+        let setToolbar = { text: 'show', active: false }
+        Vue.set(state.toolbarStatus, mod.cnrl, setToolbar)
+      }
+    },
+    setProgressStart: (state, inVerified) => {
+      for (let nxp of inVerified) {
+        let setProgress = { text: 'Experiment in progress', active: false }
+        Vue.set(state.nxpProgress, nxp.cnrl, setProgress)
+      }
+    },
+    setProgressUpdate: (state, inVerified) => {
+      let setProgress = { text: 'Experiment in progress', active: true }
+      Vue.set(state.nxpProgress, inVerified, setProgress)
+    },
+    setProgressComplete: (state, inVerified) => {
+      let setProgress = { text: 'Experiment in progress', active: false }
+      Vue.set(state.nxpProgress, inVerified, setProgress)
     }
   },
   actions: {
     async startconnectNSnetwork (context, update) {
       let NXPstart = await safeAPI.connectPeerNSnetwork(update.network, update.settings)
-      // console.log('peer star returned')
-      // console.log(NXPstart)
       context.commit('setAuthorisation', true)
       context.commit('setExperimentList', NXPstart)
       context.commit('setExperimentStatus', NXPstart)
-      // ask for devices (api source etc) for NXP list
-      // let deviceList = await safeAPI.deviceGetter(NXPstart)
-      // context.commit('setDevice', deviceList)
+      context.commit('setProgressStart', NXPstart)
     },
     async annonconnectNSnetwork (context, update) {
       console.log('annon connect')
       let nsNXPlive = await safeAPI.connectNSnetwork()
       context.commit('setNetworkExperimentList', nsNXPlive)
+      context.commit('setProgressStart', nsNXPlive)
     },
     async actionDashboardState (context, update) {
-      let inputContract = this.state.experimentStatus[update]
-      let entityReturn = await safeAPI.ECSinput(inputContract)
-      console.log('entity complete')
-      console.log(entityReturn)
-      if (entityReturn[update].status !== 'failed') {
-        // go ahead and get data and display modules and set listeniners for changes in entity
-        context.commit('setDashboardNXP', update)
-        // what data does the PLX (peer learning experience) require?
-        let dataFlow = await safeAPI.displayFilter(update, entityReturn)
-        let Dholder = {}
-        Dholder.cnrl = update
-        Dholder.modules = dataFlow
-        context.commit('setLiveNXPModules', Dholder)
-      }
+      context.commit('setLiveNXP', update)
+      context.commit('setDashboardNXP', update)
+      context.commit('setProgressUpdate', update)
+      let entityReturn = await safeAPI.ECSinput(this.state.experimentStatus[update])
+      context.commit('setentityReturn', entityReturn)
+    },
+    actionDisplay (context, update) {
+      let mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
+      let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, update)
+      // prepare toolbar status object
+      context.commit('setToolbarState', mod)
+      context.commit('setProgressComplete', this.state.liveNXP)
+      context.commit('setLiveDisplayNXPModules', displayReady)
+    },
+    actionLocalGrid (context, update) {
+      console.log('action test watch called')
+      console.log(update)
+    },
+    actionoWatch (context, update) {
+      console.log('action watch called')
+      console.log(update)
+      context.commit('setOutflowWatch', update)
+    },
+    actionVisToolbar (context, update) {
+      context.commit('setVistoolbar', update)
+    },
+    async actionVisUpdate (context, update) {
+      console.log('vis update')
+      console.log(update)
+      console.log(this.state.experimentStatus)
+      console.log(this.state.entityUUIDReturn)
+      // send ref contract and update time?
+      let updateContract = {}
+      updateContract = update // this.state.entityUUIDReturn[update.shellID]
+      // the visulisation and compute module contract need updating for time which when how????
+      // updateContract.modules[update.] = update
+      let entityReturn = await safeAPI.ECSinput(updateContract)
+      context.commit('setentityReturn', entityReturn)
     }
   },
   modules,
   strict: process.env.NODE_ENV !== 'production'
 })
+
+export default store

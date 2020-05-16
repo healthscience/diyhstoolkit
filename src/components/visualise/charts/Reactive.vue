@@ -30,21 +30,6 @@ export default ({
       }
     }
   },
-  /* watch: {
-    chartData: function () {
-      console.log('watching for update chart data')
-      this._chart.destroy()
-      this.renderChart(this.chartData, this.options)
-    }
-  } */
-  /* watch: {
-    'options': {
-      handler () {
-        this.renderChart(this.chartData, this.options)
-      },
-      deep: true
-    }
-  }, */
   mounted () {
     // this.chartData is created in the mixin
     // console.log(this.chartData)

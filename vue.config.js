@@ -3,7 +3,7 @@ module.exports = {
     ? '/healthscience/code/diyhstoolkit/dist/'
     : '/', */
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/diytoolkit/'
+    ? '/healthscience/code/diyhstoolkit/dist/'
     : '/',
   pluginOptions: {
     i18n: {

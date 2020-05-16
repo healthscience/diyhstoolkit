@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     liveData: function () {
-      return this.$store.state.NXPexperimentData[this.shellID].modules[this.moduleCNRL].data
+      return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data
     }
   },
   data: () => ({

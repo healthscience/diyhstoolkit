@@ -1,5 +1,6 @@
 <template>
   <div id="dashboard-holder" v-if="moduleContent">
+    <!-- <progress-message></progress-message> -->
     <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
@@ -9,35 +10,41 @@
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
           <div id="module-toolbar">
-            <header>Toolbar---</header>
+            <header>Toolbar--
+              <button type="button" class="btn" @click="toolbarUpdate">{{ toolbarStatusLive.text }}</button>
+            </header>
             <!-- <button @click='decreaseWidth'>Decrease Width</button>
             <button @click='increaseWidth'>Increase Width</button> -->
-            <button @click='addItem'>Add an item</button>
-            <input type='checkbox' v-model='draggable'/> Draggable
-            <input type='checkbox' v-model='resizable'/> Resizable
+            <div id="layouttools" v-if="toolbarStatusLive.active">
+              <button @click='addItem'>Add an item</button>
+              <input type='checkbox' v-model='draggable'/> Draggable
+              <input type='checkbox' v-model='resizable'/> Resizable
+            </div>
             <br/> <!-- @changes="updateLayout"  -->
-            <grid-layout v-if="moduleContent.grid"
-                         :layout='moduleContent.grid'
-                         :col-num='12'
-                         :row-height='30'
-                         :is-draggable='draggable'
-                         :is-resizable='resizable'
-                         :vertical-compact='true'
-                         :use-css-transforms='true'
-            >
-              <grid-item v-for='item in moduleContent.grid' :key='item.id'
-                         :static='item.static'
-                         :x='item.x'
-                         :y='item.y'
-                         :w='item.w'
-                         :h='item.h'
-                         :i='item.i'
-                      >
-                  <!-- <span class='text'>box{{itemTitle(item)}}</span> --> {{ moduleCNRL }}
-                  <component v-bind:is="moduleContent.prime.vistype" :shellID="shellCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
-                  {{ item.i }} --
-              </grid-item>
-            </grid-layout>
+            <div class="grid-section">
+              <grid-layout v-if="localGrid"
+                           :layout='localGrid'
+                           :col-num='12'
+                           :row-height='30'
+                           :is-draggable='draggable'
+                           :is-resizable='resizable'
+                           :vertical-compact='true'
+                           :use-css-transforms='true'
+              >
+                <grid-item v-for='item in localGrid' :key='item.id'
+                           :static='item.static'
+                           :x='item.x'
+                           :y='item.y'
+                           :w='item.w'
+                           :h='item.h'
+                           :i='item.i'
+                        >
+                    <!-- <span class='text'>box{{itemTitle(item)}}</span> -->
+                    <component v-bind:is="moduleContent.prime.vistype" :shellID="shellCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
+                    {{ item.i }} --
+                </grid-item>
+              </grid-layout>
+            </div>
           </div>
         </template>
       </module-board>
@@ -46,6 +53,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import { mapState, mapActions } from 'vuex'
 import ModuleBoard from './moduleBoard.vue'
 import VueGridLayout from 'vue-grid-layout'
 // need to dynamically plug in modules required into toolkit see https://itnext.io/create-a-vue-js-component-library-part-2-c92a42af84e9
@@ -54,7 +63,7 @@ import nxpDapp from '@/components/visualise/nxpDapp.vue'
 import nxpPlain from '@/components/visualise/plainBoard.vue'
 import nxpCompute from '@/components/visualise/nxpCompute.vue'
 import nxpVisualise from '@/components/visualise/nxpVisualise.vue'
-// import progressMessage from '@/components/toolbar/inProgress'
+import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
 // import learnReport from '@/components/reports/LearnReport'
 // import learnAction from '@/components/reports/LearnAction'
 // const moment = require('moment')
@@ -63,6 +72,7 @@ export default {
   name: 'visual-dashview',
   components: {
     ModuleBoard,
+    ProgressMessage,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
     nxpDevice,
@@ -74,6 +84,8 @@ export default {
     // learnReport,
     // learnAction
   },
+  created: function () {
+  },
   props: {
     shellCNRL: String,
     moduleCNRL: String
@@ -83,18 +95,41 @@ export default {
       let dashStateNXP = this.$store.state.experimentStatus
       return dashStateNXP[this.shellCNRL]
     },
+    toolbarStatusLive: function () {
+      console.log('modue toolbar state')
+      console.log(this.$store.state.toolbarStatus)
+      return this.$store.state.toolbarStatus[this.moduleCNRL]
+    },
     moduleContent: function () {
       let contentModule = this.$store.state.NXPexperimentData[this.shellCNRL]
       if (contentModule === undefined) {
         return false
       } else {
-        return contentModule.modules[this.moduleCNRL]
+        return contentModule[this.moduleCNRL]
       }
+    },
+    // moduleGrid: function () {
+    /* let gridperModule = this.$store.state.moduleGrid
+    if (gridperModule === undefined) {
+      return false
+    } else {
+      console.log(this.$store.state.moduleGrid)
+      return this.$store.state.moduleGrid[this.moduleCNRL]
+    } */
+    ...mapState(['moduleGrid']),
+    storeGrid () {
+      return _.cloneDeep(this.$store.state.moduleGrid[this.moduleCNRL])
+    }
+  },
+  watch: {
+    storeGrid (newValue) {
+      this.localGrid = newValue
     }
   },
   data () {
     return {
       moduleType: 'nxp-visualise',
+      localGrid: _.cloneDeep(this.$store.state.moduleGrid),
       draggable: true,
       resizable: true,
       index: 0,
@@ -106,13 +141,20 @@ export default {
       }
     }
   },
-  created () {
-  },
   mounted () {
   },
   methods: {
+    ...mapActions(['actionLocalGrid']),
     closeModule () {
       console.log('close module')
+    },
+    toolbarUpdate (bp) {
+      console.log(bp)
+      let updateToolbar = {}
+      updateToolbar.state = this.toolbarStatusLive.active
+      updateToolbar.module = this.moduleCNRL
+      console.log(updateToolbar)
+      this.$store.dispatch('actionVisToolbar', updateToolbar)
     },
     itemTitle (item) {
       var result = item.i
@@ -159,8 +201,11 @@ export default {
 </script>
 
 <style>
+#dashboard-holder {
+  border: 0px solid red;
+}
 #dashboard-view {
-  border: 2px solid white;
+  border: 1px solid white;
   margin: 2em;
   width: 98%;
 }
@@ -181,25 +226,14 @@ header {
   margin-left: 2em;
 }
 
+.grid-section {
+  border: 2px solid orange;
+  height: 100%;
+}
+
 .vue-grid-layout {
     border: 0px solid black;
     background: #eee;
-}
-
-.layoutJSON {
-    background: #ddd;
-    border: 1px solid black;
-    margin-top: 10px;
-    padding: 10px;
-}
-
-.eventsJSON {
-    background: #ddd;
-    border: 1px solid black;
-    margin-top: 10px;
-    padding: 10px;
-    height: 100px;
-    overflow-y: scroll;
 }
 
 .columns {
@@ -226,15 +260,15 @@ header {
 
 .vue-grid-item:not(.vue-grid-placeholder) {
     background: #ccc;
-    border: 3px solid red;
+    border: 0px solid red;
 }
 
 .vue-grid-item.resizing {
-    opacity: 0.9;
+    opacity: 1;
 }
 
 .vue-grid-item.static {
-    background: #cce;
+    background: #E9EDF0;
 }
 
 .vue-grid-item .text {

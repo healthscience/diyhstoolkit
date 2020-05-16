@@ -1,5 +1,5 @@
 <template>
-  <div id="module-board"> Peer  Network
+  <div id="module-board">
     <header
       class="modal-header"
       id="modalTitle"

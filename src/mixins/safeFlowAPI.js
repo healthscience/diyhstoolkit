@@ -17,6 +17,12 @@ const events = require('events')
 var safeFlowAPI = function () {
   events.EventEmitter.call(this)
   this.SAPI = new SAFEflow()
+  this.SAPI.on('displayUpdate', (data) => {
+    console.log('displayUpdate-76543434343')
+    console.log(data)
+    this.emit('safeflowUpdate', data)
+  })
+  console.log('after auth called safelow interface')
 }
 
 /**
@@ -136,7 +142,7 @@ safeFlowAPI.prototype.checkAuthorisation = function (defaultAPI, authBundle) {
 
 /**
 *
-* @method
+* @method ECSinput
 *
 */
 safeFlowAPI.prototype.ECSinput = async function (cnrl) {
@@ -159,38 +165,43 @@ safeFlowAPI.prototype.moduleKBID = async function (cnrl) {
 * @method diplayFilter
 *
 */
-safeFlowAPI.prototype.displayFilter = async function (shellID, modBundle) {
+safeFlowAPI.prototype.displayFilter = function (shellID, modules, entityData) {
   // setup return vis Object
-  let entityID = modBundle[shellID].status
-  let entityData = await this.SAPI.entityGetter(entityID)
-  console.log('dataBACK ECS--up to UI to use')
-  console.log(entityData)
-  console.log('chart data')
-  console.log(entityData.liveVisualC.visualData)
+  let entityID = shellID // modBundle[shellID].status
+  console.log(entityID)
+  console.log(modules)
   let TestDataBundle = {}
-  for (let mod of modBundle[shellID].modules) {
+  let gridPerModule = {}
+  for (let mod of modules) {
     // need to match each modules to Component Data
     if (mod.type === 'Question') {
+      gridPerModule[mod.cnrl] = mod.grid
       TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true }, 'grid': mod.grid, 'data': [{ 'form': 'html' }, { 'content': 'Movement Summary' }], 'message': 'compute-complete' }
     } else if (mod.type === 'Device') {
+      gridPerModule[mod.cnrl] = mod.grid
       TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': mod.grid, 'data': entityData.liveDeviceC.devices, 'message': 'compute-complete' }
     } else if (mod.type === 'Dapp') {
+      gridPerModule[mod.cnrl] = mod.grid
       TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true }, 'grid': mod.grid, 'data': [{ 'content': 'Gadgetbridge android' }, { 'content2': 'Xdrip android' }], 'message': 'compute-complete' }
-    } else if (mod.type === 'Compute') {
+    } else if (mod.type === 'compute') {
+      gridPerModule[mod.cnrl] = mod.grid
       TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-compute', 'text': 'Compute', 'active': true }, 'grid': mod.grid, 'message': 'compute-complete' }
     } else if (mod.type === 'Errors') {
+      // gridPerModule[mod.cnrl] = mod.grid
       // [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} }], '1': { 'chartPackage': { 'labels': [2, 4] }, { 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} } }, 'message': 'compute-complete'
     } else if (mod.type === 'Visualise') {
       // loop over data vis read
-      console.log('vis mod')
-      console.log(mod)
+      gridPerModule[mod.cnrl] = mod.grid
       TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': entityData.liveVisualC.visualData }
       /* { '0': entityData.liveVisualC.visualData, '1': entityData.liveVisualC.visualData } { 'chartPackage': { 'labels': [2, 4], 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': { }, 'message': 'compute-complete' } */
     }
   }
   console.log('TIMEPLATE DATA XLP')
   console.log(TestDataBundle)
-  return TestDataBundle
+  let displayData = {}
+  displayData.data = TestDataBundle
+  displayData.grid = gridPerModule
+  return displayData
 }
 
 export default safeFlowAPI
