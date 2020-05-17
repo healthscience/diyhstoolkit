@@ -30,7 +30,7 @@
       <!-- loop over the different modules included -->
       <div id="module-list" v-if="NXPstatusData[shellContract]" > {{ NXPprogress.active }}
         <progress-message v-if="NXPprogress.active === true"></progress-message>
-        <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">nnmmm {{ shellContract }} {{ modI }}
+        <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
           <dash-board v-if="isModalDashboardVisible" :shellCNRL="shellContract" :moduleCNRL="modI"></dash-board>
         </ul>
       </div>
@@ -82,13 +82,9 @@ export default {
   },
   computed: {
     NXPstatusData: function () {
-      console.log('state.experimentStatus')
-      console.log(this.$store.state.experimentStatus)
       return this.$store.state.experimentStatus
     },
     NXPprogress: function () {
-      console.log('this.$store.state.nxpProgress')
-      console.log(this.$store.state.nxpProgress)
       return this.$store.state.nxpProgress[this.shellContract]
     },
     filteredExperiments: function () {

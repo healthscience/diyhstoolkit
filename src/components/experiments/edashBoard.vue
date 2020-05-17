@@ -40,8 +40,9 @@
                            :i='item.i'
                         >
                     <!-- <span class='text'>box{{itemTitle(item)}}</span> -->
+                    vvv {{ moduleContent.prime.vistype }}
                     <component v-bind:is="moduleContent.prime.vistype" :shellID="shellCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
-                    {{ item.i }} --
+                    {{ item.i }} --ii
                 </grid-item>
               </grid-layout>
             </div>
@@ -96,8 +97,6 @@ export default {
       return dashStateNXP[this.shellCNRL]
     },
     toolbarStatusLive: function () {
-      console.log('modue toolbar state')
-      console.log(this.$store.state.toolbarStatus)
       return this.$store.state.toolbarStatus[this.moduleCNRL]
     },
     moduleContent: function () {
@@ -108,14 +107,6 @@ export default {
         return contentModule[this.moduleCNRL]
       }
     },
-    // moduleGrid: function () {
-    /* let gridperModule = this.$store.state.moduleGrid
-    if (gridperModule === undefined) {
-      return false
-    } else {
-      console.log(this.$store.state.moduleGrid)
-      return this.$store.state.moduleGrid[this.moduleCNRL]
-    } */
     ...mapState(['moduleGrid']),
     storeGrid () {
       return _.cloneDeep(this.$store.state.moduleGrid[this.moduleCNRL])

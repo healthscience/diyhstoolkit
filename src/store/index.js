@@ -36,6 +36,13 @@ const store = new Vuex.Store({
         active: false
       }
     },
+    opendataTools:
+    {
+      'default': {
+        text: 'show',
+        active: false
+      }
+    },
     nxpProgress: {}
   },
   getters: {
@@ -98,9 +105,6 @@ const store = new Vuex.Store({
     setLiveDisplayNXPModules: (state, inVerified) => {
       state.moduleGrid = inVerified.grid
       Vue.set(state.NXPexperimentData, state.liveNXP, inVerified.data)
-      // state.NXPexperimentData = inVerified
-      console.log('grid')
-      console.log(state.moduleGrid)
     },
     setentityReturn: (state, inVerified) => {
       state.entityUUIDReturn = inVerified
@@ -109,20 +113,49 @@ const store = new Vuex.Store({
     setUpdateGrid: (state, inVerified) => {
       state.moduleGrid = inVerified
     },
-    setVistoolbar: (state, inVerified) => {
-      if (inVerified.state === false) {
-        let setToolbar = { text: 'hide', active: true }
-        Vue.set(state.toolbarStatus, inVerified.module, setToolbar)
-      } else {
-        let setToolbarOff = { text: 'show', active: false }
-        Vue.set(state.toolbarStatus, inVerified.module, setToolbarOff)
-      }
-    },
     setToolbarState: (state, inVerified) => {
       for (let mod of inVerified) {
         let setToolbar = { text: 'show', active: false }
         Vue.set(state.toolbarStatus, mod.cnrl, setToolbar)
       }
+    },
+    setVistoolbar: (state, inVerified) => {
+      let setToolbar = {}
+      if (inVerified.state === false) {
+        setToolbar = { text: 'hide', active: true }
+        Vue.set(state.toolbarStatus, inVerified.module, setToolbar)
+      } else {
+        setToolbar = { text: 'show', active: false }
+        Vue.set(state.toolbarStatus, inVerified.module, setToolbar)
+      }
+    },
+    setOpendataState: (state, inVerified) => {
+      let setOpendata = {}
+      let moduleKeys = Object.keys(inVerified.grid)
+      for (let mod of moduleKeys) {
+        for (let dti of inVerified.grid[mod]) {
+          setOpendata[dti.i] = { text: 'open data', active: false }
+        }
+        Vue.set(state.opendataTools, mod, setOpendata)
+        setOpendata = {}
+      }
+      console.log('FINISHEDopen data toolbar')
+      console.log(state.opendataTools)
+    },
+    setOpendataBar: (state, inVerified) => {
+      console.log('set open data toolbard')
+      console.log(inVerified)
+      console.log(state.opendataTools)
+      let setToolbar = state.opendataTools[inVerified.module]
+      if (inVerified.state === false) {
+        setToolbar[inVerified.dtid] = { text: 'hide data', active: true }
+        Vue.set(state.opendataTools, inVerified.module, setToolbar)
+      } else {
+        setToolbar[inVerified.dtid] = { text: 'open data', active: false }
+        Vue.set(state.opendataTools, inVerified.module, setToolbar)
+      }
+      console.log('UPDATEpoen data toolbar')
+      console.log(state.opendataTools)
     },
     setProgressStart: (state, inVerified) => {
       for (let nxp of inVerified) {
@@ -165,6 +198,7 @@ const store = new Vuex.Store({
       let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, update)
       // prepare toolbar status object
       context.commit('setToolbarState', mod)
+      context.commit('setOpendataState', displayReady)
       context.commit('setProgressComplete', this.state.liveNXP)
       context.commit('setLiveDisplayNXPModules', displayReady)
     },
@@ -180,22 +214,21 @@ const store = new Vuex.Store({
     actionVisToolbar (context, update) {
       context.commit('setVistoolbar', update)
     },
+    actionVisOpenData (context, update) {
+      context.commit('setOpendataBar', update)
+    },
     async actionVisUpdate (context, update) {
-      console.log('vis update')
-      console.log(update)
-      console.log(this.state.experimentStatus)
-      console.log(this.state.entityUUIDReturn)
       // send ref contract and update time?
       let updateContract = {}
       updateContract = update // this.state.entityUUIDReturn[update.shellID]
       // the visulisation and compute module contract need updating for time which when how????
-      // updateContract.modules[update.] = update
+      updateContract.modules = this.state.entityUUIDReturn[update.shellID].modules
       let entityReturn = await safeAPI.ECSinput(updateContract)
       context.commit('setentityReturn', entityReturn)
     }
   },
   modules,
-  strict: process.env.NODE_ENV !== 'production'
+  strict: false // process.env.NODE_ENV !== 'production'
 })
 
 export default store

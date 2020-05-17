@@ -1,5 +1,5 @@
 <template>
-  <div id="k-toolkit">
+  <div id="k-toolkit"> toolbarstat === {{ toolbarStatusLive }}
     <div id="diy-tools" v-if="toolbarStatusLive.active">
       <div id="chart-type">
         <ul>
@@ -21,7 +21,13 @@
           <li>
             <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
           </li>
+          <li>
+            <a href="#" id="opendata" @click.prevent="openData()">{{ openDataLive.text }}</a>
+          </li>
         </ul>
+      </div>
+      <div v-if="openDataLive.active === true" id="open-knowledge">
+        <opendata-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></opendata-tool>
       </div>
     </div>
     <hsvisual :datacollection="liveData.chartPackage" :options="liveData.chartOptions" ></hsvisual>
@@ -30,14 +36,15 @@
 
 <script>
 import CalendarTool from '@/components/visualise/tools/calendarTool'
+import OpendataTool from '@/components/visualise/tools/knowledgeLive'
 import hsvisual from '@/components/visualise/hsvisual'
-// import hsfuturevisual from '@/components/visualise/hsfuturevisual'
 
 export default {
   name: 'module-visualise',
   components: {
     hsvisual,
-    CalendarTool
+    CalendarTool,
+    OpendataTool
   },
   created () {
   },
@@ -53,6 +60,9 @@ export default {
     toolbarStatusLive: function () {
       return this.$store.state.toolbarStatus[this.moduleCNRL]
     },
+    openDataLive: function () {
+      return this.$store.state.opendataTools[this.moduleCNRL][this.mData]
+    },
     liveData: function () {
       return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
     }
@@ -60,11 +70,20 @@ export default {
   data: () => ({
     timeSelect: true,
     kContext: {},
-    saveStatusEK: {}
+    saveStatusEK: {},
+    openDataState: { 'active': true }
   }),
   methods: {
     chartSelect () {
       console.log('chart select type bar line mixed')
+    },
+    openData (od) {
+      let updateOpendata = {}
+      updateOpendata.state = this.openDataLive.active
+      updateOpendata.module = this.moduleCNRL
+      updateOpendata.dtid = this.mData
+      console.log('dispatch set open data toolbar state')
+      this.$store.dispatch('actionVisOpenData', updateOpendata)
     }
   }
 }
@@ -74,7 +93,7 @@ export default {
 #k-toolkit {
   border: 0px solid red;
   height: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 ul {
