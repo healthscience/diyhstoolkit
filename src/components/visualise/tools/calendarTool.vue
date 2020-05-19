@@ -8,9 +8,24 @@
             <button id="multi-days" @click.prevent="setMultidays($event)">{{ calendarTools.name }}</button> {{ calendarTools.active }}
           </div>
           <div id="calendar-list-view" >
-            {{ calendarList }}
-            <button id="multi-day-chart" @click.prevent="chartMultiday($event)">Multi-chart</button>
-            <button id="multi-day-clear" @click.prevent="clearMultidays($event)">Clear</button>
+             <ul>
+              <li>
+                <ul>
+                  <li v-for="datesl in calendarList" :key='datesl' class="time-m-list">
+                    {{ datesl }}
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <button id="multi-day-chart" @click.prevent="chartMultiday($event)">Multi-chart</button>
+              </li>
+              <li>
+                <button id="single-day-chart" @click.prevent="singlechartMultiday($event)">Single-chart</button>
+              </li>
+              <li>
+                <button id="multi-day-clear" @click.prevent="clearMultidays($event)">Clear</button>
+              </li>
+            </ul>
           </div>
         </div>
       </li>
@@ -114,6 +129,15 @@ export default {
     chartMultiday (cm) {
       // prepare list of KnowledgeBundles to visualise
       let uSeg = {}
+      uSeg.chart = 'multi'
+      uSeg.text = 'timeList'
+      uSeg.timelist = this.calendarList
+      this.$emit('updateLearn', uSeg)
+    },
+    singlechartMultiday (cm) {
+      // prepare list of KnowledgeBundles to visualise
+      let uSeg = {}
+      uSeg.chart = 'single'
       uSeg.text = 'timeList'
       uSeg.timelist = this.calendarList
       this.$emit('updateLearn', uSeg)
@@ -125,7 +149,7 @@ export default {
       console.log(this.moduleType)
       console.log(this.mData)
       let contextK = {}
-      contextK.shellID = this.shellID
+      contextK.shellCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
       contextK.moduleType = this.moduleType
       contextK.mData = this.mData
@@ -155,6 +179,11 @@ export default {
 
 #time-calendar-tools {
   display: inline-block;
+}
+
+.time-m-list {
+  display: block;
+  border: 1px solid purple;
 }
 
 </style>

@@ -1,21 +1,92 @@
 <template>
   <div id="live-view">
-    dddd
-    <!-- <div id="live-context-datatypes" class="live-kelement">
-      <header>X-axis fixed </header>
+    <div id="knowledge-selector">
+      <div id="live-context-datatypes" class="live-kelement">
         <ul>
-          <li id="bmp-data-sensor">
-            <div class="live-item">Timestamp</div>
+          <li class="live-dtitem">
+            <header>X-axis</header>
+            <ul>
+              <li id="dt-select" v-for="dts in buidContextLive" :key='dts'>
+                <!-- <div class="live-item">{{ dts }}</div> -->
+                <div class="live-item">Timestamp</div>
+              </li>
+              <li>
+                <button id="dt-x-axis" @click.prevent="setOpenData($event)">-v-</button>
+                  <!--dropdown of data types-->
+                <ul v-if="selectChange.xaxis === true">
+                  <li id="select-new-datatype" v-for="dts in buidContextLive" :key='dts'>
+                    <div class="live-item">{{ dts }}</div>
+                    <div class="live-item">Timestamp</div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </li>
         </ul>
-      <header>Y-axis</header>
+      </div>
+      <div id="live-context-datatypes" class="live-kelement">
         <ul>
-          <li id="bmp-data-sensor" v-for="dts in buidContextLive" :key='dts'>
-            <div class="live-item">{{ dts }}</div>
+          <li class="live-item">
+            <header>Y-axis</header>
+            <ul>
+              <li id="dt-select" v-for="dts in buidContextLive" :key='dts'>
+                <div class="live-item">{{ dts }}</div>
+              </li>
+              <li>
+                <button>-v-</button>
+              </li>
+            </ul>
+            <div v-if="feedback.datatypes" class="feedback">
+              ---
+            </div>
           </li>
         </ul>
-        <div v-if="feedback.datatypes" class="feedback">---</div>
-    </div> -->
+      </div>
+      <div id="live-context-category" class="live-kelement">
+        <header>Category</header>
+          <ul>
+            <li id="cat-items" v-for="catL in buidContextLive.category" :key='catL'>
+              <div class="live-item">{{ catL.text }}</div>
+            </li>
+            <li>
+              <button>-v-</button>
+            </li>
+          </ul>
+          <div v-if="feedback.categories" class="feedback">---</div>
+      </div>
+      <div id="context-time" class="live-kelement">
+        <header>Time Period:</header>
+          <ul>
+            <li v-for="ts in buidContextLive.time" :key='ts'>
+               <div class="live-item">{{ ts }}</div>
+            </li>
+            <li>
+              <button>-v-</button>
+            </li>
+          </ul>
+          <div v-if="feedback.time" class="feedback">---</div>
+      </div>
+      <div id="context-resolution" class="live-kelement">
+        <header>Resolution:</header>
+          <div class="live-item">{{ buidContextLive.resolution }}</div>
+          <li>
+            <button>-v-</button>
+          </li>
+          <div v-if="feedback.resolution" class="feedback">---</div>
+      </div>
+      <div id="context-results" class="live-kelement">
+        <header>Results:</header>
+          <div class="live-dtresults">auto {{ }}</div>
+          <li>
+            <button>-v-</button>
+          </li>
+      </div>
+      <div id="context-learn" class="live-kelement">
+        <li>
+          <button id="learn-update" @click.prevent="learnUpdate($event)">Learn</button>
+        </li>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,14 +107,17 @@ export default {
   },
   computed: {
     buidContextLive: function () {
-      console.log(this.shellID)
-      console.log(this.moduleCNRL)
-      console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data)
-      return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data
+      // console.log(this.shellID)
+      // console.log(this.moduleCNRL)
+      // console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data)
+      return ['datatype'] // this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data
     }
   },
   data () {
     return {
+      selectChange: {
+        'xaxis': false
+      },
       feedback:
       {
         devices: false,
@@ -66,9 +140,9 @@ export default {
       let startPeriodTime = moment.utc(nowTime).startOf('day')
       let updateTbundle = {}
       updateTbundle.realtime = realTime
-      updateTbundle.timeseg = this.openDataLive.timeLive
+      updateTbundle.timeseg = this.buidContextLive.timeLive
       updateTbundle.startperiod = startPeriodTime
-      updateTbundle.timevis = this.openDataLive.timeLive
+      updateTbundle.timevis = this.buidContextLive.timeLive
       return updateTbundle
     },
     saveLearnHistory (lBundle) {
@@ -104,21 +178,21 @@ export default {
     },
     clearKnowledgeBox () {
       // but set category and compute variables
-      this.openDataLive.languageLive = ''
-      this.openDataLive.devicesLive = []
-      this.openDataLive.datatypesLive = []
-      this.openDataLive.scienceLive = ''
-      this.openDataLive.resolutionLive = ''
-      this.openDataLive.timeLive = []
-      this.openDataLive.categoryLive = []
+      this.buidContextLive.languageLive = ''
+      this.buidContextLive.devicesLive = []
+      this.buidContextLive.datatypesLive = []
+      this.buidContextLive.scienceLive = ''
+      this.buidContextLive.resolutionLive = ''
+      this.buidContextLive.timeLive = []
+      this.buidContextLive.categoryLive = []
       // set defaults
       let sciStartEmpty = {}
       sciStartEmpty.prime = { 'text': 'empty' }
-      this.openDataLive.scienceLive = sciStartEmpty
-      this.openDataLive.categoryLive.push({ 'active': false, 'cnrl': 'none', 'text': 'none' }) // categoryEmpty
+      this.buidContextLive.scienceLive = sciStartEmpty
+      this.buidContextLive.categoryLive.push({ 'active': false, 'cnrl': 'none', 'text': 'none' }) // categoryEmpty
     },
     languageStatus (lIN) {
-      this.openDataLive.languageLive = lIN
+      this.buidContextLive.languageLive = lIN
     },
     deviceStatus (dIN) {
       this.liveDevice(dIN)
@@ -131,10 +205,10 @@ export default {
         // remove device
         this.removeLiveElement(liveD.device_mac)
       }
-      this.openDataLive.devicesLive = deviceLive
+      this.buidContextLive.devicesLive = deviceLive
     },
     removeLiveElement (remove) {
-      let array = this.openDataLive.devicesLive
+      let array = this.buidContextLive.devicesLive
       function arrayRemove (arr, value) {
         return arr.filter(function (ele) {
           return ele.device_mac !== value
@@ -144,64 +218,64 @@ export default {
       return true
     },
     datatypeStatus (ldt) {
-      this.openDataLiveTypes(ldt)
+      this.buidContextLiveTypes(ldt)
     },
-    openDataLiveTypes (liveDT) {
+    buidContextLiveTypes (liveDT) {
       if (liveDT.active === true) {
-        this.openDataLive.datatypesLive.push(liveDT)
+        this.buidContextLive.datatypesLive.push(liveDT)
       } else if (liveDT.active === false) {
         // remove device
         this.removeLiveDT(liveDT.text)
       }
     },
     removeLiveDT (remove) {
-      let array = this.openDataLive.datatypesLive
+      let array = this.buidContextLive.datatypesLive
       function arrayRemove (arr, value) {
         return arr.filter(function (ele) {
           return ele.text !== value
         })
       }
       let result = arrayRemove(array, remove)
-      this.openDataLive.datatypesLive = result
+      this.buidContextLive.datatypesLive = result
       return true
     },
     scienceStatus (sIN) {
-      this.openDataLive.scienceLive = sIN
+      this.buidContextLive.scienceLive = sIN
     },
     timeStatus (tIN) {
       if (tIN.active === true) {
-        this.openDataLive.timeLive = []
-        this.openDataLive.timeLive.push(tIN.text)
+        this.buidContextLive.timeLive = []
+        this.buidContextLive.timeLive.push(tIN.text)
       } else if (tIN.active === false) {
         // remove device
         this.removeLiveTime(tIN)
       }
     },
     removeLiveTime (trIN) {
-      let removeTimeArr = this.openDataLive.timeLive.filter(item => item !== trIN.text)
-      this.openDataLive.timeLive = removeTimeArr
+      let removeTimeArr = this.buidContextLive.timeLive.filter(item => item !== trIN.text)
+      this.buidContextLive.timeLive = removeTimeArr
     },
     resolutionStatus (rIN) {
       if (rIN.active === true) {
-        this.openDataLive.resolutionLive = rIN.text
+        this.buidContextLive.resolutionLive = rIN.text
       } else if (rIN.active === false) {
         // remove device
-        this.openDataLive.resolutionLive = ''
+        this.buidContextLive.resolutionLive = ''
       }
     },
     categoryStatus (catIN) {
-      // this.openDataLive.categoryLive = catIN
-      this.openDataLive.categoryLive = []
+      // this.buidContextLive.categoryLive = catIN
+      this.buidContextLive.categoryLive = []
       if (catIN.active === true) {
-        this.openDataLive.categoryLive = []
-        this.openDataLive.categoryLive.push(catIN)
+        this.buidContextLive.categoryLive = []
+        this.buidContextLive.categoryLive.push(catIN)
       } else if (catIN.active === false) {
         // remove device
         this.removeLiveCat(catIN.text)
       }
     },
     removeLiveCat (remove) {
-      let array = this.openDataLive.categoryLive
+      let array = this.buidContextLive.categoryLive
       function arrayRemove (arr, value) {
         return arr.filter(function (ele) {
           return ele.text !== value
@@ -211,7 +285,7 @@ export default {
       if (result.length === 0) {
         result.push({ 'active': false, 'cnrl': 'none', 'text': 'none' })
       }
-      this.openDataLive.categoryLive = result
+      this.buidContextLive.categoryLive = result
       return true
     },
     setNaveTime () {
@@ -258,6 +332,12 @@ export default {
       } else if (this.vis2.active === true) {
         this.activevis = this.vis2.id
       }
+    },
+    setOpenData (od) {
+      let changeData = od.target.id
+      if (changeData === 'dt-x-axis') {
+        this.selectChange.xaxis = !this.selectChange.xaxis
+      }
     }
   }
 }
@@ -267,22 +347,12 @@ export default {
 #live-view {
   height: 100%;
   overflow: visible;
-  border: 2px solid lightgrey;
+  border: 4px solid lightgrey;
   margin-left: 1em;
 }
 
 #learn-close {
   clear:both;
-}
-
-#history {
-  border-top: 1px solid grey;
-  margin-top: 2em;
-}
-
-#live-context-datatypes li {
-  display: block;
-  border: 0px solid pink;
 }
 
 #live-knowledge-elements {
@@ -300,15 +370,7 @@ export default {
 .live-kelement {
   display: inline-block;
   vertical-align: top;
-  border: 0px solid red;
-  margin-left: 20px;
-  width: 180px;
-}
-
-.live-dtresults {
-  display: inline-block;
-  vertical-align: top;
-  border: 0px solid red;
+  border: 1px solid white;
   margin-left: 20px;
   width: 180px;
 }
@@ -323,6 +385,15 @@ export default {
 .live-item {
   font-weight: bold;
   border: 0px solid black;
+}
+
+.live-dtitem {
+  font-weight: bold;
+  border: 0px solid black;
+}
+
+#learn-update {
+  font-size: 2em;
 }
 
 .context-selecttime {

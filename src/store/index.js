@@ -139,13 +139,8 @@ const store = new Vuex.Store({
         Vue.set(state.opendataTools, mod, setOpendata)
         setOpendata = {}
       }
-      console.log('FINISHEDopen data toolbar')
-      console.log(state.opendataTools)
     },
     setOpendataBar: (state, inVerified) => {
-      console.log('set open data toolbard')
-      console.log(inVerified)
-      console.log(state.opendataTools)
       let setToolbar = state.opendataTools[inVerified.module]
       if (inVerified.state === false) {
         setToolbar[inVerified.dtid] = { text: 'hide data', active: true }
@@ -154,8 +149,6 @@ const store = new Vuex.Store({
         setToolbar[inVerified.dtid] = { text: 'open data', active: false }
         Vue.set(state.opendataTools, inVerified.module, setToolbar)
       }
-      console.log('UPDATEpoen data toolbar')
-      console.log(state.opendataTools)
     },
     setProgressStart: (state, inVerified) => {
       for (let nxp of inVerified) {
@@ -191,6 +184,8 @@ const store = new Vuex.Store({
       context.commit('setDashboardNXP', update)
       context.commit('setProgressUpdate', update)
       let entityReturn = await safeAPI.ECSinput(this.state.experimentStatus[update])
+      console.log('ECS return---------')
+      console.log(entityReturn)
       context.commit('setentityReturn', entityReturn)
     },
     actionDisplay (context, update) {
@@ -219,10 +214,28 @@ const store = new Vuex.Store({
     },
     async actionVisUpdate (context, update) {
       // send ref contract and update time?
+      console.log('vis update')
+      console.log(update)
+      console.log(this.state.entityUUIDReturn)
+      // entity container
+      let entityUUID = this.state.entityUUIDReturn[update.shellCNRL].shellID
       let updateContract = {}
-      updateContract = update // this.state.entityUUIDReturn[update.shellID]
+      updateContract = update
+      updateContract.entityUUID = entityUUID
       // the visulisation and compute module contract need updating for time which when how????
-      updateContract.modules = this.state.entityUUIDReturn[update.shellID].modules
+      let nxpModules = this.state.entityUUIDReturn[update.shellCNRL].modules
+      let updateModules = []
+      for (let mmod of nxpModules) {
+        if (mmod.cnrl === update.moduleCNRL) {
+          console.log('match mod')
+          console.log(mmod)
+          updateModules.push(mmod)
+        }
+      }
+      console.log('update modules')
+      console.log(updateModules)
+      updateContract.modules = updateModules
+      updateContract.input = 'refUpdate'
       let entityReturn = await safeAPI.ECSinput(updateContract)
       context.commit('setentityReturn', entityReturn)
     }

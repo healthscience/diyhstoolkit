@@ -121,15 +121,9 @@ export default {
     return {
       moduleType: 'nxp-visualise',
       localGrid: _.cloneDeep(this.$store.state.moduleGrid),
-      draggable: true,
-      resizable: true,
-      index: 0,
-      peerChart: {},
-      chartUI:
-      {
-        analysisStart: 'd----',
-        analysisEnd: '---dd-'
-      }
+      draggable: false,
+      resizable: false,
+      index: 0
     }
   },
   mounted () {
