@@ -18,8 +18,7 @@ var safeFlowAPI = function () {
   events.EventEmitter.call(this)
   this.SAPI = new SAFEflow()
   this.SAPI.on('displayUpdate', (data) => {
-    console.log('displayUpdate-76543434343')
-    console.log(data)
+    console.log('displayUpdate-befoe EMMIITT')
     this.emit('safeflowUpdate', data)
   })
   console.log('after auth called safelow interface')
@@ -167,9 +166,7 @@ safeFlowAPI.prototype.moduleKBID = async function (cnrl) {
 */
 safeFlowAPI.prototype.displayFilter = function (shellID, modules, entityData) {
   // setup return vis Object
-  let entityID = shellID // modBundle[shellID].status
-  console.log(entityID)
-  console.log(modules)
+  // console.log(modules)
   let TestDataBundle = {}
   let gridPerModule = {}
   for (let mod of modules) {

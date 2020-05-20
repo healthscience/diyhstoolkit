@@ -63,7 +63,7 @@ export default {
       active: false,
       text: 'off'
     },
-    navTime: [{ 'text': { 'word': '-day', 'number': 8460000 } }, { 'text': { 'word': '+day', 'number': 8460000 } }],
+    navTime: [{ 'text': { 'word': '-day', 'number': -8460000 } }, { 'text': { 'word': '+day', 'number': 8460000 } }],
     calendarTools:
     {
       name: 'Mulit Days',
@@ -144,6 +144,7 @@ export default {
     },
     setTimeData (seg) {
       // back and forward and time
+      console.log(seg)
       console.log(this.shellID)
       console.log(this.moduleCNRL)
       console.log(this.moduleType)
@@ -153,7 +154,7 @@ export default {
       contextK.moduleCNRL = this.moduleCNRL
       contextK.moduleType = this.moduleType
       contextK.mData = this.mData
-      contextK.startperiod = seg.text.number
+      contextK.startperiodchange = seg.text.number
       this.$store.dispatch('actionVisUpdate', contextK)
     }
   }

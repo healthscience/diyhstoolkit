@@ -9,9 +9,6 @@ Vue.use(Vuex)
 
 // listeners
 safeAPI.on('safeflowUpdate', (data) => {
-  // console.log('safeflowUpate--0099999')
-  // console.log(data)
-  // const listenStore = store
   store.dispatch('actionDisplay', data)
 })
 
@@ -22,6 +19,7 @@ const store = new Vuex.Store({
     liveNXP: '',
     liveNXPcontract: {},
     liveNXPbundle: {},
+    nxpModulesLive: [],
     dashboardNXP: {},
     experimentList: {},
     NXPexperimentList: {},
@@ -107,6 +105,8 @@ const store = new Vuex.Store({
       Vue.set(state.NXPexperimentData, state.liveNXP, inVerified.data)
     },
     setentityReturn: (state, inVerified) => {
+      console.log('return from ECS acknowledge input OK and being processes')
+      console.log(inVerified)
       state.entityUUIDReturn = inVerified
       // Vue.set(state.entityUUIDReturn, , inVerified)
     },
@@ -163,6 +163,9 @@ const store = new Vuex.Store({
     setProgressComplete: (state, inVerified) => {
       let setProgress = { text: 'Experiment in progress', active: false }
       Vue.set(state.nxpProgress, inVerified, setProgress)
+    },
+    setModulesLive: (state, inVerified) => {
+      state.nxpModulesLive = inVerified
     }
   },
   actions: {
@@ -185,11 +188,18 @@ const store = new Vuex.Store({
       context.commit('setProgressUpdate', update)
       let entityReturn = await safeAPI.ECSinput(this.state.experimentStatus[update])
       console.log('ECS return---------')
-      console.log(entityReturn)
       context.commit('setentityReturn', entityReturn)
     },
     actionDisplay (context, update) {
-      let mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
+      console.log('update action DISPLAY')
+      // console.log(update)
+      // console.log(this.state.entityUUIDReturn)
+      let mod = []
+      if (this.state.entityUUIDReturn === undefined) {
+        mod = this.state.nxpModulesLive
+      } else {
+        mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
+      }
       let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, update)
       // prepare toolbar status object
       context.commit('setToolbarState', mod)
@@ -199,11 +209,9 @@ const store = new Vuex.Store({
     },
     actionLocalGrid (context, update) {
       console.log('action test watch called')
-      console.log(update)
     },
     actionoWatch (context, update) {
       console.log('action watch called')
-      console.log(update)
       context.commit('setOutflowWatch', update)
     },
     actionVisToolbar (context, update) {
@@ -216,26 +224,35 @@ const store = new Vuex.Store({
       // send ref contract and update time?
       console.log('vis update')
       console.log(update)
-      console.log(this.state.entityUUIDReturn)
       // entity container
       let entityUUID = this.state.entityUUIDReturn[update.shellCNRL].shellID
       let updateContract = {}
-      updateContract = update
+      // updateContract = update
       updateContract.entityUUID = entityUUID
       // the visulisation and compute module contract need updating for time which when how????
       let nxpModules = this.state.entityUUIDReturn[update.shellCNRL].modules
       let updateModules = []
       for (let mmod of nxpModules) {
-        if (mmod.cnrl === update.moduleCNRL) {
-          console.log('match mod')
-          console.log(mmod)
+        if (mmod.type === 'compute') {
+          // update the Compute RefContract
+          mmod.automation = false
+          let newStartTime = mmod.time.startperiod + update.startperiodchange
+          mmod.time.startperiod = newStartTime
+          updateModules.push(mmod)
+        } else if (mmod.cnrl === update.moduleCNRL) {
           updateModules.push(mmod)
         }
       }
-      console.log('update modules')
-      console.log(updateModules)
+      // keep state of live modules
+      context.commit('setModulesLive', updateModules)
+      updateContract.cnrl = update.shellCNRL
+      updateContract.modules = updateModules
+      updateContract.entityUUID = entityUUID
+      updateContract.input = update.input
       updateContract.modules = updateModules
       updateContract.input = 'refUpdate'
+      console.log('check update TIMEITEITMETIME')
+      console.log(updateContract)
       let entityReturn = await safeAPI.ECSinput(updateContract)
       context.commit('setentityReturn', entityReturn)
     }
