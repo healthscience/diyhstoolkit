@@ -41,7 +41,8 @@ const store = new Vuex.Store({
         active: false
       }
     },
-    nxpProgress: {}
+    nxpProgress: {},
+    timeStartperiod: 0
   },
   getters: {
     // liveSafeFlow: state => state.safeFlow
@@ -166,6 +167,9 @@ const store = new Vuex.Store({
     },
     setModulesLive: (state, inVerified) => {
       state.nxpModulesLive = inVerified
+    },
+    setTimeAsk: (state, inVerified) => {
+      state.timeStartperiod = inVerified
     }
   },
   actions: {
@@ -206,6 +210,17 @@ const store = new Vuex.Store({
       context.commit('setOpendataState', displayReady)
       context.commit('setProgressComplete', this.state.liveNXP)
       context.commit('setLiveDisplayNXPModules', displayReady)
+      // extract out the time
+      for (let mmod of mod) {
+        if (mmod.type === 'compute') {
+          let newStartTime = 0
+          if (this.state.timeStartperiod === 0) {
+            newStartTime = mmod.time.startperiod
+            console.log(newStartTime)
+            context.commit('setTimeAsk', newStartTime)
+          }
+        }
+      }
     },
     actionLocalGrid (context, update) {
       console.log('action test watch called')
@@ -224,6 +239,8 @@ const store = new Vuex.Store({
       // send ref contract and update time?
       console.log('vis update')
       console.log(update)
+      console.log('timesate')
+      console.log(this.state.timeStartperiod)
       // entity container
       let entityUUID = this.state.entityUUIDReturn[update.shellCNRL].shellID
       let updateContract = {}
@@ -236,7 +253,15 @@ const store = new Vuex.Store({
         if (mmod.type === 'compute') {
           // update the Compute RefContract
           mmod.automation = false
-          let newStartTime = mmod.time.startperiod + update.startperiodchange
+          let newStartTime = 0
+          if (this.state.timeStartperiod === 0) {
+            newStartTime = Date.now() + update.startperiodchange
+          } else {
+            // time state available
+            newStartTime = this.state.timeStartperiod + update.startperiodchange
+          }
+          console.log(newStartTime)
+          context.commit('setTimeAsk', newStartTime)
           mmod.time.startperiod = newStartTime
           updateModules.push(mmod)
         } else if (mmod.cnrl === update.moduleCNRL) {

@@ -63,7 +63,7 @@ export default {
       active: false,
       text: 'off'
     },
-    navTime: [{ 'text': { 'word': '-day', 'number': -8460000 } }, { 'text': { 'word': '+day', 'number': 8460000 } }],
+    navTime: [{ 'text': { 'word': '-day', 'number': -86400000 } }, { 'text': { 'word': '+day', 'number': 86400000 } }],
     calendarTools:
     {
       name: 'Mulit Days',

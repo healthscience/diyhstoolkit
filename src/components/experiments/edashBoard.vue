@@ -130,9 +130,6 @@ export default {
   },
   methods: {
     ...mapActions(['actionLocalGrid']),
-    closeModule () {
-      console.log('close module')
-    },
     toolbarUpdate (bp) {
       console.log(bp)
       let updateToolbar = {}
@@ -140,6 +137,9 @@ export default {
       updateToolbar.module = this.moduleCNRL
       console.log(updateToolbar)
       this.$store.dispatch('actionVisToolbar', updateToolbar)
+    },
+    closeModule () {
+      console.log('close module')
     },
     itemTitle (item) {
       var result = item.i
