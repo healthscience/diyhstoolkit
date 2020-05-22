@@ -139,9 +139,9 @@ export default {
       contextK.mData = this.mData
       contextK.startperiod = 0
       contextK.startperiodchange = 0
-      contextK.rangechange = this.calendarList
+      contextK.rangechange = this.calendarListMS
       console.log(contextK)
-      // this.$store.dispatch('actionVisUpdate', contextK)
+      this.$store.dispatch('actionVisUpdate', contextK)
     },
     singlechartMultiday (cm) {
       // prepare update for safeFLOW
@@ -153,7 +153,6 @@ export default {
       contextK.startperiod = moment(this.value).valueOf()
       contextK.startperiodchange = 0
       contextK.rangechange = []
-      console.log(contextK)
       this.$store.dispatch('actionVisUpdate', contextK)
     },
     setTimeData (seg) {

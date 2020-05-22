@@ -253,17 +253,26 @@ const store = new Vuex.Store({
         if (mmod.type === 'compute') {
           // update the Compute RefContract
           mmod.automation = false
-          let newStartTime = 0
+          let newStartTime = []
           if (this.state.timeStartperiod === 0) {
-            newStartTime = Date.now() + update.startperiodchange
+            let freshStart = Date.now() + update.startperiodchange
+            newStartTime.push(freshStart)
           } else {
             // time state available
             if (update.startperiod !== 0) {
-              newStartTime = update.startperiod
+              console.log('not equla zero')
+              console.log(update)
+              newStartTime.push(update.startperiod)
             } else if (update.rangechange.length > 0) {
-              //
+              console.log('range chantge item')
+              console.log(update.rangechange)
+              newStartTime = update.rangechange
             } else {
-              newStartTime = this.state.timeStartperiod + update.startperiodchange
+              console.log('back forward in time')
+              console.log(update)
+              console.log(this.state.timeStartperiod)
+              let updateSum = parseInt(this.state.timeStartperiod) + update.startperiodchange
+              newStartTime.push(updateSum)
             }
           }
           console.log(newStartTime)

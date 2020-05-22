@@ -166,6 +166,8 @@ safeFlowAPI.prototype.moduleKBID = async function (cnrl) {
 */
 safeFlowAPI.prototype.displayFilter = function (shellID, modules, entityData) {
   // setup return vis Object
+  console.log('displayfiter for VUEX presenation')
+  console.log(entityData)
   // console.log(modules)
   let TestDataBundle = {}
   let gridPerModule = {}
