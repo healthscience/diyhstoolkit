@@ -258,7 +258,13 @@ const store = new Vuex.Store({
             newStartTime = Date.now() + update.startperiodchange
           } else {
             // time state available
-            newStartTime = this.state.timeStartperiod + update.startperiodchange
+            if (update.startperiod !== 0) {
+              newStartTime = update.startperiod
+            } else if (update.rangechange.length > 0) {
+              //
+            } else {
+              newStartTime = this.state.timeStartperiod + update.startperiodchange
+            }
           }
           console.log(newStartTime)
           context.commit('setTimeAsk', newStartTime)

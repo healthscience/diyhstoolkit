@@ -45,6 +45,7 @@
 <script>
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
+const moment = require('moment')
 
 export default {
   name: 'calendar-tool',
@@ -72,6 +73,7 @@ export default {
     },
     displayTime: 'today',
     calendarList: [],
+    calendarListMS: [],
     time1: '',
     time2: '',
     time3: '',
@@ -117,6 +119,7 @@ export default {
         this.$emit('updateLearn', bTime)
       } else if (this.calendarTools.active === true) {
         this.calendarList.push(this.value)
+        this.calendarListMS.push(moment(this.value).valueOf())
       }
     },
     setMultidays (md) {
@@ -124,37 +127,45 @@ export default {
     },
     clearMultidays (md) {
       this.calendarList = []
+      this.calendarListMS = []
       this.makeTimeBundles = []
     },
     chartMultiday (cm) {
       // prepare list of KnowledgeBundles to visualise
-      let uSeg = {}
-      uSeg.chart = 'multi'
-      uSeg.text = 'timeList'
-      uSeg.timelist = this.calendarList
-      this.$emit('updateLearn', uSeg)
+      let contextK = {}
+      contextK.shellCNRL = this.shellID
+      contextK.moduleCNRL = this.moduleCNRL
+      contextK.moduleType = this.moduleType
+      contextK.mData = this.mData
+      contextK.startperiod = 0
+      contextK.startperiodchange = 0
+      contextK.rangechange = this.calendarList
+      console.log(contextK)
+      // this.$store.dispatch('actionVisUpdate', contextK)
     },
     singlechartMultiday (cm) {
-      // prepare list of KnowledgeBundles to visualise
-      let uSeg = {}
-      uSeg.chart = 'single'
-      uSeg.text = 'timeList'
-      uSeg.timelist = this.calendarList
-      this.$emit('updateLearn', uSeg)
+      // prepare update for safeFLOW
+      let contextK = {}
+      contextK.shellCNRL = this.shellID
+      contextK.moduleCNRL = this.moduleCNRL
+      contextK.moduleType = this.moduleType
+      contextK.mData = this.mData
+      contextK.startperiod = moment(this.value).valueOf()
+      contextK.startperiodchange = 0
+      contextK.rangechange = []
+      console.log(contextK)
+      this.$store.dispatch('actionVisUpdate', contextK)
     },
     setTimeData (seg) {
       // back and forward and time
-      console.log(seg)
-      console.log(this.shellID)
-      console.log(this.moduleCNRL)
-      console.log(this.moduleType)
-      console.log(this.mData)
       let contextK = {}
       contextK.shellCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
       contextK.moduleType = this.moduleType
       contextK.mData = this.mData
       contextK.startperiodchange = seg.text.number
+      contextK.startperiod = 0
+      contextK.rangechange = []
       this.$store.dispatch('actionVisUpdate', contextK)
     }
   }
