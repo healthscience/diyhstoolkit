@@ -152,7 +152,8 @@ export default {
       contextK.mData = this.mData
       contextK.startperiod = moment(this.value).valueOf()
       contextK.startperiodchange = 0
-      contextK.rangechange = []
+      contextK.rangechange = this.calendarListMS
+      contextK.singlemulti = true
       this.$store.dispatch('actionVisUpdate', contextK)
     },
     setTimeData (seg) {

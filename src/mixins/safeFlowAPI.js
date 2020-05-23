@@ -11,12 +11,14 @@
 */
 
 import SAFEflow from 'node-safeflow'
+import CryptoUtility from './cryptoUtility.js'
 const util = require('util')
 const events = require('events')
 
 var safeFlowAPI = function () {
   events.EventEmitter.call(this)
   this.SAPI = new SAFEflow()
+  this.liveCrypto = new CryptoUtility()
   this.SAPI.on('displayUpdate', (data) => {
     console.log('displayUpdate-befoe EMMIITT')
     this.emit('safeflowUpdate', data)
@@ -164,9 +166,10 @@ safeFlowAPI.prototype.moduleKBID = async function (cnrl) {
 * @method diplayFilter
 *
 */
-safeFlowAPI.prototype.displayFilter = function (shellID, modules, entityData) {
+safeFlowAPI.prototype.displayFilter = function (shellID, modules, time, entityData) {
   // setup return vis Object
-  console.log('displayfiter for VUEX presenation')
+  console.log('DISPLAYflitttter')
+  console.log(time)
   console.log(entityData)
   // console.log(modules)
   let TestDataBundle = {}
@@ -190,9 +193,17 @@ safeFlowAPI.prototype.displayFilter = function (shellID, modules, entityData) {
       // [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} }], '1': { 'chartPackage': { 'labels': [2, 4] }, { 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} } }, 'message': 'compute-complete'
     } else if (mod.type === 'Visualise') {
       // loop over data vis read
+      mod.grid = []
+      // let dataIndex = Object.keys(entityData.liveVisualC.visualData)
+      for (let dr of entityData.liveVisualC.liveVislist) {
+        // need to add to grid for multi charts asked for
+        // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
+        let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
+        mod.grid.push(newGriditem)
+      }
+      gridPerModule = {}
       gridPerModule[mod.cnrl] = mod.grid
       TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': entityData.liveVisualC.visualData }
-      /* { '0': entityData.liveVisualC.visualData, '1': entityData.liveVisualC.visualData } { 'chartPackage': { 'labels': [2, 4], 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': { }, 'message': 'compute-complete' } */
     }
   }
   console.log('TIMEPLATE DATA XLP')

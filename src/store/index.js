@@ -21,6 +21,7 @@ const store = new Vuex.Store({
     liveNXPbundle: {},
     nxpModulesLive: [],
     dashboardNXP: {},
+    ECSupdateOUT: {},
     experimentList: {},
     NXPexperimentList: {},
     experimentStatus: {},
@@ -170,6 +171,14 @@ const store = new Vuex.Store({
     },
     setTimeAsk: (state, inVerified) => {
       state.timeStartperiod = inVerified
+    },
+    setUpdatesOUT: (state, inVerified) => {
+      state.ECSupdateOUT = inVerified
+    },
+    setClearGrid: (state, inVerified) => {
+      state.moduleGrid = []
+      console.log('state of GRID')
+      console.log(state.moduleGrid)
     }
   },
   actions: {
@@ -187,28 +196,36 @@ const store = new Vuex.Store({
       context.commit('setProgressStart', nsNXPlive)
     },
     async actionDashboardState (context, update) {
+      console.log(update)
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
       context.commit('setProgressUpdate', update)
+      context.commit('setUpdatesOUT', update)
       let entityReturn = await safeAPI.ECSinput(this.state.experimentStatus[update])
       console.log('ECS return---------')
       context.commit('setentityReturn', entityReturn)
     },
     actionDisplay (context, update) {
       console.log('update action DISPLAY')
-      // console.log(update)
-      // console.log(this.state.entityUUIDReturn)
+      console.log(update)
+      console.log(this.state.entityUUIDReturn)
+      console.log(this.state.ECSupdateOUT)
       let mod = []
       if (this.state.entityUUIDReturn === undefined) {
         mod = this.state.nxpModulesLive
       } else {
         mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
       }
-      let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, update)
+      // remove existing vis component if in single mode (default)
+      // context.commit('setClearGrid')
+      // update or first time
+      let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
       // prepare toolbar status object
       context.commit('setToolbarState', mod)
       context.commit('setOpendataState', displayReady)
       context.commit('setProgressComplete', this.state.liveNXP)
+      console.log('state module grid')
+      console.log(this.state.moduleGrid)
       context.commit('setLiveDisplayNXPModules', displayReady)
       // extract out the time
       for (let mmod of mod) {
@@ -280,6 +297,10 @@ const store = new Vuex.Store({
           mmod.time.startperiod = newStartTime
           updateModules.push(mmod)
         } else if (mmod.cnrl === update.moduleCNRL) {
+          console.log('update.singlemulti')
+          console.log(update.singlemulti)
+          mmod.singlemulti = update.singlemulti
+          console.log(mmod)
           updateModules.push(mmod)
         }
       }
@@ -293,6 +314,7 @@ const store = new Vuex.Store({
       updateContract.input = 'refUpdate'
       console.log('check update TIMEITEITMETIME')
       console.log(updateContract)
+      context.commit('setUpdatesOUT', updateContract)
       let entityReturn = await safeAPI.ECSinput(updateContract)
       context.commit('setentityReturn', entityReturn)
     }
