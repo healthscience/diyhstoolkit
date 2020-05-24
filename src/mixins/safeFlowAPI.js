@@ -169,7 +169,6 @@ safeFlowAPI.prototype.moduleKBID = async function (cnrl) {
 safeFlowAPI.prototype.displayFilter = function (shellID, modules, time, entityData) {
   // setup return vis Object
   console.log('DISPLAYflitttter')
-  console.log(time)
   console.log(entityData)
   // console.log(modules)
   let TestDataBundle = {}
@@ -177,9 +176,13 @@ safeFlowAPI.prototype.displayFilter = function (shellID, modules, time, entityDa
   for (let mod of modules) {
     // need to match each modules to Component Data
     if (mod.type === 'Question') {
+      console.log('questions')
+      console.log(mod.grid)
       gridPerModule[mod.cnrl] = mod.grid
       TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true }, 'grid': mod.grid, 'data': [{ 'form': 'html' }, { 'content': 'Movement Summary' }], 'message': 'compute-complete' }
     } else if (mod.type === 'Device') {
+      console.log('Device module')
+      console.log(mod.grid)
       gridPerModule[mod.cnrl] = mod.grid
       TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': mod.grid, 'data': entityData.liveDeviceC.devices, 'message': 'compute-complete' }
     } else if (mod.type === 'Dapp') {
@@ -193,26 +196,29 @@ safeFlowAPI.prototype.displayFilter = function (shellID, modules, time, entityDa
       // [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} }], '1': { 'chartPackage': { 'labels': [2, 4] }, { 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} } }, 'message': 'compute-complete'
     } else if (mod.type === 'Visualise') {
       // loop over data vis read
+      console.log(mod)
       mod.grid = []
+      let makeGrid = []
       // let dataIndex = Object.keys(entityData.liveVisualC.visualData)
-      if (entityData.liveVisualC.singlemulti) {
+      console.log(entityData.liveVisualC.singlemulti)
+      if (entityData.liveVisualC.singlemulti.chartPackage) {
         // single chart multi datasets
         let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'singlemulti', static: false }
-        mod.grid.push(newGriditem)
-        gridPerModule = {}
-        gridPerModule[mod.cnrl] = mod.grid
-        TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': { 'singlemulti': entityData.liveVisualC.singlemulti } }
+        makeGrid.push(newGriditem)
+        // gridPerModule = {}
+        gridPerModule[mod.cnrl] = makeGrid
+        TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': { 'singlemulti': entityData.liveVisualC.singlemulti } }
       } else {
         // normal display indivduals charts
         for (let dr of entityData.liveVisualC.liveVislist) {
           // need to add to grid for multi charts asked for
           // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
           let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
-          mod.grid.push(newGriditem)
+          makeGrid.push(newGriditem)
         }
-        gridPerModule = {}
-        gridPerModule[mod.cnrl] = mod.grid
-        TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': entityData.liveVisualC.visualData }
+        // gridPerModule = {}
+        gridPerModule[mod.cnrl] = makeGrid
+        TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': entityData.liveVisualC.visualData }
       }
     }
   }

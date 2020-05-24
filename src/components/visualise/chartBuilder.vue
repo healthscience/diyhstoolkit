@@ -1,6 +1,7 @@
 <template>
-  <div id="k-toolkit"> toolbarstat === {{ toolbarStatusLive }}
-    <div id="diy-tools" v-if="toolbarStatusLive.active">
+  <div id="k-toolkit">
+    <button type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>dsds
+    <div id="diy-tools" v-if="visToolbarStatusLive.active">
       <div id="chart-type">
         <ul>
           <li>
@@ -57,8 +58,10 @@ export default {
     mData: String
   },
   computed: {
-    toolbarStatusLive: function () {
-      return this.$store.state.toolbarStatus[this.moduleCNRL]
+    visToolbarStatusLive: function () {
+      console.log('vid toooooobar')
+      console.log(this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData])
+      return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
     },
     openDataLive: function () {
       return this.$store.state.opendataTools[this.moduleCNRL][this.mData]
@@ -76,6 +79,14 @@ export default {
   methods: {
     chartSelect () {
       console.log('chart select type bar line mixed')
+    },
+    visToolbarUpdate () {
+      console.log('vis toolbar')
+      let updateVisTools = {}
+      updateVisTools.state = this.visToolbarStatusLive.active
+      updateVisTools.module = this.moduleCNRL
+      updateVisTools.dtid = this.mData
+      this.$store.dispatch('actionVistoolsUpdate', updateVisTools)
     },
     openData (od) {
       let updateOpendata = {}

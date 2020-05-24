@@ -40,7 +40,6 @@
                            :i='item.i'
                         >
                     <!-- <span class='text'>box{{itemTitle(item)}}</span> -->
-                    vvv {{ moduleContent.prime.vistype }}
                     <component v-bind:is="moduleContent.prime.vistype" :shellID="shellCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
                     {{ item.i }} --ii
                 </grid-item>

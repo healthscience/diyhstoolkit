@@ -35,6 +35,7 @@ const store = new Vuex.Store({
         active: false
       }
     },
+    toolbarVisStatus: {},
     opendataTools:
     {
       'default': {
@@ -103,8 +104,13 @@ const store = new Vuex.Store({
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
     },
     setLiveDisplayNXPModules: (state, inVerified) => {
+      console.log('update vuex with new datadisplay')
+      console.log(inVerified)
       state.moduleGrid = inVerified.grid
       Vue.set(state.NXPexperimentData, state.liveNXP, inVerified.data)
+      console.log('what is set>>>>')
+      console.log(state.moduleGrid)
+      console.log(state.NXPexperimentData)
     },
     setentityReturn: (state, inVerified) => {
       console.log('return from ECS acknowledge input OK and being processes')
@@ -129,6 +135,29 @@ const store = new Vuex.Store({
       } else {
         setToolbar = { text: 'show', active: false }
         Vue.set(state.toolbarStatus, inVerified.module, setToolbar)
+      }
+    },
+    setVisToolbarState: (state, inVerified) => {
+      let setVistoolbar = {}
+      let moduleKeys = Object.keys(inVerified.grid)
+      for (let mod of moduleKeys) {
+        for (let dti of inVerified.grid[mod]) {
+          setVistoolbar[dti.i] = { text: 'open tools', active: false }
+        }
+        Vue.set(state.toolbarVisStatus, mod, setVistoolbar)
+        setVistoolbar = {}
+      }
+      console.log('vis too bar state')
+      console.log(state.toolbarVisStatus)
+    },
+    setVistoolsUpdate: (state, inVerified) => {
+      let setVisTools = state.toolbarVisStatus[inVerified.module]
+      if (inVerified.state === false) {
+        setVisTools[inVerified.dtid] = { text: 'hide tools', active: true }
+        Vue.set(state.toolbarVisStatus, inVerified.module, setVisTools)
+      } else {
+        setVisTools[inVerified.dtid] = { text: 'open tools', active: false }
+        Vue.set(state.toolbarVisStatus, inVerified.module, setVisTools)
       }
     },
     setOpendataState: (state, inVerified) => {
@@ -163,6 +192,9 @@ const store = new Vuex.Store({
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
     setProgressComplete: (state, inVerified) => {
+      console.log('set progress complete')
+      console.log(state.nxpProgress)
+      console.log(inVerified)
       let setProgress = { text: 'Experiment in progress', active: false }
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
@@ -215,15 +247,15 @@ const store = new Vuex.Store({
     actionVisToolbar (context, update) {
       context.commit('setVistoolbar', update)
     },
+    actionVistoolsUpdate (context, update) {
+      context.commit('setVistoolsUpdate', update)
+    },
     actionVisOpenData (context, update) {
       context.commit('setOpendataBar', update)
     },
     async actionVisUpdate (context, update) {
       // send ref contract and update time?
       console.log('vis update')
-      console.log(update)
-      console.log('timesate')
-      console.log(this.state.timeStartperiod)
       // entity container
       let entityUUID = this.state.entityUUIDReturn[update.shellCNRL].shellID
       let updateContract = {}
@@ -291,8 +323,10 @@ const store = new Vuex.Store({
       // update or first time
       let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
       console.log('DISPLAY READY BACK')
+      console.log(displayReady)
       // prepare toolbar status object
       context.commit('setToolbarState', mod)
+      context.commit('setVisToolbarState', displayReady)
       context.commit('setOpendataState', displayReady)
       context.commit('setProgressComplete', this.state.liveNXP)
       console.log('state module grid')
