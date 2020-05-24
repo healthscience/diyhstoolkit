@@ -195,15 +195,25 @@ safeFlowAPI.prototype.displayFilter = function (shellID, modules, time, entityDa
       // loop over data vis read
       mod.grid = []
       // let dataIndex = Object.keys(entityData.liveVisualC.visualData)
-      for (let dr of entityData.liveVisualC.liveVislist) {
-        // need to add to grid for multi charts asked for
-        // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
-        let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
+      if (entityData.liveVisualC.singlemulti) {
+        // single chart multi datasets
+        let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'singlemulti', static: false }
         mod.grid.push(newGriditem)
+        gridPerModule = {}
+        gridPerModule[mod.cnrl] = mod.grid
+        TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': { 'singlemulti': entityData.liveVisualC.singlemulti } }
+      } else {
+        // normal display indivduals charts
+        for (let dr of entityData.liveVisualC.liveVislist) {
+          // need to add to grid for multi charts asked for
+          // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
+          let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
+          mod.grid.push(newGriditem)
+        }
+        gridPerModule = {}
+        gridPerModule[mod.cnrl] = mod.grid
+        TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': entityData.liveVisualC.visualData }
       }
-      gridPerModule = {}
-      gridPerModule[mod.cnrl] = mod.grid
-      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': mod.grid, 'data': entityData.liveVisualC.visualData }
     }
   }
   console.log('TIMEPLATE DATA XLP')

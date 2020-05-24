@@ -205,40 +205,6 @@ const store = new Vuex.Store({
       console.log('ECS return---------')
       context.commit('setentityReturn', entityReturn)
     },
-    actionDisplay (context, update) {
-      console.log('update action DISPLAY')
-      console.log(update)
-      console.log(this.state.entityUUIDReturn)
-      console.log(this.state.ECSupdateOUT)
-      let mod = []
-      if (this.state.entityUUIDReturn === undefined) {
-        mod = this.state.nxpModulesLive
-      } else {
-        mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
-      }
-      // remove existing vis component if in single mode (default)
-      // context.commit('setClearGrid')
-      // update or first time
-      let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
-      // prepare toolbar status object
-      context.commit('setToolbarState', mod)
-      context.commit('setOpendataState', displayReady)
-      context.commit('setProgressComplete', this.state.liveNXP)
-      console.log('state module grid')
-      console.log(this.state.moduleGrid)
-      context.commit('setLiveDisplayNXPModules', displayReady)
-      // extract out the time
-      for (let mmod of mod) {
-        if (mmod.type === 'compute') {
-          let newStartTime = 0
-          if (this.state.timeStartperiod === 0) {
-            newStartTime = mmod.time.startperiod
-            console.log(newStartTime)
-            context.commit('setTimeAsk', newStartTime)
-          }
-        }
-      }
-    },
     actionLocalGrid (context, update) {
       console.log('action test watch called')
     },
@@ -272,35 +238,28 @@ const store = new Vuex.Store({
           mmod.automation = false
           let newStartTime = []
           if (this.state.timeStartperiod === 0) {
+            console.log('first time time')
             let freshStart = Date.now() + update.startperiodchange
             newStartTime.push(freshStart)
           } else {
             // time state available
-            if (update.startperiod !== 0) {
-              console.log('not equla zero')
-              console.log(update)
+            if (update.startperiod !== 0 && update.rangechange.length === 0) {
+              console.log('yes start period not zero')
               newStartTime.push(update.startperiod)
             } else if (update.rangechange.length > 0) {
-              console.log('range chantge item')
-              console.log(update.rangechange)
+              console.log('range is asked for')
               newStartTime = update.rangechange
             } else {
-              console.log('back forward in time')
-              console.log(update)
-              console.log(this.state.timeStartperiod)
+              console.log('back forward time')
               let updateSum = parseInt(this.state.timeStartperiod) + update.startperiodchange
               newStartTime.push(updateSum)
             }
           }
-          console.log(newStartTime)
           context.commit('setTimeAsk', newStartTime)
           mmod.time.startperiod = newStartTime
           updateModules.push(mmod)
         } else if (mmod.cnrl === update.moduleCNRL) {
-          console.log('update.singlemulti')
-          console.log(update.singlemulti)
           mmod.singlemulti = update.singlemulti
-          console.log(mmod)
           updateModules.push(mmod)
         }
       }
@@ -312,11 +271,44 @@ const store = new Vuex.Store({
       updateContract.input = update.input
       updateContract.modules = updateModules
       updateContract.input = 'refUpdate'
-      console.log('check update TIMEITEITMETIME')
-      console.log(updateContract)
       context.commit('setUpdatesOUT', updateContract)
       let entityReturn = await safeAPI.ECSinput(updateContract)
       context.commit('setentityReturn', entityReturn)
+    },
+    actionDisplay (context, update) {
+      console.log('update action DISPLAY')
+      // console.log(update)
+      console.log(this.state.entityUUIDReturn)
+      console.log(this.state.ECSupdateOUT)
+      let mod = []
+      if (this.state.entityUUIDReturn === undefined) {
+        mod = this.state.nxpModulesLive
+      } else {
+        mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
+      }
+      // remove existing vis component if in single mode (default)
+      // context.commit('setClearGrid')
+      // update or first time
+      let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
+      console.log('DISPLAY READY BACK')
+      // prepare toolbar status object
+      context.commit('setToolbarState', mod)
+      context.commit('setOpendataState', displayReady)
+      context.commit('setProgressComplete', this.state.liveNXP)
+      console.log('state module grid')
+      console.log(this.state.moduleGrid)
+      context.commit('setLiveDisplayNXPModules', displayReady)
+      // extract out the time
+      for (let mmod of mod) {
+        if (mmod.type === 'compute') {
+          let newStartTime = 0
+          if (this.state.timeStartperiod === 0) {
+            newStartTime = mmod.time.startperiod
+            console.log(newStartTime)
+            context.commit('setTimeAsk', newStartTime)
+          }
+        }
+      }
     }
   },
   modules,
