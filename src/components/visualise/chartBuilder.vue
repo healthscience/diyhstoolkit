@@ -1,6 +1,6 @@
 <template>
   <div id="k-toolkit">
-    <button type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>dsds
+    <button type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>
     <div id="diy-tools" v-if="visToolbarStatusLive.active">
       <div id="chart-type">
         <ul>
@@ -14,9 +14,6 @@
               </li>
               <li>
                 <button @click.prevent="chartSelect()">Mixed</button>
-              </li>
-              <li>
-                <button @click.prevent="chartSelect()">Tools</button>
               </li>
             </div>
           <li>

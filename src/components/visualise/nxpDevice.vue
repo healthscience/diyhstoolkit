@@ -23,8 +23,6 @@ export default {
   },
   computed: {
     liveData: function () {
-      console.log('device moduloe')
-      console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData])
       return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
     }
   },

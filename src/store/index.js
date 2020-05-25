@@ -27,6 +27,7 @@ const store = new Vuex.Store({
     experimentStatus: {},
     NXPexperimentData: {},
     entityUUIDReturn: {},
+    updateentityUUIDReturn: {},
     moduleGrid: {},
     toolbarStatus:
     {
@@ -82,10 +83,7 @@ const store = new Vuex.Store({
       }
     },
     setOutflowWatch: (state, inVerified) => {
-      console.log('##################commit watchflow')
-      console.log(inVerified)
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
-      console.log(state.experimentStatus)
     },
     setNetworkExperimentList: (state, inVerified) => {
       let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
@@ -104,18 +102,19 @@ const store = new Vuex.Store({
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
     },
     setLiveDisplayNXPModules: (state, inVerified) => {
-      console.log('update vuex with new datadisplay')
-      console.log(inVerified)
       state.moduleGrid = inVerified.grid
       Vue.set(state.NXPexperimentData, state.liveNXP, inVerified.data)
-      console.log('what is set>>>>')
-      console.log(state.moduleGrid)
-      console.log(state.NXPexperimentData)
     },
     setentityReturn: (state, inVerified) => {
-      console.log('return from ECS acknowledge input OK and being processes')
+      console.log('ECS acknowledge inpue been processed')
       console.log(inVerified)
       state.entityUUIDReturn = inVerified
+      // Vue.set(state.entityUUIDReturn, , inVerified)
+    },
+    setUpdateentityReturn: (state, inVerified) => {
+      console.log('ECS acknowledge inpue been processed')
+      console.log(inVerified)
+      state.updateentityUUIDReturn = inVerified
       // Vue.set(state.entityUUIDReturn, , inVerified)
     },
     setUpdateGrid: (state, inVerified) => {
@@ -147,8 +146,6 @@ const store = new Vuex.Store({
         Vue.set(state.toolbarVisStatus, mod, setVistoolbar)
         setVistoolbar = {}
       }
-      console.log('vis too bar state')
-      console.log(state.toolbarVisStatus)
     },
     setVistoolsUpdate: (state, inVerified) => {
       let setVisTools = state.toolbarVisStatus[inVerified.module]
@@ -192,9 +189,6 @@ const store = new Vuex.Store({
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
     setProgressComplete: (state, inVerified) => {
-      console.log('set progress complete')
-      console.log(state.nxpProgress)
-      console.log(inVerified)
       let setProgress = { text: 'Experiment in progress', active: false }
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
@@ -209,8 +203,6 @@ const store = new Vuex.Store({
     },
     setClearGrid: (state, inVerified) => {
       state.moduleGrid = []
-      console.log('state of GRID')
-      console.log(state.moduleGrid)
     }
   },
   actions: {
@@ -228,14 +220,11 @@ const store = new Vuex.Store({
       context.commit('setProgressStart', nsNXPlive)
     },
     async actionDashboardState (context, update) {
-      console.log(update)
-      console.log(this.state.experimentStatus[update])
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
       context.commit('setProgressUpdate', update)
       context.commit('setUpdatesOUT', update)
       let entityReturn = await safeAPI.ECSinput(this.state.experimentStatus[update])
-      console.log('ECS return---------')
       context.commit('setentityReturn', entityReturn)
     },
     actionLocalGrid (context, update) {
@@ -256,7 +245,6 @@ const store = new Vuex.Store({
     },
     async actionVisUpdate (context, update) {
       // send ref contract and update time?
-      console.log('vis update')
       // entity container
       let entityUUID = this.state.entityUUIDReturn[update.shellCNRL].shellID
       let updateContract = {}
@@ -271,19 +259,15 @@ const store = new Vuex.Store({
           mmod.automation = false
           let newStartTime = []
           if (this.state.timeStartperiod === 0) {
-            console.log('first time time')
             let freshStart = Date.now() + update.startperiodchange
             newStartTime.push(freshStart)
           } else {
             // time state available
             if (update.startperiod !== 0 && update.rangechange.length === 0) {
-              console.log('yes start period not zero')
               newStartTime.push(update.startperiod)
             } else if (update.rangechange.length > 0) {
-              console.log('range is asked for')
               newStartTime = update.rangechange
             } else {
-              console.log('back forward time')
               let updateSum = parseInt(this.state.timeStartperiod) + update.startperiodchange
               newStartTime.push(updateSum)
             }
@@ -306,17 +290,19 @@ const store = new Vuex.Store({
       updateContract.input = 'refUpdate'
       context.commit('setUpdatesOUT', updateContract)
       let entityReturn = await safeAPI.ECSinput(updateContract)
-      context.commit('setentityReturn', entityReturn)
+      context.commit('setUpdateentityReturn', entityReturn)
     },
     actionDisplay (context, update) {
-      console.log('update action DISPLAY')
-      // console.log(update)
-      console.log(this.state.entityUUIDReturn)
-      console.log(this.state.ECSupdateOUT)
       let mod = []
       if (this.state.entityUUIDReturn === undefined) {
         mod = this.state.nxpModulesLive
       } else {
+        // only update modules returned
+        console.log('moduels 1')
+        console.log(this.state.experimentStatus) // [this.state.liveNXP])
+        console.log(this.state.nxpModulesLive)
+        console.log(this.state.entityUUIDReturn[this.state.liveNXP].modules)
+        console.log(this.state.updateentityUUIDReturn[this.state.liveNXP].modules)
         mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
       }
       // remove existing vis component if in single mode (default)
@@ -330,8 +316,6 @@ const store = new Vuex.Store({
       context.commit('setVisToolbarState', displayReady)
       context.commit('setOpendataState', displayReady)
       context.commit('setProgressComplete', this.state.liveNXP)
-      console.log('state module grid')
-      console.log(this.state.moduleGrid)
       context.commit('setLiveDisplayNXPModules', displayReady)
       // extract out the time
       for (let mmod of mod) {
@@ -339,7 +323,6 @@ const store = new Vuex.Store({
           let newStartTime = 0
           if (this.state.timeStartperiod === 0) {
             newStartTime = mmod.time.startperiod
-            console.log(newStartTime)
             context.commit('setTimeAsk', newStartTime)
           }
         }

@@ -12,6 +12,8 @@
       </div>
     </div>
     <div class="network-experiments">
+      <live-timeline></live-timeline>
+      <live-lifestyle></live-lifestyle>
       <live-network></live-network>
     </div>
   </div>
@@ -22,13 +24,17 @@
 import NetworkStatus from '@/components/home/NetworkStatus.vue'
 // import StartNetworkExperiment from '@/components/home/StartNetworkExperiment.vue'
 import LiveNetwork from '@/components/home/LiveNetwork.vue'
+import LiveTimeline from '@/components/home/LiveTimeline.vue'
+import LiveLifestyle from '@/components/home/LiveLifestyle.vue'
 
 export default {
   name: 'home',
   components: {
     NetworkStatus,
     // StartNetworkExperiment,
-    LiveNetwork
+    LiveNetwork,
+    LiveTimeline,
+    LiveLifestyle
   },
   data () {
     return {

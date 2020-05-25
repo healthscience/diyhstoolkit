@@ -38,6 +38,12 @@
           </ul>
         </div>
       </li>
+      <li class="context-future">
+        <button class="button is-primary" @click.prevent="setFuture('future')">{{ future.text }}</button>
+      </li>
+      <li class="context-network">
+        <button class="button is-primary" @click.prevent="setNetwork('networkview')">{{ network.text }}</button>
+      </li>
     </ul>
   </div>
 </template>
@@ -72,6 +78,16 @@ export default {
       active: false
     },
     displayTime: 'today',
+    future:
+    {
+      text: 'future',
+      active: true
+    },
+    network:
+    {
+      text: 'network',
+      active: true
+    },
     calendarList: [],
     calendarListMS: [],
     time1: '',
@@ -167,6 +183,14 @@ export default {
       contextK.startperiod = 0
       contextK.rangechange = []
       this.$store.dispatch('actionVisUpdate', contextK)
+    },
+    setFuture (ff) {
+      console.log('cale to make future?')
+      console.log(ff)
+    },
+    setNetwork (nv) {
+      console.log('is a network visualisation available?')
+      console.log(nv)
     }
   }
 }

@@ -20,10 +20,8 @@ var safeFlowAPI = function () {
   this.SAPI = new SAFEflow()
   this.liveCrypto = new CryptoUtility()
   this.SAPI.on('displayUpdate', (data) => {
-    console.log('displayUpdate-befoe EMMIITT')
     this.emit('safeflowUpdate', data)
   })
-  console.log('after auth called safelow interface')
 }
 
 /**
@@ -176,13 +174,9 @@ safeFlowAPI.prototype.displayFilter = function (shellID, modules, time, entityDa
   for (let mod of modules) {
     // need to match each modules to Component Data
     if (mod.type === 'Question') {
-      console.log('questions')
-      console.log(mod.grid)
       gridPerModule[mod.cnrl] = mod.grid
       TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true }, 'grid': mod.grid, 'data': [{ 'form': 'html' }, { 'content': 'Movement Summary' }], 'message': 'compute-complete' }
     } else if (mod.type === 'Device') {
-      console.log('Device module')
-      console.log(mod.grid)
       gridPerModule[mod.cnrl] = mod.grid
       TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': mod.grid, 'data': entityData.liveDeviceC.devices, 'message': 'compute-complete' }
     } else if (mod.type === 'Dapp') {
@@ -196,11 +190,9 @@ safeFlowAPI.prototype.displayFilter = function (shellID, modules, time, entityDa
       // [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} }], '1': { 'chartPackage': { 'labels': [2, 4] }, { 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} } }, 'message': 'compute-complete'
     } else if (mod.type === 'Visualise') {
       // loop over data vis read
-      console.log(mod)
       mod.grid = []
       let makeGrid = []
       // let dataIndex = Object.keys(entityData.liveVisualC.visualData)
-      console.log(entityData.liveVisualC.singlemulti)
       if (entityData.liveVisualC.singlemulti.chartPackage) {
         // single chart multi datasets
         let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'singlemulti', static: false }
