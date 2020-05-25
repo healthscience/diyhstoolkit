@@ -59,8 +59,6 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      console.log('vid toooooobar')
-      console.log(this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData])
       return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
     },
     openDataLive: function () {

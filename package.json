@@ -25,7 +25,7 @@
     "csv-parser": "^2.3.2",
     "lodash": "^4.17.15",
     "moment-range": "^4.0.2",
-    "node-safeflow": "0.5.2",
+    "node-safeflow": "^0.5.4",
     "polling-to-event": "^2.1.0",
     "vue": "^2.6.10",
     "vue-chartjs": "^3.5.0",

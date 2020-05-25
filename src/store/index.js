@@ -229,6 +229,7 @@ const store = new Vuex.Store({
     },
     async actionDashboardState (context, update) {
       console.log(update)
+      console.log(this.state.experimentStatus[update])
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
       context.commit('setProgressUpdate', update)
