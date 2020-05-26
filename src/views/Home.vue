@@ -12,9 +12,18 @@
       </div>
     </div>
     <div class="network-experiments">
-      <live-timeline></live-timeline>
-      <live-lifestyle></live-lifestyle>
-      <live-network></live-network>
+      <div id="peer-views">
+        <ul>
+          <li>
+            <button id="nxp-view" @click.prevent="setView($event)">Network experiments</button>
+            <button id="timeline" @click.prevent="setView($event)">Timeline</button>
+            <button id="lifestyleworld" @click.prevent="setView($event)">Lifestyle-world</button>
+          </li>
+        </ul>
+      </div>
+      <live-timeline v-if="viewTimeline === true"></live-timeline>
+      <live-lifestyle v-if="viewLifestyleworld === true"></live-lifestyle>
+      <live-network v-if="viewNXP === true"></live-network>
     </div>
   </div>
 </template>
@@ -38,9 +47,28 @@ export default {
   },
   data () {
     return {
+      viewNXP: true,
+      viewTimeline: false,
+      viewLifestyleworld: false
     }
   },
   methods: {
+    setView (e) {
+      let viewLive = e.target.id
+      if (viewLive === 'nxp-view') {
+        this.viewNXP = !this.viewNXP
+        this.viewTimeline = false
+        this.viewLifestyleworld = false
+      } else if (viewLive === 'timeline') {
+        this.viewTimeline = !this.viewTimeline
+        this.viewNXP = false
+        this.viewLifestyleworld = false
+      } else if (viewLive === 'lifestyleworld') {
+        this.viewLifestyleworld = !this.viewLifestyleworld
+        this.viewNXP = false
+        this.viewTimeline = false
+      }
+    }
   }
 }
 </script>
