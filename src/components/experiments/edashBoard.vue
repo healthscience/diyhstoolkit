@@ -130,11 +130,9 @@ export default {
   methods: {
     ...mapActions(['actionLocalGrid']),
     toolbarUpdate (bp) {
-      console.log(bp)
       let updateToolbar = {}
       updateToolbar.state = this.toolbarStatusLive.active
       updateToolbar.module = this.moduleCNRL
-      console.log(updateToolbar)
       this.$store.dispatch('actionVisToolbar', updateToolbar)
     },
     closeModule () {

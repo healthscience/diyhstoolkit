@@ -166,8 +166,8 @@ safeFlowAPI.prototype.moduleKBID = async function (cnrl) {
 */
 safeFlowAPI.prototype.displayFilter = function (shellID, modules, time, entityData) {
   // setup return vis Object
-  console.log('DISPLAYflitttter')
-  console.log(entityData)
+  // console.log('DISPLAYflitttter')
+  // console.log(entityData)
   // console.log(modules)
   let TestDataBundle = {}
   let gridPerModule = {}

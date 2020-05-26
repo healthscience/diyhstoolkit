@@ -244,6 +244,8 @@ const store = new Vuex.Store({
       context.commit('setOpendataBar', update)
     },
     async actionVisUpdate (context, update) {
+      console.log('inputinputinput')
+      console.log(update)
       // send ref contract and update time?
       // entity container
       let entityUUID = this.state.entityUUIDReturn[update.shellCNRL].shellID
@@ -267,13 +269,20 @@ const store = new Vuex.Store({
               newStartTime.push(update.startperiod)
             } else if (update.rangechange.length > 0) {
               newStartTime = update.rangechange
+              console.log(update.startperiodchange)
+              mmod.time.timeseg = update.startperiodchange
             } else {
               let updateSum = parseInt(this.state.timeStartperiod) + update.startperiodchange
               newStartTime.push(updateSum)
+              console.log(update.startperiodchange)
+              mmod.time.timeseg = update.startperiodchange
             }
           }
           context.commit('setTimeAsk', newStartTime)
           mmod.time.startperiod = newStartTime
+          console.log('segsegsegseg')
+          console.log(update.startperiodchange)
+          mmod.time.timeseg = update.startperiodchange
           updateModules.push(mmod)
         } else if (mmod.cnrl === update.moduleCNRL) {
           mmod.singlemulti = update.singlemulti
@@ -285,7 +294,6 @@ const store = new Vuex.Store({
       updateContract.cnrl = update.shellCNRL
       updateContract.modules = updateModules
       updateContract.entityUUID = entityUUID
-      updateContract.input = update.input
       updateContract.modules = updateModules
       updateContract.input = 'refUpdate'
       context.commit('setUpdatesOUT', updateContract)
@@ -298,19 +306,12 @@ const store = new Vuex.Store({
         mod = this.state.nxpModulesLive
       } else {
         // only update modules returned
-        console.log('moduels 1')
-        console.log(this.state.experimentStatus) // [this.state.liveNXP])
-        console.log(this.state.nxpModulesLive)
-        console.log(this.state.entityUUIDReturn[this.state.liveNXP].modules)
-        console.log(this.state.updateentityUUIDReturn[this.state.liveNXP].modules)
         mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
       }
       // remove existing vis component if in single mode (default)
       // context.commit('setClearGrid')
       // update or first time
       let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
-      console.log('DISPLAY READY BACK')
-      console.log(displayReady)
       // prepare toolbar status object
       context.commit('setToolbarState', mod)
       context.commit('setVisToolbarState', displayReady)
