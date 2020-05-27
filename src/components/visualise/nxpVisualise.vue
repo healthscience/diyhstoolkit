@@ -1,14 +1,14 @@
 <template>
   <div id="visualise-nxp">
-    <div id="prime-visualise">
-        <!-- <progress-Message :progressMessage="entityPrepareStatus"></progress-Message> -->
+    <div id="prime-visualise">PM {{ entityPrepareStatus }}
+      <progress-vismessage v-if="entityPrepareStatus.active === true"></progress-vismessage>
       <component v-bind:is="moduleVisType" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></component>
     </div>
   </div>
 </template>
 
 <script>
-// import progressMessage from '@/components/toolbar/inProgress'
+import ProgressVismessage from '@/components/visualise/tools/inProgress.vue'
 import chartBuilder from '@/components/visualise/chartBuilder'
 // import tableBuild from '@/components/visualise/table/tableBuilder'
 // import simulationView from '@/components/visualise/simulation/simulation-life'
@@ -16,7 +16,7 @@ import chartBuilder from '@/components/visualise/chartBuilder'
 export default {
   name: 'nxp-question',
   components: {
-    // progressMessage,
+    ProgressVismessage,
     chartBuilder
     // tableBuild,
     // simulationView
@@ -30,14 +30,21 @@ export default {
   computed: {
     moduleVisType: function () {
       return 'chart-builder' // modvisType[this.dashCNRL].vistype
+    },
+    entityPrepareStatus: function () {
+      console.log('visusiaotn update')
+      console.log(this.$store.state.visProgress)
+      // this.$store.state.visProgress[this.moduleCNRL][this.mData] = { text: 'Preparing visualisation', active: true }
+      let visProgressState = {}
+      if (this.$store.state.visProgress[this.moduleCNRL][this.mData] !== undefined) {
+        visProgressState = this.$store.state.visProgress[this.moduleCNRL][this.mData]
+      } else {
+        visProgressState = { text: 'Preparing visualisation', active: false }
+      }
+      return visProgressState
     }
   },
   data: () => ({
-    entityPrepareStatus:
-    {
-      active: false,
-      text: 'Preparing visualisation'
-    },
     visChart: false,
     visTableview: false,
     visSimview: false,

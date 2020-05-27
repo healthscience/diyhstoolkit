@@ -45,6 +45,7 @@ const store = new Vuex.Store({
       }
     },
     nxpProgress: {},
+    visProgress: {},
     timeStartperiod: 0
   },
   getters: {
@@ -192,6 +193,37 @@ const store = new Vuex.Store({
       let setProgress = { text: 'Experiment in progress', active: false }
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
+    setVisProgressStart: (state, inVerified) => {
+      console.log('vis start newnewnew')
+      console.log(inVerified)
+      let setVisProg = {}
+      let moduleKeys = Object.keys(inVerified.grid)
+      for (let mod of moduleKeys) {
+        for (let dti of inVerified.grid[mod]) {
+          setVisProg[dti.i] = { text: 'Preparing visualisation', active: false }
+        }
+        Vue.set(state.visProgress, mod, setVisProg)
+        setVisProg = {}
+      }
+    },
+    setVisProgressUpdate: (state, inVerified) => {
+      console.log('inverified vis state')
+      console.log(inVerified)
+      let setProgress = {}
+      setProgress[inVerified.mData] = { text: 'Preparing visualisation', active: true }
+      Vue.set(state.visProgress, inVerified.moduleCNRL, setProgress)
+      console.log('upate VIS progress vuex')
+      console.log(state.visProgress)
+    },
+    setVisProgressComplete: (state, inVerified) => {
+      console.log('ivis start COMPLETE')
+      console.log(inVerified)
+      let setProgress = {}
+      setProgress[inVerified.mData] = { text: 'Preparing visualisation', active: false }
+      Vue.set(state.visProgress, inVerified.moduleCNRL, setProgress)
+      console.log('upate VIS progress vuex')
+      console.log(state.visProgress)
+    },
     setModulesLive: (state, inVerified) => {
       state.nxpModulesLive = inVerified
     },
@@ -246,6 +278,8 @@ const store = new Vuex.Store({
     async actionVisUpdate (context, update) {
       console.log('inputinputinput')
       console.log(update)
+      // display processing
+      context.commit('setVisProgressUpdate', update)
       // send ref contract and update time?
       // entity container
       let entityUUID = this.state.entityUUIDReturn[update.shellCNRL].shellID
@@ -314,8 +348,10 @@ const store = new Vuex.Store({
       let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
       // prepare toolbar status object
       context.commit('setToolbarState', mod)
+      context.commit('setVisProgressStart', displayReady)
       context.commit('setVisToolbarState', displayReady)
       context.commit('setOpendataState', displayReady)
+      context.commit('setVisProgressComplete', displayReady) // setVisProgressComplete
       context.commit('setProgressComplete', this.state.liveNXP)
       context.commit('setLiveDisplayNXPModules', displayReady)
       // extract out the time
