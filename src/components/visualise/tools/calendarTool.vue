@@ -148,6 +148,13 @@ export default {
     },
     chartMultiday (cm) {
       // prepare list of KnowledgeBundles to visualise
+      // if single day selected use calendar list
+      let timeRange = []
+      if (this.calendarListMS.length === 0) {
+        timeRange.push(this.value)
+      } else {
+        timeRange = this.calendarListMS
+      }
       let contextK = {}
       contextK.shellCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
@@ -155,8 +162,7 @@ export default {
       contextK.mData = this.mData
       contextK.startperiod = 0
       contextK.startperiodchange = 0
-      contextK.rangechange = this.calendarListMS
-      console.log(contextK)
+      contextK.rangechange = timeRange
       this.$store.dispatch('actionVisUpdate', contextK)
     },
     singlechartMultiday (cm) {
