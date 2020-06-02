@@ -19,15 +19,10 @@
             </template>
             <template v-slot:body>
             <!-- The code below goes into the header slot -->
-              <header>DOWNLOAD MOBILE APPLICACTION & CONNECT DEVICE</header>
-            </template>
-            <template v-slot:connect>
-              <div> Compatible Devices: </div>
+              <header>Build Network Experiment</header>
             </template>
             <template v-slot:dashboard>
-              <div>
-              Dashboard Layout
-              </div>
+              <module-builder></module-builder>
             </template>
             <template v-slot:submit-join>
               <button>Submit new N=1 exerpiment to network</button>
@@ -55,12 +50,14 @@
 <script>
 import ExperimentNetwork from '@/components/grids/ExperimentNetwork.vue'
 import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
+import ModuleBuilder from '@/components/grids/moduleBuilder.vue'
 
 export default {
   name: 'LiveNetwork',
   components: {
     ExperimentNetwork,
-    NewNetworkexperiment
+    NewNetworkexperiment,
+    ModuleBuilder
   },
   props: {
   },

@@ -56,7 +56,7 @@
           </div>
         </template>
         <template v-slot:submit-join>
-          <button>Yes, join this netwokr experiment</button>
+          <button>Yes, join this network experiment</button>
         </template>
       </join-experiment>
     </div>

@@ -2,8 +2,12 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import LiveMixinSAFEflow from '@/mixins/safeFlowAPI'
 import modules from './modules'
+import CALE from 'cale-ai'
 
 const safeAPI = new LiveMixinSAFEflow()
+const CALElive = new CALE(safeAPI)
+console.log('cale')
+console.log(CALElive)
 
 Vue.use(Vuex)
 
@@ -363,6 +367,13 @@ const store = new Vuex.Store({
             context.commit('setTimeAsk', newStartTime)
           }
         }
+      }
+    },
+    actionFuture (context, update) {
+      console.log('future data')
+      // what basis for future data for next day?
+      if (update === 'CALE') {
+        CALElive.startFuture('24')
       }
     }
   },

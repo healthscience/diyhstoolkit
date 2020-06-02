@@ -35,11 +35,6 @@
               N=1 network experiment summary
             </slot>
           </div>
-          <div class="network-connect">
-            <slot name="connect">
-              I'm the default body!
-            </slot>
-          </div>
           <div class="network-dashboard">
             <slot name="dashboard">
               I'm the default body!
@@ -53,7 +48,6 @@
         </section>
         <footer class="modal-footer">
           <slot name="footer">
-
             <button
               type="button"
               class="btn-green"
@@ -106,12 +100,13 @@ export default {
   }
 
   .modal {
+    height: 100%;
     background: #FFFFFF;
     box-shadow: 2px 2px 20px 1px;
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    width: 80%;
+    width: 90%;
   }
 
   .modal-header,

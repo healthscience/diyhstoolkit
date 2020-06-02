@@ -32,14 +32,21 @@
       <li>
         <div id="select-time">
           <ul>
-            <li v-for="tv in navTime" :key='tv' class="context-time">
+            <li v-for="tv in navTime" :key='tv.id' class="context-time">
               <button class="button is-primary" @click.prevent="setTimeData(tv)">{{ tv.text.word }}</button>
             </li>
           </ul>
         </div>
       </li>
       <li class="context-future">
-        <button class="button is-primary" @click.prevent="setFuture('future')">{{ future.text }}</button>
+        <!-- <button class="button is-primary" @click.prevent="setFuture('future')">{{ future.text }}</button> -->
+        <select v-model="selectedFuture" @change.prevent="setFuture()">
+          <option disabled value="">How to make future</option>
+          <option v-for="foption in futureoptions" v-bind:value="foption.value" :key='foption.value'>
+              {{ foption.text }}
+            </option>
+        </select>
+        <!-- <span>Selected: {{ selectedFuture }}</span> -->
       </li>
       <li class="context-network">
         <button class="button is-primary" @click.prevent="setNetwork('networkview')">{{ network.text }}</button>
@@ -88,6 +95,12 @@ export default {
       text: 'network',
       active: true
     },
+    futureoptions: [
+      { text: 'Repeat week', value: 'week' },
+      { text: 'Repeat month', value: 'month' },
+      { text: 'Ask CALE', value: 'CALE' }
+    ],
+    selectedFuture: '',
     calendarList: [],
     calendarListMS: [],
     time1: '',
@@ -190,9 +203,10 @@ export default {
       contextK.rangechange = []
       this.$store.dispatch('actionVisUpdate', contextK)
     },
-    setFuture (ff) {
-      console.log('cale to make future?')
-      console.log(ff)
+    setFuture () {
+      console.log('make future?')
+      console.log(this.selectedFuture)
+      this.$store.dispatch('actionFuture', this.selectedFuture)
     },
     setNetwork (nv) {
       console.log('is a network visualisation available?')
