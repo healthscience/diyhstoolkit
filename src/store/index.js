@@ -50,7 +50,8 @@ const store = new Vuex.Store({
     },
     nxpProgress: {},
     visProgress: {},
-    timeStartperiod: 0
+    timeStartperiod: 0,
+    newNXshell: {}
   },
   getters: {
     // liveSafeFlow: state => state.safeFlow
@@ -173,6 +174,11 @@ const store = new Vuex.Store({
         setOpendata = {}
       }
     },
+    setVistoolsTemp: (state, inVerified) => {
+      let setVisTools = {}
+      setVisTools[inVerified] = { text: 'open tools', active: true }
+      Vue.set(state.toolbarVisStatus, 'tempVis', setVisTools)
+    },
     setOpendataBar: (state, inVerified) => {
       let setToolbar = state.opendataTools[inVerified.module]
       if (inVerified.state === false) {
@@ -182,6 +188,11 @@ const store = new Vuex.Store({
         setToolbar[inVerified.dtid] = { text: 'open data', active: false }
         Vue.set(state.opendataTools, inVerified.module, setToolbar)
       }
+    },
+    setOpendataBarTemp: (state, inVerified) => {
+      let setToolbar = {}
+      setToolbar[inVerified] = { text: 'open data', active: true }
+      Vue.set(state.opendataTools, 'tempVis', setToolbar)
     },
     setProgressStart: (state, inVerified) => {
       for (let nxp of inVerified) {
@@ -239,6 +250,14 @@ const store = new Vuex.Store({
     },
     setClearGrid: (state, inVerified) => {
       state.moduleGrid = []
+    },
+    newNXPshell: (state, inVerified) => {
+      Vue.set(state.newNXshell, 'tempshell', inVerified)
+    },
+    newNXPshellUpdate: (state, inVerified) => {
+      let tempModcontract = inVerified
+      console.log(tempModcontract)
+      // Vue.set(state.newNXshell, '', tempModcontract)
     }
   },
   actions: {
@@ -375,6 +394,13 @@ const store = new Vuex.Store({
       if (update === 'CALE') {
         CALElive.startFuture('24')
       }
+    },
+    actionNewNXP (context, update) {
+      console.log('new Shell info ref contracts')
+      let newShelltempid = '275519914' // Math.floor(100000000 + Math.random() * 900000000)
+      context.commit('newNXPshell', newShelltempid)
+      context.commit('setVistoolsTemp', newShelltempid)
+      context.commit('setOpendataBarTemp', newShelltempid)
     }
   },
   modules,

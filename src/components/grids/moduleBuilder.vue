@@ -18,11 +18,11 @@
         <draggable class="list-group" :list="list2" group="people" @change="log">
           <div
             class="list-group-item"
-            v-for="(element, index) in list2"
+            v-for="(element) in list2"
             :key="element.name"
           >
           <!-- {{ element.name }} {{ index }} -->
-            <component v-bind:is="moduleNXP[index].prime.type" ></component>
+            <component v-bind:is="moduleNXP[element.id].prime.type" ></component>
           </div>
         </draggable>
       </div>
@@ -153,7 +153,8 @@ export default {
   display: block;
   width: 80%;
   padding: .5em;
-  margin: .5em;
+  margin: 1em;
   border: 1px solid lightgrey;
+  background-color: #E6ECEC;
 }
 </style>

@@ -25,10 +25,10 @@ export default {
   },
   data: () => ({
     type: 'chart',
-    shellID: 'new',
-    moduleCNRL: 'dfdfd',
-    moduleType: 'dfdfd',
-    mData: 'one'
+    shellID: '275519914',
+    moduleCNRL: 'tempVis',
+    moduleType: 'vis',
+    mData: '275519914'
   }),
   created () {
   },

@@ -1,5 +1,5 @@
 <template>
-  <div id="k-toolkit">
+  <div id="k-toolkit">{{ visToolbarStatusLive }}
     <button type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>
     <div id="diy-tools" v-if="visToolbarStatusLive.active">
       <div id="chart-type">
@@ -28,7 +28,7 @@
         <opendata-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></opendata-tool>
       </div>
     </div>
-    <hsvisual :datacollection="liveData.chartPackage" :options="liveData.chartOptions" ></hsvisual>
+    <hsvisual v-if="liveData" :datacollection="liveData.chartPackage" :options="liveData.chartOptions" ></hsvisual>
   </div>
 </template>
 
@@ -62,7 +62,14 @@ export default {
       return this.$store.state.opendataTools[this.moduleCNRL][this.mData]
     },
     liveData: function () {
-      return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
+      console.log(this.moduleCNRL)
+      console.log(this.mData)
+      console.log(this.$store.state.NXPexperimentData)
+      if (this.$store.state.NXPexperimentData) {
+        return {}
+      } else {
+        return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
+      }
     }
   },
   data: () => ({

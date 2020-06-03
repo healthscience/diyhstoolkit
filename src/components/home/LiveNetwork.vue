@@ -78,6 +78,8 @@ export default {
   methods: {
     newExperiment () {
       this.isModalNewNetworkExperiment = true
+      // start building up info. to make new Shell, modules ref contracts
+      this.$store.dispatch('actionNewNXP')
     },
     closeModalNewN1 () {
       this.isModalNewNetworkExperiment = false

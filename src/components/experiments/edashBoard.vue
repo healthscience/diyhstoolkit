@@ -41,7 +41,7 @@
                         >
                     <!-- <span class='text'>box{{itemTitle(item)}}</span> -->
                     <component v-bind:is="moduleContent.prime.vistype" :shellID="shellCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
-                    {{ item.i }} --ii
+                    {{ item.i }}
                 </grid-item>
               </grid-layout>
             </div>
