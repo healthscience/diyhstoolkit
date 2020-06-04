@@ -28,7 +28,7 @@
         <opendata-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></opendata-tool>
       </div>
     </div>
-    <hsvisual v-if="liveData" :datacollection="liveData.chartPackage" :options="liveData.chartOptions" ></hsvisual>
+    <hsvisual :datacollection="liveData.chartPackage" :options="liveData.chartOptions" ></hsvisual>
   </div>
 </template>
 
@@ -64,8 +64,8 @@ export default {
     liveData: function () {
       console.log(this.moduleCNRL)
       console.log(this.mData)
-      console.log(this.$store.state.NXPexperimentData)
-      if (this.$store.state.NXPexperimentData) {
+      // console.log(this.$store.state.NXPexperimentData)
+      if (!this.$store.state.NXPexperimentData) {
         return {}
       } else {
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]

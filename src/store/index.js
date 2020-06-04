@@ -222,22 +222,14 @@ const store = new Vuex.Store({
       }
     },
     setVisProgressUpdate: (state, inVerified) => {
-      console.log('inverified vis state')
-      console.log(inVerified)
       let setProgress = {}
       setProgress[inVerified.mData] = { text: 'Preparing visualisation', active: true }
       Vue.set(state.visProgress, inVerified.moduleCNRL, setProgress)
-      console.log('upate VIS progress vuex')
-      console.log(state.visProgress)
     },
     setVisProgressComplete: (state, inVerified) => {
-      console.log('ivis start COMPLETE')
-      console.log(inVerified)
       let setProgress = {}
       setProgress[inVerified.mData] = { text: 'Preparing visualisation', active: false }
       Vue.set(state.visProgress, inVerified.moduleCNRL, setProgress)
-      console.log('upate VIS progress vuex')
-      console.log(state.visProgress)
     },
     setModulesLive: (state, inVerified) => {
       state.nxpModulesLive = inVerified
@@ -323,22 +315,31 @@ const store = new Vuex.Store({
           } else {
             // time state available
             if (update.startperiod !== 0 && update.rangechange.length === 0) {
+              console.log('update starp0 but range above 1')
               newStartTime.push(update.startperiod)
             } else if (update.rangechange.length > 0) {
+              console.log('chage range above zero')
               newStartTime = update.rangechange
-              console.log(update.startperiodchange)
+              mmod.time.timeseg = update.startperiodchange
+            } else if (update.startperiod === 0 && update.startperiodchange) {
+              console.log('update starp0 but range above 1')
+              console.log(this.state.timeStartperiod)
+              let timeCon = new Date(this.state.timeStartperiod)
+              console.log(timeCon)
+              console.log(timeCon.getTime())
+              let convertTime = timeCon.getTime()
+              let updateT = parseInt(convertTime) + update.startperiodchange
+              newStartTime.push(updateT)
               mmod.time.timeseg = update.startperiodchange
             } else {
+              console.log('elas all otehr opieons')
               let updateSum = parseInt(this.state.timeStartperiod) + update.startperiodchange
               newStartTime.push(updateSum)
-              console.log(update.startperiodchange)
               mmod.time.timeseg = update.startperiodchange
             }
           }
           context.commit('setTimeAsk', newStartTime)
           mmod.time.startperiod = newStartTime
-          console.log('segsegsegseg')
-          console.log(update.startperiodchange)
           mmod.time.timeseg = update.startperiodchange
           updateModules.push(mmod)
         } else if (mmod.cnrl === update.moduleCNRL) {
