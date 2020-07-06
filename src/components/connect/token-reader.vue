@@ -25,7 +25,6 @@
 
 <script>
 import Passwordk from 'vue-password-strength-meter'
-// import { sBus } from '../../main.js'
 
 export default {
   name: 'unlockkey-page',
@@ -78,6 +77,11 @@ export default {
         authBundle.network = 'cloud'
         authBundle.settings = tokenJSON
         localthis.$store.dispatch('startconnectNSnetwork', authBundle)
+        const refContract = {}
+        refContract.reftype = 'datatype'
+        refContract.action = 'GET'
+        const refCJSON = JSON.stringify(refContract)
+        localthis.$store.dispatch('actionGetRefContract', refCJSON)
         localthis.$emit('closeTreader')
       }
       reader.readAsText(file)

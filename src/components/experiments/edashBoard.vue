@@ -210,7 +210,6 @@ header {
 
 .grid-section {
   border: 2px solid orange;
-  height: 100%;
 }
 
 .vue-grid-layout {

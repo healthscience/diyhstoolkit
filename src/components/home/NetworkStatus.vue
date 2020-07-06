@@ -4,7 +4,7 @@
     <div id="connection-status">{{ msg }} ssss{{ authState }}</div>
     <button type="button" class="btn" @click="connectNetwork('connect')">Connect</button>
     <button type="button" class="btn" @click="connectNetwork('new-connect')">New account</button>
-    <button type="button" class="btn" @click="connectNetwork('self-connect')">{{ connectBut.text }}</button>
+    <!-- <button type="button" class="btn" @click="connectNetwork('self-connect')">{{ connectBut.text }}</button> -->
     <button type="button" class="btn" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
     <connect-modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>

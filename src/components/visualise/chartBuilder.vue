@@ -65,7 +65,7 @@ export default {
       console.log(this.moduleCNRL)
       console.log(this.mData)
       // console.log(this.$store.state.NXPexperimentData)
-      if (!this.$store.state.NXPexperimentData) {
+      if (!this.$store.state.NXPexperimentData[this.shellID]) {
         return {}
       } else {
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]

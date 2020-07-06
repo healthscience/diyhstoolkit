@@ -60,7 +60,7 @@ safeFlowAPI.prototype.connectNSnetwork = async function () {
   if (network === 'safenetwork') {
     // implement in network release see DIY repo on github.
   } else if (network === 'cloud') {
-    let readOnly = { 'publickey': '', 'token': '', 'cnrl': 'cnrl-33221101' }
+    let readOnly = { 'publickey': 'e97bd0056edae2a5da49b7868167b6c9d13bc3d5', 'token': 'CVUbN3zCmvubqNpJ3ru6YLtwLRMv6kfa9NmRAzTGSiUQ', 'cnrl': 'cnrl-33221101' }
     starthsNXP = await this.startannonCycle(readOnly)
   }
   return starthsNXP

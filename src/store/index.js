@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import LiveMixinSAFEflow from '@/mixins/safeFlowAPI'
 import modules from './modules'
 import CALE from 'cale-ai'
+const moment = require('moment')
 
 const safeAPI = new LiveMixinSAFEflow()
 const CALElive = new CALE(safeAPI)
@@ -17,6 +18,7 @@ safeAPI.on('safeflowUpdate', (data) => {
 })
 
 const store = new Vuex.Store({
+  modules,
   state: {
     authorised: false,
     devices: [],
@@ -110,6 +112,41 @@ const store = new Vuex.Store({
     setLiveDisplayNXPModules: (state, inVerified) => {
       state.moduleGrid = inVerified.grid
       Vue.set(state.NXPexperimentData, state.liveNXP, inVerified.data)
+    },
+    setLiveDisplayNXPModulesItem: (state, inVerified) => {
+      console.log('update chart item per item')
+      console.log(inVerified)
+      // update title in options
+      let chartUpdateOptions = state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item].chartOptions
+      chartUpdateOptions.title.text = 'future'
+      let dataItem = state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item].chartPackage
+      for (let uit of inVerified.changes.label) {
+        dataItem.labels.push(uit)
+      }
+      // update data i.e. y axis
+      /* for (let dit of inVerified.changes.data) {
+        dit = null
+        dataItem.datasets[0].data.push(dit)
+      } */
+      let preparFuturedata = []
+      // future
+      for (let fit of dataItem.datasets[0].data) {
+        fit = null
+        preparFuturedata.push(fit)
+      }
+      for (let ffit of inVerified.changes.data) {
+        preparFuturedata.push(ffit)
+      }
+      let dataFuture = { label: 'future',
+        data: preparFuturedata,
+        borderColor: 'rgb(25, 52, 226)',
+        type: 'line',
+        fillColor: 'rgb(25, 52, 226)'
+      }
+      dataItem.datasets.push(dataFuture)
+      Vue.set(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item], 'chartPackage', dataItem)
+      Vue.set(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item], 'chartOptions', chartUpdateOptions)
+      console.log(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item])
     },
     setentityReturn: (state, inVerified) => {
       console.log('ECS acknowledge inpue been processed')
@@ -391,9 +428,41 @@ const store = new Vuex.Store({
     },
     actionFuture (context, update) {
       console.log('future data')
+      console.log(update)
+      // console.log(this.state.NXPexperimentData[update.refs.shellCNRL][update.refs.moduleCNRL].data)
+      let chartData = this.state.NXPexperimentData[update.refs.shellCNRL][update.refs.moduleCNRL].data
+      // pick out data Chart object and add to dataset
       // what basis for future data for next day?
-      if (update === 'CALE') {
-        CALElive.startFuture('24')
+      if (update.future === 'CALE') {
+        console.log('ask CALE')
+        // CALElive.startFuture('24')
+      } else if (update.future === 'month') {
+        console.log('month normal')
+        let dataKeys = Object.keys(chartData)
+        for (let dItem of dataKeys) {
+          // console.log('chart item')
+          // console.log(chartData[dItem].chartPackage)
+          let futureHR = [147, 177, 170, 130, 90, 80, 79, 77, 76, 90, 80, 79, 77, 76, 90, 80, 79, 77, 76]
+          let prepareFutuerTime = [1593644400000, 1593817200000, 1593990000000, 1593991000000, 1593992000000, 1593993000000, 1593994000000, 1593995000000, 1593996000000, 1593997000000, 1593998000000, 1593999000000, 159400000000, 159410000000, 159420000000, 159430000000, 159440000000, 159450000000, 159460000000]
+          let futureLabel = []
+          for (let ft of prepareFutuerTime) {
+            let timeFormat = moment(ft).toDate()
+            let tsimp = moment(timeFormat).format('llll')
+            futureLabel.push(tsimp)
+          }
+          // let futureLabel = ['Sat, May 23, 2020 10:59 AM', 'Sat, May 23, 2020 11:59 AM', 'Sat, May 23, 2020 12:59 AM']
+          let changeData = {}
+          changeData.data = futureHR
+          changeData.label = futureLabel
+          // now set the data for display
+          let updateData = {}
+          updateData.refs = update.refs
+          updateData.refs.item = dItem
+          updateData.changes = changeData
+          this.commit('setLiveDisplayNXPModulesItem', updateData)
+        }
+      } else if (update.future === 'self') {
+        console.log('self')
       }
     },
     actionNewNXP (context, update) {
@@ -404,7 +473,6 @@ const store = new Vuex.Store({
       context.commit('setOpendataBarTemp', newShelltempid)
     }
   },
-  modules,
   strict: false // process.env.NODE_ENV !== 'production'
 })
 

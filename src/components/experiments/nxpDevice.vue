@@ -8,7 +8,11 @@
       <form id="device_form" name="device_form" method="post" action="#">
         <ul>
           <li class="device-item">
-            Network Library Reference Contract:<input placeholder="Reference Contract">
+            Network Library Reference Contract:<input v-model="computeRefCont" placeholder="Reference Contract">
+            <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
+          </li>
+          <li>
+            {{ refContractCompute }} ---
           </li>
         </ul>
       </form>
@@ -23,14 +27,23 @@ export default {
   components: {
   },
   computed: {
+    refContractCompute: function () {
+      return this.$store.state.refcontract
+    }
   },
   data: () => ({
+    computeRefCont: ''
   }),
   created () {
   },
   mounted () {
   },
   methods: {
+    refContractLookup () {
+      console.log('lookup ref contract for api data info')
+      console.log(this.computeRefCont)
+      this.$store.dispatch('actionSetRefContract', this.computeRefCont)
+    }
   }
 }
 </script>

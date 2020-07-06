@@ -96,8 +96,8 @@ export default {
       active: true
     },
     futureoptions: [
-      { text: 'Repeat week', value: 'week' },
-      { text: 'Repeat month', value: 'month' },
+      { text: 'Repeat day', value: 'month' },
+      { text: 'Self decide', value: 'self' },
       { text: 'Ask CALE', value: 'CALE' }
     ],
     selectedFuture: '',
@@ -205,8 +205,16 @@ export default {
     },
     setFuture () {
       console.log('make future?')
-      console.log(this.selectedFuture)
-      this.$store.dispatch('actionFuture', this.selectedFuture)
+      let buildContext = {}
+      buildContext.future = this.selectedFuture
+      let refContracts = {}
+      refContracts.shellCNRL = this.shellID
+      refContracts.moduleCNRL = this.moduleCNRL
+      refContracts.moduleType = this.moduleType
+      refContracts.mData = this.mData
+      buildContext.refs = refContracts
+      console.log(buildContext)
+      this.$store.dispatch('actionFuture', buildContext)
     },
     setNetwork (nv) {
       console.log('is a network visualisation available?')

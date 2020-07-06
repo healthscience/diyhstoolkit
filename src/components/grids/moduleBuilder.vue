@@ -124,7 +124,7 @@ export default {
 
 .row {
   border: 3px solid green;
-  min-height: 20em;
+  min-height: 2em;
 }
 
 .col-3 {
