@@ -53,7 +53,9 @@ const store = new Vuex.Store({
     nxpProgress: {},
     visProgress: {},
     timeStartperiod: 0,
-    newNXshell: {}
+    newNXshell: {},
+    refcontractPackaging: {},
+    refcontractCompute: {}
   },
   getters: {
     // liveSafeFlow: state => state.safeFlow

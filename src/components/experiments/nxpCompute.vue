@@ -4,11 +4,25 @@
     <div id="prime-compute">
       <form id="compute_form" name="compute_form" method="post" action="#">
         <ul>
-          <li class="compute-summary">
-            Prime compute:<input v-model="compute.text" placeholder="prime">
+          <li class="device-item">
+            Network Library Reference Contract:<input v-model="computeRefCont" placeholder="Reference Contract">
+            <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
           </li>
-          <li class="compute-summary">
-            Github:<input v-model="compute.forum" placeholder="git link">
+          <li>
+            <ul v-if="refContractCompute.key">
+              <li>
+                {{ refContractCompute.key }} ---
+              </li>
+              <li>
+                {{ refContractCompute.value.computational.name }} ---
+              </li>
+              <li>
+                {{ refContractCompute.value.computational.description}} ---
+              </li>
+              <li>
+                {{ refContractCompute.value.computational.code }} ---
+              </li>d
+            </ul>
           </li>
         </ul>
       </form>
@@ -28,19 +42,29 @@ export default {
   components: {
   },
   computed: {
+    refContractCompute: function () {
+      console.log(this.$store.state.refcontractCompute)
+      return this.$store.state.refcontractCompute
+    }
   },
   data: () => ({
     compute:
     {
       text: '',
       forum: ''
-    }
+    },
+    computeRefCont: ''
   }),
   created () {
   },
   mounted () {
   },
   methods: {
+    refContractLookup () {
+      console.log('lookup ref contract for api data info')
+      console.log(this.computeRefCont)
+      this.$store.dispatch('actionSetComputeRefContract', this.computeRefCont)
+    }
   }
 }
 </script>

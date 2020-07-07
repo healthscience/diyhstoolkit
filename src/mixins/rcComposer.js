@@ -140,15 +140,15 @@ ReferenceContractComposer.prototype.mergePackageMap = function (col, table) {
 *
 */
 ReferenceContractComposer.prototype.refcontractSperate = function (refContractsList) {
-  console.log('seperate out the reference contracts')
-  console.log(refContractsList)
+  // console.log('seperate out the reference contracts')
+  // console.log(refContractsList)
   const refContractHolder = {}
   const datatypeList = []
   const unitsList = []
   const computeList = []
   const packagingList = []
   for (const rc of refContractsList) {
-    console.log(rc)
+    // console.log(rc)
     if (rc.value.refcontract === 'datatype') {
       const refCont = { key: rc.key, value: rc.value }
       datatypeList.push(refCont)
