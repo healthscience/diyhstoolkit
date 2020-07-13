@@ -55,7 +55,25 @@ const store = new Vuex.Store({
     timeStartperiod: 0,
     newNXshell: {},
     refcontractPackaging: {},
-    refcontractCompute: {}
+    refcontractCompute: {},
+    refcontractVisualise: {},
+    nxpMakeList:
+    [
+      { name: 'Question', id: 0, refcont: '0492e4bf43a6f930a169baab13d5ae4917f17544' }
+    ],
+    nxpModulesList:
+    [
+      { name: 'Device/source', id: 1, refcont: '3f8830cab791df89acd6b093d52ea397a0c90853' },
+      { name: 'Mobile/Dapps', id: 2, refcont: '' },
+      { name: 'Compute', id: 3, refcont: 'f9b584cf83bbbc45e2f5d869990b592efa2945b3' },
+      { name: 'Visulisation', id: 4, refcont: 'd60569614d692317f2ffcb6b01e162179ae5a470' },
+      { name: 'Education', id: 5, refcont: '' },
+      { name: 'Error Mgt', id: 6, refcont: '' },
+      { name: 'Control', id: 7, refcont: '' },
+      { name: 'Lifestyle medicine', id: 8, refcont: '' },
+      { name: 'Prescription', id: 9, refcont: '' },
+      { name: 'Communication', id: 10, refcont: '' }
+    ]
   },
   getters: {
     // liveSafeFlow: state => state.safeFlow
@@ -215,8 +233,8 @@ const store = new Vuex.Store({
     },
     setVistoolsTemp: (state, inVerified) => {
       let setVisTools = {}
-      setVisTools[inVerified] = { text: 'open tools', active: true }
-      Vue.set(state.toolbarVisStatus, 'tempVis', setVisTools)
+      setVisTools[inVerified.mData] = { text: 'open tools', active: true }
+      Vue.set(state.toolbarVisStatus, inVerified.moduleCNRL, setVisTools)
     },
     setOpendataBar: (state, inVerified) => {
       let setToolbar = state.opendataTools[inVerified.module]
@@ -230,8 +248,8 @@ const store = new Vuex.Store({
     },
     setOpendataBarTemp: (state, inVerified) => {
       let setToolbar = {}
-      setToolbar[inVerified] = { text: 'open data', active: true }
-      Vue.set(state.opendataTools, 'tempVis', setToolbar)
+      setToolbar[inVerified.mData] = { text: 'open data', active: true }
+      Vue.set(state.opendataTools, inVerified.moduleCNRL, setToolbar)
     },
     setProgressStart: (state, inVerified) => {
       for (let nxp of inVerified) {
@@ -467,12 +485,14 @@ const store = new Vuex.Store({
         console.log('self')
       }
     },
-    actionNewNXP (context, update) {
-      console.log('new Shell info ref contracts')
-      let newShelltempid = '275519914' // Math.floor(100000000 + Math.random() * 900000000)
-      context.commit('newNXPshell', newShelltempid)
-      context.commit('setVistoolsTemp', newShelltempid)
-      context.commit('setOpendataBarTemp', newShelltempid)
+    actionSetTempToolbarVis (context, update) {
+      console.log('new TEMP NXP contract settings')
+      // pass on to NXP composer
+      // const prepareNXP = liveComposer.()
+      // let newShelltempid = update // Math.floor(100000000 + Math.random() * 900000000)
+      context.commit('newNXPshell', update.shellID)
+      context.commit('setVistoolsTemp', update)
+      context.commit('setOpendataBarTemp', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

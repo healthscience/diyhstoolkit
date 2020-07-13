@@ -25,7 +25,7 @@
               <module-builder></module-builder>
             </template>
             <template v-slot:submit-join>
-              <button>Submit new N=1 exerpiment to network</button>
+              <button @click="contributeNXP" >Contribute experiment to network</button>
             </template>
           </new-networkexperiment>
         </li>
@@ -78,11 +78,14 @@ export default {
   methods: {
     newExperiment () {
       this.isModalNewNetworkExperiment = true
-      // start building up info. to make new Shell, modules ref contracts
-      this.$store.dispatch('actionNewNXP')
     },
     closeModalNewN1 () {
       this.isModalNewNetworkExperiment = false
+    },
+    contributeNXP () {
+      console.log('contribute NXP to world')
+      // start building NXP refcontract
+      this.$store.dispatch('actionNewNXPrefcontract')
     }
   }
 }

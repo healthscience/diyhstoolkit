@@ -3,10 +3,10 @@
     <div class="row">
       <div class="col-3">
         <h3>Modules available</h3>
-        <draggable class="list-group" :list="list1" group="people" @change="log">
+        <draggable class="list-group" :list="nxpModulesList" group="people" @change="log">
           <div
             class="list-group-item"
-            v-for="(element) in list1"
+            v-for="(element) in nxpModulesList"
             :key="element.name"
           >
           {{ element.name }}
@@ -15,10 +15,10 @@
       </div>
       <div class="col-4">
         <h3>Experiment</h3>
-        <draggable class="list-group" :list="list2" group="people" @change="log">
+        <draggable class="list-group" :list="nxpMakeList" group="people" @change="log">
           <div
             class="list-group-item"
-            v-for="(element) in list2"
+            v-for="(element) in nxpMakeList"
             :key="element.name"
           >
           <!-- {{ element.name }} {{ index }} -->
@@ -26,7 +26,7 @@
           </div>
         </draggable>
       </div>
-    </div>
+    </div> -- {{ nxpMakeList }}
   </div>
 </template>
 
@@ -63,6 +63,12 @@ export default {
   props: {
   },
   computed: {
+    nxpMakeList: function () {
+      return this.$store.state.nxpMakeList
+    },
+    nxpModulesList: function () {
+      return this.$store.state.nxpModulesList
+    }
   },
   data () {
     return {
@@ -81,22 +87,7 @@ export default {
         10: { 'prime': { 'type': 'nxp-communication' } },
         11: { 'prime': { 'type': 'nxp-clone' } }
       },
-      moduleList: ['Question', 'Device/source', 'Dapps', 'Compute', 'Visulisation'],
-      list1: [
-        { name: 'Device/source', id: 1 },
-        { name: 'Mobile/Dapps', id: 2 },
-        { name: 'Compute', id: 3 },
-        { name: 'Visulisation', id: 4 },
-        { name: 'Education', id: 5 },
-        { name: 'Error Mgt', id: 6 },
-        { name: 'Control', id: 7 },
-        { name: 'Lifestyle medicine', id: 8 },
-        { name: 'Prescription', id: 9 },
-        { name: 'Communication', id: 10 }
-      ],
-      list2: [
-        { name: 'Question', id: 0 }
-      ]
+      moduleList: ['Question', 'Device/source', 'Dapps', 'Compute', 'Visulisation']
     }
   },
   methods: {

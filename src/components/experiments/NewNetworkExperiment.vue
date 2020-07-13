@@ -43,6 +43,7 @@
           <div id="join-submit">
             <slot name="submit-join">
               <!-- no default button -->
+              <button @click='contributeNXP'>contribute experiment</button>
             </slot>
           </div>
         </section>
@@ -80,6 +81,10 @@ export default {
     },
     routerStatus () {
       // console.log(this.$router.currentRoute)
+    },
+    contributeNXP () {
+      console.log('nexpnexp')
+      this.$emit('saveNXP')
     }
   }
 }

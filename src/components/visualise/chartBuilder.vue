@@ -1,6 +1,6 @@
 <template>
-  <div id="k-toolkit">{{ visToolbarStatusLive }}
-    <button type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>
+  <div id="k-toolkit"> {{ this.shellID }} -- {{ visToolbarStatusLive }}
+    <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>
     <div id="diy-tools" v-if="visToolbarStatusLive.active">
       <div id="chart-type">
         <ul>
@@ -56,7 +56,15 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
+      console.log('tool bar ivs status')
+      console.log(this.moduleCNRL)
+      console.log(this.mData)
+      console.log(this.$store.state.toolbarVisStatus)
+      if (!this.shellID) {
+        return {}
+      } else {
+        return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
+      }
     },
     openDataLive: function () {
       return this.$store.state.opendataTools[this.moduleCNRL][this.mData]
@@ -84,6 +92,7 @@ export default {
     },
     visToolbarUpdate () {
       console.log('vis toolbar')
+      console.log(this.visToolbarStatusLive)
       let updateVisTools = {}
       updateVisTools.state = this.visToolbarStatusLive.active
       updateVisTools.module = this.moduleCNRL

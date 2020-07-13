@@ -34,7 +34,7 @@
           <dash-board v-if="isModalDashboardVisible" :shellCNRL="shellContract" :moduleCNRL="modI"></dash-board>
         </ul>
       </div>
-      <join-experiment v-show="isModalJoinVisible" @close="closeModalJoin">
+      <join-experiment v-show="isModalJoinVisible" @close="closeModalJoin" @saveNXP="saveNXPrefcontract">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
           N=1 Network Experiment {{ actionKBundle.name }} {{ actionKBundle.description }}
@@ -56,10 +56,10 @@
           </div>
         </template>
         <template v-slot:submit-join>
-          <button>Yes, join this network experiment</button>
         </template>
       </join-experiment>
     </div>
+    <button @click="contributeNXP">contribute experiment</button>
   </div>
 </template>
 
@@ -154,6 +154,16 @@ export default {
     },
     viewDashboard () {
       this.previewSeen = true
+    },
+    saveNetworkExperiment () {
+      console.log('save network experiment')
+    },
+    contributeNXP () {
+      console.log('new NXP to save progess')
+      this.$store.dispatch('actionNewNXPrefcontract')
+    },
+    saveNXPrefcontract () {
+      console.log('save NXP contract')
     }
   }
 }
