@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import RCcomposer from '@/mixins/rcComposer.js'
-const refcontComposerLive = new RCcomposer()
+// import RCcomposer from '@/mixins/rcComposer.js'
+// const refcontComposerLive = new RCcomposer()
 
 export default {
   state: {
@@ -43,38 +43,60 @@ export default {
       } else {
         // query back from peer data store
         // pass to sort data into ref contract types
-        const segmentedRefContracts = refcontComposerLive.refcontractSperate(backJSON)
+        const segmentedRefContracts = this.state.livesafeFLOW.refcontComposerLive.refcontractSperate(backJSON)
         console.log('segmentated contracts')
         console.log(segmentedRefContracts)
         this.state.referenceContract = segmentedRefContracts
+        // prepare nxp list format
+        let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
+        let gridData = []
+        // need to split for genesis and peer joined NXPs
+        const nxpSplit = this.state.livesafeFLOW.refcontComposerLive.experimentSplit(segmentedRefContracts.experiment)
+        for (let nxp of nxpSplit.genesis) {
+          // console.log(nxp)
+          gridData.push({ id: nxp.key, name: nxp.value.concept.new, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })
+        }
+        let gridAnnon = {}
+        gridAnnon.columns = gridColumns
+        gridAnnon.data = gridData
+        this.state.NXPexperimentList = gridAnnon
+        let gridDatapeer = []
+        for (let nxp of nxpSplit.joined) {
+          // console.log(nxp)
+          gridDatapeer.push({ id: nxp.key, name: nxp.value.concept.new, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })
+        }
+        let gridPeer = {}
+        gridPeer.columns = gridColumns
+        gridPeer.data = gridDatapeer
+        this.state.joinedNXPlist = gridPeer
       }
+    },
+    SET_QUESTION_REFCONTRACT (state, inVerified) {
+      console.log(inVerified)
+      this.state.refcontractQuestion = inVerified
+      // this.state.newNXPmakeRefs.push(inVerified)
     },
     SET_PACKAGING_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
       // Vue.set(state.refcontractPackaging, 'packaging' inVerified)
+      this.state.newNXPmakeRefs.push(inVerified)
       this.state.refcontractPackaging = inVerified
-      console.log('after set packaging')
-      console.log(state.refContractPackaging)
     },
     SET_COMPUTE_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
       // Vue.set(state.refcontractPackaging, 'packaging' inVerified)
+      this.state.newNXPmakeRefs.push(inVerified)
       this.state.refcontractCompute = inVerified
-      console.log('after set compute')
-      console.log(state.refContractCompute)
     },
     SET_VISUALISE_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
       // Vue.set(state.refcontractPackaging, 'packaging' inVerified)
+      this.state.newNXPmakeRefs.push(inVerified)
       this.state.refcontractVisualise = inVerified
-      console.log('after set visualise')
-      console.log(this.state.refcontractVisualise)
     },
     SET_NXP_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
       this.state.nxpRefContract = inVerified
-      console.log('after set network experiment ref contract')
-      console.log(this.state.nxpRefContract)
       // send to peerLink for saving
       // Vue.set(this.state.nxpRefContract, 'nxpRefContract' inVerified)
     }
@@ -86,13 +108,13 @@ export default {
       let prepareRefContract = {}
       if (message.reftype === 'new-datatype') {
         const localData = this.state.newRefcontractForm
-        prepareRefContract = refcontComposerLive.dataTypePrepare(localData)
+        prepareRefContract = this.state.livesafeFLOW.refcontComposerLive.datatypeRefLive.dataTypePrepare(localData)
       } else if (message.reftype === 'new-packaging') {
-        prepareRefContract = refcontComposerLive.packagingPrepare(this.state.newPackingForm)
+        prepareRefContract = this.state.livesafeFLOW.refcontComposerLive.packagingRefLive.packagingPrepare(this.state.newPackingForm)
       } else if (message.reftype === 'new-compute') {
-        prepareRefContract = refcontComposerLive.computePrepare(this.state.newComputeForm)
+        prepareRefContract = this.state.livesafeFLOW.refcontComposerLive.computeRefLive.computePrepare(this.state.newComputeForm)
       } else if (message.reftype === 'new-visualise') {
-        prepareRefContract = refcontComposerLive.visualisePrepare(this.state.newVisualiseForm)
+        prepareRefContract = this.state.livesafeFLOW.refcontComposerLive.visualiseRefLive.visualisePrepare(this.state.newVisualiseForm)
       }
       console.log(prepareRefContract)
       const referenceContractReady = JSON.stringify(prepareRefContract)
@@ -100,6 +122,7 @@ export default {
     },
     actionGetRefContract (context, message) {
       console.log('action for ws')
+      console.log(this.state.livesafeFLOW)
       Vue.prototype.$socket.send(message)
     },
     actionMakeVisualiseRefContract (context, message) {
@@ -214,45 +237,65 @@ export default {
       console.log(moduleContracts)
       for (const mc of moduleContracts) {
         console.log(mc)
-        const prepareModule = refcontComposerLive.modulePrepare(mc)
+        const prepareModule = this.state.livesafeFLOW.refcontComposerLive.modulePrepare(mc)
         const referenceContractReady = JSON.stringify(prepareModule)
         Vue.prototype.$socket.send(referenceContractReady)
       }
     },
+    actionSetQuestionRefContract (context, update) {
+      // console.log('look up peer store for refContract')
+      context.commit('SET_QUESTION_REFCONTRACT', update)
+    },
     actionSetRefContract (context, update) {
       // console.log('look up peer store for refContract')
-      let refContractLookup = refcontComposerLive.refcontractLookup(update, this.state.referenceContract.packaging)
+      let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update, this.state.referenceContract.packaging)
       // console.log('refContractLookup')
       // console.log(refContractLookup)
       context.commit('SET_PACKAGING_REFCONTRACT', refContractLookup)
     },
     actionSetComputeRefContract (context, update) {
       console.log('look compute refContracts')
-      let refContractLookup = refcontComposerLive.refcontractLookup(update, this.state.referenceContract.compute)
+      let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update, this.state.referenceContract.compute)
       console.log('refContractLookup')
       console.log(refContractLookup)
       context.commit('SET_COMPUTE_REFCONTRACT', refContractLookup)
     },
     actionSetVisualiseRefContract (context, update) {
       console.log('look visualise refContracts')
-      let refContractLookup = refcontComposerLive.refcontractLookup(update, this.state.referenceContract.visualise)
-      console.log('refContractLookup')
-      console.log(refContractLookup)
+      let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update, this.state.referenceContract.visualise)
       context.commit('SET_VISUALISE_REFCONTRACT', refContractLookup)
     },
     actionNewNXPrefcontract (context, update) {
       console.log('new Shell info ref contracts')
-      let nxpBundle = {}
+      // add contenet from Question (default module)
+      this.state.newNXPmakeRefs.push(this.state.refcontractQuestion)
+      // let nxpBundle = {}
+      // add content from question module
       const liveMakeRefContracts = this.state.nxpMakeList
       // aggregate the modules with contracts
       for (const lnxp of liveMakeRefContracts) {
         console.log(lnxp.refcont)
       }
-      // this.state.refcontractPackaging
-      // this.state.refcontractCompute
-      // this.state.refcontractVisualise
+      console.log('modules live in nxp make')
+      console.log(this.state.newNXPmakeRefs)
+      // console.log(this.state.refcontractPackaging)
+      // console.log(this.state.refcontractCompute)
+      // console.log(this.state.refcontractVisualise)
       // pass to Network Library Composer to make New Network Experiment Reference Contract
-      context.commit('SET_NXP_REFCONTRACT', nxpBundle)
+      const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.newNXPmakeRefs)
+      const referenceContractReady = JSON.stringify(prepareNXPrefcont)
+      Vue.prototype.$socket.send(referenceContractReady)
+    },
+    joinExperiment (context, update) {
+      console.log('save to Peer datastore joined NXP')
+      // map experiment refcont to genesis contract
+      const genesisMatch = update.refcont
+      const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerJoin(genesisMatch)
+      const referenceContractReady = JSON.stringify(prepareNXPrefcont)
+      Vue.prototype.$socket.send(referenceContractReady)
+    },
+    sourceExperiment (context, update) {
+      console.log('peer select data source for NXP')
     }
   }
 }

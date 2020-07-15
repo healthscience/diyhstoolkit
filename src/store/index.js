@@ -20,6 +20,7 @@ safeAPI.on('safeflowUpdate', (data) => {
 const store = new Vuex.Store({
   modules,
   state: {
+    livesafeFLOW: safeAPI,
     authorised: false,
     devices: [],
     liveNXP: '',
@@ -30,6 +31,7 @@ const store = new Vuex.Store({
     ECSupdateOUT: {},
     experimentList: {},
     NXPexperimentList: {},
+    joinedNXPlist: {},
     experimentStatus: {},
     NXPexperimentData: {},
     entityUUIDReturn: {},
@@ -54,6 +56,8 @@ const store = new Vuex.Store({
     visProgress: {},
     timeStartperiod: 0,
     newNXshell: {},
+    newNXPmakeRefs: [],
+    refcontractQuestion: {},
     refcontractPackaging: {},
     refcontractCompute: {},
     refcontractVisualise: {},
@@ -319,9 +323,10 @@ const store = new Vuex.Store({
     },
     async annonconnectNSnetwork (context, update) {
       console.log('annon connect')
-      let nsNXPlive = await safeAPI.connectNSnetwork()
-      context.commit('setNetworkExperimentList', nsNXPlive)
-      context.commit('setProgressStart', nsNXPlive)
+      // for cloud
+      // let nsNXPlive = await safeAPI.connectNSnetwork()
+      // context.commit('setNetworkExperimentList', nsNXPlive)
+      // context.commit('setProgressStart', nsNXPlive)
     },
     async actionDashboardState (context, update) {
       context.commit('setLiveNXP', update)

@@ -1,5 +1,5 @@
 <template>
-  <div class="experiment-info" id="live-network-experiment">
+  <div class="experiment-info" id="live-network-experiment"> jj--{{ peerExperimentListlive }}
     <div class="live-network-header">
       <ul>
         <li class="network-toolbar">
@@ -65,6 +65,9 @@ export default {
     peerNXPListlive: function () {
       return this.$store.state.experimentList
     },
+    peerExperimentListlive: function () {
+      return this.$store.state.joinedNXPlist
+    },
     networkNXPListlive: function () {
       return this.$store.state.NXPexperimentList
     }
@@ -86,6 +89,7 @@ export default {
       console.log('contribute NXP to world')
       // start building NXP refcontract
       this.$store.dispatch('actionNewNXPrefcontract')
+      this.closeModalNewN1()
     }
   }
 }

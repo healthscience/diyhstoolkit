@@ -5,11 +5,12 @@
       <form id="question_form" name="question_form" method="post" action="#">
         <ul>
           <li class="question-item">
-            Prime question:<textarea v-model="question.text" placeholder="prime"></textarea>
+            Prime question:
+            <textarea @paste="questionSave" @keyup="questionSave" required="" v-model="question.text" placeholder="prime"></textarea>
           </li>
-          <li class="question-item">
+          <!--<li class="question-item">
             Forum discussion:<input v-model="question.forum" placeholder="forum link">
-          </li>
+          </li> -->
         </ul>
       </form>
     </div>
@@ -35,8 +36,9 @@ export default {
   computed: {
   },
   methods: {
-    saveQuestion () {
+    questionSave () {
       console.log('save question')
+      this.$store.dispatch('actionSetQuestionRefContract', this.question)
     }
   }
 }

@@ -34,17 +34,22 @@
           </div>
           <div class="network-connect">
             <slot name="connect">
+              No suggest mobile applications
+            </slot>
+          </div>
+          <div class="network-compute">
+            <slot name="compute">
               I'm the default body!
             </slot>
           </div>
           <div class="network-dashboard">
             <slot name="dashboard">
-              I'm the default body!
+              No visualisation preview available
             </slot>
           </div>
           <div id="join-submit">
             <slot name="submit-join">
-              <!-- no default button -->
+              <!-- default button -->
             </slot>
           </div>
         </section>
@@ -80,9 +85,6 @@ export default {
   methods: {
     close () {
       this.$emit('close')
-    },
-    routerStatus () {
-      // console.log(this.$router.currentRoute)
     }
   }
 }

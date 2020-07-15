@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <header>Network Status</header>
-    <div id="connection-status">{{ msg }} ssss{{ authState }}</div>
+    <div id="connection-status"></div>
     <button type="button" class="btn" @click="connectNetwork('connect')">Connect</button>
     <button type="button" class="btn" @click="connectNetwork('new-connect')">New account</button>
     <!-- <button type="button" class="btn" @click="connectNetwork('self-connect')">{{ connectBut.text }}</button> -->
@@ -72,7 +72,12 @@ export default {
         this.connectContext.type = 'connect'
         this.connectContext.message = 'Anno. connect to network'
         this.buttonName = 'Annon. connect'
-        this.$store.dispatch('annonconnectNSnetwork')
+        // this.$store.dispatch('annonconnectNSnetwork')
+        const refContract = {}
+        refContract.reftype = 'datatype'
+        refContract.action = 'GET'
+        const refCJSON = JSON.stringify(refContract)
+        this.$store.dispatch('actionGetRefContract', refCJSON)
       } else if (typeConnect === 'new-connect') {
         this.connectContext.type = 'firsttime'
         this.connectContext.message = 'first time new connection setup'

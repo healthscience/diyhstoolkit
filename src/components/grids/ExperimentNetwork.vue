@@ -34,32 +34,37 @@
           <dash-board v-if="isModalDashboardVisible" :shellCNRL="shellContract" :moduleCNRL="modI"></dash-board>
         </ul>
       </div>
-      <join-experiment v-show="isModalJoinVisible" @close="closeModalJoin" @saveNXP="saveNXPrefcontract">
-        <template v-slot:header>
+      <join-experiment v-show="isModalJoinVisible" @close="closeModalJoin">
+        <template v-slot:header> {{ actionKBundle }}
         <!-- The code below goes into the header slot -->
           N=1 Network Experiment {{ actionKBundle.name }} {{ actionKBundle.description }}
         </template>
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
-          <header>DOWNLOAD MOBILE APPLICACTION & CONNECT DEVICE</header>
+          <header>Experiment Question:</header>
         </template>
         <template v-slot:connect>
-          <div>Devices required: {{ actionKBundle.dapps }}  Compatible Devices: {{ actionKBundle.device }}</div>
+          <!-- mobile apps suggested-->
         </template>
-        <template v-slot:dashboard>
-          <div>
-            DASHBOARD preview - other templates
-            <button type="button" class="btn" @click="viewDashboard">
-              View
-            </button>
-            <img id="preview-width" v-if="previewSeen" alt="dashboard-example" src="../../assets/preview-dashboard.png">
+        <template v-slot:compute>
+          <!-- select data source -->
+          <div class="compute-select-datasource">
+            <label for="compute-select-source">Select data source:</label>
+            <select class="select-compute-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
+              <option value="mongo-gadgetbridge">Gadgetbridge-mongo</option>
+              <option value="openhumansAPI">OpenHumans</option>
+            </select>
           </div>
         </template>
+        <template v-slot:dashboard>
+          <!-- preview visualisation -->
+        </template>
         <template v-slot:submit-join>
+          <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
         </template>
       </join-experiment>
+      <button v-show="isModalJoinVisible" @click="contributeNXP">contribute experiment</button>
     </div>
-    <button @click="contributeNXP">contribute experiment</button>
   </div>
 </template>
 
@@ -126,7 +131,12 @@ export default {
       isModalDashboardVisible: false,
       isModalJoinVisible: false,
       actionKBundle: {},
-      previewSeen: false
+      previewSeen: false,
+      selectJoin:
+      {
+        refcon: '',
+        source: ''
+      }
     }
   },
   methods: {
@@ -155,15 +165,21 @@ export default {
     viewDashboard () {
       this.previewSeen = true
     },
-    saveNetworkExperiment () {
-      console.log('save network experiment')
+    joinsaveNetworkExperiment () {
+      console.log('join & save network experiment')
     },
     contributeNXP () {
       console.log('new NXP to save progess')
       this.$store.dispatch('actionNewNXPrefcontract')
     },
-    saveNXPrefcontract () {
-      console.log('save NXP contract')
+    joinNetworkExperiment () {
+      console.log('save and join network exerpiment')
+      this.$store.dispatch('joinExperiment', this.selectJoin)
+      this.closeModalJoin()
+    },
+    sourceSelect () {
+      console.log('select source JOIN')
+      this.$store.dispatch('sourceExperiment', this.selectJoin)
     }
   }
 }

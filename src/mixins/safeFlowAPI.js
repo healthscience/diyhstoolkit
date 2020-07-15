@@ -11,6 +11,7 @@
 */
 
 import SAFEflow from 'node-safeflow'
+import RCcomposer from '@/mixins/rcComposer.js'
 import CryptoUtility from './cryptoUtility.js'
 const util = require('util')
 const events = require('events')
@@ -18,6 +19,7 @@ const events = require('events')
 var safeFlowAPI = function () {
   events.EventEmitter.call(this)
   this.SAPI = new SAFEflow()
+  this.refcontComposerLive = new RCcomposer()
   this.liveCrypto = new CryptoUtility()
   this.SAPI.on('displayUpdate', (data) => {
     this.emit('safeflowUpdate', data)
@@ -54,11 +56,11 @@ safeFlowAPI.prototype.connectPeerNSnetwork = async function (authNetwork, authBu
 */
 safeFlowAPI.prototype.connectNSnetwork = async function () {
   console.log('ask connect to HS NETWORK')
-  let network = 'cloud'
+  let network = 'peerlink'
   let starthsNXP = {}
   // connected annon
   if (network === 'safenetwork') {
-    // implement in network release see DIY repo on github.
+    // safe Test network coming soon
   } else if (network === 'cloud') {
     let readOnly = { 'publickey': 'e97bd0056edae2a5da49b7868167b6c9d13bc3d5', 'token': 'CVUbN3zCmvubqNpJ3ru6YLtwLRMv6kfa9NmRAzTGSiUQ', 'cnrl': 'cnrl-33221101' }
     starthsNXP = await this.startannonCycle(readOnly)
