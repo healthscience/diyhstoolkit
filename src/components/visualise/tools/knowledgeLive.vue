@@ -1,40 +1,77 @@
 <template>
   <div id="live-view">
     <div id="knowledge-selector">
-      <div id="live-context-datatypes" class="live-kelement">
+      <div id="live-context-datatypes">
+        <div id="context-devices" class="live-kelement">
+          <header>Devices:</header>
+          <ul>
+            <li>
+              <label for="devices-select"></label>
+              <select class="select-device-id" id="device-mapping-build" @change="deviceSelect" v-model="visualsettings.devices">
+                <option value="none" selected="">please select</option>
+                <option v-for="dev in devices" :key="dev.refcont" >
+                  <option value=dev.key>{{ dev.text }}</option>
+                </option>
+              </select>
+            </li>
+          </ul>
+        </div>
+
+        <div id="context-compute" class="live-kelement">
+          <header>Compute:</header>
+          <ul>
+            <li>
+              <label for="compute-select"></label>
+              <select class="select-compute-id" id="compute-mapping-build" @change="computeSelect" v-model="visualsettings.compute">
+                <option value="none" selected="">please select</option>
+                <option v-for="comp in compute" :key="comp.refcont" >
+                  <option value=com0.key>{{ comp.text }}</option>
+                </option>
+              </select>
+            </li>
+          </ul>
+        </div>
+        <div id="context-results" class="live-kelement">
+          <header>Results:</header>
+          <ul>
+            <li>
+              <label for="results-select"></label>
+              <select class="select-results-id" id="results-mapping-build" @change="resultsSelect" v-model="visualsettings.results">
+                <option value="none" selected="">please select</option>
+                <option v-for="rDT in resultsDTs" :key="rDT.refcont" >
+                  <option value=rDT.key>{{ rDT.text }}</option>
+                </option>
+              </select>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div id="live-context-datatypes">
         <ul>
           <li class="live-dtitem">
             <header>X-axis</header>
             <ul>
-              <li id="dt-select" v-for="dts in buidContextLive" :key='dts'>
-                <!-- <div class="live-item">{{ dts }}</div> -->
-                <div class="live-item">Timestamp</div>
-              </li>
               <li>
-                <button id="dt-x-axis" @click.prevent="setOpenData($event)">-v-</button>
-                  <!--dropdown of data types-->
-                <ul v-if="selectChange.xaxis === true">
-                  <li id="select-new-datatype" v-for="dts in buidContextLive" :key='dts'>
-                    <div class="live-item">{{ dts }}</div>
-                    <div class="live-item">Timestamp</div>
-                  </li>
-                </ul>
+                <label for="yaxis-select"></label>
+                <select class="select-categor-id" id="category-mapping-build" @change="xaxisSelect" v-model="visualsettings.xaxis">
+                  <option value="none" selected="">please select</option>
+                  <option v-for="colpair in refContractPackage.value.concept.tablestructure" :key="colpair.refcontract" >
+                    <option value=colpair.refcontract>{{ colpair.column }}</option>
+                  </option>
+                </select>
               </li>
             </ul>
           </li>
-        </ul>
-      </div>
-      <div id="live-context-datatypes" class="live-kelement">
-        <ul>
           <li class="live-item">
             <header>Y-axis</header>
             <ul>
-              <li id="dt-select" v-for="dts in buidContextLive" :key='dts'>
-                <div class="live-item">{{ dts }}</div>
-              </li>
-              <li>
-                <button>-v-</button>
-              </li>
+              <label for="yaxis-select"></label>
+              <select class="select-categor-id" id="category-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
+                <option value="none" selected="">please select</option>
+                <option v-for="colpair in refContractPackage.value.concept.tablestructure" :key="colpair.refcontract" >
+                  <option value=colpair.refcontract>{{ colpair.column }}</option>
+                </option>
+              </select>
             </ul>
             <div v-if="feedback.datatypes" class="feedback">
               ---
@@ -45,11 +82,14 @@
       <div id="live-context-category" class="live-kelement">
         <header>Category</header>
           <ul>
-            <li id="cat-items" v-for="catL in buidContextLive.category" :key='catL'>
-              <div class="live-item">{{ catL.text }}</div>
-            </li>
-            <li>
-              <button>-v-</button>
+            <li id="cat-items">
+              <label for="category-select"></label>
+              <select class="select-category-id" id="category-mapping-build" @change="categorySelect" v-model="visualsettings.category">
+                <option value="none" selected="">please select</option>
+                <option v-for="catL in category" :key="catL" >
+                  <option value=catL>{{ catL }}</option>
+                </option>
+              </select>
             </li>
           </ul>
           <div v-if="feedback.categories" class="feedback">---</div>
@@ -57,29 +97,31 @@
       <div id="context-time" class="live-kelement">
         <header>Time Period:</header>
           <ul>
-            <li v-for="ts in buidContextLive.time" :key='ts'>
-               <div class="live-item">{{ ts }}</div>
-            </li>
-            <li>
-              <button>-v-</button>
+            <li id="time-items">
+              <label for="time-select"></label>
+              <select class="select-time-id" id="time-mapping-build" @change="timeSelect" v-model="visualsettings.time">
+                <option value="none" selected="">please select</option>
+                <option v-for="t in time" :key="t.cnrl" >
+                  <option value=t>{{ t.text }}</option>
+                </option>
+              </select>
             </li>
           </ul>
           <div v-if="feedback.time" class="feedback">---</div>
       </div>
       <div id="context-resolution" class="live-kelement">
         <header>Resolution:</header>
-          <div class="live-item">{{ buidContextLive.resolution }}</div>
-          <li>
-            <button>-v-</button>
-          </li>
+          <div class="live-item"></div>
+            <li id="resolution-items">
+              <label for="resolution-select"></label>
+              <select class="select-resolution-id" id="resolution-mapping-build" @change="resolutionSelect" v-model="visualsettings.resolution">
+                <option value="none" selected="">please select</option>
+                <option v-for="rs in resolution" :key="rs.cnrl" >
+                  <option value=rs>{{ rs.text }}</option>
+                </option>
+              </select>
+            </li>
           <div v-if="feedback.resolution" class="feedback">---</div>
-      </div>
-      <div id="context-results" class="live-kelement">
-        <header>Results:</header>
-          <div class="live-dtresults">auto {{ }}</div>
-          <li>
-            <button>-v-</button>
-          </li>
       </div>
       <div id="context-learn" class="live-kelement">
         <li>
@@ -111,12 +153,61 @@ export default {
       // console.log(this.moduleCNRL)
       // console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data)
       return ['datatype'] // this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data
+    },
+    refContractPackage: function () {
+      return this.$store.state.refcontractPackaging
+    },
+    category: function () {
+      const catLive = this.$store.state.refcontractPackaging.value.concept.category
+      let catList = []
+      for (let cat of catLive) {
+        if (cat.category !== undefined) {
+          catList.push(cat.category)
+        }
+      }
+      function onlyUnique (value, index, self) {
+        return self.indexOf(value) === index
+      }
+      // usage example:
+      let unique = catList.filter(onlyUnique)
+      return unique
+    },
+    computes: function () {
+      return this.$store.state.refContractCompute
+    },
+    time: function () {
+      // mock time unit refContracts
+      let timeList = []
+      const timeItem = { text: 'day', id: 'cnrl-t1', active: false }
+      timeList.push(timeItem)
+      const timeItem2 = { text: 'week', id: 'cnrl-t2', active: false }
+      timeList.push(timeItem2)
+      const timeItem3 = { text: 'month', id: 'cnrl-t3', active: false }
+      timeList.push(timeItem3)
+      return timeList // this.$store.state.refContractPackaging
+    },
+    resolution: function () {
+      // mock units refContract
+      let resList = []
+      const resItem = { text: 'minute', id: 'cnrl-t11', active: false }
+      resList.push(resItem)
+      return resList // this.$store.state.refContractPackaging
+    },
+    results: function () {
+      return this.$store.state.refContractPackaging
+    },
+    devices: function () {
+      return this.$store.state.refContractPackaging
     }
   },
   data () {
     return {
       selectChange: {
         'xaxis': false
+      },
+      visualsettings: {
+        xaxis: null,
+        yaxis: null
       },
       feedback:
       {
@@ -338,6 +429,20 @@ export default {
       if (changeData === 'dt-x-axis') {
         this.selectChange.xaxis = !this.selectChange.xaxis
       }
+    },
+    xaxisSelect () {
+      // set default x-axis chart setting
+    },
+    yaxisSelect () {
+      // set default y-axis chart setting
+    },
+    timeSelect () {
+      // set default time chart setting
+    },
+    resolutionSelect () {
+      // set default resolution chart setting
+    },
+    categorySelect () {
     }
   }
 }
@@ -355,29 +460,23 @@ export default {
   clear:both;
 }
 
-#live-knowledge-elements {
-  border: 0px solid blue;
-  background-color: #eae6ed;
-}
-
-#live-knowledge-holder {
-  float: left;
-  border: 1px solid purple;
-  background-color: white;
-  margin: 6px;
+#live-context-datatypes {
+  display: block;
+  margin-bottom: 30px;
+  border-bottom: 1px dashed grey;
 }
 
 .live-kelement {
   display: inline-block;
   vertical-align: top;
-  border: 1px solid white;
+  border: 3px solid white;
   margin-left: 20px;
   width: 180px;
 }
 
 .live-kelement header {
   background-color: #d7e6f5;
-  border-bottom: 2px dotted #6F6B63;
+  /* border-bottom: 2px dotted #6F6B63; */
   margin: 4px;
   font-weight: normal;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="experiment-info" id="live-network-experiment"> jj--{{ peerExperimentListlive }}
+  <div class="experiment-info" id="live-network-experiment">
     <div class="live-network-header">
       <ul>
         <li class="network-toolbar">
@@ -31,13 +31,13 @@
         </li>
       </ul>
     </div>
-    <experiment-network v-if="peerNXPListlive.data"
+    <experiment-network v-if="peerExperimentListlive.data"
       class="experiment-info"
-      :experiments="peerNXPListlive.data"
-      :columns="peerNXPListlive.columns"
+      :experiments="peerExperimentListlive.data"
+      :columns="peerExperimentListlive.columns"
       :filter-key="searchQuery">
     </experiment-network>
-    NETWORK
+    AVAILABLE ON NETWORK
     <experiment-network
       class="experiment-info" v-if="networkNXPListlive.data"
       :experiments="networkNXPListlive.data"
@@ -63,6 +63,7 @@ export default {
   },
   computed: {
     peerNXPListlive: function () {
+      // cloud setup
       return this.$store.state.experimentList
     },
     peerExperimentListlive: function () {

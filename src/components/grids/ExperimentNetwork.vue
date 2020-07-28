@@ -46,7 +46,7 @@
         <template v-slot:connect>
           <!-- mobile apps suggested-->
         </template>
-        <template v-slot:compute>
+        <template v-slot:packaging>
           <!-- select data source -->
           <div class="compute-select-datasource">
             <label for="compute-select-source">Select data source:</label>
@@ -56,8 +56,25 @@
             </select>
           </div>
         </template>
-        <template v-slot:dashboard>
+        <template v-slot:compute>
+          <li class="compute-form-item">
+            Set start time of data:<input v-model="newCompute.startperiod" placeholder="Reference Contract">
+            <button type="button" class="btn" @click="datastartLookup()">find startdate</button>
+            <label for="compute-add-source">Controls</label>
+            <select class="select-compute-source" @change="controlsSave" v-model="newCompute.controls" id="">Please select
+              <option value=true>YES</option>
+              <option value=false>NO</option>
+            </select>
+            <label for="compute-add-source">Automation</label>
+            <select class="select-compute-automation" @change="automationSave" v-model="newCompute.automation" id="">Please select
+              <option value=true>YES</option>
+              <option value=false>NO</option>
+            </select>
+          </li>
           <!-- preview visualisation -->
+        </template>
+        <template v-slot:dashboard-visualisation>
+          Visualisation chart layout wizard
         </template>
         <template v-slot:submit-join>
           <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
@@ -136,6 +153,13 @@ export default {
       {
         refcon: '',
         source: ''
+      },
+      newCompute: {
+        automation: false,
+        controls: false,
+        startperiod: null
+      },
+      newVisualisation: {
       }
     }
   },
@@ -168,18 +192,31 @@ export default {
     joinsaveNetworkExperiment () {
       console.log('join & save network experiment')
     },
+    sourceSelect () {
+      console.log('select source JOIN')
+      this.$store.dispatch('sourceExperiment', this.selectJoin)
+    },
+    automationSave () {
+      // this.$store.dispatch('buildRefComputeAutomation', this.newCompute.automation)
+    },
+    controlsSave () {
+      // this.$store.dispatch('buildRefComputeControls', this.newCompute.controls)
+    },
+    datastartLookup () {
+      console.log('look up start of data now have api info')
+      this.newCompute.startperiod = 12345123451
+    },
     contributeNXP () {
       console.log('new NXP to save progess')
       this.$store.dispatch('actionNewNXPrefcontract')
     },
     joinNetworkExperiment () {
       console.log('save and join network exerpiment')
-      this.$store.dispatch('joinExperiment', this.selectJoin)
+      const peerChoices = {}
+      peerChoices.compute = this.newCompute
+      peerChoices.visualise = {} // empty set default from genesis setup
+      this.$store.dispatch('joinExperiment', peerChoices)
       this.closeModalJoin()
-    },
-    sourceSelect () {
-      console.log('select source JOIN')
-      this.$store.dispatch('sourceExperiment', this.selectJoin)
     }
   }
 }

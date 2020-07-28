@@ -92,16 +92,17 @@ const store = new Vuex.Store({
       state.liveNXP = inVerified
     },
     setExperimentList: (state, inVerified) => {
-      let gridData = []
+      // check if peerlink has been called if not get ref contracts
+      /* let gridData = []
       let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
-      for (let nxp of inVerified) {
+      for (let nxp of inVerified) { // state.joinedNXPlist.data) {
         // console.log(nxp.contract)
         gridData.push({ id: nxp.contract.prime.cnrl, name: nxp.contract.prime.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'View' })
       }
       let gridTest2 = {}
       gridTest2.columns = gridColumns
       gridTest2.data = gridData
-      state.experimentList = gridTest2
+      state.experimentList = gridTest2 */
     },
     setExperimentStatus: (state, inVerified) => {
       for (let exl of inVerified) {
@@ -120,6 +121,8 @@ const store = new Vuex.Store({
     setNetworkExperimentList: (state, inVerified) => {
       let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
       let gridData = []
+      console.log('join list')
+      console.log(inVerified)
       for (let nxp of inVerified) {
         gridData.push({ id: nxp.prime.cnrl, name: nxp.prime.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })
       }

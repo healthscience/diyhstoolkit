@@ -38,12 +38,17 @@
             </slot>
           </div>
           <div class="network-compute">
+            <slot name="packaging">
+              I'm the default body!
+            </slot>
+          </div>
+          <div class="network-compute">
             <slot name="compute">
               I'm the default body!
             </slot>
           </div>
           <div class="network-dashboard">
-            <slot name="dashboard">
+            <slot name="dashboard-visualisation">
               No visualisation preview available
             </slot>
           </div>

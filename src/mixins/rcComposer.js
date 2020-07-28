@@ -84,9 +84,9 @@ ReferenceContractComposer.prototype.visualiseComposer = function (input) {
 * @method experimentComposerGenesis
 *
 */
-ReferenceContractComposer.prototype.experimentComposerGenesis = function (input) {
+ReferenceContractComposer.prototype.experimentComposerGenesis = function (input, question) {
   console.log('prepare New visualise contract')
-  const preContract = this.experimentRefLive.nxpPrepare(input)
+  const preContract = this.experimentRefLive.nxpPrepare(input, question)
   return preContract
 }
 
@@ -178,13 +178,15 @@ ReferenceContractComposer.prototype.refcontractSperate = function (refContractsL
 */
 ReferenceContractComposer.prototype.experimentSplit = function (inputNXPs) {
   console.log('experimentSplit')
+  console.log(inputNXPs)
   const splitExperiments = {}
   let genesis = []
   let joined = []
   for (const exp of inputNXPs) {
-    if (exp.refcont === 'genesis') {
+    console.log(exp.value.refcontract)
+    if (exp.value.concept.state === 'genesis') {
       genesis.push(exp)
-    } else {
+    } else if (exp.value.concept.state === 'joined') {
       joined.push(exp)
     }
   }

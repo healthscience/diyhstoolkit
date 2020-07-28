@@ -30,7 +30,9 @@ util.inherits(ExperimentReferenceContract, events.EventEmitter)
 * @method nxpPrepare
 *
 */
-ExperimentReferenceContract.prototype.nxpPrepare = function (inputRC) {
+ExperimentReferenceContract.prototype.nxpPrepare = function (inputRC, question) {
+  console.log('genesis experiment')
+  console.log(inputRC)
   const nxpReferenceContract = {}
   nxpReferenceContract.refcontract = 'experiment'
   nxpReferenceContract.modules = {}
@@ -38,7 +40,7 @@ ExperimentReferenceContract.prototype.nxpPrepare = function (inputRC) {
   nxpReferenceContract.space = {}
   nxpReferenceContract.computational = {}
   // prepare semantic part of datatype ref contracts
-  nxpReferenceContract.concept = { new: 'experiment' }
+  nxpReferenceContract.concept = { state: 'genesis', question: question }
   nxpReferenceContract.modules = inputRC
   // prepare space coordinates e.g. quark, atom, molecule etc.
   nxpReferenceContract.space = { concept: 'mind' }
@@ -68,7 +70,7 @@ ExperimentReferenceContract.prototype.nxpJoinedPrepare = function (inputRC) {
   nxpReferenceContract.space = {}
   nxpReferenceContract.computational = {}
   // prepare semantic part of datatype ref contracts
-  nxpReferenceContract.concept = { new: 'experiment' }
+  nxpReferenceContract.concept = { state: 'joined' }
   nxpReferenceContract.modules = inputRC
   // prepare space coordinates e.g. quark, atom, molecule etc.
   nxpReferenceContract.space = { concept: 'mind' }

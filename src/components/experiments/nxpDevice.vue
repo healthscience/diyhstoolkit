@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     refContractPackage: function () {
-      console.log(this.$store.state.refcontractPackaging)
+      // console.log(this.$store.state.refcontractPackaging)
       return this.$store.state.refcontractPackaging
     }
   },

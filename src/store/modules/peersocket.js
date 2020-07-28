@@ -52,6 +52,8 @@ export default {
         let gridData = []
         // need to split for genesis and peer joined NXPs
         const nxpSplit = this.state.livesafeFLOW.refcontComposerLive.experimentSplit(segmentedRefContracts.experiment)
+        console.log('split geneiss joined')
+        console.log(nxpSplit)
         for (let nxp of nxpSplit.genesis) {
           // console.log(nxp)
           gridData.push({ id: nxp.key, name: nxp.value.concept.new, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })
@@ -63,21 +65,21 @@ export default {
         let gridDatapeer = []
         for (let nxp of nxpSplit.joined) {
           // console.log(nxp)
-          gridDatapeer.push({ id: nxp.key, name: nxp.value.concept.new, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })
+          gridDatapeer.push({ id: nxp.key, name: nxp.value.concept.new, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'View' })
         }
         let gridPeer = {}
         gridPeer.columns = gridColumns
         gridPeer.data = gridDatapeer
         this.state.joinedNXPlist = gridPeer
+        console.log('peer grid set')
+        console.log(this.state.joinedNXPlist)
       }
     },
     SET_QUESTION_REFCONTRACT (state, inVerified) {
-      console.log(inVerified)
       this.state.refcontractQuestion = inVerified
       // this.state.newNXPmakeRefs.push(inVerified)
     },
     SET_PACKAGING_REFCONTRACT (state, inVerified) {
-      console.log(inVerified)
       // Vue.set(state.refcontractPackaging, 'packaging' inVerified)
       this.state.newNXPmakeRefs.push(inVerified)
       this.state.refcontractPackaging = inVerified
@@ -268,7 +270,7 @@ export default {
     actionNewNXPrefcontract (context, update) {
       console.log('new Shell info ref contracts')
       // add contenet from Question (default module)
-      this.state.newNXPmakeRefs.push(this.state.refcontractQuestion)
+      // this.state.newNXPmakeRefs.push(this.state.refcontractQuestion)
       // let nxpBundle = {}
       // add content from question module
       const liveMakeRefContracts = this.state.nxpMakeList
@@ -282,14 +284,16 @@ export default {
       // console.log(this.state.refcontractCompute)
       // console.log(this.state.refcontractVisualise)
       // pass to Network Library Composer to make New Network Experiment Reference Contract
-      const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.newNXPmakeRefs)
+      const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.newNXPmakeRefs, this.state.refcontractQuestion)
+      console.log(prepareNXPrefcont)
       const referenceContractReady = JSON.stringify(prepareNXPrefcont)
-      Vue.prototype.$socket.send(referenceContractReady)
+      console.log(referenceContractReady)
+      // Vue.prototype.$socket.send(referenceContractReady)
     },
     joinExperiment (context, update) {
       console.log('save to Peer datastore joined NXP')
       // map experiment refcont to genesis contract
-      const genesisMatch = update.refcont
+      const genesisMatch = update
       const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerJoin(genesisMatch)
       const referenceContractReady = JSON.stringify(prepareNXPrefcont)
       Vue.prototype.$socket.send(referenceContractReady)
