@@ -7,9 +7,7 @@ const moment = require('moment')
 
 const safeAPI = new LiveMixinSAFEflow()
 const CALElive = new CALE(safeAPI)
-console.log('cale')
 console.log(CALElive)
-
 Vue.use(Vuex)
 
 // listeners
@@ -121,7 +119,7 @@ const store = new Vuex.Store({
     setNetworkExperimentList: (state, inVerified) => {
       let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
       let gridData = []
-      console.log('join list')
+      console.log('Peer joined experiment list')
       console.log(inVerified)
       for (let nxp of inVerified) {
         gridData.push({ id: nxp.prime.cnrl, name: nxp.prime.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })

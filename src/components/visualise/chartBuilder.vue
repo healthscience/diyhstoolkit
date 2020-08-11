@@ -1,5 +1,5 @@
 <template>
-  <div id="k-toolkit"> {{ this.shellID }} -- {{ visToolbarStatusLive }}
+  <div id="k-toolkit">
     <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>
     <div id="diy-tools" v-if="visToolbarStatusLive.active">
       <div id="chart-type">

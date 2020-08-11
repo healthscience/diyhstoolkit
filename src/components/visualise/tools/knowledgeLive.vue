@@ -24,8 +24,8 @@
               <label for="compute-select"></label>
               <select class="select-compute-id" id="compute-mapping-build" @change="computeSelect" v-model="visualsettings.compute">
                 <option value="none" selected="">please select</option>
-                <option v-for="comp in compute" :key="comp.refcont" >
-                  <option value=com0.key>{{ comp.text }}</option>
+                <option v-for="comp in refContractCompute" :key="comp.key" >
+                  <option value=com.key>{{ comp.value.computational.name }}</option>
                 </option>
               </select>
             </li>
@@ -52,8 +52,8 @@
             <header>X-axis</header>
             <ul>
               <li>
-                <label for="yaxis-select"></label>
-                <select class="select-categor-id" id="category-mapping-build" @change="xaxisSelect" v-model="visualsettings.xaxis">
+                <label for="xaxis-select"></label>
+                <select class="select-xaxis-id" id="xaxis-mapping-build" @change="xaxisSelect" v-model="visualsettings.xaxis">
                   <option value="none" selected="">please select</option>
                   <option v-for="colpair in refContractPackage.value.concept.tablestructure" :key="colpair.refcontract" >
                     <option value=colpair.refcontract>{{ colpair.column }}</option>
@@ -66,7 +66,7 @@
             <header>Y-axis</header>
             <ul>
               <label for="yaxis-select"></label>
-              <select class="select-categor-id" id="category-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
+              <select class="select-yaxis-id" id="yaxis-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
                 <option value="none" selected="">please select</option>
                 <option v-for="colpair in refContractPackage.value.concept.tablestructure" :key="colpair.refcontract" >
                   <option value=colpair.refcontract>{{ colpair.column }}</option>
@@ -154,6 +154,14 @@ export default {
       // console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data)
       return ['datatype'] // this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data
     },
+    refContractCompute: function () {
+      let computeLive = []
+      computeLive.push(this.$store.state.refcontractCompute)
+      return computeLive
+    },
+    resultsDTs: function () {
+      return []
+    },
     refContractPackage: function () {
       return this.$store.state.refcontractPackaging
     },
@@ -165,15 +173,13 @@ export default {
           catList.push(cat.category)
         }
       }
+      catList.push('none')
       function onlyUnique (value, index, self) {
         return self.indexOf(value) === index
       }
       // usage example:
       let unique = catList.filter(onlyUnique)
       return unique
-    },
-    computes: function () {
-      return this.$store.state.refContractCompute
     },
     time: function () {
       // mock time unit refContracts
@@ -432,17 +438,31 @@ export default {
     },
     xaxisSelect () {
       // set default x-axis chart setting
+      this.$store.dispatch('actionNewVisXaxis', this.visualsettings.xaxis)
     },
     yaxisSelect () {
       // set default y-axis chart setting
+      this.$store.dispatch('actionNewVisYaxis', this.visualsettings.yaxis)
+    },
+    categorySelect () {
+      this.$store.dispatch('actionNewVisCategory', this.visualsettings.category)
     },
     timeSelect () {
       // set default time chart setting
+      this.$store.dispatch('actionNewVisTime', this.visualsettings.time)
     },
     resolutionSelect () {
       // set default resolution chart setting
+      this.$store.dispatch('actionNewVisResolution', this.visualsettings.resolution)
     },
-    categorySelect () {
+    deviceSelect () {
+      this.$store.dispatch('actionNewVis.devices', this.visualsettings.devices)
+    },
+    computeSelect () {
+      this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
+    },
+    resultsSelect () {
+      this.$store.dispatch('actionNewVisResults', this.visualsettings.results)
     }
   }
 }

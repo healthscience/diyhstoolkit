@@ -8,7 +8,7 @@
         <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
       </li>
       <li v-if="refContractVisualise.key">
-        {{ refContractVisualise }}
+        {{  }}
       </li>
     </div>
     <chart-builder v-if="type === 'chart.js'" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></chart-builder>

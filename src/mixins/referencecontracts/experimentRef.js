@@ -31,7 +31,7 @@ util.inherits(ExperimentReferenceContract, events.EventEmitter)
 *
 */
 ExperimentReferenceContract.prototype.nxpPrepare = function (inputRC, question) {
-  console.log('genesis experiment')
+  console.log('NEW genesis experiment')
   console.log(inputRC)
   const nxpReferenceContract = {}
   nxpReferenceContract.refcontract = 'experiment'

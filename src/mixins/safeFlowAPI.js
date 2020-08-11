@@ -12,6 +12,7 @@
 
 import SAFEflow from 'node-safeflow'
 import RCcomposer from '@/mixins/rcComposer.js'
+import KBID from '@/mixins/kbidComposer.js'
 import CryptoUtility from './cryptoUtility.js'
 const util = require('util')
 const events = require('events')
@@ -20,6 +21,7 @@ var safeFlowAPI = function () {
   events.EventEmitter.call(this)
   this.SAPI = new SAFEflow()
   this.refcontComposerLive = new RCcomposer()
+  this.KBIDLive = new KBID()
   this.liveCrypto = new CryptoUtility()
   this.SAPI.on('displayUpdate', (data) => {
     this.emit('safeflowUpdate', data)

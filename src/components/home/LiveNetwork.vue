@@ -31,6 +31,7 @@
         </li>
       </ul>
     </div>
+    PEER EXPERIMENTS
     <experiment-network v-if="peerExperimentListlive.data"
       class="experiment-info"
       :experiments="peerExperimentListlive.data"
@@ -62,10 +63,6 @@ export default {
   props: {
   },
   computed: {
-    peerNXPListlive: function () {
-      // cloud setup
-      return this.$store.state.experimentList
-    },
     peerExperimentListlive: function () {
       return this.$store.state.joinedNXPlist
     },
@@ -82,6 +79,8 @@ export default {
   methods: {
     newExperiment () {
       this.isModalNewNetworkExperiment = true
+      // create a set of modules and save if contributed
+      this.$store.dispatch('actionMakeModuleRefContract')
     },
     closeModalNewN1 () {
       this.isModalNewNetworkExperiment = false

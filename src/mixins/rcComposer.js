@@ -14,6 +14,7 @@ import DatatypeRefCont from './referencecontracts/datatypeRef.js'
 import PackagingRefCont from './referencecontracts/packagingRef.js'
 import ComputeRefCont from './referencecontracts/computeRef.js'
 import VisualiseRefCont from './referencecontracts/visualiseRef.js'
+import ModulueRefCont from './referencecontracts/moduleRef.js'
 import ExperimentRefCont from './referencecontracts/experimentRef.js'
 const util = require('util')
 const events = require('events')
@@ -26,6 +27,7 @@ var ReferenceContractComposer = function () {
   this.packagingRefLive = new PackagingRefCont()
   this.computeRefLive = new ComputeRefCont()
   this.visualiseRefLive = new VisualiseRefCont()
+  this.moduleRefLive = new ModulueRefCont()
   this.experimentRefLive = new ExperimentRefCont()
 }
 
@@ -76,6 +78,17 @@ ReferenceContractComposer.prototype.computeComposer = function (input) {
 ReferenceContractComposer.prototype.visualiseComposer = function (input) {
   console.log('prepare New visualise contract')
   const preContract = this.visualiseRefLive.visualisePrepare(input)
+  return preContract
+}
+
+/**
+* moduleComposer composer
+* @method moduleComposer
+*
+*/
+ReferenceContractComposer.prototype.moduleComposer = function (input) {
+  console.log('prepare New visualise contract')
+  const preContract = this.moduleRefLive.modulePrepare(input)
   return preContract
 }
 

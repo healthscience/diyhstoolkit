@@ -34,8 +34,9 @@
           <dash-board v-if="isModalDashboardVisible" :shellCNRL="shellContract" :moduleCNRL="modI"></dash-board>
         </ul>
       </div>
+      <!-- join network experiment modal -->
       <join-experiment v-show="isModalJoinVisible" @close="closeModalJoin">
-        <template v-slot:header> {{ actionKBundle }}
+        <template v-slot:header> {{ joinExperiment }}
         <!-- The code below goes into the header slot -->
           N=1 Network Experiment {{ actionKBundle.name }} {{ actionKBundle.description }}
         </template>
@@ -129,6 +130,9 @@ export default {
         })
       }
       return experiments
+    },
+    joinExperiment: function () {
+      return [1, 2]
     }
   },
   filters: {
