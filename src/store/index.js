@@ -59,23 +59,27 @@ const store = new Vuex.Store({
     refcontractPackaging: {},
     refcontractCompute: {},
     refcontractVisualise: {},
-    nxpMakeList:
-    [
-      { name: 'Question', id: 0, refcont: '0492e4bf43a6f930a169baab13d5ae4917f17544' }
-    ],
-    nxpModulesList:
-    [
-      { name: 'Device/source', id: 1, refcont: '3f8830cab791df89acd6b093d52ea397a0c90853' },
-      { name: 'Mobile/Dapps', id: 2, refcont: '' },
-      { name: 'Compute', id: 3, refcont: 'f9b584cf83bbbc45e2f5d869990b592efa2945b3' },
-      { name: 'Visulisation', id: 4, refcont: 'd60569614d692317f2ffcb6b01e162179ae5a470' },
-      { name: 'Education', id: 5, refcont: '' },
-      { name: 'Error Mgt', id: 6, refcont: '' },
-      { name: 'Control', id: 7, refcont: '' },
-      { name: 'Lifestyle medicine', id: 8, refcont: '' },
-      { name: 'Prescription', id: 9, refcont: '' },
-      { name: 'Communication', id: 10, refcont: '' }
-    ]
+    nxpMakeList: [],
+    /* [
+      { name: 'question', id: 0, refcont: '0492e4bf43a6f930a169baab13d5ae4917f17544' }
+    ] */
+    nxpModulesList: [],
+    moduleNXP:
+    {
+      question: { 'prime': { 'module': 'question', 'type': 'nxp-question' } },
+      data: { 'prime': { 'module': 'data', 'type': 'nxp-device' } },
+      mobile: { 'prime': { 'module': 'mobile', 'type': 'nxp-dapp' } },
+      compute: { 'prime': { 'module': 'compute', 'type': 'nxp-compute' } },
+      visualise: { 'prime': { 'module': 'visualise', 'type': 'nxp-visualise' } },
+      education: { 'prime': { 'module': 'education', 'type': 'nxp-education' } },
+      error: { 'prime': { 'module': 'error', 'type': 'nxp-errormgt' } },
+      control: { 'prime': { 'module': 'control', 'type': 'nxp-control' } },
+      presecription: { 'prime': { 'module': 'prescription', 'type': 'nxp-prescription' } },
+      lifestyle: { 'prime': { 'module': 'lifestyle', 'type': 'nxp-lifestylemedicine' } },
+      communication: { 'prime': { 'module': 'communication', 'type': 'nxp-communication' } },
+      clone: { 'prime': { 'module': 'clone', 'type': 'nxp-clone' } },
+      idea: { 'prime': { 'module': 'idea', 'type': 'nxp-idea' } }
+    }
   },
   getters: {
     // liveSafeFlow: state => state.safeFlow

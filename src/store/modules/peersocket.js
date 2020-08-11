@@ -126,6 +126,10 @@ export default {
     },
     SET_NEWNXP_VISRESOLUTION (state, inVerified) {
       console.log(inVerified)
+    },
+    SET_MODULE_LIST (state, inVerified) {
+      console.log(inVerified)
+      this.state.nxpModulesList = inVerified
     }
   },
   actions: {
@@ -272,13 +276,35 @@ export default {
       dataCNRLbundle13.grid = []
       moduleContracts.push(dataCNRLbundle13)
       console.log(moduleContracts)
+      let modCount = 1
+      let moduleHolder = []
       for (const mc of moduleContracts) {
         console.log(mc)
-        const prepareModule = this.state.livesafeFLOW.refcontComposerLive.modulePrepare(mc)
+        const prepareModule = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mc)
         console.log(prepareModule)
+        let moduleContainer = {}
+        moduleContainer.name = prepareModule.contract.concept.type
+        moduleContainer.id = modCount
+        moduleContainer.refcont = prepareModule.key
+        moduleHolder.push(moduleContainer)
+        modCount++
         // const referenceContractReady = JSON.stringify(prepareModule)
         // Vue.prototype.$socket.send(referenceContractReady)
+        /*
+        [
+          { name: 'Device/source', id: 1, refcont: '3f8830cab791df89acd6b093d52ea397a0c90853' },
+          { name: 'Mobile/Dapps', id: 2, refcont: '' },
+          { name: 'Compute', id: 3, refcont: 'f9b584cf83bbbc45e2f5d869990b592efa2945b3' },
+          { name: 'Visulisation', id: 4, refcont: 'd60569614d692317f2ffcb6b01e162179ae5a470' },
+          { name: 'Education', id: 5, refcont: '' },
+          { name: 'Error Mgt', id: 6, refcont: '' },
+          { name: 'Control', id: 7, refcont: '' },
+          { name: 'Lifestyle medicine', id: 8, refcont: '' },
+          { name: 'Prescription', id: 9, refcont: '' },
+          { name: 'Communication', id: 10, refcont: '' }
+        ] */
       }
+      context.commit('SET_MODULE_LIST', moduleHolder)
     },
     actionSetQuestionRefContract (context, update) {
       // console.log('look up peer store for refContract')

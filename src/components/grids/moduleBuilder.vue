@@ -21,12 +21,11 @@
             v-for="(element) in nxpMakeList"
             :key="element.name"
           >
-          <!-- {{ element.name }} {{ index }} -->
-            <component v-bind:is="moduleNXP[element.id].prime.type" ></component>
+            <component v-bind:is="moduleNXPTemplate[element.name].prime.type" ></component>
           </div>
         </draggable>
       </div>
-    </div> -- {{ nxpMakeList }}
+    </div>
   </div>
 </template>
 
@@ -68,26 +67,13 @@ export default {
     },
     nxpModulesList: function () {
       return this.$store.state.nxpModulesList
+    },
+    moduleNXPTemplate: function () {
+      return this.$store.state.moduleNXP
     }
   },
   data () {
     return {
-      moduleNXP:
-      {
-        0: { 'prime': { 'type': 'nxp-question' } },
-        1: { 'prime': { 'type': 'nxp-device' } },
-        2: { 'prime': { 'type': 'nxp-dapp' } },
-        3: { 'prime': { 'type': 'nxp-compute' } },
-        4: { 'prime': { 'type': 'nxp-visualise' } },
-        5: { 'prime': { 'type': 'nxp-education' } },
-        6: { 'prime': { 'type': 'nxp-errormgt' } },
-        7: { 'prime': { 'type': 'nxp-control' } },
-        8: { 'prime': { 'type': 'nxp-lifestylemedicine' } },
-        9: { 'prime': { 'type': 'nxp-prescription' } },
-        10: { 'prime': { 'type': 'nxp-communication' } },
-        11: { 'prime': { 'type': 'nxp-clone' } }
-      },
-      moduleList: ['Question', 'Device/source', 'Dapps', 'Compute', 'Visulisation']
     }
   },
   methods: {
