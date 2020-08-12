@@ -6,63 +6,41 @@
     </div>
     <div id="prime-device">
       <form id="device_form" name="device_form" method="post" action="#">
-        <ul>
-          <li class="device-item">
-            Network Library Reference Contract:<input v-model="packageRefCont" placeholder="Reference Contract">
-            <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
-          </li>
-          <li>
-            <ul v-if="refContractPackage.key">
-              <li>
-                {{ refContractPackage.key }} ---
-              </li>
-              <li>
-                {{ refContractPackage.value.concept.name }} ---
-              </li>
-              <li>
-                {{ refContractPackage.value.concept.description}} ---
-              </li>
-              <li>
-                {{ refContractPackage.value.concept.api }} ---
-              </li>
-              <li>
-                {{ refContractPackage.value.concept.apipath}} ---
-              </li>
-              <li class="ref-pair" v-for="colpair in refContractPackage.value.concept.tablestructure" :key="colpair.refcontract">
-                {{ colpair.refcontract }} --- {{ colpair.column }}
-              </li>
-            </ul>
-          </li>
+        <ul v-for="ds of datasource" :key="ds.id">
+          <device-source></device-source>
         </ul>
+          <button type="button" class="btn" @click="addDatasource()">add data source</button>
+
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import DeviceSource from './nxpDeviceAdd.vue'
 
 export default {
   name: 'nxp-device',
   components: {
+    DeviceSource
   },
   computed: {
-    refContractPackage: function () {
-      // console.log(this.$store.state.refcontractPackaging)
-      return this.$store.state.refcontractPackaging
-    }
   },
   data: () => ({
-    packageRefCont: ''
+    countD: 1,
+    datasource: [1]
   }),
   created () {
   },
   mounted () {
   },
   methods: {
-    refContractLookup () {
-      console.log('lookup ref contract for api data info')
-      console.log(this.packageRefCont)
-      this.$store.dispatch('actionSetRefContract', this.packageRefCont)
+    addDatasource () {
+      console.log('add another data source')
+      console.log(this.countD)
+      this.countD++
+      console.log(this.countD)
+      this.datasource.push(this.countD)
     }
   }
 }

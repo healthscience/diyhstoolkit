@@ -97,9 +97,9 @@ ReferenceContractComposer.prototype.moduleComposer = function (input) {
 * @method experimentComposerGenesis
 *
 */
-ReferenceContractComposer.prototype.experimentComposerGenesis = function (input, question) {
+ReferenceContractComposer.prototype.experimentComposerGenesis = function (input) {
   console.log('prepare New visualise contract')
-  const preContract = this.experimentRefLive.nxpPrepare(input, question)
+  const preContract = this.experimentRefLive.nxpPrepare(input)
   return preContract
 }
 

@@ -30,7 +30,7 @@ util.inherits(ExperimentReferenceContract, events.EventEmitter)
 * @method nxpPrepare
 *
 */
-ExperimentReferenceContract.prototype.nxpPrepare = function (inputRC, question) {
+ExperimentReferenceContract.prototype.nxpPrepare = function (inputRC) {
   console.log('NEW genesis experiment')
   console.log(inputRC)
   const nxpReferenceContract = {}
@@ -40,7 +40,7 @@ ExperimentReferenceContract.prototype.nxpPrepare = function (inputRC, question) 
   nxpReferenceContract.space = {}
   nxpReferenceContract.computational = {}
   // prepare semantic part of datatype ref contracts
-  nxpReferenceContract.concept = { state: 'genesis', question: question }
+  nxpReferenceContract.concept = { state: 'genesis' }
   nxpReferenceContract.modules = inputRC
   // prepare space coordinates e.g. quark, atom, molecule etc.
   nxpReferenceContract.space = { concept: 'mind' }

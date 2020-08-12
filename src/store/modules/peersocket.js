@@ -83,7 +83,7 @@ export default {
     SET_PACKAGING_REFCONTRACT (state, inVerified) {
       // Vue.set(state.refcontractPackaging, 'packaging' inVerified)
       this.state.newNXPmakeRefs.push(inVerified)
-      this.state.refcontractPackaging = inVerified
+      this.state.refcontractPackaging.push(inVerified)
     },
     SET_COMPUTE_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
@@ -153,7 +153,6 @@ export default {
     },
     actionGetRefContract (context, message) {
       console.log('action for ws')
-      console.log(this.state.livesafeFLOW)
       Vue.prototype.$socket.send(message)
     },
     actionMakeVisualiseRefContract (context, message) {
@@ -198,13 +197,6 @@ export default {
       dataCNRLbundle4.grid = []
       moduleContracts.push(dataCNRLbundle4)
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      const dataCNRLbundle5 = {}
-      dataCNRLbundle5.reftype = 'module'
-      dataCNRLbundle5.type = 'visualise'
-      dataCNRLbundle5.primary = 'genesis'
-      dataCNRLbundle5.grid = []
-      moduleContracts.push(dataCNRLbundle5)
-      // CNRL implementation contract e.g. from mobile phone sqlite table structure
       const dataCNRLbundle6 = {}
       dataCNRLbundle6.reftype = 'module'
       dataCNRLbundle6.type = 'compute'
@@ -219,6 +211,13 @@ export default {
       dataCNRLbundle6.automation = false
       dataCNRLbundle6.time = { realtime: 0, timeseg: [], startperiod: '' }
       moduleContracts.push(dataCNRLbundle6)
+      // CNRL implementation contract e.g. from mobile phone sqlite table structure
+      const dataCNRLbundle5 = {}
+      dataCNRLbundle5.reftype = 'module'
+      dataCNRLbundle5.type = 'visualise'
+      dataCNRLbundle5.primary = 'genesis'
+      dataCNRLbundle5.grid = []
+      moduleContracts.push(dataCNRLbundle5)
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
       const dataCNRLbundle7 = {}
       dataCNRLbundle7.reftype = 'module'
@@ -275,13 +274,13 @@ export default {
       dataCNRLbundle13.concept = ''
       dataCNRLbundle13.grid = []
       moduleContracts.push(dataCNRLbundle13)
-      console.log(moduleContracts)
+      // console.log(moduleContracts)
       let modCount = 1
       let moduleHolder = []
       for (const mc of moduleContracts) {
-        console.log(mc)
+        // console.log(mc)
         const prepareModule = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mc)
-        console.log(prepareModule)
+        // console.log(prepareModule)
         let moduleContainer = {}
         moduleContainer.name = prepareModule.contract.concept.type
         moduleContainer.id = modCount
@@ -290,19 +289,6 @@ export default {
         modCount++
         // const referenceContractReady = JSON.stringify(prepareModule)
         // Vue.prototype.$socket.send(referenceContractReady)
-        /*
-        [
-          { name: 'Device/source', id: 1, refcont: '3f8830cab791df89acd6b093d52ea397a0c90853' },
-          { name: 'Mobile/Dapps', id: 2, refcont: '' },
-          { name: 'Compute', id: 3, refcont: 'f9b584cf83bbbc45e2f5d869990b592efa2945b3' },
-          { name: 'Visulisation', id: 4, refcont: 'd60569614d692317f2ffcb6b01e162179ae5a470' },
-          { name: 'Education', id: 5, refcont: '' },
-          { name: 'Error Mgt', id: 6, refcont: '' },
-          { name: 'Control', id: 7, refcont: '' },
-          { name: 'Lifestyle medicine', id: 8, refcont: '' },
-          { name: 'Prescription', id: 9, refcont: '' },
-          { name: 'Communication', id: 10, refcont: '' }
-        ] */
       }
       context.commit('SET_MODULE_LIST', moduleHolder)
     },
@@ -318,14 +304,14 @@ export default {
       context.commit('SET_PACKAGING_REFCONTRACT', refContractLookup)
     },
     actionSetComputeRefContract (context, update) {
-      console.log('look compute refContracts')
+      // console.log('look compute refContracts')
       let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update, this.state.referenceContract.compute)
-      console.log('refContractLookup')
-      console.log(refContractLookup)
+      // console.log('refContractLookup')
+      // console.log(refContractLookup)
       context.commit('SET_COMPUTE_REFCONTRACT', refContractLookup)
     },
     actionSetVisualiseRefContract (context, update) {
-      console.log('look visualise refContracts')
+      // console.log('look visualise refContracts')
       let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update, this.state.referenceContract.visualise)
       context.commit('SET_VISUALISE_REFCONTRACT', refContractLookup)
     },
@@ -335,12 +321,12 @@ export default {
       console.log(this.state.refcontractQuestion)
       console.log(this.state.nxpMakeList)
       // add contenet from Question (default module)
-      this.state.nxpMakeList.push(this.state.refcontractQuestion)
+      // this.state.nxpMakeList.push(this.state.refcontractQuestion)
       console.log('modules live in nxp make')
       console.log(this.state.newNXPmakeRefs)
       // pass to Network Library Composer to make New Network Experiment Reference Contract
       // AND need to create a template KBID set for defaults
-      const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.newNXPmakeRefs, this.state.refcontractQuestion)
+      const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.newNXPmakeRefs)
       const referenceContractReady = JSON.stringify(prepareNXPrefcont)
       console.log(referenceContractReady)
       // Vue.prototype.$socket.send(referenceContractReady)

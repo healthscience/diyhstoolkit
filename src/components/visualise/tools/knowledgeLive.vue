@@ -85,7 +85,7 @@
             <li id="cat-items">
               <label for="category-select"></label>
               <select class="select-category-id" id="category-mapping-build" @change="categorySelect" v-model="visualsettings.category">
-                <option value="none" selected="">please select</option>
+                <option value="none" selected="">none</option>
                 <option v-for="catL in category" :key="catL" >
                   <option value=catL>{{ catL }}</option>
                 </option>
@@ -133,8 +133,6 @@
 </template>
 
 <script>
-// import KnowledgeContext from '@/components/visualise/tools/knowledgeContext'
-const moment = require('moment')
 
 export default {
   name: 'knowledge-live',
@@ -173,7 +171,7 @@ export default {
           catList.push(cat.category)
         }
       }
-      catList.push('none')
+      // catList.push('none')
       function onlyUnique (value, index, self) {
         return self.indexOf(value) === index
       }
@@ -231,48 +229,6 @@ export default {
   mounted () {
   },
   methods: {
-    setTimeBundle () {
-      const nowTime = moment()
-      let realTime = moment.utc(nowTime)
-      let startPeriodTime = moment.utc(nowTime).startOf('day')
-      let updateTbundle = {}
-      updateTbundle.realtime = realTime
-      updateTbundle.timeseg = this.buidContextLive.timeLive
-      updateTbundle.startperiod = startPeriodTime
-      updateTbundle.timevis = this.buidContextLive.timeLive
-      return updateTbundle
-    },
-    saveLearnHistory (lBundle) {
-      this.historyData.push(lBundle)
-    },
-    setKnowledgtBox (liveKbid) {
-      // first clear existing knowledge in box
-      this.clearKnowledgeBox()
-      this.languageStatus(liveKbid.language)
-      this.deviceStatus(liveKbid.startStatus)
-      for (let dI of liveKbid.devices) {
-        this.liveDevice(dI)
-      }
-      for (let dtI of liveKbid.datatypes) {
-        this.datatypeStatus(dtI)
-      }
-      this.scienceStatus(liveKbid.science)
-      let timeBuild = {}
-      timeBuild.active = true
-      timeBuild.text = liveKbid.time.timeseg[0]
-      this.timeStatus(timeBuild)
-      let resolutionBuild = {}
-      resolutionBuild.active = true
-      resolutionBuild.text = liveKbid.resolution
-      this.resolutionStatus(resolutionBuild)
-      let categoriesBuild = {}
-      categoriesBuild.active = true
-      categoriesBuild.cnrl = liveKbid.categories[0].cnrl
-      categoriesBuild.text = liveKbid.categories[0].text
-      this.categoryStatus(categoriesBuild)
-      // pass on info to open knowledge
-      this.$emit('newLiveKBundle', liveKbid)
-    },
     clearKnowledgeBox () {
       // but set category and compute variables
       this.buidContextLive.languageLive = ''
@@ -286,155 +242,7 @@ export default {
       let sciStartEmpty = {}
       sciStartEmpty.prime = { 'text': 'empty' }
       this.buidContextLive.scienceLive = sciStartEmpty
-      this.buidContextLive.categoryLive.push({ 'active': false, 'cnrl': 'none', 'text': 'none' }) // categoryEmpty
-    },
-    languageStatus (lIN) {
-      this.buidContextLive.languageLive = lIN
-    },
-    deviceStatus (dIN) {
-      this.liveDevice(dIN)
-    },
-    liveDevice (liveD) {
-      let deviceLive = []
-      if (liveD.active === true) {
-        deviceLive.push(liveD)
-      } else if (liveD.active === false) {
-        // remove device
-        this.removeLiveElement(liveD.device_mac)
-      }
-      this.buidContextLive.devicesLive = deviceLive
-    },
-    removeLiveElement (remove) {
-      let array = this.buidContextLive.devicesLive
-      function arrayRemove (arr, value) {
-        return arr.filter(function (ele) {
-          return ele.device_mac !== value
-        })
-      }
-      arrayRemove(array, remove)
-      return true
-    },
-    datatypeStatus (ldt) {
-      this.buidContextLiveTypes(ldt)
-    },
-    buidContextLiveTypes (liveDT) {
-      if (liveDT.active === true) {
-        this.buidContextLive.datatypesLive.push(liveDT)
-      } else if (liveDT.active === false) {
-        // remove device
-        this.removeLiveDT(liveDT.text)
-      }
-    },
-    removeLiveDT (remove) {
-      let array = this.buidContextLive.datatypesLive
-      function arrayRemove (arr, value) {
-        return arr.filter(function (ele) {
-          return ele.text !== value
-        })
-      }
-      let result = arrayRemove(array, remove)
-      this.buidContextLive.datatypesLive = result
-      return true
-    },
-    scienceStatus (sIN) {
-      this.buidContextLive.scienceLive = sIN
-    },
-    timeStatus (tIN) {
-      if (tIN.active === true) {
-        this.buidContextLive.timeLive = []
-        this.buidContextLive.timeLive.push(tIN.text)
-      } else if (tIN.active === false) {
-        // remove device
-        this.removeLiveTime(tIN)
-      }
-    },
-    removeLiveTime (trIN) {
-      let removeTimeArr = this.buidContextLive.timeLive.filter(item => item !== trIN.text)
-      this.buidContextLive.timeLive = removeTimeArr
-    },
-    resolutionStatus (rIN) {
-      if (rIN.active === true) {
-        this.buidContextLive.resolutionLive = rIN.text
-      } else if (rIN.active === false) {
-        // remove device
-        this.buidContextLive.resolutionLive = ''
-      }
-    },
-    categoryStatus (catIN) {
-      // this.buidContextLive.categoryLive = catIN
-      this.buidContextLive.categoryLive = []
-      if (catIN.active === true) {
-        this.buidContextLive.categoryLive = []
-        this.buidContextLive.categoryLive.push(catIN)
-      } else if (catIN.active === false) {
-        // remove device
-        this.removeLiveCat(catIN.text)
-      }
-    },
-    removeLiveCat (remove) {
-      let array = this.buidContextLive.categoryLive
-      function arrayRemove (arr, value) {
-        return arr.filter(function (ele) {
-          return ele.text !== value
-        })
-      }
-      let result = arrayRemove(array, remove)
-      if (result.length === 0) {
-        result.push({ 'active': false, 'cnrl': 'none', 'text': 'none' })
-      }
-      this.buidContextLive.categoryLive = result
-      return true
-    },
-    setNaveTime () {
-      // this.liveNavTime = this.timeNav('datatime-index')
-    },
-    startStatusSave (se) {
-      // change start status and save or delete settings
-      this.$store.dispatch('actionUpdateBundleItem', this.activeEntity)
-      let updateBundle = this.$store.getters.startBundlesList
-      for (let iB of updateBundle) {
-        if (iB.kbid === this.activeEntity) {
-          this.saveStartBundle(iB)
-        }
-      }
-    },
-    filterDeviceActive () {
-      if (this.device1.active === true) {
-        this.activedevice = this.device1.id
-      } else if (this.device2.active === true) {
-        this.activedevice = this.device2.id
-      }
-    },
-    filterSensorActive () {
-      if (this.sensor1.active === true) {
-        this.activesensor = this.sensor1.id
-      } else if (this.sensor2.active === true) {
-        this.activesensor = this.sensor2.id
-      }
-    },
-    filterScienceActive () {
-      if (this.compute1.active === true) {
-        this.activecompute = this.compute1.id
-      } else if (this.compute2.active === true) {
-        this.activecompute = this.compute2.id
-      } else if (this.compute3.active === true) {
-        this.activecompute = this.compute3.id
-      } else if (this.compute4.active === true) {
-        this.activecompute = this.compute4.id
-      }
-    },
-    filterVisActive () {
-      if (this.vis1.active === true) {
-        this.activevis = this.vis1.id
-      } else if (this.vis2.active === true) {
-        this.activevis = this.vis2.id
-      }
-    },
-    setOpenData (od) {
-      let changeData = od.target.id
-      if (changeData === 'dt-x-axis') {
-        this.selectChange.xaxis = !this.selectChange.xaxis
-      }
+      // this.buidContextLive.categoryLive.push({ 'active': false, 'cnrl': 'none', 'text': 'none' }) // categoryEmpty
     },
     xaxisSelect () {
       // set default x-axis chart setting

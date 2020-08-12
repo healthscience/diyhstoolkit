@@ -27,6 +27,7 @@ const store = new Vuex.Store({
     nxpModulesLive: [],
     dashboardNXP: {},
     ECSupdateOUT: {},
+    referenceContract: {},
     experimentList: {},
     NXPexperimentList: {},
     joinedNXPlist: {},
@@ -56,18 +57,16 @@ const store = new Vuex.Store({
     newNXshell: {},
     newNXPmakeRefs: [],
     refcontractQuestion: {},
-    refcontractPackaging: {},
-    refcontractCompute: {},
-    refcontractVisualise: {},
+    refcontractPackaging: [],
+    refcontractCompute: [],
+    refcontractVisualise: [],
     nxpMakeList: [],
-    /* [
-      { name: 'question', id: 0, refcont: '0492e4bf43a6f930a169baab13d5ae4917f17544' }
-    ] */
     nxpModulesList: [],
     moduleNXP:
     {
       question: { 'prime': { 'module': 'question', 'type': 'nxp-question' } },
       data: { 'prime': { 'module': 'data', 'type': 'nxp-device' } },
+      device: { 'prime': { 'module': 'data', 'type': 'nxp-device' } },
       mobile: { 'prime': { 'module': 'mobile', 'type': 'nxp-dapp' } },
       compute: { 'prime': { 'module': 'compute', 'type': 'nxp-compute' } },
       visualise: { 'prime': { 'module': 'visualise', 'type': 'nxp-visualise' } },
@@ -82,7 +81,6 @@ const store = new Vuex.Store({
     }
   },
   getters: {
-    // liveSafeFlow: state => state.safeFlow
     liveGrid: state => state.moduleGrid,
     watchFlow: state => function (state) { return state.experimentStatus }
   },
