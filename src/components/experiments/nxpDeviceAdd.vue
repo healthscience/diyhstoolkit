@@ -5,24 +5,34 @@
         <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
       </li>
       <li>
-        <ul v-if="refContractPackage.key">
+        <ul v-for="rcp of refContractPackage" :key="rcp.key">
           <li>
-            {{ refContractPackage.key }} ---
-          </li>
-          <li>
-            {{ refContractPackage.value.concept.name }} ---
-          </li>
-          <li>
-            {{ refContractPackage.value.concept.description}} ---
-          </li>
-          <li>
-            {{ refContractPackage.value.concept.api }} ---
-          </li>
-          <li>
-            {{ refContractPackage.value.concept.apipath}} ---
-          </li>
-          <li class="ref-pair" v-for="colpair in refContractPackage.value.concept.tablestructure" :key="colpair.refcontract">
-            {{ colpair.refcontract }} --- {{ colpair.column }}
+            <ul v-if="rcp.key">
+              <li>
+                {{ rcp.key }} ---
+              </li>
+              <li>
+                {{ rcp.value.concept.name }} ---
+              </li>
+              <li>
+                {{ rcp.value.concept.description}} ---
+              </li>
+              <li>
+                {{ rcp.value.concept.api }} ---
+              </li>
+              <li>
+                {{ rcp.value.concept.apipath}} ---
+              </li>
+              <li class="ref-pair" v-for="colpair in rcp.value.concept.tablestructure" :key="colpair.refcontract">
+                {{ colpair.refcontract }} --- {{ colpair.column }}
+              </li>
+              <li class="ref-pair" v-for="cat in rcp.value.concept.category" :key="cat.id">
+                {{ cat.category }} --- {{ cat.column }}
+              </li>
+              <li class="ref-pair" v-for="tidy in rcp.value.concept.tidy" :key="tidy.id">
+                {{ tidy.tidy }} --- {{ tidy.tidydatatype }} --- {{ tidy.tidycode }}
+              </li>
+            </ul>
           </li>
         </ul>
       </li>

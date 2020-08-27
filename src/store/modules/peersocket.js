@@ -81,19 +81,16 @@ export default {
       // this.state.newNXPmakeRefs.push(inVerified)
     },
     SET_PACKAGING_REFCONTRACT (state, inVerified) {
-      // Vue.set(state.refcontractPackaging, 'packaging' inVerified)
       this.state.newNXPmakeRefs.push(inVerified)
       this.state.refcontractPackaging.push(inVerified)
     },
     SET_COMPUTE_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
-      // Vue.set(state.refcontractPackaging, 'packaging' inVerified)
       this.state.newNXPmakeRefs.push(inVerified)
       this.state.refcontractCompute = inVerified
     },
     SET_VISUALISE_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
-      // Vue.set(state.refcontractPackaging, 'packaging' inVerified)
       this.state.newNXPmakeRefs.push(inVerified)
       this.state.refcontractVisualise = inVerified
     },
@@ -299,8 +296,8 @@ export default {
     actionSetRefContract (context, update) {
       // console.log('look up peer store for refContract')
       let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update, this.state.referenceContract.packaging)
-      // console.log('refContractLookup')
-      // console.log(refContractLookup)
+      console.log('refContractLookup')
+      console.log(refContractLookup)
       context.commit('SET_PACKAGING_REFCONTRACT', refContractLookup)
     },
     actionSetComputeRefContract (context, update) {
