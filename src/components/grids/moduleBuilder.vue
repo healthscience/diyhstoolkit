@@ -20,8 +20,8 @@
             class="list-group-item"
             v-for="(element) in nxpMakeList"
             :key="element.name"
-          >
-            <component v-bind:is="moduleNXPTemplate[element.name].prime.type" ></component>
+          > {{ element }}
+            <component v-bind:is="moduleNXPTemplate[element.name].prime.type" :modData="element" ></component>
           </div>
         </draggable>
       </div>

@@ -1,35 +1,35 @@
 <template>
-  <div id="device-add-nxp">
+  <div id="device-add-nxp"> modDa== {{ modData }}
       <li class="device-item">
         Network Library Reference Contract:<input v-model="packageRefCont" placeholder="Reference Contract">
         <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
       </li>
-      <li>
-        <ul v-for="rcp of refContractPackage" :key="rcp.key">
+      <li> ii{{ datID }}
+        <ul>
           <li>
-            <ul v-if="rcp.key">
+            <ul v-if="refContractPackage.key">
               <li>
-                {{ rcp.key }} ---
+                {{ refContractPackage.key }} ---
               </li>
               <li>
-                {{ rcp.value.concept.name }} ---
+                {{ refContractPackage.value.concept.name }} ---
               </li>
               <li>
-                {{ rcp.value.concept.description}} ---
+                {{ refContractPackage.value.concept.description}} ---
               </li>
               <li>
-                {{ rcp.value.concept.api }} ---
+                {{ refContractPackage.value.concept.api }} ---
               </li>
               <li>
-                {{ rcp.value.concept.apipath}} ---
+                {{ refContractPackage.value.concept.apipath}} ---
               </li>
-              <li class="ref-pair" v-for="colpair in rcp.value.concept.tablestructure" :key="colpair.refcontract">
+              <li class="ref-pair" v-for="colpair in refContractPackage.value.concept.tablestructure" :key="colpair.refcontract">
                 {{ colpair.refcontract }} --- {{ colpair.column }}
               </li>
-              <li class="ref-pair" v-for="cat in rcp.value.concept.category" :key="cat.id">
+              <li class="ref-pair" v-for="cat in refContractPackage.value.concept.category" :key="cat.id">
                 {{ cat.category }} --- {{ cat.column }}
               </li>
-              <li class="ref-pair" v-for="tidy in rcp.value.concept.tidy" :key="tidy.id">
+              <li class="ref-pair" v-for="tidy in refContractPackage.value.concept.tidy" :key="tidy.id">
                 {{ tidy.tidy }} --- {{ tidy.tidydatatype }} --- {{ tidy.tidycode }}
               </li>
             </ul>
@@ -47,8 +47,19 @@ export default {
   },
   computed: {
     refContractPackage: function () {
-      // console.log(this.$store.state.refcontractPackaging)
-      return this.$store.state.refcontractPackaging
+      let livePackage = {}
+      if (this.$store.state.refcontractPackaging[this.datID] !== undefined) {
+        livePackage = this.$store.state.refcontractPackaging[0].option
+      } else {
+        livePackage = {}
+      }
+      return livePackage
+    }
+  },
+  props: {
+    datID: null,
+    modData: {
+      type: Object
     }
   },
   data: () => ({
@@ -62,7 +73,10 @@ export default {
     refContractLookup () {
       console.log('lookup ref contract for api data info')
       console.log(this.packageRefCont)
-      this.$store.dispatch('actionSetRefContract', this.packageRefCont)
+      let dataModHolder = {}
+      dataModHolder.moduleinfo = this.modData
+      dataModHolder.refcont = this.packageRefCont
+      this.$store.dispatch('actionSetDataRefContract', dataModHolder)
     }
   }
 }

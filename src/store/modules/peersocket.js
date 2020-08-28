@@ -75,14 +75,19 @@ export default {
     },
     SET_QUESTION_REFCONTRACT (state, inVerified) {
       // build Question module data structure
-      // let questionStrucure = {}
-      // questionStrucure.key = ''
-      this.state.refcontractQuestion = inVerified
-      // this.state.newNXPmakeRefs.push(inVerified)
+      let questionStrucure = {}
+      questionStrucure.module = inVerified.module
+      questionStrucure.question = inVerified.question
+      this.state.refcontractQuestion = questionStrucure
     },
     SET_PACKAGING_REFCONTRACT (state, inVerified) {
-      this.state.newNXPmakeRefs.push(inVerified)
+      console.log('set packaing')
+      console.log(inVerified)
+      // prepare Module Contract
+      this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
+      // feedback on option for UI
       this.state.refcontractPackaging.push(inVerified)
+      console.log(this.state.refcontractPackaging)
     },
     SET_COMPUTE_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
@@ -277,11 +282,10 @@ export default {
       for (const mc of moduleContracts) {
         // console.log(mc)
         const prepareModule = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mc)
-        // console.log(prepareModule)
         let moduleContainer = {}
         moduleContainer.name = prepareModule.contract.concept.type
         moduleContainer.id = modCount
-        moduleContainer.refcont = prepareModule.key
+        moduleContainer.refcont = prepareModule.hash
         moduleHolder.push(moduleContainer)
         modCount++
         // const referenceContractReady = JSON.stringify(prepareModule)
@@ -293,12 +297,12 @@ export default {
       // console.log('look up peer store for refContract')
       context.commit('SET_QUESTION_REFCONTRACT', update)
     },
-    actionSetRefContract (context, update) {
-      // console.log('look up peer store for refContract')
-      let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update, this.state.referenceContract.packaging)
-      console.log('refContractLookup')
-      console.log(refContractLookup)
-      context.commit('SET_PACKAGING_REFCONTRACT', refContractLookup)
+    actionSetDataRefContract (context, update) {
+      console.log('look up packaing for refContract')
+      console.log(update)
+      let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update.refcont, this.state.referenceContract.packaging)
+      update.option = refContractLookup
+      context.commit('SET_PACKAGING_REFCONTRACT', update)
     },
     actionSetComputeRefContract (context, update) {
       // console.log('look compute refContracts')
@@ -314,16 +318,17 @@ export default {
     },
     actionNewNXPrefcontract (context, update) {
       console.log('new Shell info ref contracts')
+      // add question module
       console.log('question module')
       console.log(this.state.refcontractQuestion)
-      console.log(this.state.nxpMakeList)
-      // add contenet from Question (default module)
-      // this.state.nxpMakeList.push(this.state.refcontractQuestion)
+      this.state.newNXPmakeRefs.push(this.state.refcontractQuestion.module.refcont)
       console.log('modules live in nxp make')
       console.log(this.state.newNXPmakeRefs)
       // pass to Network Library Composer to make New Network Experiment Reference Contract
       // AND need to create a template KBID set for defaults
       const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.newNXPmakeRefs)
+      console.log('prepare genesis network experiment')
+      console.log(prepareNXPrefcont)
       const referenceContractReady = JSON.stringify(prepareNXPrefcont)
       console.log(referenceContractReady)
       // Vue.prototype.$socket.send(referenceContractReady)

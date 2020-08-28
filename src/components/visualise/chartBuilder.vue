@@ -38,7 +38,7 @@ import OpendataTool from '@/components/visualise/tools/knowledgeLive'
 import hsvisual from '@/components/visualise/hsvisual'
 
 export default {
-  name: 'module-visualise',
+  name: 'module-chartbuilder',
   components: {
     hsvisual,
     CalendarTool,

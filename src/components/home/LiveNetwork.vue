@@ -60,8 +60,6 @@ export default {
     NewNetworkexperiment,
     ModuleBuilder
   },
-  props: {
-  },
   computed: {
     peerExperimentListlive: function () {
       return this.$store.state.joinedNXPlist

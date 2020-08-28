@@ -20,6 +20,7 @@ const store = new Vuex.Store({
   state: {
     livesafeFLOW: safeAPI,
     authorised: false,
+    datasourceCount: 0,
     devices: [],
     liveNXP: '',
     liveNXPcontract: {},
@@ -90,6 +91,9 @@ const store = new Vuex.Store({
     },
     setLiveNXP: (state, inVerified) => {
       state.liveNXP = inVerified
+    },
+    SET_DATASOURCECOUNT: (state, inVerified) => {
+      state.datasourceCount = inVerified
     },
     setExperimentList: (state, inVerified) => {
       // check if peerlink has been called if not get ref contracts
@@ -501,6 +505,9 @@ const store = new Vuex.Store({
       context.commit('newNXPshell', update.shellID)
       context.commit('setVistoolsTemp', update)
       context.commit('setOpendataBarTemp', update)
+    },
+    actionDatasourceCount (context, update) {
+      context.commit('SET_DATASOURCECOUNT', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

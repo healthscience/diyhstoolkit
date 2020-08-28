@@ -7,7 +7,7 @@
     <div id="prime-device">
       <form id="device_form" name="device_form" method="post" action="#">
         <ul v-for="ds of datasource" :key="ds.id">
-          <device-source></device-source>
+          <device-source :modData="modData" :datID="ds"></device-source>
         </ul>
           <button type="button" class="btn" @click="addDatasource()">add data source</button>
 
@@ -26,9 +26,14 @@ export default {
   },
   computed: {
   },
+  props: {
+    modData: {
+      type: Object
+    }
+  },
   data: () => ({
-    countD: 1,
-    datasource: [1]
+    countD: 0,
+    datasource: [0]
   }),
   created () {
   },
@@ -36,10 +41,9 @@ export default {
   },
   methods: {
     addDatasource () {
-      console.log('add another data source')
-      console.log(this.countD)
+      // update vuex of data source latest
+      this.$store.dispatch('actionDatasourceCount', this.countD)
       this.countD++
-      console.log(this.countD)
       this.datasource.push(this.countD)
     }
   }

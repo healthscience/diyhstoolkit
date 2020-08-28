@@ -1,6 +1,6 @@
 <template>
   <div id="question-nxp">
-    <header>QUESTION:</header>
+    <header>QUESTION:</header> mod prop -- {{ modData }}
     <div id="prime-question">
       <form id="question_form" name="question_form" method="post" action="#">
         <ul>
@@ -22,6 +22,11 @@ export default {
   name: 'nxp-question',
   components: {
   },
+  props: {
+    modData: {
+      type: Object
+    }
+  },
   data: () => ({
     question:
     {
@@ -38,7 +43,11 @@ export default {
   methods: {
     questionSave () {
       console.log('save question')
-      this.$store.dispatch('actionSetQuestionRefContract', this.question)
+      let questionMod = {}
+      questionMod.module = this.modData
+      questionMod.question = this.question
+      // this.formData.options = this.question
+      this.$store.dispatch('actionSetQuestionRefContract', questionMod)
     }
   }
 }

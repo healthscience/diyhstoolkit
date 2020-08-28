@@ -87,7 +87,7 @@ ReferenceContractComposer.prototype.visualiseComposer = function (input) {
 *
 */
 ReferenceContractComposer.prototype.moduleComposer = function (input) {
-  console.log('prepare New visualise contract')
+  console.log('prepare New module contracts')
   const preContract = this.moduleRefLive.modulePrepare(input)
   return preContract
 }
@@ -119,14 +119,11 @@ ReferenceContractComposer.prototype.experimentComposerJoin = function (input) {
 * @method refcontractLookup
 *
 */
-ReferenceContractComposer.prototype.refcontractLookup = function (cnrl, allContracts) {
-  console.log('all ref contracts')
-  console.log(cnrl)
-  console.log(allContracts)
+ReferenceContractComposer.prototype.refcontractLookup = function (refCont, allContracts) {
   let matchKey = {}
   for (const rc of allContracts) {
     console.log(rc)
-    if (cnrl.trim() === rc.key) {
+    if (refCont.trim() === rc.key) {
       matchKey = rc
     }
   }

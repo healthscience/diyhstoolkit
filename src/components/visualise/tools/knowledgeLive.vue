@@ -1,5 +1,5 @@
 <template>
-  <div id="live-view">
+  <div id="live-view"> {{ refContractPackage }}
     <div id="knowledge-selector">
       <div id="live-context-datatypes">
         <div id="context-devices" class="live-kelement">
@@ -16,7 +16,6 @@
             </li>
           </ul>
         </div>
-
         <div id="context-compute" class="live-kelement">
           <header>Compute:</header>
           <ul>
@@ -133,11 +132,9 @@
 </template>
 
 <script>
-
 export default {
   name: 'knowledge-live',
   components: {
-    // KnowledgeContext
   },
   props: {
     shellID: String,
@@ -146,11 +143,8 @@ export default {
     mData: String
   },
   computed: {
-    buidContextLive: function () {
-      // console.log(this.shellID)
-      // console.log(this.moduleCNRL)
-      // console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data)
-      return ['datatype'] // this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data
+    dataSource: function () {
+      return this.$store.state.datasourceCount
     },
     refContractCompute: function () {
       let computeLive = []
@@ -161,17 +155,19 @@ export default {
       return []
     },
     refContractPackage: function () {
-      return this.$store.state.refcontractPackaging
+      console.log('packaing live')
+      console.log(this.$store.state.refcontractPackaging)
+      return this.$store.state.refcontractPackaging[this.dataSource]
     },
     category: function () {
-      const catLive = this.$store.state.refcontractPackaging.value.concept.category
+      const catLive = this.$store.state.refcontractPackaging[this.dataSource].value.concept.category
+      const catIndex = Object.keys(catLive)
       let catList = []
-      for (let cat of catLive) {
-        if (cat.category !== undefined) {
-          catList.push(cat.category)
+      for (let cat of catIndex) {
+        if (catLive[cat].category !== undefined) {
+          catList.push(catLive[cat].category)
         }
       }
-      // catList.push('none')
       function onlyUnique (value, index, self) {
         return self.indexOf(value) === index
       }
@@ -230,19 +226,7 @@ export default {
   },
   methods: {
     clearKnowledgeBox () {
-      // but set category and compute variables
-      this.buidContextLive.languageLive = ''
-      this.buidContextLive.devicesLive = []
-      this.buidContextLive.datatypesLive = []
-      this.buidContextLive.scienceLive = ''
-      this.buidContextLive.resolutionLive = ''
-      this.buidContextLive.timeLive = []
-      this.buidContextLive.categoryLive = []
       // set defaults
-      let sciStartEmpty = {}
-      sciStartEmpty.prime = { 'text': 'empty' }
-      this.buidContextLive.scienceLive = sciStartEmpty
-      // this.buidContextLive.categoryLive.push({ 'active': false, 'cnrl': 'none', 'text': 'none' }) // categoryEmpty
     },
     xaxisSelect () {
       // set default x-axis chart setting
