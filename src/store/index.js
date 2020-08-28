@@ -56,6 +56,7 @@ const store = new Vuex.Store({
     visProgress: {},
     timeStartperiod: 0,
     newNXshell: {},
+    moduleHolder: [],
     newNXPmakeRefs: [],
     refcontractQuestion: {},
     refcontractPackaging: [],

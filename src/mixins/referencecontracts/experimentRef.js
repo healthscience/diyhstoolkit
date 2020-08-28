@@ -15,7 +15,6 @@ const events = require('events')
 
 var ExperimentReferenceContract = function () {
   events.EventEmitter.call(this)
-  console.log('ref contract composer live')
   this.cryptoLive = new CryptoUtility()
 }
 
@@ -32,7 +31,7 @@ util.inherits(ExperimentReferenceContract, events.EventEmitter)
 */
 ExperimentReferenceContract.prototype.nxpPrepare = function (inputRC) {
   console.log('NEW genesis experiment')
-  console.log(inputRC)
+  // console.log(inputRC)
   const nxpReferenceContract = {}
   nxpReferenceContract.refcontract = 'experiment'
   nxpReferenceContract.modules = {}

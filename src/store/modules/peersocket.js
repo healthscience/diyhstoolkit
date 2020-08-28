@@ -31,8 +31,8 @@ export default {
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
       const backJSON = JSON.parse(message.data)
-      console.log('back message')
-      console.log(backJSON)
+      // console.log('back message')
+      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         console.log('save successful')
@@ -58,8 +58,8 @@ export default {
         gridAnnon.columns = gridColumns
         gridAnnon.data = gridData
         this.state.NXPexperimentList = gridAnnon
-        console.log('available NXP in network available')
-        console.log(this.state.NXPexperimentList)
+        // console.log('available NXP in network available')
+        // console.log(this.state.NXPexperimentList)
         let gridDatapeer = []
         for (let nxp of nxpSplit.joined) {
           // console.log(nxp)
@@ -83,7 +83,9 @@ export default {
     SET_PACKAGING_REFCONTRACT (state, inVerified) {
       console.log('set packaing')
       console.log(inVerified)
-      // prepare Module Contract
+      // add to module list full details
+      this.state.moduleHolder.push(inVerified)
+      // add to module list
       this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
       // feedback on option for UI
       this.state.refcontractPackaging.push(inVerified)
@@ -91,11 +93,15 @@ export default {
     },
     SET_COMPUTE_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
+      // add to module list full details
+      this.state.moduleHolder.push(inVerified)
       this.state.newNXPmakeRefs.push(inVerified)
       this.state.refcontractCompute = inVerified
     },
     SET_VISUALISE_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
+      // add to module list full details
+      this.state.moduleHolder.push(inVerified)
       this.state.newNXPmakeRefs.push(inVerified)
       this.state.refcontractVisualise = inVerified
     },
@@ -132,6 +138,12 @@ export default {
     SET_MODULE_LIST (state, inVerified) {
       console.log(inVerified)
       this.state.nxpModulesList = inVerified
+    },
+    SET_QUESTION_MODULE (state, inVerified) {
+      console.log('question module')
+      console.log(this.state.refcontractQuestion)
+      this.state.moduleHolder.push(this.state.refcontractQuestion)
+      this.state.newNXPmakeRefs.push(this.state.refcontractQuestion.module.refcont)
     }
   },
   actions: {
@@ -318,14 +330,21 @@ export default {
     },
     actionNewNXPrefcontract (context, update) {
       console.log('new Shell info ref contracts')
-      // add question module
-      console.log('question module')
-      console.log(this.state.refcontractQuestion)
-      this.state.newNXPmakeRefs.push(this.state.refcontractQuestion.module.refcont)
+      // add the question module
+      context.commit('SET_QUESTION_MODULE')
       console.log('modules live in nxp make')
       console.log(this.state.newNXPmakeRefs)
+      // prepare the genesis modules
+      // loop over list of module contract to make genesis ie first
+      console.log('list of modules full details')
+      console.log(this.state.moduleHolder)
+      for (let mh of this.state.moduleHolder) {
+        const moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mh)
+        const moduleRefContractReady = JSON.stringify(moduleRefContract)
+        console.log(moduleRefContractReady)
+        // Vue.prototype.$socket.send(moduleRefContractReady)
+      }
       // pass to Network Library Composer to make New Network Experiment Reference Contract
-      // AND need to create a template KBID set for defaults
       const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.newNXPmakeRefs)
       console.log('prepare genesis network experiment')
       console.log(prepareNXPrefcont)

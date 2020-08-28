@@ -136,8 +136,8 @@ ReferenceContractComposer.prototype.refcontractLookup = function (refCont, allCo
 *
 */
 ReferenceContractComposer.prototype.refcontractSperate = function (refContractsList) {
-  console.log('seperate out the reference contracts')
-  console.log(refContractsList)
+  // console.log('seperate out the reference contracts')
+  // console.log(refContractsList)
   const refContractHolder = {}
   const datatypeList = []
   const unitsList = []
@@ -187,8 +187,8 @@ ReferenceContractComposer.prototype.refcontractSperate = function (refContractsL
 *
 */
 ReferenceContractComposer.prototype.experimentSplit = function (inputNXPs) {
-  console.log('experimentSplit')
-  console.log(inputNXPs)
+  // console.log('experimentSplit')
+  // console.log(inputNXPs)
   const splitExperiments = {}
   let genesis = []
   let joined = []
