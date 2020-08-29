@@ -236,10 +236,73 @@ ReferenceContractComposer.prototype.expMatchModule = function (allRefcont, expMo
 * @method extractQuestion
 *
 */
+ReferenceContractComposer.prototype.extractData = function (modules, typeAsk) {
+  let packages = []
+  for (const mod of modules) {
+    console.log(mod.value.concept.moduleinfo.name)
+    if (mod.value.concept.moduleinfo.name === typeAsk) {
+      packages.push(mod.value.concept)
+    }
+  }
+  return packages
+}
+
+/**
+* extract the network experiment question module
+* @method extractCompute
+*
+*/
+ReferenceContractComposer.prototype.extractCompute = function (modules, typeAsk) {
+  let computes = []
+  for (const mod of modules) {
+    console.log(mod.value.concept.moduleinfo.name)
+    if (mod.value.concept.moduleinfo.name === typeAsk) {
+      computes.push(mod.value.concept)
+    }
+  }
+  return computes
+}
+
+/**
+* extract the network experiment question module
+* @method extractVisualise
+*
+*/
+ReferenceContractComposer.prototype.extractVisualise = function (modules, typeAsk) {
+  let visuals = []
+  for (const mod of modules) {
+    console.log(mod.value.concept.moduleinfo.name)
+    if (mod.value.concept.moduleinfo.name === typeAsk) {
+      visuals.push(mod.value.concept)
+    }
+  }
+  return visuals
+}
+
+/**
+* extract the network experiment question module
+* @method extractEduction
+*
+*/
+ReferenceContractComposer.prototype.extractEducation = function (modules, typeAsk) {
+  let education = []
+  for (const mod of modules) {
+    console.log(mod.value.concept.moduleinfo.name)
+    if (mod.value.concept.moduleinfo.name === typeAsk) {
+      education.push(mod.value.concept)
+    }
+  }
+  return education
+}
+
+/**
+* extract the network experiment question module
+* @method extractQuestion
+*
+*/
 ReferenceContractComposer.prototype.extractQuestion = function (modules, typeAsk) {
   let question = ''
   for (const mod of modules) {
-    console.log(mod.value.concept.moduleinfo.name)
     if (mod.value.concept.moduleinfo.name === typeAsk) {
       question = mod.value.concept.question
     }

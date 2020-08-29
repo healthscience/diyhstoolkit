@@ -62,8 +62,10 @@ export default {
   methods: {
     refContractLookup () {
       console.log('lookup ref contract for api data info')
-      console.log(this.computeRefCont)
-      this.$store.dispatch('actionSetComputeRefContract', this.computeRefCont)
+      let computeMod = {}
+      computeMod.module = this.modData
+      computeMod.question = this.computeRefCont
+      this.$store.dispatch('actionSetComputeRefContract', computeMod)
     }
   }
 }

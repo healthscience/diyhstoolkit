@@ -56,7 +56,7 @@
               <!-- <option value="mongo-gadgetbridge">Gadgetbridge-mongo</option>
               <option value="openhumansAPI">OpenHumans</option> -->
               <option v-for="ds in NXPJoinModuleData" :key="ds.key" >
-                <option value=ds.key>{{ ds.value }}</option>
+                <option value=ds.option.key>{{ ds.option.value.concept.name }}</option>
               </option>
             </select>
           </div>

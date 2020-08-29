@@ -369,9 +369,9 @@ const store = new Vuex.Store({
       }
       console.log(joinNXP)
       // break out the modules
-      joinExpDisplay.data = this.state.livesafeFLOW.refcontComposerLive.extractQuestion(joinNXP, 'data')
-      joinExpDisplay.compute = this.state.livesafeFLOW.refcontComposerLive.extractQuestion(joinNXP, 'compute')
-      joinExpDisplay.visualise = this.state.livesafeFLOW.refcontComposerLive.extractQuestion(joinNXP, 'visualise')
+      joinExpDisplay.data = this.state.livesafeFLOW.refcontComposerLive.extractData(joinNXP.modules, 'data')
+      joinExpDisplay.compute = this.state.livesafeFLOW.refcontComposerLive.extractCompute(joinNXP.modules, 'compute')
+      joinExpDisplay.visualise = this.state.livesafeFLOW.refcontComposerLive.extractVisualise(joinNXP.modules, 'visualise')
       context.commit('SET_JOIN_NXP', joinExpDisplay)
     },
     actionLocalGrid (context, update) {

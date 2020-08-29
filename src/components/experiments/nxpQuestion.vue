@@ -46,7 +46,6 @@ export default {
       let questionMod = {}
       questionMod.module = this.modData
       questionMod.question = this.question
-      // this.formData.options = this.question
       this.$store.dispatch('actionSetQuestionRefContract', questionMod)
     }
   }

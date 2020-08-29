@@ -54,7 +54,7 @@
                 <label for="xaxis-select"></label>
                 <select class="select-xaxis-id" id="xaxis-mapping-build" @change="xaxisSelect" v-model="visualsettings.xaxis">
                   <option value="none" selected="">please select</option>
-                  <option v-for="colpair in refContractPackage.value.concept.tablestructure" :key="colpair.refcontract" >
+                  <option v-for="colpair in refContractPackage.option.value.concept.tablestructure" :key="colpair.refcontract" >
                     <option value=colpair.refcontract>{{ colpair.column }}</option>
                   </option>
                 </select>
@@ -67,7 +67,7 @@
               <label for="yaxis-select"></label>
               <select class="select-yaxis-id" id="yaxis-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
                 <option value="none" selected="">please select</option>
-                <option v-for="colpair in refContractPackage.value.concept.tablestructure" :key="colpair.refcontract" >
+                <option v-for="colpair in refContractPackage.option.value.concept.tablestructure" :key="colpair.refcontract" >
                   <option value=colpair.refcontract>{{ colpair.column }}</option>
                 </option>
               </select>
@@ -160,7 +160,7 @@ export default {
       return this.$store.state.refcontractPackaging[this.dataSource]
     },
     category: function () {
-      const catLive = this.$store.state.refcontractPackaging[this.dataSource].value.concept.category
+      const catLive = this.$store.state.refcontractPackaging[this.dataSource].option.value.concept.category
       const catIndex = Object.keys(catLive)
       let catList = []
       for (let cat of catIndex) {

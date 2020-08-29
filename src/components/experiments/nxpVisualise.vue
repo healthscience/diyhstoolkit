@@ -58,7 +58,10 @@ export default {
       tempNew.mData = this.mData
       // setup toolbar info.
       this.$store.dispatch('actionSetTempToolbarVis', tempNew)
-      this.$store.dispatch('actionSetVisualiseRefContract', this.visualRefCont)
+      let visMod = {}
+      visMod.module = this.modData
+      visMod.question = this.visualRefCont
+      this.$store.dispatch('actionSetVisualiseRefContract', visMod)
     }
   }
 }
