@@ -69,10 +69,10 @@ export default {
         console.log('split geneiss joined')
         console.log(nxpSplit)
         // look up modules for this experiments
-        let networkExpModules = this.state.livesafeFLOW.refcontComposerLive.expMatchModule(this.state.referenceContract.module, nxpSplit.genesis)
+        this.state.networkExpModules = this.state.livesafeFLOW.refcontComposerLive.expMatchModule(this.state.referenceContract.module, nxpSplit.genesis)
         console.log('matched genesis to modules')
-        console.log(networkExpModules)
-        for (let nxp of networkExpModules) {
+        console.log(this.state.networkExpModules)
+        for (let nxp of this.state.networkExpModules) {
           // look up question
           let question = this.state.livesafeFLOW.refcontComposerLive.extractQuestion(nxp.modules, 'question')
           console.log('question')

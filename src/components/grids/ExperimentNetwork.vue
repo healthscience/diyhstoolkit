@@ -36,13 +36,14 @@
       </div>
       <!-- join network experiment modal -->
       <join-experiment v-show="isModalJoinVisible" @close="closeModalJoin">
-        <template v-slot:header> {{ joinExperiment }}
-        <!-- The code below goes into the header slot -->
-          N=1 Network Experiment {{ actionKBundle.name }} {{ actionKBundle.description }}
+        <template v-slot:header>
+        <!-- The code below goes into the header slot --> {{ actionKBundle }}
+          N=1 Network Experiment {{ actionKBundle.name }}
         </template>
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
           <header>Experiment Question:</header>
+          {{ actionKBundle.name }}
         </template>
         <template v-slot:connect>
           <!-- mobile apps suggested-->
@@ -52,12 +53,19 @@
           <div class="compute-select-datasource">
             <label for="compute-select-source">Select data source:</label>
             <select class="select-compute-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
-              <option value="mongo-gadgetbridge">Gadgetbridge-mongo</option>
-              <option value="openhumansAPI">OpenHumans</option>
+              <!-- <option value="mongo-gadgetbridge">Gadgetbridge-mongo</option>
+              <option value="openhumansAPI">OpenHumans</option> -->
+              <option v-for="ds in NXPJoinModuleData" :key="ds.key" >
+                <option value=ds.key>{{ ds.value }}</option>
+              </option>
             </select>
           </div>
         </template>
         <template v-slot:compute>
+          <header>Compute</header>
+          <li>
+            {{ NXPJoinModuleCompute }}
+          </li>
           <li class="compute-form-item">
             Set start time of data:<input v-model="newCompute.startperiod" placeholder="Reference Contract">
             <button type="button" class="btn" @click="datastartLookup()">find startdate</button>
@@ -75,7 +83,10 @@
           <!-- preview visualisation -->
         </template>
         <template v-slot:dashboard-visualisation>
-          Visualisation chart layout wizard
+          <header>Visualisation</header>
+          <li>
+            {{ NXPJoinModuleVisualise }}
+          </li>
         </template>
         <template v-slot:submit-join>
           <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
@@ -107,6 +118,15 @@ export default {
     NXPstatusData: function () {
       return this.$store.state.experimentStatus
     },
+    NXPJoinModuleData: function () {
+      return this.$store.state.joinNXPlive.data
+    },
+    NXPJoinModuleCompute: function () {
+      return this.$store.state.joinNXPlive.compute
+    },
+    NXPJoinModuleVisualise: function () {
+      return this.$store.state.joinNXPlive.visualise
+    },
     NXPprogress: function () {
       return this.$store.state.nxpProgress[this.shellContract]
     },
@@ -130,9 +150,6 @@ export default {
         })
       }
       return experiments
-    },
-    joinExperiment: function () {
-      return [1, 2]
     }
   },
   filters: {
@@ -184,6 +201,7 @@ export default {
         // this.$store.dispatch('actionDisplay', shellCNRL)
         this.isModalDashboardVisible = true
       } else {
+        this.$store.dispatch('actionJOINexperiment', shellCNRL)
         this.isModalJoinVisible = true
       }
     },

@@ -26,6 +26,7 @@ const store = new Vuex.Store({
     liveNXPcontract: {},
     liveNXPbundle: {},
     nxpModulesLive: [],
+    joinNXPlive: {},
     dashboardNXP: {},
     ECSupdateOUT: {},
     referenceContract: {},
@@ -60,6 +61,7 @@ const store = new Vuex.Store({
     newNXPmakeRefs: [],
     moduleGenesisList: [],
     moduleListEnd: false,
+    networkExpModules: [],
     refcontractQuestion: {},
     refcontractPackaging: [],
     refcontractCompute: [],
@@ -321,6 +323,13 @@ const store = new Vuex.Store({
       let tempModcontract = inVerified
       console.log(tempModcontract)
       // Vue.set(state.newNXshell, '', tempModcontract)
+    },
+    SET_JOIN_NXP: (state, inVerified) => {
+      // state.joinNXPlive = inVerified
+      Vue.set(state.joinNXPlive, 'data', inVerified.data)
+      Vue.set(state.joinNXPlive, 'compute', inVerified.compute)
+      Vue.set(state.joinNXPlive, 'visualise', inVerified.visualise)
+      console.log(state.joinNXPlive)
     }
   },
   actions: {
@@ -345,6 +354,25 @@ const store = new Vuex.Store({
       context.commit('setUpdatesOUT', update)
       let entityReturn = await safeAPI.ECSinput(this.state.experimentStatus[update])
       context.commit('setentityReturn', entityReturn)
+    },
+    actionJOINexperiment (context, update) {
+      console.log('match to expanded NXP module data structure')
+      console.log(update)
+      let joinExpDisplay = {}
+      let joinNXP = {}
+      for (const ep of this.state.networkExpModules) {
+        console.log(ep.exp.key)
+        if (ep.exp.key === update) {
+          console.log('match')
+          joinNXP = ep
+        }
+      }
+      console.log(joinNXP)
+      // break out the modules
+      joinExpDisplay.data = this.state.livesafeFLOW.refcontComposerLive.extractQuestion(joinNXP, 'data')
+      joinExpDisplay.compute = this.state.livesafeFLOW.refcontComposerLive.extractQuestion(joinNXP, 'compute')
+      joinExpDisplay.visualise = this.state.livesafeFLOW.refcontComposerLive.extractQuestion(joinNXP, 'visualise')
+      context.commit('SET_JOIN_NXP', joinExpDisplay)
     },
     actionLocalGrid (context, update) {
       console.log('action test watch called')
