@@ -206,6 +206,48 @@ ReferenceContractComposer.prototype.experimentSplit = function (inputNXPs) {
 }
 
 /**
+* match network experiment to modules
+* @method expMatchModule
+*
+*/
+ReferenceContractComposer.prototype.expMatchModule = function (allRefcont, expModules) {
+  let expHolder = []
+  let expandedNXP = {}
+  expandedNXP.modules = []
+  for (const exp of expModules) {
+    for (const mod of exp.value.modules) {
+      // match this key to module
+      for (const mrf of allRefcont) {
+        if (mod.key === mrf.key) {
+          expandedNXP.modules.push(mrf)
+        }
+      }
+    }
+    expandedNXP.exp = exp
+    expHolder.push(expandedNXP)
+    expandedNXP = {}
+    expandedNXP.modules = []
+  }
+  return expHolder
+}
+
+/**
+* extract the network experiment question module
+* @method extractQuestion
+*
+*/
+ReferenceContractComposer.prototype.extractQuestion = function (modules, typeAsk) {
+  let question = ''
+  for (const mod of modules) {
+    console.log(mod.value.concept.moduleinfo.name)
+    if (mod.value.concept.moduleinfo.name === typeAsk) {
+      question = mod.value.concept.question
+    }
+  }
+  return question
+}
+
+/**
 * map columns to datatype reference contracts
 * @method mergePackageMap
 *

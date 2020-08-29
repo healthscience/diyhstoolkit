@@ -34,7 +34,9 @@ ModuleReferenceContract.prototype.modulePrepare = function (inputRC) {
   console.log(inputRC)
   let newModule = {}
   // what type of modules is it?
-  if (inputRC.moduleinfo.name === 'question') {
+  if (inputRC.reftype === 'module') {
+    newModule = this.prepareTemplateModule(inputRC)
+  } else if (inputRC.moduleinfo.name === 'question') {
     newModule = this.prepareQuestion(inputRC)
   } else if (inputRC.moduleinfo.name === 'data') {
     newModule = this.prepareData(inputRC)
@@ -46,6 +48,34 @@ ModuleReferenceContract.prototype.modulePrepare = function (inputRC) {
     newModule = 1
   }
   return newModule
+}
+
+/**
+* prepare template module
+* @method prepareTemplateModule
+*
+*/
+ModuleReferenceContract.prototype.prepareTemplateModule = function (modIN) {
+  const datatypeReferenceContract = {}
+  datatypeReferenceContract.refcontract = 'module'
+  datatypeReferenceContract.concept = {}
+  datatypeReferenceContract.space = {}
+  datatypeReferenceContract.computational = {}
+  // need to prepare matching of datatyps ref contracts to table columns
+  datatypeReferenceContract.concept = modIN
+  // prepare space coordinates e.g. quark, atom, molecule etc.
+  datatypeReferenceContract.space = { concept: 'mind' }
+  datatypeReferenceContract.computational = { refcontract: null }
+  // create a hash of entries as the index key
+  const dtHASH = this.cryptoLive.evidenceProof(datatypeReferenceContract)
+  const RefContractHolder = {}
+  RefContractHolder.reftype = 'module'
+  RefContractHolder.action = 'PUT'
+  RefContractHolder.hash = dtHASH
+  RefContractHolder.contract = datatypeReferenceContract
+  // console.log('module holder')
+  // console.log(RefContractHolder)
+  return RefContractHolder
 }
 
 /**

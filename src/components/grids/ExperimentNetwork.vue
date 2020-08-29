@@ -1,5 +1,5 @@
 <template>
-  <div id="live-network-grid">
+  <div id="live-network-grid"> ff -- {{ filteredExperiments }}
     <!-- component template -->
     <div id="grid-template">
       <table>

@@ -58,6 +58,8 @@ const store = new Vuex.Store({
     newNXshell: {},
     moduleHolder: [],
     newNXPmakeRefs: [],
+    moduleGenesisList: [],
+    moduleListEnd: false,
     refcontractQuestion: {},
     refcontractPackaging: [],
     refcontractCompute: [],

@@ -31,11 +31,29 @@ export default {
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
       const backJSON = JSON.parse(message.data)
-      // console.log('back message')
-      // console.log(backJSON)
+      console.log('back message')
+      console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         console.log('save successful')
+        // what type of save?
+        if (backJSON.type === 'module') {
+          this.state.moduleGenesisList.push(backJSON)
+        } else if (backJSON.type === 'experiment') {
+          console.log('network experiment genesis saved')
+          this.state.moduleListEnd = false
+        }
+        console.log('module geneis list')
+        console.log(this.state.moduleGenesisList)
+        if (this.state.moduleListEnd === true) {
+          // pass to Network Library Composer to make New Network Experiment Reference Contract ie. extract genesis module contract keys
+          const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.moduleGenesisList)
+          console.log('prepare genesis network experiment')
+          console.log(prepareNXPrefcont)
+          const referenceContractReady = JSON.stringify(prepareNXPrefcont)
+          // console.log(referenceContractReady)
+          Vue.prototype.$socket.send(referenceContractReady)
+        }
       } else {
         // query back from peer data store
         // pass to sort data into ref contract types
@@ -50,9 +68,16 @@ export default {
         const nxpSplit = this.state.livesafeFLOW.refcontComposerLive.experimentSplit(segmentedRefContracts.experiment)
         console.log('split geneiss joined')
         console.log(nxpSplit)
-        for (let nxp of nxpSplit.genesis) {
-          // console.log(nxp)
-          gridData.push({ id: nxp.key, name: nxp.value.concept.new, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })
+        // look up modules for this experiments
+        let networkExpModules = this.state.livesafeFLOW.refcontComposerLive.expMatchModule(this.state.referenceContract.module, nxpSplit.genesis)
+        console.log('matched genesis to modules')
+        console.log(networkExpModules)
+        for (let nxp of networkExpModules) {
+          // look up question
+          let question = this.state.livesafeFLOW.refcontComposerLive.extractQuestion(nxp.modules, 'question')
+          console.log('question')
+          console.log(question)
+          gridData.push({ id: nxp.exp.key, name: question.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })
         }
         let gridAnnon = {}
         gridAnnon.columns = gridColumns
@@ -76,7 +101,7 @@ export default {
     SET_QUESTION_REFCONTRACT (state, inVerified) {
       // build Question module data structure
       let questionStrucure = {}
-      questionStrucure.module = inVerified.module
+      questionStrucure.moduleinfo = inVerified.module
       questionStrucure.question = inVerified.question
       this.state.refcontractQuestion = questionStrucure
     },
@@ -143,7 +168,7 @@ export default {
       console.log('question module')
       console.log(this.state.refcontractQuestion)
       this.state.moduleHolder.push(this.state.refcontractQuestion)
-      this.state.newNXPmakeRefs.push(this.state.refcontractQuestion.module.refcont)
+      this.state.newNXPmakeRefs.push(this.state.refcontractQuestion.moduleinfo.refcont)
     }
   },
   actions: {
@@ -332,25 +357,25 @@ export default {
       console.log('new Shell info ref contracts')
       // add the question module
       context.commit('SET_QUESTION_MODULE')
-      console.log('modules live in nxp make')
-      console.log(this.state.newNXPmakeRefs)
       // prepare the genesis modules
       // loop over list of module contract to make genesis ie first
-      console.log('list of modules full details')
-      console.log(this.state.moduleHolder)
+      let lengthMholder = this.state.moduleHolder.length
+      console.log('num modules in this experiment')
+      console.log(lengthMholder)
       for (let mh of this.state.moduleHolder) {
         const moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mh)
+        console.log('module genesis sent to peerLINK')
+        console.log(moduleRefContract)
         const moduleRefContractReady = JSON.stringify(moduleRefContract)
-        console.log(moduleRefContractReady)
-        // Vue.prototype.$socket.send(moduleRefContractReady)
+        // console.log(moduleRefContractReady)
+        Vue.prototype.$socket.send(moduleRefContractReady)
+        lengthMholder--
+        console.log('number of muldes LEFT')
+        console.log(lengthMholder)
+        if (lengthMholder === 0) {
+          this.state.moduleListEnd = true
+        }
       }
-      // pass to Network Library Composer to make New Network Experiment Reference Contract
-      const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.newNXPmakeRefs)
-      console.log('prepare genesis network experiment')
-      console.log(prepareNXPrefcont)
-      const referenceContractReady = JSON.stringify(prepareNXPrefcont)
-      console.log(referenceContractReady)
-      // Vue.prototype.$socket.send(referenceContractReady)
     },
     joinExperiment (context, update) {
       console.log('save to Peer datastore joined NXP')
