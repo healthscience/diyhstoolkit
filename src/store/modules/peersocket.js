@@ -57,7 +57,7 @@ export default {
       } else {
         // query back from peer data store
         // pass to sort data into ref contract types
-        const segmentedRefContracts = this.state.livesafeFLOW.refcontComposerLive.refcontractSperate(backJSON)
+        const segmentedRefContracts = this.state.livesafeFLOW.refcontUtilityLive.refcontractSperate(backJSON)
         console.log('segmentated contracts')
         console.log(segmentedRefContracts)
         this.state.referenceContract = segmentedRefContracts
@@ -65,18 +65,14 @@ export default {
         let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
         let gridData = []
         // need to split for genesis and peer joined NXPs
-        const nxpSplit = this.state.livesafeFLOW.refcontComposerLive.experimentSplit(segmentedRefContracts.experiment)
+        const nxpSplit = this.state.livesafeFLOW.refcontUtilityLive.experimentSplit(segmentedRefContracts.experiment)
         console.log('split geneiss joined')
         console.log(nxpSplit)
         // look up modules for this experiments
-        this.state.networkExpModules = this.state.livesafeFLOW.refcontComposerLive.expMatchModule(this.state.referenceContract.module, nxpSplit.genesis)
-        console.log('matched genesis to modules')
-        console.log(this.state.networkExpModules)
+        this.state.networkExpModules = this.state.livesafeFLOW.refcontUtilityLive.expMatchModule(this.state.referenceContract.module, nxpSplit.genesis)
         for (let nxp of this.state.networkExpModules) {
           // look up question
-          let question = this.state.livesafeFLOW.refcontComposerLive.extractQuestion(nxp.modules, 'question')
-          console.log('question')
-          console.log(question)
+          let question = this.state.livesafeFLOW.refcontUtilityLive.extractQuestion(nxp.modules, 'question')
           gridData.push({ id: nxp.exp.key, name: question.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })
         }
         let gridAnnon = {}
@@ -94,8 +90,6 @@ export default {
         gridPeer.columns = gridColumns
         gridPeer.data = gridDatapeer
         this.state.joinedNXPlist = gridPeer
-        console.log('peer grid set')
-        console.log(this.state.joinedNXPlist)
       }
     },
     SET_QUESTION_REFCONTRACT (state, inVerified) {
@@ -114,21 +108,20 @@ export default {
       this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
       // feedback on option for UI
       this.state.refcontractPackaging.push(inVerified)
-      console.log(this.state.refcontractPackaging)
     },
     SET_COMPUTE_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
       // add to module list full details
       this.state.moduleHolder.push(inVerified)
-      this.state.newNXPmakeRefs.push(inVerified)
-      this.state.refcontractCompute = inVerified
+      this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
+      this.state.refcontractCompute.push(inVerified)
     },
     SET_VISUALISE_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
       // add to module list full details
       this.state.moduleHolder.push(inVerified)
-      this.state.newNXPmakeRefs.push(inVerified)
-      this.state.refcontractVisualise = inVerified
+      this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
+      this.state.refcontractVisualise.push(inVerified)
     },
     SET_NXP_REFCONTRACT (state, inVerified) {
       console.log(inVerified)
@@ -337,21 +330,21 @@ export default {
     actionSetDataRefContract (context, update) {
       console.log('look up packaing for refContract')
       console.log(update)
-      let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update.refcont, this.state.referenceContract.packaging)
+      let refContractLookup = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.refcont, this.state.referenceContract.packaging)
       update.option = refContractLookup
       context.commit('SET_PACKAGING_REFCONTRACT', update)
     },
     actionSetComputeRefContract (context, update) {
       // console.log('look compute refContracts')
-      let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update, this.state.referenceContract.compute)
-      // console.log('refContractLookup')
-      // console.log(refContractLookup)
-      context.commit('SET_COMPUTE_REFCONTRACT', refContractLookup)
+      let refContractLookup = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.refcont, this.state.referenceContract.compute)
+      update.option = refContractLookup
+      context.commit('SET_COMPUTE_REFCONTRACT', update)
     },
     actionSetVisualiseRefContract (context, update) {
       // console.log('look visualise refContracts')
-      let refContractLookup = this.state.livesafeFLOW.refcontComposerLive.refcontractLookup(update, this.state.referenceContract.visualise)
-      context.commit('SET_VISUALISE_REFCONTRACT', refContractLookup)
+      let refContractLookup = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.refcont, this.state.referenceContract.visualise)
+      update.option = refContractLookup
+      context.commit('SET_VISUALISE_REFCONTRACT', update)
     },
     actionNewNXPrefcontract (context, update) {
       console.log('new Shell info ref contracts')

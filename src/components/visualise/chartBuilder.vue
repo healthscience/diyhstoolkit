@@ -56,10 +56,6 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      console.log('tool bar ivs status')
-      console.log(this.moduleCNRL)
-      console.log(this.mData)
-      console.log(this.$store.state.toolbarVisStatus)
       if (!this.shellID) {
         return {}
       } else {
@@ -70,9 +66,6 @@ export default {
       return this.$store.state.opendataTools[this.moduleCNRL][this.mData]
     },
     liveData: function () {
-      console.log(this.moduleCNRL)
-      console.log(this.mData)
-      // console.log(this.$store.state.NXPexperimentData)
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
         return {}
       } else {
@@ -91,8 +84,6 @@ export default {
       console.log('chart select type bar line mixed')
     },
     visToolbarUpdate () {
-      console.log('vis toolbar')
-      console.log(this.visToolbarStatusLive)
       let updateVisTools = {}
       updateVisTools.state = this.visToolbarStatusLive.active
       updateVisTools.module = this.moduleCNRL

@@ -1,5 +1,5 @@
 <template>
-  <div id="live-view"> {{ refContractPackage }}
+  <div id="live-view"> -- {{ refContractPackage }}
     <div id="knowledge-selector">
       <div id="live-context-datatypes">
         <div id="context-devices" class="live-kelement">
@@ -24,7 +24,7 @@
               <select class="select-compute-id" id="compute-mapping-build" @change="computeSelect" v-model="visualsettings.compute">
                 <option value="none" selected="">please select</option>
                 <option v-for="comp in refContractCompute" :key="comp.key" >
-                  <option value=com.key>{{ comp.value.computational.name }}</option>
+                  <option value=comp.key>{{ comp.option.value.computational.name }}</option>
                 </option>
               </select>
             </li>
@@ -147,16 +147,13 @@ export default {
       return this.$store.state.datasourceCount
     },
     refContractCompute: function () {
-      let computeLive = []
-      computeLive.push(this.$store.state.refcontractCompute)
+      let computeLive = this.$store.state.refcontractCompute
       return computeLive
     },
     resultsDTs: function () {
       return []
     },
     refContractPackage: function () {
-      console.log('packaing live')
-      console.log(this.$store.state.refcontractPackaging)
       return this.$store.state.refcontractPackaging[this.dataSource]
     },
     category: function () {

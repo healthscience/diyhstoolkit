@@ -130,10 +130,10 @@ const store = new Vuex.Store({
     setNetworkExperimentList: (state, inVerified) => {
       let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
       let gridData = []
-      console.log('Peer joined experiment list')
+      console.log('Peer join experiment list')
       console.log(inVerified)
       for (let nxp of inVerified) {
-        gridData.push({ id: nxp.prime.cnrl, name: nxp.prime.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'Join' })
+        gridData.push({ id: nxp.prime.cnrl, name: nxp.prime.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'Preview / Join' })
       }
       let gridAnnon = {}
       gridAnnon.columns = gridColumns

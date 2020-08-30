@@ -8,20 +8,20 @@
             Network Library Reference Contract:<input v-model="computeRefCont" placeholder="Reference Contract">
             <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
           </li>
-          <li>
-            <ul v-if="refContractCompute.key">
+          <li v-for="cs of computesource" :key="cs.id">
+            <ul v-if="refContractCompute[cs]">
               <li>
-                {{ refContractCompute.key }} ---
+                {{ refContractCompute[cs].option.key }} ---
               </li>
               <li>
-                {{ refContractCompute.value.computational.name }} ---
+                {{ refContractCompute[cs].option.value.computational.name }} ---
               </li>
               <li>
-                {{ refContractCompute.value.computational.description}} ---
+                {{ refContractCompute[cs].option.value.computational.description}} ---
               </li>
               <li>
-                {{ refContractCompute.value.computational.code }} ---
-              </li>d
+                {{ refContractCompute[cs].option.value.computational.code }} ---
+              </li>
             </ul>
           </li>
         </ul>
@@ -29,7 +29,7 @@
       <div id="view-controls-compute">
       </div>
       <div class="compute-code">
-        <a href="#" id="add-compute" >add</a>
+        <a href="#" id="addComputeContract" >add</a>
       </div>
     </div>
   </div>
@@ -43,8 +43,20 @@ export default {
   },
   computed: {
     refContractCompute: function () {
-      console.log(this.$store.state.refcontractCompute)
-      return this.$store.state.refcontractCompute
+      console.log('compute live???')
+      console.log(this.$store.state.refcontractCompute.length)
+      let liveCompute = []
+      if (this.$store.state.refcontractCompute.length !== 0) {
+        liveCompute = this.$store.state.refcontractCompute
+      } else {
+        liveCompute = []
+      }
+      return liveCompute
+    }
+  },
+  props: {
+    modData: {
+      type: Object
     }
   },
   data: () => ({
@@ -53,7 +65,9 @@ export default {
       text: '',
       forum: ''
     },
-    computeRefCont: ''
+    computeRefCont: '',
+    countD: 0,
+    computesource: [0]
   }),
   created () {
   },
@@ -61,11 +75,16 @@ export default {
   },
   methods: {
     refContractLookup () {
-      console.log('lookup ref contract for api data info')
       let computeMod = {}
-      computeMod.module = this.modData
-      computeMod.question = this.computeRefCont
+      computeMod.moduleinfo = this.modData
+      computeMod.refcont = this.computeRefCont
       this.$store.dispatch('actionSetComputeRefContract', computeMod)
+    },
+    addComputeContract () {
+      // update vuex of data source latest
+      // this.$store.dispatch('actionDatasourceCount', this.countD)
+      this.countD++
+      this.computesource.push(this.countD)
     }
   }
 }

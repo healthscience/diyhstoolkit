@@ -23,12 +23,23 @@ export default {
   components: {
     chartBuilder
   },
-  props: {
-  },
   computed: {
     refContractVisualise: function () {
       // console.log(this.$store.state.refcontractVisualise)
-      return this.$store.state.refcontractVisualise
+      console.log('vis live???')
+      console.log(this.$store.state.refcontractVisualise.length)
+      let liveVis = []
+      if (this.$store.state.refcontractVisualise.length !== 0) {
+        liveVis = this.$store.state.refcontractVisualise
+      } else {
+        liveVis = []
+      }
+      return liveVis
+    }
+  },
+  props: {
+    modData: {
+      type: Object
     }
   },
   data: () => ({
@@ -59,8 +70,8 @@ export default {
       // setup toolbar info.
       this.$store.dispatch('actionSetTempToolbarVis', tempNew)
       let visMod = {}
-      visMod.module = this.modData
-      visMod.question = this.visualRefCont
+      visMod.moduleinfo = this.modData
+      visMod.refcont = this.visualRefCont
       this.$store.dispatch('actionSetVisualiseRefContract', visMod)
     }
   }
