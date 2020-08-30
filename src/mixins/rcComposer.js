@@ -86,9 +86,14 @@ ReferenceContractComposer.prototype.visualiseComposer = function (input) {
 * @method moduleComposer
 *
 */
-ReferenceContractComposer.prototype.moduleComposer = function (input) {
+ReferenceContractComposer.prototype.moduleComposer = function (input, join) {
   console.log('prepare New module contracts')
-  const preContract = this.moduleRefLive.modulePrepare(input)
+  let preContract = {}
+  if (join === 'join') {
+    preContract = this.moduleRefLive.moduleJoinPrepare(input)
+  } else {
+    preContract = this.moduleRefLive.modulePrepare(input)
+  }
   return preContract
 }
 

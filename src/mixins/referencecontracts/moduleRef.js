@@ -51,6 +51,32 @@ ModuleReferenceContract.prototype.modulePrepare = function (inputRC) {
 }
 
 /**
+* prepare a module template reference contract
+* @method moduleJoinPrepare
+*
+*/
+ModuleReferenceContract.prototype.moduleJoinPrepare = function (inputRC) {
+  console.log('module comps')
+  console.log(inputRC)
+  let newModule = {}
+  // what type of modules is it?
+  if (inputRC.reftype === 'module') {
+    newModule = this.prepareTemplateModule(inputRC)
+  } else if (inputRC.moduleinfo.name === 'question') {
+    newModule = this.prepareQuestion(inputRC)
+  } else if (inputRC.moduleinfo.name === 'data') {
+    newModule = this.prepareData(inputRC)
+  } else if (inputRC.moduleinfo.name === 'compute') {
+    newModule = this.prepareCompute(inputRC)
+  } else if (inputRC.moduleinfo.name === 'visualise') {
+    newModule = this.prepareVisulise(inputRC)
+  } else if (inputRC.moduleinfo.name === 'education') {
+    newModule = 1
+  }
+  return newModule
+}
+
+/**
 * prepare template module
 * @method prepareTemplateModule
 *

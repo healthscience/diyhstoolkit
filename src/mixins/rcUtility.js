@@ -31,11 +31,8 @@ util.inherits(RCutility, events.EventEmitter)
 *
 */
 RCutility.prototype.refcontractLookup = function (refCont, allContracts) {
-  console.log('lookup contract')
-  console.log(refCont)
   let matchKey = {}
   for (const rc of allContracts) {
-    console.log(rc)
     if (refCont.trim() === rc.key) {
       matchKey = rc
     }
@@ -124,6 +121,8 @@ RCutility.prototype.experimentSplit = function (inputNXPs) {
 *
 */
 RCutility.prototype.expMatchModule = function (allRefcont, expModules) {
+  console.log(allRefcont)
+  console.log(expModules)
   let expHolder = []
   let expandedNXP = {}
   expandedNXP.modules = []
@@ -142,6 +141,18 @@ RCutility.prototype.expMatchModule = function (allRefcont, expModules) {
     expandedNXP.modules = []
   }
   return expHolder
+}
+
+/**
+* match network experiment to modules
+* @method expMatchGenModule
+*
+*/
+RCutility.prototype.expMatchGenModule = function (allRefcont, expModules) {
+  console.log(allRefcont)
+  console.log(expModules)
+  let question = 'aabb'
+  return question
 }
 
 /**

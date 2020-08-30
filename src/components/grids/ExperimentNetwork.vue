@@ -1,6 +1,6 @@
 <template>
   <div id="live-network-grid"> ff -- {{ filteredExperiments }}
-    <!-- component template -->
+    <!-- peer network experiment added -->
     <div id="grid-template">
       <table>
         <thead>
@@ -50,7 +50,7 @@
         </template>
         <template v-slot:packaging>
           <!-- select data source -->
-          <div class="compute-select-datasource">
+          <div class="compute-select-datasource">ppp= {{ NXPJoinModuleData }}
             <label for="compute-select-source">Select data source:</label>
             <select class="select-compute-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
               <!-- <option value="mongo-gadgetbridge">Gadgetbridge-mongo</option>
@@ -64,7 +64,7 @@
         <template v-slot:compute>
           <header>Compute</header>
           <li>
-            {{ NXPJoinModuleCompute }}
+            --{{ NXPJoinModuleCompute }}
           </li>
           <li class="compute-form-item">
             Set start time of data:<input v-model="newCompute.startperiod" placeholder="Reference Contract">
@@ -84,7 +84,7 @@
         </template>
         <template v-slot:dashboard-visualisation>
           <header>Visualisation</header>
-          <li>
+          <li>newVisualise
             {{ NXPJoinModuleVisualise }}
           </li>
         </template>
@@ -180,6 +180,7 @@ export default {
         controls: false,
         startperiod: null
       },
+      newVisualise: {},
       newVisualisation: {
       }
     }
@@ -190,10 +191,6 @@ export default {
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
     actionExperiment (shellCNRL, NXPcontract) {
-      // view or joing a NXP?
-      console.log('action for experiment???')
-      console.log(shellCNRL)
-      console.log(NXPcontract)
       this.shellContract = shellCNRL
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
@@ -201,7 +198,7 @@ export default {
         // this.$store.dispatch('actionDisplay', shellCNRL)
         this.isModalDashboardVisible = true
       } else {
-        this.$store.dispatch('actionJOINexperiment', shellCNRL)
+        this.$store.dispatch('actionJOINViewexperiment', shellCNRL)
         this.isModalJoinVisible = true
       }
     },
@@ -235,9 +232,17 @@ export default {
     joinNetworkExperiment () {
       console.log('save and join network exerpiment')
       const peerChoices = {}
-      peerChoices.compute = this.newCompute
-      peerChoices.visualise = {} // empty set default from genesis setup
-      this.$store.dispatch('joinExperiment', peerChoices)
+      let compute = {}
+      compute.refcont = this.NXPJoinModuleCompute
+      compute.controls = this.newCompute
+      let visualise = {}
+      compute.refcont = this.NXPJoinModuleVisualise
+      compute.controls = this.newVisualise
+      peerChoices.genesis = this.actionKBundle.id
+      peerChoices.question = this.actionKBundle.name
+      peerChoices.compute = compute
+      peerChoices.visualise = visualise
+      this.$store.dispatch('actionJoinExperiment', peerChoices)
       this.closeModalJoin()
     }
   }

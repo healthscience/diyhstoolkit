@@ -61,6 +61,7 @@ const store = new Vuex.Store({
     newNXPmakeRefs: [],
     moduleGenesisList: [],
     moduleListEnd: false,
+    moduleJoinedListEnd: false,
     networkExpModules: [],
     refcontractQuestion: {},
     refcontractPackaging: [],
@@ -355,13 +356,11 @@ const store = new Vuex.Store({
       let entityReturn = await safeAPI.ECSinput(this.state.experimentStatus[update])
       context.commit('setentityReturn', entityReturn)
     },
-    actionJOINexperiment (context, update) {
+    actionJOINViewexperiment (context, update) {
       console.log('match to expanded NXP module data structure')
-      console.log(update)
       let joinExpDisplay = {}
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
-        console.log(ep.exp.key)
         if (ep.exp.key === update) {
           console.log('match')
           joinNXP = ep
@@ -369,9 +368,9 @@ const store = new Vuex.Store({
       }
       console.log(joinNXP)
       // break out the modules
-      joinExpDisplay.data = this.state.livesafeFLOW.refcontComposerLive.extractData(joinNXP.modules, 'data')
-      joinExpDisplay.compute = this.state.livesafeFLOW.refcontComposerLive.extractCompute(joinNXP.modules, 'compute')
-      joinExpDisplay.visualise = this.state.livesafeFLOW.refcontComposerLive.extractVisualise(joinNXP.modules, 'visualise')
+      joinExpDisplay.data = this.state.livesafeFLOW.refcontUtilityLive.extractData(joinNXP.modules, 'data')
+      joinExpDisplay.compute = this.state.livesafeFLOW.refcontUtilityLive.extractCompute(joinNXP.modules, 'compute')
+      joinExpDisplay.visualise = this.state.livesafeFLOW.refcontUtilityLive.extractVisualise(joinNXP.modules, 'visualise')
       context.commit('SET_JOIN_NXP', joinExpDisplay)
     },
     actionLocalGrid (context, update) {
