@@ -29,7 +29,7 @@ util.inherits(ModuleReferenceContract, events.EventEmitter)
 * @method modulePrepare
 *
 */
-ModuleReferenceContract.prototype.modulePrepare = function (inputRC) {
+ModuleReferenceContract.prototype.modulePrepare = function (inputRC, defaults) {
   // console.log('module comps')
   // console.log(inputRC)
   let newModule = {}
@@ -41,7 +41,7 @@ ModuleReferenceContract.prototype.modulePrepare = function (inputRC) {
   } else if (inputRC.moduleinfo.name === 'data') {
     newModule = this.prepareData(inputRC)
   } else if (inputRC.moduleinfo.name === 'compute') {
-    newModule = this.prepareCompute(inputRC)
+    newModule = this.prepareCompute(inputRC, defaults)
   } else if (inputRC.moduleinfo.name === 'visualise') {
     newModule = this.prepareVisulise(inputRC)
   } else if (inputRC.moduleinfo.name === 'education') {
@@ -165,13 +165,20 @@ ModuleReferenceContract.prototype.prepareData = function (modIN) {
 * @method prepareCompute
 *
 */
-ModuleReferenceContract.prototype.prepareCompute = function (modIN) {
+ModuleReferenceContract.prototype.prepareCompute = function (modIN, defaults) {
   const datatypeReferenceContract = {}
   datatypeReferenceContract.refcontract = 'module'
   datatypeReferenceContract.concept = {}
   datatypeReferenceContract.space = {}
   datatypeReferenceContract.computational = {}
   // need to prepare matching of datatyps ref contracts to table columns
+  // defaults set?
+  let dataCNRLbundle6 = {}
+  dataCNRLbundle6.defaults = defaults
+  dataCNRLbundle6.controlpanel = ['standard']
+  dataCNRLbundle6.automation = false
+  dataCNRLbundle6.time = { realtime: 0, timeseg: [], startperiod: '' }
+  modIN.settings = dataCNRLbundle6
   datatypeReferenceContract.concept = modIN
   // prepare space coordinates e.g. quark, atom, molecule etc.
   datatypeReferenceContract.space = { concept: 'mind' }

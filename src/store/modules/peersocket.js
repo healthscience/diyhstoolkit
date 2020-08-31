@@ -139,32 +139,38 @@ export default {
     },
     SET_NXP_REFCONTRACT (state, inVerified) {
       this.state.nxpRefContract = inVerified
-      // send to peerLink for saving
-      // Vue.set(this.state.nxpRefContract, 'nxpRefContract' inVerified)
     },
     SET_NEWNXP_VISDEVICES (state, inVerified) {
       console.log(inVerified)
+      Vue.set(this.state.visModuleHolder, 'devices', inVerified)
     },
     SET_NEWNXP_VISCOMPUTE (state, inVerified) {
       console.log(inVerified)
+      Vue.set(this.state.visModuleHolder, 'compute', inVerified)
     },
     SET_NEWNXP_VISRESULTS (state, inVerified) {
       console.log(inVerified)
+      Vue.set(this.state.visModuleHolder, 'visualise', inVerified)
     },
     SET_NEWNXP_VISXAXIS (state, inVerified) {
       console.log(inVerified)
+      Vue.set(this.state.visModuleHolder, 'xaxis', inVerified)
     },
     SET_NEWNXP_VISYAXIS (state, inVerified) {
       console.log(inVerified)
+      Vue.set(this.state.visModuleHolder, 'yaxis', inVerified)
     },
     SET_NEWNXP_VISCATEGORY (state, inVerified) {
       console.log(inVerified)
+      Vue.set(this.state.visModuleHolder, 'category', inVerified)
     },
     SET_NEWNXP_VISTIME (state, inVerified) {
       console.log(inVerified)
+      Vue.set(this.state.visModuleHolder, 'timeperiod', inVerified)
     },
     SET_NEWNXP_VISRESOLUTION (state, inVerified) {
       console.log(inVerified)
+      Vue.set(this.state.visModuleHolder, 'resolution', inVerified)
     },
     SET_MODULE_LIST (state, inVerified) {
       console.log(inVerified)
@@ -356,8 +362,11 @@ export default {
       // prepare the genesis modules
       // loop over list of module contract to make genesis ie first
       this.state.lengthMholder = this.state.moduleHolder.length
+      // bring together defaults i.e. setting for compute/vis
+      console.log('deafults')
+      console.log(this.state.visModuleHolder)
       for (let mh of this.state.moduleHolder) {
-        const moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mh)
+        const moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mh, '', this.state.visModuleHolder)
         const moduleRefContractReady = JSON.stringify(moduleRefContract)
         Vue.prototype.$socket.send(moduleRefContractReady)
       }

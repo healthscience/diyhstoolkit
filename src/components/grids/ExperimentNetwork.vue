@@ -1,5 +1,5 @@
 <template>
-  <div id="live-network-grid"> ff -- {{ filteredExperiments }}
+  <div id="live-network-grid">
     <!-- peer network experiment added -->
     <div id="grid-template">
       <table>
@@ -85,7 +85,8 @@
         <template v-slot:dashboard-visualisation>
           <header>Visualisation</header>
           <li>newVisualise
-            {{ NXPJoinModuleVisualise }}
+            vv- {{ NXPJoinModuleVisualise }}
+            <chart-builder v-if="type === 'chart.js'" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></chart-builder>
           </li>
         </template>
         <template v-slot:submit-join>
@@ -101,13 +102,18 @@
 import DashBoard from '@/components/experiments/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
 import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
+import ChartBuilder from '@/components/visualise/chartBuilder'
 
 export default {
   name: 'ExperimentNetwork',
   components: {
     DashBoard,
     ProgressMessage,
-    JoinExperiment
+    JoinExperiment,
+    ChartBuilder
+  },
+  created () {
+    this.refContractLookup()
   },
   props: {
     experiments: Array,
@@ -182,13 +188,36 @@ export default {
       },
       newVisualise: {},
       newVisualisation: {
-      }
+      },
+      type: 'chart.js',
+      shellID: null,
+      moduleCNRL: 'cnrl-001234543458',
+      moduleType: 'vis',
+      mData: '',
+      visualRefCont: ''
     }
   },
   methods: {
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
+    },
+    refContractLookup () {
+      console.log('lookup ref contract for api data info')
+      console.log(this.visualRefCont)
+      // create new temp shellID
+      this.shellID = '1234567'
+      this.mData = '98889'
+      let tempNew = {}
+      tempNew.shellID = this.shellID
+      tempNew.moduleCNRL = 'cnrl-001234543458'
+      tempNew.mData = this.mData
+      // setup toolbar info.
+      this.$store.dispatch('actionSetTempToolbarVis', tempNew)
+      let visMod = {}
+      visMod.moduleinfo = this.modData
+      visMod.refcont = this.visualRefCont
+      this.$store.dispatch('actionSetVisualiseRefContract', visMod)
     },
     actionExperiment (shellCNRL, NXPcontract) {
       this.shellContract = shellCNRL

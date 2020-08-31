@@ -29,6 +29,7 @@ const store = new Vuex.Store({
     joinNXPlive: {},
     lengthMholder: 0,
     lengthMholderj: 0,
+    visModuleHolder: {},
     dashboardNXP: {},
     ECSupdateOUT: {},
     referenceContract: {},
@@ -144,6 +145,9 @@ const store = new Vuex.Store({
       state.NXPexperimentList = gridAnnon
     },
     setDashboardNXP: (state, inVerified) => {
+      console.log('setcashsbaoc')
+      console.log(inVerified)
+      console.log(state.experimentStatus)
       let dStatus = state.experimentStatus[inVerified].active
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)

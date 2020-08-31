@@ -1,10 +1,10 @@
 <template>
-  <div id="device-add-nxp"> modDa== {{ modData }}
+  <div id="device-add-nxp">
       <li class="device-item">
         Network Library Reference Contract:<input v-model="packageRefCont" placeholder="Reference Contract">
         <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
       </li>
-      <li> ii{{ datID }}
+      <li>
         <ul>
           <li>
             <ul v-if="refContractPackage.key">
@@ -71,8 +71,6 @@ export default {
   },
   methods: {
     refContractLookup () {
-      console.log('lookup ref contract for api data info')
-      console.log(this.packageRefCont)
       let dataModHolder = {}
       dataModHolder.moduleinfo = this.modData
       dataModHolder.refcont = this.packageRefCont

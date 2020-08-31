@@ -1,6 +1,6 @@
 <template>
   <div id="question-nxp">
-    <header>QUESTION:</header> mod prop -- {{ modData }}
+    <header>QUESTION:</header>
     <div id="prime-question">
       <form id="question_form" name="question_form" method="post" action="#">
         <ul>
@@ -42,7 +42,6 @@ export default {
   },
   methods: {
     questionSave () {
-      console.log('save question')
       let questionMod = {}
       questionMod.module = this.modData
       questionMod.question = this.question

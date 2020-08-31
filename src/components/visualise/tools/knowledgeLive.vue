@@ -67,8 +67,8 @@
               <label for="yaxis-select"></label>
               <select class="select-yaxis-id" id="yaxis-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
                 <option value="none" selected="">please select</option>
-                <option v-for="colpair in refContractPackage.option.value.concept.tablestructure" :key="colpair.refcontract" >
-                  <option value=colpair.refcontract>{{ colpair.column }}</option>
+                <option v-for="colpairy in refContractPackage.option.value.concept.tablestructure" :key="colpairy.refcontract" >
+                  <option value=colpairy.refcontract>{{ colpairy.column }}</option>
                 </option>
               </select>
             </ul>
@@ -245,7 +245,7 @@ export default {
       this.$store.dispatch('actionNewVisResolution', this.visualsettings.resolution)
     },
     deviceSelect () {
-      this.$store.dispatch('actionNewVis.devices', this.visualsettings.devices)
+      this.$store.dispatch('actionNewVisdevices', this.visualsettings.devices)
     },
     computeSelect () {
       this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
