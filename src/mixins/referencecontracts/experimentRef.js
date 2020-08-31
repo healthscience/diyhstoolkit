@@ -51,8 +51,8 @@ ExperimentReferenceContract.prototype.nxpPrepare = function (inputRC) {
   RefContractHolder.action = 'PUT'
   RefContractHolder.hash = dtHASH
   RefContractHolder.contract = nxpReferenceContract
-  console.log('nxp holder')
-  console.log(RefContractHolder)
+  // console.log('nxp holder')
+  // console.log(RefContractHolder)
   return RefContractHolder
 }
 
@@ -81,8 +81,8 @@ ExperimentReferenceContract.prototype.nxpJoinedPrepare = function (inputRC) {
   RefContractHolder.action = 'PUT'
   RefContractHolder.hash = dtHASH
   RefContractHolder.contract = nxpReferenceContract
-  console.log('nxp holder')
-  console.log(RefContractHolder)
+  // console.log('nxp JOINED')
+  // console.log(RefContractHolder)
   return RefContractHolder
 }
 

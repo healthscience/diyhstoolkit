@@ -121,8 +121,8 @@ RCutility.prototype.experimentSplit = function (inputNXPs) {
 *
 */
 RCutility.prototype.expMatchModule = function (allRefcont, expModules) {
-  console.log(allRefcont)
-  console.log(expModules)
+  // console.log(allRefcont)
+  // console.log(expModules)
   let expHolder = []
   let expandedNXP = {}
   expandedNXP.modules = []
@@ -149,10 +149,28 @@ RCutility.prototype.expMatchModule = function (allRefcont, expModules) {
 *
 */
 RCutility.prototype.expMatchGenModule = function (allRefcont, expModules) {
-  console.log(allRefcont)
-  console.log(expModules)
-  let question = 'aabb'
-  return question
+  // console.log(allRefcont)
+  // console.log(expModules)
+  let expJOINHolder = []
+  // joined list of modules in NXP
+  let joinModules = {}
+  joinModules.exp = ''
+  joinModules.modules = []
+  for (const exp of expModules) {
+    for (const mod of exp.value.modules) {
+      // match this key to module
+      for (const mrf of allRefcont) {
+        if (mod.key === mrf.key) {
+          joinModules.modules.push(mrf)
+        }
+      }
+    }
+    joinModules.exp = exp
+    expJOINHolder.push(joinModules)
+    joinModules = {}
+    joinModules.modules = []
+  }
+  return expJOINHolder
 }
 
 /**
@@ -163,7 +181,7 @@ RCutility.prototype.expMatchGenModule = function (allRefcont, expModules) {
 RCutility.prototype.extractData = function (modules, typeAsk) {
   let packages = []
   for (const mod of modules) {
-    console.log(mod.value.concept.moduleinfo.name)
+    // console.log(mod.value.concept.moduleinfo.name)
     if (mod.value.concept.moduleinfo.name === typeAsk) {
       packages.push(mod.value.concept)
     }
@@ -179,7 +197,7 @@ RCutility.prototype.extractData = function (modules, typeAsk) {
 RCutility.prototype.extractCompute = function (modules, typeAsk) {
   let computes = []
   for (const mod of modules) {
-    console.log(mod.value.concept.moduleinfo.name)
+    // console.log(mod.value.concept.moduleinfo.name)
     if (mod.value.concept.moduleinfo.name === typeAsk) {
       computes.push(mod.value.concept)
     }
@@ -195,7 +213,7 @@ RCutility.prototype.extractCompute = function (modules, typeAsk) {
 RCutility.prototype.extractVisualise = function (modules, typeAsk) {
   let visuals = []
   for (const mod of modules) {
-    console.log(mod.value.concept.moduleinfo.name)
+    // console.log(mod.value.concept.moduleinfo.name)
     if (mod.value.concept.moduleinfo.name === typeAsk) {
       visuals.push(mod.value.concept)
     }
@@ -211,7 +229,7 @@ RCutility.prototype.extractVisualise = function (modules, typeAsk) {
 RCutility.prototype.extractEducation = function (modules, typeAsk) {
   let education = []
   for (const mod of modules) {
-    console.log(mod.value.concept.moduleinfo.name)
+    // console.log(mod.value.concept.moduleinfo.name)
     if (mod.value.concept.moduleinfo.name === typeAsk) {
       education.push(mod.value.concept)
     }
@@ -225,10 +243,31 @@ RCutility.prototype.extractEducation = function (modules, typeAsk) {
 *
 */
 RCutility.prototype.extractQuestion = function (modules, typeAsk) {
+  // console.log('question mod matcher')
+  // console.log(modules)
+  // console.log(typeAsk)
   let question = ''
   for (const mod of modules) {
     if (mod.value.concept.moduleinfo.name === typeAsk) {
       question = mod.value.concept.question
+    }
+  }
+  return question
+}
+
+/**
+* extract the network experiment question module
+* @method extractQuestion
+*
+*/
+RCutility.prototype.extractQuestionJOINED = function (modules, typeAsk) {
+  // console.log('question mod matcher')
+  // console.log(modules)
+  // console.log(typeAsk)
+  let question = ''
+  for (const mod of modules) {
+    if (mod.value.concept.value.concept.moduleinfo.name === typeAsk) {
+      question = mod.value.concept.value.concept.question
     }
   }
   return question
@@ -240,9 +279,9 @@ RCutility.prototype.extractQuestion = function (modules, typeAsk) {
 *
 */
 RCutility.prototype.mergePackageMap = function (col, table) {
-  console.log('map columns to dts contracts')
-  console.log(col)
-  console.log(table)
+  // console.log('map columns to dts contracts')
+  // console.log(col)
+  // console.log(table)
   const mapped = []
   // remove first element array empty by design
   table.shift()
@@ -260,8 +299,8 @@ RCutility.prototype.mergePackageMap = function (col, table) {
       }
     }
   }
-  console.log('mapped pair')
-  console.log(mapped)
+  // console.log('mapped pair')
+  // console.log(mapped)
   return mapped
 }
 

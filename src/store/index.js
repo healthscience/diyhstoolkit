@@ -27,6 +27,8 @@ const store = new Vuex.Store({
     liveNXPbundle: {},
     nxpModulesLive: [],
     joinNXPlive: {},
+    lengthMholder: 0,
+    lengthMholderj: 0,
     dashboardNXP: {},
     ECSupdateOUT: {},
     referenceContract: {},
@@ -357,16 +359,13 @@ const store = new Vuex.Store({
       context.commit('setentityReturn', entityReturn)
     },
     actionJOINViewexperiment (context, update) {
-      console.log('match to expanded NXP module data structure')
       let joinExpDisplay = {}
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
         if (ep.exp.key === update) {
-          console.log('match')
           joinNXP = ep
         }
       }
-      console.log(joinNXP)
       // break out the modules
       joinExpDisplay.data = this.state.livesafeFLOW.refcontUtilityLive.extractData(joinNXP.modules, 'data')
       joinExpDisplay.compute = this.state.livesafeFLOW.refcontUtilityLive.extractCompute(joinNXP.modules, 'compute')
