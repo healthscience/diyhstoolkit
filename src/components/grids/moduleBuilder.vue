@@ -1,5 +1,5 @@
 <template>
-  <div id="module-builder">
+  <div id="module-builder">hhhold--{{ testHolder }}
     <div class="row">
       <div class="col-3">
         <h3>Modules available</h3>
@@ -62,6 +62,9 @@ export default {
   props: {
   },
   computed: {
+    testHolder: function () {
+      return this.$store.state.moduleHolder
+    },
     nxpMakeList: function () {
       return this.$store.state.nxpMakeList
     },

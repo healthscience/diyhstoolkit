@@ -21,7 +21,7 @@
               {{entry[key]}}
               </div>
               <div v-else>
-                <button type="button" class="btn" @click="actionExperiment(entry.id, entry)">{{ entry[key] }}</button>
+                <button type="button" class="btn" @click="actionPreviewExperiment(entry.id, entry)">{{ entry[key] }}</button>
               </div>
             </td>
           </tr>
@@ -86,7 +86,7 @@
           <header>Visualisation</header>
           <li>newVisualise
             vv- {{ NXPJoinModuleVisualise }}
-            <chart-builder v-if="type === 'chart.js'" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></chart-builder>
+            <chart-builder v-if="type === 'chart.js'" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" ></chart-builder>
           </li>
         </template>
         <template v-slot:submit-join>
@@ -113,7 +113,8 @@ export default {
     ChartBuilder
   },
   created () {
-    this.refContractLookup()
+  },
+  mounted () {
   },
   props: {
     experiments: Array,
@@ -204,7 +205,6 @@ export default {
     },
     refContractLookup () {
       console.log('lookup ref contract for api data info')
-      console.log(this.visualRefCont)
       // create new temp shellID
       this.shellID = '1234567'
       this.mData = '98889'
@@ -212,14 +212,23 @@ export default {
       tempNew.shellID = this.shellID
       tempNew.moduleCNRL = 'cnrl-001234543458'
       tempNew.mData = this.mData
+      console.log('data and vis modules info')
+      console.log(this.NXPJoinModuleData[0])
+      console.log(this.NXPJoinModuleVisualise[0])
+      let dataMod = {}
+      dataMod.moduleinfo = this.NXPJoinModuleData[0].moduleinfo // this.modData
+      dataMod.refcont = this.NXPJoinModuleData[0].refcont // this.visualRefCont
+      console.log(dataMod)
+      let visMod = {}
+      visMod.moduleinfo = this.NXPJoinModuleVisualise[0].moduleinfo // this.modData
+      visMod.refcont = this.NXPJoinModuleVisualise[0].refcont // this.visualRefCont
+      console.log(visMod)
+      this.$store.dispatch('actionSetDataRefContract', dataMod)
       // setup toolbar info.
       this.$store.dispatch('actionSetTempToolbarVis', tempNew)
-      let visMod = {}
-      visMod.moduleinfo = this.modData
-      visMod.refcont = this.visualRefCont
       this.$store.dispatch('actionSetVisualiseRefContract', visMod)
     },
-    actionExperiment (shellCNRL, NXPcontract) {
+    actionPreviewExperiment (shellCNRL, NXPcontract) {
       this.shellContract = shellCNRL
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
@@ -227,7 +236,12 @@ export default {
         // this.$store.dispatch('actionDisplay', shellCNRL)
         this.isModalDashboardVisible = true
       } else {
+        console.log('view previsu jion')
+        console.log(shellCNRL)
         this.$store.dispatch('actionJOINViewexperiment', shellCNRL)
+        this.refContractLookup()
+        console.log('after')
+        console.log(this.NXPJoinModuleVisualise)
         this.isModalJoinVisible = true
       }
     },

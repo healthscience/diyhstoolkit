@@ -30,8 +30,8 @@ util.inherits(ModuleReferenceContract, events.EventEmitter)
 *
 */
 ModuleReferenceContract.prototype.modulePrepare = function (inputRC, defaults) {
-  // console.log('module comps')
-  // console.log(inputRC)
+  console.log('module comps')
+  console.log(inputRC)
   let newModule = {}
   // what type of modules is it?
   if (inputRC.reftype === 'module') {

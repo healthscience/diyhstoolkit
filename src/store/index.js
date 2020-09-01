@@ -363,6 +363,9 @@ const store = new Vuex.Store({
       context.commit('setentityReturn', entityReturn)
     },
     actionJOINViewexperiment (context, update) {
+      console.log('previs jion vuex')
+      console.log(update)
+      console.log(this.state.networkExpModules)
       let joinExpDisplay = {}
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
@@ -374,6 +377,8 @@ const store = new Vuex.Store({
       joinExpDisplay.data = this.state.livesafeFLOW.refcontUtilityLive.extractData(joinNXP.modules, 'data')
       joinExpDisplay.compute = this.state.livesafeFLOW.refcontUtilityLive.extractCompute(joinNXP.modules, 'compute')
       joinExpDisplay.visualise = this.state.livesafeFLOW.refcontUtilityLive.extractVisualise(joinNXP.modules, 'visualise')
+      console.log('display join ')
+      console.log(joinExpDisplay)
       context.commit('SET_JOIN_NXP', joinExpDisplay)
     },
     actionLocalGrid (context, update) {
@@ -532,12 +537,14 @@ const store = new Vuex.Store({
     },
     actionSetTempToolbarVis (context, update) {
       console.log('new TEMP NXP contract settings')
+      console.log(update)
       // pass on to NXP composer
       // const prepareNXP = liveComposer.()
       // let newShelltempid = update // Math.floor(100000000 + Math.random() * 900000000)
       context.commit('newNXPshell', update.shellID)
       context.commit('setVistoolsTemp', update)
       context.commit('setOpendataBarTemp', update)
+      console.log('toolbar set')
     },
     actionDatasourceCount (context, update) {
       context.commit('SET_DATASOURCECOUNT', update)

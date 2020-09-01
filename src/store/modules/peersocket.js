@@ -108,6 +108,7 @@ export default {
         gridPeer.columns = gridColumns
         gridPeer.data = gridDatapeer
         this.state.joinedNXPlist = gridPeer
+        console.log('complete start lists')
       }
     },
     SET_QUESTION_REFCONTRACT (state, inVerified) {
@@ -133,6 +134,7 @@ export default {
     },
     SET_VISUALISE_REFCONTRACT (state, inVerified) {
       // add to module list full details
+      console.log(inVerified)
       this.state.moduleHolder.push(inVerified)
       this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
       this.state.refcontractVisualise.push(inVerified)
@@ -177,6 +179,8 @@ export default {
       this.state.nxpModulesList = inVerified
     },
     SET_QUESTION_MODULE (state, inVerified) {
+      console.log('quholer')
+      console.log(this.state.refcontractQuestion)
       this.state.moduleHolder.push(this.state.refcontractQuestion)
       this.state.newNXPmakeRefs.push(this.state.refcontractQuestion.moduleinfo.refcont)
     }
@@ -325,7 +329,7 @@ export default {
       let moduleHolder = []
       for (const mc of moduleContracts) {
         // console.log(mc)
-        const prepareModule = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mc)
+        const prepareModule = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mc, '', {})
         let moduleContainer = {}
         moduleContainer.name = prepareModule.contract.concept.type
         moduleContainer.id = modCount
@@ -351,7 +355,9 @@ export default {
       context.commit('SET_COMPUTE_REFCONTRACT', update)
     },
     actionSetVisualiseRefContract (context, update) {
-      // console.log('look visualise refContracts')
+      console.log('look visualise refContracts')
+      console.log(update)
+      console.log(this.state.joinNXPlive.visualise)
       let refContractLookup = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.refcont, this.state.referenceContract.visualise)
       update.option = refContractLookup
       context.commit('SET_VISUALISE_REFCONTRACT', update)
@@ -359,12 +365,13 @@ export default {
     actionNewNXPrefcontract (context, update) {
       // add the question module
       context.commit('SET_QUESTION_MODULE')
-      // prepare the genesis modules
+      // prepare the genesis modules please
       // loop over list of module contract to make genesis ie first
       this.state.lengthMholder = this.state.moduleHolder.length
       // bring together defaults i.e. setting for compute/vis
       console.log('deafults')
       console.log(this.state.visModuleHolder)
+      console.log(this.state.moduleHolder)
       for (let mh of this.state.moduleHolder) {
         const moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mh, '', this.state.visModuleHolder)
         const moduleRefContractReady = JSON.stringify(moduleRefContract)

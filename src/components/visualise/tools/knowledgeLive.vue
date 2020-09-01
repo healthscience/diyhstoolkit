@@ -144,6 +144,8 @@ export default {
   },
   computed: {
     dataSource: function () {
+      console.log('data source')
+      console.log(this.$store.state.datasourceCount)
       return this.$store.state.datasourceCount
     },
     refContractCompute: function () {
@@ -154,9 +156,14 @@ export default {
       return []
     },
     refContractPackage: function () {
+      console.log('ref package')
+      console.log(this.$store.state.refcontractPackaging)
+      console.log(this.dataSource)
       return this.$store.state.refcontractPackaging[this.dataSource]
     },
     category: function () {
+      console.log(this.$store.state.refcontractPackaging)
+      console.log(this.dataSource)
       const catLive = this.$store.state.refcontractPackaging[this.dataSource].option.value.concept.category
       const catIndex = Object.keys(catLive)
       let catList = []
