@@ -117,17 +117,6 @@ const store = new Vuex.Store({
       gridTest2.data = gridData
       state.experimentList = gridTest2 */
     },
-    setExperimentStatus: (state, inVerified) => {
-      for (let exl of inVerified) {
-        let experBundle = {}
-        experBundle.cnrl = exl.contract.prime.cnrl
-        experBundle.status = false
-        experBundle.contract = exl.contract
-        experBundle.modules = exl.contract.modules
-        let objectPropC = exl.contract.prime.cnrl
-        Vue.set(state.experimentStatus, objectPropC, experBundle)
-      }
-    },
     setOutflowWatch: (state, inVerified) => {
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
     },
@@ -145,7 +134,7 @@ const store = new Vuex.Store({
       state.NXPexperimentList = gridAnnon
     },
     setDashboardNXP: (state, inVerified) => {
-      console.log('setcashsbaoc')
+      console.log('set dashboard status')
       console.log(inVerified)
       console.log(state.experimentStatus)
       let dStatus = state.experimentStatus[inVerified].active
@@ -191,7 +180,7 @@ const store = new Vuex.Store({
       Vue.set(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item], 'chartOptions', chartUpdateOptions)
       console.log(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item])
     },
-    setentityReturn: (state, inVerified) => {
+    SET_ENTITY_RETURN: (state, inVerified) => {
       console.log('ECS acknowledge inpue been processed')
       console.log(inVerified)
       state.entityUUIDReturn = inVerified
@@ -274,12 +263,6 @@ const store = new Vuex.Store({
       setToolbar[inVerified.mData] = { text: 'open data', active: true }
       Vue.set(state.opendataTools, inVerified.moduleCNRL, setToolbar)
     },
-    setProgressStart: (state, inVerified) => {
-      for (let nxp of inVerified) {
-        let setProgress = { text: 'Experiment in progress', active: false }
-        Vue.set(state.nxpProgress, nxp.cnrl, setProgress)
-      }
-    },
     setProgressUpdate: (state, inVerified) => {
       let setProgress = { text: 'Experiment in progress', active: true }
       Vue.set(state.nxpProgress, inVerified, setProgress)
@@ -341,11 +324,11 @@ const store = new Vuex.Store({
   },
   actions: {
     async startconnectNSnetwork (context, update) {
-      let NXPstart = await safeAPI.connectPeerNSnetwork(update.network, update.settings)
-      context.commit('setAuthorisation', true)
-      context.commit('setExperimentList', NXPstart)
-      context.commit('setExperimentStatus', NXPstart)
-      context.commit('setProgressStart', NXPstart)
+      let authStatus = await safeAPI.connectPeerNSnetwork(update.network, update.settings)
+      context.commit('setAuthorisation', authStatus)
+      // context.commit('setExperimentList', NXPstart)
+      // context.commit('setExperimentStatus', NXPstart)
+      // context.commit('setProgressStart', NXPstart)
     },
     async annonconnectNSnetwork (context, update) {
       console.log('annon connect')
@@ -355,12 +338,26 @@ const store = new Vuex.Store({
       // context.commit('setProgressStart', nsNXPlive)
     },
     async actionDashboardState (context, update) {
+      console.log('preview start learn')
+      console.log(update)
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
       context.commit('setProgressUpdate', update)
       context.commit('setUpdatesOUT', update)
-      let entityReturn = await safeAPI.ECSinput(this.state.experimentStatus[update])
-      context.commit('setentityReturn', entityReturn)
+      // pass the safeFLOW-ECS input bundle
+      console.log('ECS bundle')
+      console.log(this.state.experimentStatus[update])
+      // look up the module reference Contracts
+      let moduleExpandLive = this.state.livesafeFLOW.refcontUtilityLive.expMatchModuleLive(this.state.referenceContract.module, this.state.experimentStatus[update].modules)
+      console.log('live modules NXP')
+      console.log(moduleExpandLive)
+      let ECSbundle = {}
+      ECSbundle.cnrl = this.state.experimentStatus[update].cnrl
+      ECSbundle.module = moduleExpandLive
+      console.log('ECS bundle')
+      console.log(ECSbundle)
+      let entityReturn = await safeAPI.ECSinput(ECSbundle)
+      context.commit('SET_ENTITY_RETURN', entityReturn)
     },
     actionJOINViewexperiment (context, update) {
       console.log('previs jion vuex')

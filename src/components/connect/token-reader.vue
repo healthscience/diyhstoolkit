@@ -76,10 +76,12 @@ export default {
         let authBundle = {}
         authBundle.network = 'cloud'
         authBundle.settings = tokenJSON
+        // data store authorisation
         localthis.$store.dispatch('startconnectNSnetwork', authBundle)
         const refContract = {}
         refContract.reftype = 'datatype'
         refContract.action = 'GET'
+        // peerLink sync to network
         const refCJSON = JSON.stringify(refContract)
         localthis.$store.dispatch('actionGetRefContract', refCJSON)
         localthis.$emit('closeTreader')

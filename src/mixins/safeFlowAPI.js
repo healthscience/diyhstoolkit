@@ -9,11 +9,10 @@
 * @license    http://www.gnu.org/licenses/old-licenses/gpl-3.0.html
 * @version    $Id$
 */
-
 import SAFEflow from 'node-safeflow'
 import RCcomposer from '@/mixins/rcComposer.js'
 import RCutility from '@/mixins/rcUtility.js'
-import KBID from '@/mixins/kbidComposer.js'
+import KBIDcomposer from '@/mixins/kbidComposer.js'
 import CryptoUtility from './cryptoUtility.js'
 const util = require('util')
 const events = require('events')
@@ -23,7 +22,7 @@ var safeFlowAPI = function () {
   this.SAPI = new SAFEflow()
   this.refcontComposerLive = new RCcomposer()
   this.refcontUtilityLive = new RCutility()
-  this.KBIDLive = new KBID()
+  this.KBIDLive = new KBIDcomposer()
   this.liveCrypto = new CryptoUtility()
   this.SAPI.on('displayUpdate', (data) => {
     this.emit('safeflowUpdate', data)
@@ -66,7 +65,7 @@ safeFlowAPI.prototype.connectNSnetwork = async function () {
   if (network === 'safenetwork') {
     // safe Test network coming soon
   } else if (network === 'cloud') {
-    let readOnly = { 'publickey': 'e97bd0056edae2a5da49b7868167b6c9d13bc3d5', 'token': 'CVUbN3zCmvubqNpJ3ru6YLtwLRMv6kfa9NmRAzTGSiUQ', 'cnrl': 'cnrl-33221101' }
+    let readOnly = { 'publickey': 'e97bd0056edae2a5da49b7868167b6c9d13bc3d5', 'token': 'CVUbN3zCmvubqNpJ3ru6YLtwLRMv6kfa9NmRAzTGSiUQA', 'cnrl': 'cnrl-33221101' }
     starthsNXP = await this.startannonCycle(readOnly)
   }
   return starthsNXP
@@ -129,7 +128,8 @@ safeFlowAPI.prototype.startPeerCycle = async function (authIN) {
   let authStatus = this.checkAuthorisation(defaultAPI, authIN)
   if (authStatus === true) {
     // What network experiments entries are indexed in KBLedger?
-    entityData = await this.SAPI.startPeerFlow(defaultAPI)
+    // entityData = await this.SAPI.startPeerFlow(defaultAPI)
+    entityData = true
   }
   return entityData
 }
@@ -150,8 +150,8 @@ safeFlowAPI.prototype.checkAuthorisation = function (defaultAPI, authBundle) {
 * @method ECSinput
 *
 */
-safeFlowAPI.prototype.ECSinput = async function (cnrl) {
-  let entityComplete = await this.SAPI.liveEManager.peerInput(cnrl)
+safeFlowAPI.prototype.ECSinput = async function (InputBundle) {
+  let entityComplete = await this.SAPI.liveEManager.peerInput(InputBundle)
   return entityComplete
 }
 

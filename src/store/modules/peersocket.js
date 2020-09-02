@@ -84,7 +84,8 @@ export default {
         const nxpSplit = this.state.livesafeFLOW.refcontUtilityLive.experimentSplit(segmentedRefContracts.experiment)
         console.log('split------')
         console.log(nxpSplit)
-        // prepare nxp list format
+        // prepare NPXs in NETWORK
+        // NETWORK tap into -- NB over time need to filter as info overload
         let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
         let gridData = []
         // look up modules for this experiments
@@ -98,6 +99,44 @@ export default {
         gridAnnon.columns = gridColumns
         gridAnnon.data = gridData
         this.state.NXPexperimentList = gridAnnon
+        // set the dashboard toolbar status settings
+        console.log('set exp status on signin')
+        for (let exl of nxpSplit.joined) {
+          console.log(exl)
+          let experBundle = {}
+          experBundle.cnrl = exl.key
+          experBundle.status = false
+          experBundle.contract = exl.value
+          experBundle.modules = exl.value.modules
+          let objectPropC = exl.key
+          Vue.set(this.state.experimentStatus, objectPropC, experBundle)
+        }
+        for (let nxp of nxpSplit.joined) {
+          let setProgress = { text: 'Experiment in progress', active: false }
+          Vue.set(this.state.nxpProgress, nxp.key, setProgress)
+        }
+        /* context.commit('SET_EXPERIMENT_STATUS', nxpSplit.joined)
+        context.commit('SET_PROGRESS_START', nxpSplit.joined)
+        SET_EXPERIMENT_STATUS: (state, inVerified) => {
+          console.log('set exp status on signin')
+          console.log(inVerified)
+          for (let exl of inVerified) {
+            let experBundle = {}
+            experBundle.cnrl = exl.contract.prime.cnrl
+            experBundle.status = false
+            experBundle.contract = exl.contract
+            experBundle.modules = exl.contract.modules
+            let objectPropC = exl.contract.prime.cnrl
+            Vue.set(state.experimentStatus, objectPropC, experBundle)
+          }
+        },
+        SET_PROGRESS_START: (state, inVerified) => {
+          for (let nxp of inVerified) {
+            let setProgress = { text: 'Experiment in progress', active: false }
+            Vue.set(state.nxpProgress, nxp.cnrl, setProgress)
+          }
+        }, */
+        // prepare PEER JOINED LIST
         this.state.networkPeerExpModules = this.state.livesafeFLOW.refcontUtilityLive.expMatchGenModule(this.state.referenceContract.module, nxpSplit.joined)
         let gridDatapeer = []
         for (let nxp of this.state.networkPeerExpModules) {

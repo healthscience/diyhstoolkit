@@ -121,8 +121,8 @@ RCutility.prototype.experimentSplit = function (inputNXPs) {
 *
 */
 RCutility.prototype.expMatchModule = function (allRefcont, expModules) {
-  // console.log(allRefcont)
-  // console.log(expModules)
+  console.log(allRefcont)
+  console.log(expModules)
   let expHolder = []
   let expandedNXP = {}
   expandedNXP.modules = []
@@ -171,6 +171,26 @@ RCutility.prototype.expMatchGenModule = function (allRefcont, expModules) {
     joinModules.modules = []
   }
   return expJOINHolder
+}
+
+/**
+* match network experiment to modules
+* @method expMatchModule
+*
+*/
+RCutility.prototype.expMatchModuleLive = function (allRefcont, expModules) {
+  console.log(allRefcont)
+  console.log(expModules)
+  let expHolder = []
+  for (const exp of expModules) {
+    // match this key to module
+    for (const mrf of allRefcont) {
+      if (exp.key === mrf.key) {
+        expHolder.push(mrf)
+      }
+    }
+  }
+  return expHolder
 }
 
 /**
