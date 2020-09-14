@@ -31,8 +31,8 @@ export default {
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
       const backJSON = JSON.parse(message.data)
-      console.log('back message')
-      console.log(backJSON)
+      // console.log('back message')
+      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         console.log('save successful')
@@ -102,7 +102,7 @@ export default {
         // set the dashboard toolbar status settings
         console.log('set exp status on signin')
         for (let exl of nxpSplit.joined) {
-          console.log(exl)
+          // console.log(exl)
           let experBundle = {}
           experBundle.cnrl = exl.key
           experBundle.status = false
@@ -112,36 +112,17 @@ export default {
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }
         for (let nxp of nxpSplit.joined) {
+          // console.log(nxp)
           let setProgress = { text: 'Experiment in progress', active: false }
           Vue.set(this.state.nxpProgress, nxp.key, setProgress)
         }
-        /* context.commit('SET_EXPERIMENT_STATUS', nxpSplit.joined)
-        context.commit('SET_PROGRESS_START', nxpSplit.joined)
-        SET_EXPERIMENT_STATUS: (state, inVerified) => {
-          console.log('set exp status on signin')
-          console.log(inVerified)
-          for (let exl of inVerified) {
-            let experBundle = {}
-            experBundle.cnrl = exl.contract.prime.cnrl
-            experBundle.status = false
-            experBundle.contract = exl.contract
-            experBundle.modules = exl.contract.modules
-            let objectPropC = exl.contract.prime.cnrl
-            Vue.set(state.experimentStatus, objectPropC, experBundle)
-          }
-        },
-        SET_PROGRESS_START: (state, inVerified) => {
-          for (let nxp of inVerified) {
-            let setProgress = { text: 'Experiment in progress', active: false }
-            Vue.set(state.nxpProgress, nxp.cnrl, setProgress)
-          }
-        }, */
         // prepare PEER JOINED LIST
         this.state.networkPeerExpModules = this.state.livesafeFLOW.refcontUtilityLive.expMatchGenModule(this.state.referenceContract.module, nxpSplit.joined)
+        console.log(this.state.networkPeerExpModules)
         let gridDatapeer = []
         for (let nxp of this.state.networkPeerExpModules) {
           let question = this.state.livesafeFLOW.refcontUtilityLive.extractQuestionJOINED(nxp.modules, 'question')
-          gridDatapeer.push({ id: nxp.exp.key, name: question.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
+          gridDatapeer.push({ id: nxp.exp.key, name: question, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
         }
         let gridPeer = {}
         gridPeer.columns = gridColumns
@@ -158,7 +139,7 @@ export default {
       this.state.refcontractQuestion = questionStrucure
     },
     SET_PACKAGING_REFCONTRACT (state, inVerified) {
-      // add to module list full details
+      // add to module list full detail
       this.state.moduleHolder.push(inVerified)
       // add to module list
       this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
@@ -173,7 +154,6 @@ export default {
     },
     SET_VISUALISE_REFCONTRACT (state, inVerified) {
       // add to module list full details
-      console.log(inVerified)
       this.state.moduleHolder.push(inVerified)
       this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
       this.state.refcontractVisualise.push(inVerified)
@@ -182,46 +162,53 @@ export default {
       this.state.nxpRefContract = inVerified
     },
     SET_NEWNXP_VISDEVICES (state, inVerified) {
-      console.log(inVerified)
       Vue.set(this.state.visModuleHolder, 'devices', inVerified)
     },
     SET_NEWNXP_VISCOMPUTE (state, inVerified) {
-      console.log(inVerified)
       Vue.set(this.state.visModuleHolder, 'compute', inVerified)
     },
     SET_NEWNXP_VISRESULTS (state, inVerified) {
-      console.log(inVerified)
       Vue.set(this.state.visModuleHolder, 'visualise', inVerified)
     },
     SET_NEWNXP_VISXAXIS (state, inVerified) {
-      console.log(inVerified)
       Vue.set(this.state.visModuleHolder, 'xaxis', inVerified)
     },
     SET_NEWNXP_VISYAXIS (state, inVerified) {
-      console.log(inVerified)
       Vue.set(this.state.visModuleHolder, 'yaxis', inVerified)
     },
     SET_NEWNXP_VISCATEGORY (state, inVerified) {
-      console.log(inVerified)
       Vue.set(this.state.visModuleHolder, 'category', inVerified)
     },
     SET_NEWNXP_VISTIME (state, inVerified) {
-      console.log(inVerified)
       Vue.set(this.state.visModuleHolder, 'timeperiod', inVerified)
     },
     SET_NEWNXP_VISRESOLUTION (state, inVerified) {
-      console.log(inVerified)
       Vue.set(this.state.visModuleHolder, 'resolution', inVerified)
     },
     SET_MODULE_LIST (state, inVerified) {
-      console.log(inVerified)
       this.state.nxpModulesList = inVerified
     },
     SET_QUESTION_MODULE (state, inVerified) {
-      console.log('quholer')
-      console.log(this.state.refcontractQuestion)
       this.state.moduleHolder.push(this.state.refcontractQuestion)
       this.state.newNXPmakeRefs.push(this.state.refcontractQuestion.moduleinfo.refcont)
+    },
+    SET_JOIN_NXP_SOURCE (state, inVerified) {
+      Vue.set(this.state.joinNXPselected, 'data', inVerified)
+      console.log('set data source selected')
+      console.log(this.state.joinNXPselected)
+    },
+    SET_DATE_STARTNXP (state, inVerified) {
+      console.log('set date data flow starts')
+      console.log(inVerified)
+      Vue.set(this.state.joinNXPselected.compute, 'date', inVerified)
+    },
+    SET_JOIN_NXP_COMPUTE_CONTROLS (state, inVerified) {
+      console.log('set join compute controls')
+      Vue.set(this.state.joinNXPselected.compute, 'controls', inVerified)
+    },
+    SET_JOIN_NXP_COMPUTE_AUTO (state, inVerified) {
+      console.log('set join compute controls')
+      Vue.set(this.state.joinNXPselected.compute, 'automate', inVerified)
     }
   },
   actions: {
@@ -394,9 +381,6 @@ export default {
       context.commit('SET_COMPUTE_REFCONTRACT', update)
     },
     actionSetVisualiseRefContract (context, update) {
-      console.log('look visualise refContracts')
-      console.log(update)
-      console.log(this.state.joinNXPlive.visualise)
       let refContractLookup = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.refcont, this.state.referenceContract.visualise)
       update.option = refContractLookup
       context.commit('SET_VISUALISE_REFCONTRACT', update)
@@ -408,26 +392,8 @@ export default {
       // loop over list of module contract to make genesis ie first
       this.state.lengthMholder = this.state.moduleHolder.length
       // bring together defaults i.e. setting for compute/vis
-      console.log('deafults')
-      console.log(this.state.visModuleHolder)
-      console.log(this.state.moduleHolder)
       for (let mh of this.state.moduleHolder) {
         const moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mh, '', this.state.visModuleHolder)
-        const moduleRefContractReady = JSON.stringify(moduleRefContract)
-        Vue.prototype.$socket.send(moduleRefContractReady)
-      }
-    },
-    actionJoinExperiment (context, update) {
-      // map experiment refcont to genesis contract
-      // make first module contracts for this peer to record start and other module refs with new computations
-      const genesisExpRefCont = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.genesis, this.state.referenceContract.experiment)
-      // for each module in experiment, add peer selections
-      // loop over list of module contract to make genesis ie first
-      this.state.lengthMholderj = genesisExpRefCont.value.modules.length
-      for (let mh of genesisExpRefCont.value.modules) {
-        // look up module template genesis contract
-        let moduleExpanded = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(mh.key, this.state.referenceContract.module)
-        const moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(moduleExpanded, 'join')
         const moduleRefContractReady = JSON.stringify(moduleRefContract)
         Vue.prototype.$socket.send(moduleRefContractReady)
       }
@@ -450,40 +416,80 @@ export default {
       console.log(kbidEntryReady)
       // Vue.prototype.$socket.send(kbidEntryReady)
     },
-    sourceExperiment (context, update) {
-      console.log('peer select data source for NXP')
+    sourceDataExperiment (context, update) {
+      context.commit('SET_JOIN_NXP_SOURCE', update)
+    },
+    buildRefComputeControls (context, update) {
+      context.commit('SET_JOIN_NXP_COMPUTE_CONTROLS', update)
+    },
+    buildRefComputeAutomation (context, update) {
+      context.commit('SET_JOIN_NXP_COMPUTE_AUTO', update)
     },
     actionNewVisDevices (context, update) {
-      console.log('new vis contract')
       context.commit('SET_NEWNXP_VISDEVICES', update)
     },
     actionNewVisCompute (context, update) {
-      console.log('new vis contract')
       context.commit('SET_NEWNXP_VISCOMPUTE', update)
     },
     actionNewVisResults (context, update) {
-      console.log('new vis contract')
       context.commit('SET_NEWNXP_VISRESULTS', update)
     },
     actionNewVisXaxis (context, update) {
-      console.log('new vis contract')
       context.commit('SET_NEWNXP_VISXAXIS', update)
     },
     actionNewVisYaxis (context, update) {
-      console.log('new vis contract')
       context.commit('SET_NEWNXP_VISYAXIS', update)
     },
     actionNewVisCategory (context, update) {
-      console.log('new vis contract')
       context.commit('SET_NEWNXP_VISCATEGORY', update)
     },
     actionNewVisTime (context, update) {
-      console.log('new vis contract')
       context.commit('SET_NEWNXP_VISTIME', update)
     },
     actionNewVisResolution (context, update) {
-      console.log('new vis contract')
       context.commit('SET_NEWNXP_VISRESOLUTION', update)
+    },
+    actionCalendarDate (context, update) {
+      if (update.text === 'data-start') {
+        context.commit('SET_DATE_STARTNXP', update.selectDate)
+      }
+    },
+    actionJoinExperiment (context, update) {
+      // map experiment refcont to genesis contract
+      // make first module contracts for this peer to record start and other module refs with new computations
+      console.log('JOIN NXP START-----')
+      const genesisExpRefCont = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.genesis, this.state.referenceContract.experiment)
+      // for each module in experiment, add peer selections
+      // loop over list of module contract to make genesis ie first
+      this.state.lengthMholderj = genesisExpRefCont.value.modules.length
+      for (let mh of genesisExpRefCont.value.modules) {
+        // prepare new modules for this peer  ledger
+        let peerModules = {}
+        // look up module template genesis contract
+        // console.log('module')
+        // console.log(mh)
+        let moduleExpanded = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(mh.key, this.state.referenceContract.module)
+        if (moduleExpanded.value.concept.moduleinfo.name === 'question') {
+          peerModules.type = 'question'
+          peerModules.question = moduleExpanded.value.concept.question
+        } else if (moduleExpanded.value.concept.moduleinfo.name === 'data') {
+          peerModules.type = 'data'
+          peerModules.data = this.state.joinNXPselected.data
+        } else if (moduleExpanded.value.concept.moduleinfo.name === 'compute') {
+          peerModules.type = 'compute'
+          peerModules.compute = moduleExpanded.value.concept.refcont
+          peerModules.controls = this.state.joinNXPselected.compute
+          peerModules.settings = this.state.visModuleHolder
+        } else if (moduleExpanded.value.concept.moduleinfo.name === 'visualise') {
+          peerModules.type = 'visualise'
+          peerModules.visualise = moduleExpanded.value.concept.refcont
+        }
+        let moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(peerModules, 'join', '')
+        let moduleRefContractReady = JSON.stringify(moduleRefContract)
+        // console.log('send to NetworkLibrary to record in peers LEDGER')
+        // console.log(moduleRefContractReady)
+        Vue.prototype.$socket.send(moduleRefContractReady)
+      }
     }
   }
 }

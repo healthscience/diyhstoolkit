@@ -1,6 +1,6 @@
 <template>
   <div id="visual-view">
-    <div id="charts-live"> <!-- chart prep. {{ datacollection }}  {{ options }} -->
+    <div id="charts-live" v-if="datacollection !== undefined">
       <reactive class="chartholder" :chartData="datacollection" :options="options" :width="1200" :height="600"></reactive>
     </div>
   </div>

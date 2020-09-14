@@ -121,8 +121,8 @@ RCutility.prototype.experimentSplit = function (inputNXPs) {
 *
 */
 RCutility.prototype.expMatchModule = function (allRefcont, expModules) {
-  console.log(allRefcont)
-  console.log(expModules)
+  // console.log(allRefcont)
+  // console.log(expModules)
   let expHolder = []
   let expandedNXP = {}
   expandedNXP.modules = []
@@ -179,8 +179,6 @@ RCutility.prototype.expMatchGenModule = function (allRefcont, expModules) {
 *
 */
 RCutility.prototype.expMatchModuleLive = function (allRefcont, expModules) {
-  console.log(allRefcont)
-  console.log(expModules)
   let expHolder = []
   for (const exp of expModules) {
     // match this key to module
@@ -268,8 +266,11 @@ RCutility.prototype.extractQuestion = function (modules, typeAsk) {
   // console.log(typeAsk)
   let question = ''
   for (const mod of modules) {
-    if (mod.value.concept.moduleinfo.name === typeAsk) {
-      question = mod.value.concept.question
+    // console.log(typeof (mod.value))
+    if (typeof (mod.value) === 'object') {
+      if (mod.value.concept.moduleinfo.name === typeAsk) {
+        question = mod.value.concept.question
+      }
     }
   }
   return question
@@ -281,13 +282,12 @@ RCutility.prototype.extractQuestion = function (modules, typeAsk) {
 *
 */
 RCutility.prototype.extractQuestionJOINED = function (modules, typeAsk) {
-  // console.log('question mod matcher')
-  // console.log(modules)
-  // console.log(typeAsk)
   let question = ''
   for (const mod of modules) {
-    if (mod.value.concept.value.concept.moduleinfo.name === typeAsk) {
-      question = mod.value.concept.value.concept.question
+    if (mod.value.concept !== undefined) {
+      if (mod.value.concept.type === typeAsk) {
+        question = mod.value.concept.question.text
+      }
     }
   }
   return question
@@ -299,17 +299,14 @@ RCutility.prototype.extractQuestionJOINED = function (modules, typeAsk) {
 *
 */
 RCutility.prototype.mergePackageMap = function (col, table) {
-  // console.log('map columns to dts contracts')
-  // console.log(col)
-  // console.log(table)
   const mapped = []
   // remove first element array empty by design
   table.shift()
   let countCol = 1
   for (const co of col) {
-    console.log(co)
+    // console.log(co)
     for (const tb of table) {
-      console.log(tb[0])
+      // console.log(tb[0])
       if (co.count === countCol) {
         const mapPair = {}
         mapPair.refcontract = tb[0].key

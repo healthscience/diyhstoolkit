@@ -1,6 +1,5 @@
 <template>
-  <div id="dashboard-holder" v-if="moduleContent">
-    <!-- <progress-message></progress-message> -->
+  <div id="dashboard-holder" v-if="moduleContent === true">
     <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
@@ -99,6 +98,8 @@ export default {
       return this.$store.state.toolbarStatus[this.moduleCNRL]
     },
     moduleContent: function () {
+      console.log('module content')
+      console.log(this.$store.state.NXPexperimentData[this.shellCNRL])
       let contentModule = this.$store.state.NXPexperimentData[this.shellCNRL]
       if (contentModule === undefined) {
         return false

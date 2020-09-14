@@ -29,6 +29,10 @@ const store = new Vuex.Store({
     joinNXPlive: {},
     lengthMholder: 0,
     lengthMholderj: 0,
+    joinNXPselected:
+    {
+      compute: {}
+    },
     visModuleHolder: {},
     dashboardNXP: {},
     ECSupdateOUT: {},
@@ -354,15 +358,15 @@ const store = new Vuex.Store({
       let ECSbundle = {}
       ECSbundle.cnrl = this.state.experimentStatus[update].cnrl
       ECSbundle.module = moduleExpandLive
-      console.log('ECS bundle')
+      console.log('ECS bundle mod expaneded')
       console.log(ECSbundle)
       let entityReturn = await safeAPI.ECSinput(ECSbundle)
       context.commit('SET_ENTITY_RETURN', entityReturn)
     },
     actionJOINViewexperiment (context, update) {
-      console.log('previs jion vuex')
+      console.log('PREVIEW / JOIN vuex')
       console.log(update)
-      console.log(this.state.networkExpModules)
+      // console.log(this.state.networkExpModules)
       let joinExpDisplay = {}
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
@@ -374,8 +378,6 @@ const store = new Vuex.Store({
       joinExpDisplay.data = this.state.livesafeFLOW.refcontUtilityLive.extractData(joinNXP.modules, 'data')
       joinExpDisplay.compute = this.state.livesafeFLOW.refcontUtilityLive.extractCompute(joinNXP.modules, 'compute')
       joinExpDisplay.visualise = this.state.livesafeFLOW.refcontUtilityLive.extractVisualise(joinNXP.modules, 'visualise')
-      console.log('display join ')
-      console.log(joinExpDisplay)
       context.commit('SET_JOIN_NXP', joinExpDisplay)
     },
     actionLocalGrid (context, update) {
@@ -463,6 +465,7 @@ const store = new Vuex.Store({
       context.commit('setUpdateentityReturn', entityReturn)
     },
     actionDisplay (context, update) {
+      console.log('action display start i.e. ECS data back')
       let mod = []
       if (this.state.entityUUIDReturn === undefined) {
         mod = this.state.nxpModulesLive
@@ -533,15 +536,10 @@ const store = new Vuex.Store({
       }
     },
     actionSetTempToolbarVis (context, update) {
-      console.log('new TEMP NXP contract settings')
-      console.log(update)
-      // pass on to NXP composer
-      // const prepareNXP = liveComposer.()
-      // let newShelltempid = update // Math.floor(100000000 + Math.random() * 900000000)
       context.commit('newNXPshell', update.shellID)
       context.commit('setVistoolsTemp', update)
       context.commit('setOpendataBarTemp', update)
-      console.log('toolbar set')
+      // console.log('toolbar set')
     },
     actionDatasourceCount (context, update) {
       context.commit('SET_DATASOURCECOUNT', update)

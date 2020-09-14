@@ -9,8 +9,8 @@
               <label for="devices-select"></label>
               <select class="select-device-id" id="device-mapping-build" @change="deviceSelect" v-model="visualsettings.devices">
                 <option value="none" selected="">please select</option>
-                <option v-for="dev in devices" :key="dev.refcont" >
-                  <option value=dev.key>{{ dev.text }}</option>
+                <option v-for="dev in devices" :key="dev.refcont" v-bind:value="dev.key">
+                  {{ dev.text }}
                 </option>
               </select>
             </li>
@@ -23,8 +23,8 @@
               <label for="compute-select"></label>
               <select class="select-compute-id" id="compute-mapping-build" @change="computeSelect" v-model="visualsettings.compute">
                 <option value="none" selected="">please select</option>
-                <option v-for="comp in refContractCompute" :key="comp.key" >
-                  <option value=comp.key>{{ comp.option.value.computational.name }}</option>
+                <option v-for="comp in refContractCompute" :key="comp.option.key" v-bind:value="comp.option.key">
+                {{ comp.option.value.computational.name }}
                 </option>
               </select>
             </li>
@@ -37,8 +37,8 @@
               <label for="results-select"></label>
               <select class="select-results-id" id="results-mapping-build" @change="resultsSelect" v-model="visualsettings.results">
                 <option value="none" selected="">please select</option>
-                <option v-for="rDT in resultsDTs" :key="rDT.refcont" >
-                  <option value=rDT.key>{{ rDT.text }}</option>
+                <option v-for="rDT in resultsDTs" :key="rDT.refcont" v-bind:value="rDT.key">
+                {{ rDT.text }}
                 </option>
               </select>
             </li>
@@ -54,8 +54,8 @@
                 <label for="xaxis-select"></label>
                 <select class="select-xaxis-id" id="xaxis-mapping-build" @change="xaxisSelect" v-model="visualsettings.xaxis">
                   <option value="none" selected="">please select</option>
-                  <option v-for="colpair in refContractPackage.option.value.concept.tablestructure" :key="colpair.refcontract" >
-                    <option value=colpair.refcontract>{{ colpair.column }}</option>
+                  <option v-for="colpair in refContractPackage.option.value.concept.tablestructure" :key="colpair.refcontract" v-bind:value="colpair.refcontract">
+                  {{ colpair.column }}
                   </option>
                 </select>
               </li>
@@ -67,8 +67,8 @@
               <label for="yaxis-select"></label>
               <select class="select-yaxis-id" id="yaxis-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
                 <option value="none" selected="">please select</option>
-                <option v-for="colpairy in refContractPackage.option.value.concept.tablestructure" :key="colpairy.refcontract" >
-                  <option value=colpairy.refcontract>{{ colpairy.column }}</option>
+                <option v-for="colpairy in refContractPackage.option.value.concept.tablestructure" :key="colpairy.refcontract" v-bind:value="colpairy.refcontract">
+                {{ colpairy.column }}
                 </option>
               </select>
             </ul>
@@ -85,8 +85,8 @@
               <label for="category-select"></label>
               <select class="select-category-id" id="category-mapping-build" @change="categorySelect" v-model="visualsettings.category">
                 <option value="none" selected="">none</option>
-                <option v-for="catL in category" :key="catL" >
-                  <option value=catL>{{ catL }}</option>
+                <option v-for="catL in category" :key="catL" v-bind:value="catL.key">
+                  {{ catL }}
                 </option>
               </select>
             </li>
@@ -100,8 +100,8 @@
               <label for="time-select"></label>
               <select class="select-time-id" id="time-mapping-build" @change="timeSelect" v-model="visualsettings.time">
                 <option value="none" selected="">please select</option>
-                <option v-for="t in time" :key="t.cnrl" >
-                  <option value=t>{{ t.text }}</option>
+                <option v-for="t in time" :key="t.id" v-bind:value="t.id">
+                  {{ t.text }}
                 </option>
               </select>
             </li>
@@ -115,8 +115,8 @@
               <label for="resolution-select"></label>
               <select class="select-resolution-id" id="resolution-mapping-build" @change="resolutionSelect" v-model="visualsettings.resolution">
                 <option value="none" selected="">please select</option>
-                <option v-for="rs in resolution" :key="rs.cnrl" >
-                  <option value=rs>{{ rs.text }}</option>
+                <option v-for="rs in resolution" :key="rs.id" v-bind:value="rs.id">
+                  {{ rs.text }}
                 </option>
               </select>
             </li>
@@ -144,26 +144,19 @@ export default {
   },
   computed: {
     dataSource: function () {
-      console.log('data source')
-      console.log(this.$store.state.datasourceCount)
       return this.$store.state.datasourceCount
     },
     refContractCompute: function () {
-      let computeLive = this.$store.state.refcontractCompute
+      let computeLive = this.$store.state.joinNXPlive.compute // this.$store.state.refcontractCompute
       return computeLive
     },
     resultsDTs: function () {
       return []
     },
     refContractPackage: function () {
-      console.log('ref package')
-      console.log(this.$store.state.refcontractPackaging)
-      console.log(this.dataSource)
       return this.$store.state.refcontractPackaging[this.dataSource]
     },
     category: function () {
-      console.log(this.$store.state.refcontractPackaging)
-      console.log(this.dataSource)
       const catLive = this.$store.state.refcontractPackaging[this.dataSource].option.value.concept.category
       const catIndex = Object.keys(catLive)
       let catList = []

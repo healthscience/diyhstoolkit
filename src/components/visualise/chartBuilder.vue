@@ -56,8 +56,6 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      console.log('toolbar')
-      console.log(this.$store.state.toolbarVisStatus)
       if (!this.shellID) {
         return {}
       } else {
