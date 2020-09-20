@@ -1,24 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import LiveMixinSAFEflow from '@/mixins/safeFlowAPI'
 import modules from './modules'
-import CALE from 'cale-ai'
 const moment = require('moment')
 
-const safeAPI = new LiveMixinSAFEflow()
-const CALElive = new CALE(safeAPI)
-console.log(CALElive)
 Vue.use(Vuex)
-
-// listeners
-safeAPI.on('safeflowUpdate', (data) => {
-  store.dispatch('actionDisplay', data)
-})
 
 const store = new Vuex.Store({
   modules,
   state: {
-    livesafeFLOW: safeAPI,
     authorised: false,
     datasourceCount: 0,
     devices: [],
@@ -328,11 +317,15 @@ const store = new Vuex.Store({
   },
   actions: {
     async startconnectNSnetwork (context, update) {
-      let authStatus = await safeAPI.connectPeerNSnetwork(update.network, update.settings)
-      context.commit('setAuthorisation', authStatus)
-      // context.commit('setExperimentList', NXPstart)
-      // context.commit('setExperimentStatus', NXPstart)
-      // context.commit('setProgressStart', NXPstart)
+      // send a auth requrst to peerlink
+      let message = {}
+      message.type = 'safeflow'
+      message.reftype = 'ignore'
+      message.action = 'auth'
+      message.network = update.network
+      message.settings = update.settings
+      const safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage)
     },
     async annonconnectNSnetwork (context, update) {
       console.log('annon connect')
@@ -352,7 +345,7 @@ const store = new Vuex.Store({
       console.log('ECS bundle')
       console.log(this.state.experimentStatus[update])
       // look up the module reference Contracts
-      let moduleExpandLive = this.state.livesafeFLOW.refcontUtilityLive.expMatchModuleLive(this.state.referenceContract.module, this.state.experimentStatus[update].modules)
+      /* let moduleExpandLive = this.state.livesafeFLOW.refcontUtilityLive.expMatchModuleLive(this.state.referenceContract.module, this.state.experimentStatus[update].modules)
       console.log('live modules NXP')
       console.log(moduleExpandLive)
       let ECSbundle = {}
@@ -361,24 +354,24 @@ const store = new Vuex.Store({
       console.log('ECS bundle mod expaneded')
       console.log(ECSbundle)
       let entityReturn = await safeAPI.ECSinput(ECSbundle)
-      context.commit('SET_ENTITY_RETURN', entityReturn)
+      context.commit('SET_ENTITY_RETURN', entityReturn) */
     },
     actionJOINViewexperiment (context, update) {
       console.log('PREVIEW / JOIN vuex')
       console.log(update)
       // console.log(this.state.networkExpModules)
-      let joinExpDisplay = {}
-      let joinNXP = {}
-      for (const ep of this.state.networkExpModules) {
+      // let joinExpDisplay = {}
+      // let joinNXP = {}
+      /* for (const ep of this.state.networkExpModules) {
         if (ep.exp.key === update) {
           joinNXP = ep
         }
-      }
+      } */
       // break out the modules
-      joinExpDisplay.data = this.state.livesafeFLOW.refcontUtilityLive.extractData(joinNXP.modules, 'data')
+      /* joinExpDisplay.data = this.state.livesafeFLOW.refcontUtilityLive.extractData(joinNXP.modules, 'data')
       joinExpDisplay.compute = this.state.livesafeFLOW.refcontUtilityLive.extractCompute(joinNXP.modules, 'compute')
       joinExpDisplay.visualise = this.state.livesafeFLOW.refcontUtilityLive.extractVisualise(joinNXP.modules, 'visualise')
-      context.commit('SET_JOIN_NXP', joinExpDisplay)
+      context.commit('SET_JOIN_NXP', joinExpDisplay) */
     },
     actionLocalGrid (context, update) {
       console.log('action test watch called')
@@ -461,8 +454,8 @@ const store = new Vuex.Store({
       updateContract.modules = updateModules
       updateContract.input = 'refUpdate'
       context.commit('setUpdatesOUT', updateContract)
-      let entityReturn = await safeAPI.ECSinput(updateContract)
-      context.commit('setUpdateentityReturn', entityReturn)
+      // let entityReturn = await safeAPI.ECSinput(updateContract)
+      // context.commit('setUpdateentityReturn', entityReturn)
     },
     actionDisplay (context, update) {
       console.log('action display start i.e. ECS data back')
@@ -473,20 +466,21 @@ const store = new Vuex.Store({
         // only update modules returned
         mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
       }
+      console.log(mod)
       // remove existing vis component if in single mode (default)
       // context.commit('setClearGrid')
       // update or first time
-      let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
+      // let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
       // prepare toolbar status object
-      context.commit('setToolbarState', mod)
-      context.commit('setVisProgressStart', displayReady)
-      context.commit('setVisToolbarState', displayReady)
-      context.commit('setOpendataState', displayReady)
-      context.commit('setVisProgressComplete', displayReady) // setVisProgressComplete
-      context.commit('setProgressComplete', this.state.liveNXP)
-      context.commit('setLiveDisplayNXPModules', displayReady)
+      // context.commit('setToolbarState', mod)
+      // context.commit('setVisProgressStart', displayReady)
+      // context.commit('setVisToolbarState', displayReady)
+      // context.commit('setOpendataState', displayReady)
+      // context.commit('setVisProgressComplete', displayReady) // setVisProgressComplete
+      // context.commit('setProgressComplete', this.state.liveNXP)
+      // context.commit('setLiveDisplayNXPModules', displayReady)
       // extract out the time
-      for (let mmod of mod) {
+      /* for (let mmod of mod) {
         if (mmod.type === 'compute') {
           let newStartTime = 0
           if (this.state.timeStartperiod === 0) {
@@ -494,7 +488,7 @@ const store = new Vuex.Store({
             context.commit('setTimeAsk', newStartTime)
           }
         }
-      }
+      } */
     },
     actionFuture (context, update) {
       console.log('future data')

@@ -31,8 +31,8 @@ export default {
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
       const backJSON = JSON.parse(message.data)
-      // console.log('back message')
-      // console.log(backJSON)
+      console.log('back message')
+      console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         console.log('save successful')
@@ -64,35 +64,37 @@ export default {
         }
         if (this.state.moduleListEnd === true) {
           // pass to Network Library Composer to make New Network Experiment Reference Contract ie. extract genesis module contract keys
-          const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.moduleGenesisList)
-          const referenceContractReady = JSON.stringify(prepareNXPrefcont)
-          Vue.prototype.$socket.send(referenceContractReady)
+          // const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.moduleGenesisList)
+          // const referenceContractReady = JSON.stringify(prepareNXPrefcont)
+          // Vue.prototype.$socket.send(referenceContractReady)
         } else if (this.state.moduleJoinedListEnd === true) {
           // pass to Network Library Composer to make New Network Experiment Reference Contract ie. extract genesis module contract keys
-          const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerJoin(this.state.moduleGenesisList)
-          const referenceContractReady = JSON.stringify(prepareNXPrefcont)
-          Vue.prototype.$socket.send(referenceContractReady)
+          // const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerJoin(this.state.moduleGenesisList)
+          // const referenceContractReady = JSON.stringify(prepareNXPrefcont)
+          // Vue.prototype.$socket.send(referenceContractReady)
+        }
+      } else if (backJSON.safeflow === true) {
+        // safeFLOW inflow
+        if (backJSON.type === 'auth') {
+          console.log('auth complete')
+          console.log(backJSON)
+          // get starting experiments
+          const refContract = {}
+          refContract.reftype = 'datatype'
+          refContract.action = 'GET'
+          const refCJSON = JSON.stringify(refContract)
+          Vue.prototype.$socket.send(refCJSON)
         }
       } else {
-        // query back from peer data store
-        // pass to sort data into ref contract types
-        const segmentedRefContracts = this.state.livesafeFLOW.refcontUtilityLive.refcontractSperate(backJSON)
-        console.log('segmentated contracts')
-        console.log(segmentedRefContracts)
-        this.state.referenceContract = segmentedRefContracts
-        // need to split for genesis and peer joined NXPs
-        const nxpSplit = this.state.livesafeFLOW.refcontUtilityLive.experimentSplit(segmentedRefContracts.experiment)
-        console.log('split------')
-        console.log(nxpSplit)
+        console.log('network experiment data input')
         // prepare NPXs in NETWORK
         // NETWORK tap into -- NB over time need to filter as info overload
         let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
         let gridData = []
-        // look up modules for this experiments
-        this.state.networkExpModules = this.state.livesafeFLOW.refcontUtilityLive.expMatchModule(this.state.referenceContract.module, nxpSplit.genesis)
-        for (let nxp of this.state.networkExpModules) {
+
+        for (let nxp of backJSON.networkExpModules) {
           // look up question
-          let question = this.state.livesafeFLOW.refcontUtilityLive.extractQuestion(nxp.modules, 'question')
+          let question = { text: 111 } // this.state.livesafeFLOW.refcontUtilityLive.extractQuestion(nxp.modules, 'question')
           gridData.push({ id: nxp.exp.key, name: question.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'Preview / Join' })
         }
         let gridAnnon = {}
@@ -100,28 +102,23 @@ export default {
         gridAnnon.data = gridData
         this.state.NXPexperimentList = gridAnnon
         // set the dashboard toolbar status settings
-        console.log('set exp status on signin')
-        for (let exl of nxpSplit.joined) {
-          // console.log(exl)
+        for (let exl of backJSON.networkExpModules) {
           let experBundle = {}
-          experBundle.cnrl = exl.key
+          experBundle.cnrl = exl.exp.key
           experBundle.status = false
-          experBundle.contract = exl.value
-          experBundle.modules = exl.value.modules
-          let objectPropC = exl.key
+          experBundle.contract = exl.exp.value
+          experBundle.modules = exl.exp.value.modules
+          let objectPropC = exl.exp.key
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }
-        for (let nxp of nxpSplit.joined) {
-          // console.log(nxp)
+        for (let nxp of backJSON.networkExpModules) {
           let setProgress = { text: 'Experiment in progress', active: false }
-          Vue.set(this.state.nxpProgress, nxp.key, setProgress)
+          Vue.set(this.state.nxpProgress, nxp.exp.key, setProgress)
         }
         // prepare PEER JOINED LIST
-        this.state.networkPeerExpModules = this.state.livesafeFLOW.refcontUtilityLive.expMatchGenModule(this.state.referenceContract.module, nxpSplit.joined)
-        console.log(this.state.networkPeerExpModules)
         let gridDatapeer = []
-        for (let nxp of this.state.networkPeerExpModules) {
-          let question = this.state.livesafeFLOW.refcontUtilityLive.extractQuestionJOINED(nxp.modules, 'question')
+        for (let nxp of backJSON.networkPeerExpModules) {
+          let question = 222 //  this.state.livesafeFLOW.refcontUtilityLive.extractQuestionJOINED(nxp.modules, 'question')
           gridDatapeer.push({ id: nxp.exp.key, name: question, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
         }
         let gridPeer = {}
