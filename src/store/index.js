@@ -11,6 +11,7 @@ const store = new Vuex.Store({
     authorised: false,
     datasourceCount: 0,
     devices: [],
+    liveRefContIndex: {},
     liveNXP: '',
     liveNXPcontract: {},
     liveNXPbundle: {},
@@ -236,11 +237,6 @@ const store = new Vuex.Store({
         setOpendata = {}
       }
     },
-    setVistoolsTemp: (state, inVerified) => {
-      let setVisTools = {}
-      setVisTools[inVerified.mData] = { text: 'open tools', active: true }
-      Vue.set(state.toolbarVisStatus, inVerified.moduleCNRL, setVisTools)
-    },
     setOpendataBar: (state, inVerified) => {
       let setToolbar = state.opendataTools[inVerified.module]
       if (inVerified.state === false) {
@@ -250,11 +246,6 @@ const store = new Vuex.Store({
         setToolbar[inVerified.dtid] = { text: 'open data', active: false }
         Vue.set(state.opendataTools, inVerified.module, setToolbar)
       }
-    },
-    setOpendataBarTemp: (state, inVerified) => {
-      let setToolbar = {}
-      setToolbar[inVerified.mData] = { text: 'open data', active: true }
-      Vue.set(state.opendataTools, inVerified.moduleCNRL, setToolbar)
     },
     setProgressUpdate: (state, inVerified) => {
       let setProgress = { text: 'Experiment in progress', active: true }
@@ -299,20 +290,10 @@ const store = new Vuex.Store({
     setClearGrid: (state, inVerified) => {
       state.moduleGrid = []
     },
-    newNXPshell: (state, inVerified) => {
-      Vue.set(state.newNXshell, 'tempshell', inVerified)
-    },
     newNXPshellUpdate: (state, inVerified) => {
       let tempModcontract = inVerified
       console.log(tempModcontract)
       // Vue.set(state.newNXshell, '', tempModcontract)
-    },
-    SET_JOIN_NXP: (state, inVerified) => {
-      // state.joinNXPlive = inVerified
-      Vue.set(state.joinNXPlive, 'data', inVerified.data)
-      Vue.set(state.joinNXPlive, 'compute', inVerified.compute)
-      Vue.set(state.joinNXPlive, 'visualise', inVerified.visualise)
-      console.log(state.joinNXPlive)
     }
   },
   actions: {
@@ -359,19 +340,21 @@ const store = new Vuex.Store({
     actionJOINViewexperiment (context, update) {
       console.log('PREVIEW / JOIN vuex')
       console.log(update)
-      // console.log(this.state.networkExpModules)
-      // let joinExpDisplay = {}
-      // let joinNXP = {}
-      /* for (const ep of this.state.networkExpModules) {
+      console.log(this.state.networkExpModules)
+      let joinNXP = {}
+      for (const ep of this.state.networkExpModules) {
         if (ep.exp.key === update) {
           joinNXP = ep
         }
-      } */
-      // break out the modules
-      /* joinExpDisplay.data = this.state.livesafeFLOW.refcontUtilityLive.extractData(joinNXP.modules, 'data')
-      joinExpDisplay.compute = this.state.livesafeFLOW.refcontUtilityLive.extractCompute(joinNXP.modules, 'compute')
-      joinExpDisplay.visualise = this.state.livesafeFLOW.refcontUtilityLive.extractVisualise(joinNXP.modules, 'visualise')
-      context.commit('SET_JOIN_NXP', joinExpDisplay) */
+      }
+      // break out the module via sending message to network library utility
+      let displayLibUtil = {}
+      displayLibUtil.type = 'library'
+      displayLibUtil.reftype = 'ignore'
+      displayLibUtil.action = 'extractexperiment'
+      displayLibUtil.data = joinNXP
+      const displayMessage = JSON.stringify(displayLibUtil)
+      Vue.prototype.$socket.send(displayMessage)
     },
     actionLocalGrid (context, update) {
       console.log('action test watch called')
@@ -528,12 +511,6 @@ const store = new Vuex.Store({
       } else if (update.future === 'self') {
         console.log('self')
       }
-    },
-    actionSetTempToolbarVis (context, update) {
-      context.commit('newNXPshell', update.shellID)
-      context.commit('setVistoolsTemp', update)
-      context.commit('setOpendataBarTemp', update)
-      // console.log('toolbar set')
     },
     actionDatasourceCount (context, update) {
       context.commit('SET_DATASOURCECOUNT', update)

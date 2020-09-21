@@ -48,19 +48,6 @@ export default {
           if (this.state.lengthMholderj === 0) {
             this.state.moduleJoinedListEnd = true
           }
-        } else if (backJSON.type === 'experiment') {
-          console.log('network experiment genesis or Joined saved')
-          this.state.moduleListEnd = false
-          this.state.moduleJoinedListEnd = false
-          // reset the module list
-          this.state.moduleGenesisList = []
-          // prepare display for contributed experiment
-          let refUpdateContracts = {}
-          refUpdateContracts.reftype = 'datatype'
-          refUpdateContracts.action = 'GET'
-          // update the exp list
-          const refCJSON = JSON.stringify(refUpdateContracts)
-          Vue.prototype.$socket.send(refCJSON)
         }
         if (this.state.moduleListEnd === true) {
           // pass to Network Library Composer to make New Network Experiment Reference Contract ie. extract genesis module contract keys
@@ -80,18 +67,46 @@ export default {
           console.log(backJSON)
           // get starting experiments
           const refContract = {}
+          refContract.type = 'library'
           refContract.reftype = 'datatype'
           refContract.action = 'GET'
           const refCJSON = JSON.stringify(refContract)
           Vue.prototype.$socket.send(refCJSON)
         }
+      } else if (backJSON.type === 'extractexperiment') {
+        console.log('data ref contract extract')
+        console.log(backJSON)
+        Vue.set(this.state.joinNXPlive, 'data', backJSON.data)
+        Vue.set(this.state.joinNXPlive, 'compute', backJSON.compute)
+        Vue.set(this.state.joinNXPlive, 'visualise', backJSON.visualise)
+        // set dataModule
+        // set vis tools
+        let tempNew = {}
+        tempNew.shellID = '1234567'
+        tempNew.moduleCNRL = 'cnrl-001234543458'
+        tempNew.mData = '98889'
+        // context.commit('NEW_NXP_SHELL', tempNew.shellID)
+        Vue.set(this.state.newNXshell, 'tempshell', tempNew.shellID)
+        // context.commit('SET_VISTOOLS_TEMP', tempNew)
+        let setVisTools = {}
+        setVisTools[tempNew.mData] = { text: 'open tools', active: true }
+        Vue.set(this.state.toolbarVisStatus, tempNew.moduleCNRL, setVisTools)
+        // context.commit('SETOPEN_DATABAR_TEMP', tempNew)
+        let setToolbar = {}
+        setToolbar[tempNew.mData] = { text: 'open data', active: true }
+        Vue.set(this.state.opendataTools, tempNew.moduleCNRL, setToolbar)
+        /* this.$store.dispatch('actionSetDataRefContract', dataMod)
+        this.$store.dispatch('actionSetTempToolbarVis', tempNew)
+        this.$store.dispatch('actionSetVisualiseRefContract', visMod) */
       } else {
-        console.log('network experiment data input')
+        console.log('network experiment data BACK FAE NetworkLibrary')
+        // save copy of ref contract indexes
+        this.state.liveRefContIndex = backJSON.referenceContracts
         // prepare NPXs in NETWORK
-        // NETWORK tap into -- NB over time need to filter as info overload
+        this.state.networkExpModules = backJSON.networkExpModules
+        // NETWORK tap into -- N B over time need to filter as info overload
         let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
         let gridData = []
-
         for (let nxp of backJSON.networkExpModules) {
           // look up question
           let question = { text: 111 } // this.state.livesafeFLOW.refcontUtilityLive.extractQuestion(nxp.modules, 'question')
@@ -103,11 +118,12 @@ export default {
         this.state.NXPexperimentList = gridAnnon
         // set the dashboard toolbar status settings
         for (let exl of backJSON.networkExpModules) {
+          console.log(exl)
           let experBundle = {}
           experBundle.cnrl = exl.exp.key
           experBundle.status = false
-          experBundle.contract = exl.exp.value
-          experBundle.modules = exl.exp.value.modules
+          experBundle.contract = exl.exp
+          experBundle.modules = exl.modules
           let objectPropC = exl.exp.key
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }
@@ -206,6 +222,19 @@ export default {
     SET_JOIN_NXP_COMPUTE_AUTO (state, inVerified) {
       console.log('set join compute controls')
       Vue.set(this.state.joinNXPselected.compute, 'automate', inVerified)
+    },
+    NEW_NXP_SHELL (state, inVerified) {
+      Vue.set(state.newNXshell, 'tempshell', inVerified)
+    },
+    SET_VISTOOLS_TEMP (state, inVerified) {
+      let setVisTools = {}
+      setVisTools[inVerified.mData] = { text: 'open tools', active: true }
+      Vue.set(state.toolbarVisStatus, inVerified.moduleCNRL, setVisTools)
+    },
+    SETOPEN_DATABAR_TEMP (state, inVerified) {
+      let setToolbar = {}
+      setToolbar[inVerified.mData] = { text: 'open data', active: true }
+      Vue.set(state.opendataTools, inVerified.moduleCNRL, setToolbar)
     }
   },
   actions: {
@@ -377,9 +406,13 @@ export default {
       update.option = refContractLookup
       context.commit('SET_COMPUTE_REFCONTRACT', update)
     },
+    actionSetTempToolbarVis (context, update) {
+      // context.commit('NEW_NXP_SHELL', update.shellID)
+      // context.commit('SET_VISTOOLS_TEMP', update)
+      // context.commit('SETOPEN_DATABAR_TEMP', update)
+      // console.log('toolbar set')
+    },
     actionSetVisualiseRefContract (context, update) {
-      let refContractLookup = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.refcont, this.state.referenceContract.visualise)
-      update.option = refContractLookup
       context.commit('SET_VISUALISE_REFCONTRACT', update)
     },
     actionNewNXPrefcontract (context, update) {

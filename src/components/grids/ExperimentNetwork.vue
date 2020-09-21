@@ -35,7 +35,7 @@
         </ul>
       </div>
       <!-- join network experiment modal -->
-      <join-experiment v-show="isModalJoinVisible" @close="closeModalJoin">
+      <join-experiment v-show="isModalJoinVisible && NXPJoinModuleData.length !== 0" @close="closeModalJoin">
         <template v-slot:header> sl-- {{ selectedOptions }} --vv {{ visDefaults }}
         <!-- The code below goes into the header slot -->
           N=1 Network Experiment {{ actionKBundle.name }}
@@ -51,10 +51,8 @@
         <template v-slot:packaging>
           <!-- select data source -->
           <div class="compute-select-datasource" v-if="NXPJoinModuleData.length !== 0">
-            <label for="compute-select-source">Select data source:</label>
-            <select class="select-compute-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
-              <!-- <option value="mongo-gadgetbridge">Gadgetbridge-mongo</option>
-              <option value="openhumansAPI">OpenHumans</option> -->
+            <label for="data-select-source">Select data source:</label>
+            <select class="data-data-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
               <option v-for="ds in NXPJoinModuleData" :key="ds.key" v-bind:value="ds.option.key">
                 {{ ds.option.value.concept.name }}
               </option>
@@ -64,11 +62,14 @@
         <template v-slot:compute>
           <header>Compute</header>
           <li>
-            --{{ NXPJoinModuleCompute }}
+            <label for="compute-select-source">Select compute source:</label>
+            <select class="select-compute-source" @change="computeSelect" v-model="selectJoin.compute" id="">Please select
+              <option v-for="ds in NXPJoinModuleCompute" :key="ds.key" v-bind:value="ds.option.key">
+                {{ ds.option.value.computational.name }}
+              </option>
+            </select>
           </li>
           <li class="compute-form-item">
-            <!-- Set start time of data:<input v-model="newCompute.startperiod" placeholder="Reference Contract">
-            <button type="button" class="btn" @click="datastartLookup()">find startdate</button> -->
             <calendar-select></calendar-select>
             <label for="compute-add-source">Controls</label>
             <select class="select-compute-source" @change="controlsSave" v-model="newCompute.controls" id="">Please select
@@ -85,8 +86,8 @@
         </template>
         <template v-slot:dashboard-visualisation>
           <header>Visualisation</header>
-          <li>newVisualise
-            <chart-builder v-if="type === 'chart.js'" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" ></chart-builder>
+          <li>newVisualise --{{  NXPJoinModuleVisualise }}
+            <chart-builder v-if="type === 'chart.js'" :shellID="'1234567'" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="'98889'" ></chart-builder>
           </li>
         </template>
         <template v-slot:submit-join>
@@ -134,8 +135,6 @@ export default {
       return this.$store.state.experimentStatus
     },
     NXPJoinModuleData: function () {
-      // console.log('data sources')
-      // console.log(this.$store.state.joinNXPlive.data)
       let modulesLive = []
       if (this.$store.state.joinNXPlive.data !== undefined) {
         modulesLive = this.$store.state.joinNXPlive.data
@@ -148,6 +147,8 @@ export default {
       return this.$store.state.joinNXPlive.compute
     },
     NXPJoinModuleVisualise: function () {
+      console.log('compute vis options')
+      console.log(this.$store.state.joinNXPlive.visualise)
       return this.$store.state.joinNXPlive.visualise
     },
     NXPprogress: function () {
@@ -223,20 +224,6 @@ export default {
       // create new temp shellID
       this.shellID = '1234567'
       this.mData = '98889'
-      let tempNew = {}
-      tempNew.shellID = this.shellID
-      tempNew.moduleCNRL = 'cnrl-001234543458'
-      tempNew.mData = this.mData
-      let dataMod = {}
-      dataMod.moduleinfo = this.NXPJoinModuleData[0].moduleinfo // this.modData
-      dataMod.refcont = this.NXPJoinModuleData[0].refcont // this.visualRefCont
-      let visMod = {}
-      visMod.moduleinfo = this.NXPJoinModuleVisualise[0].moduleinfo // this.modData
-      visMod.refcont = this.NXPJoinModuleVisualise[0].refcont // this.visualRefCont
-      this.$store.dispatch('actionSetDataRefContract', dataMod)
-      // setup toolbar info.
-      this.$store.dispatch('actionSetTempToolbarVis', tempNew)
-      this.$store.dispatch('actionSetVisualiseRefContract', visMod)
     },
     actionPreviewExperiment (shellCNRL, NXPcontract) {
       console.log('View or Preview/join clicked')
@@ -246,9 +233,9 @@ export default {
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
         this.$store.dispatch('actionDashboardState', shellCNRL)
-        // this.$store.dispatch('actionDisplay', shellCNRL)
         this.isModalDashboardVisible = true
       } else {
+        // preview network experiment
         this.$store.dispatch('actionJOINViewexperiment', shellCNRL)
         this.refContractLookup()
         this.isModalJoinVisible = true
@@ -261,7 +248,10 @@ export default {
       this.previewSeen = true
     },
     sourceSelect () {
-      this.$store.dispatch('sourceDataExperiment', this.selectJoin)
+      this.$store.dispatch('sourceDataExperiment', this.selectJoin.source)
+    },
+    computeSelect () {
+      this.$store.dispatch('sourceComputeExperiment', this.selectJoin.compute)
     },
     automationSave () {
       this.$store.dispatch('buildRefComputeAutomation', this.newCompute.automation)

@@ -1,5 +1,5 @@
 <template>
-  <div id="live-view"> -- {{ refContractPackage }}
+  <div id="live-view">
     <div id="knowledge-selector">
       <div id="live-context-datatypes">
         <div id="context-devices" class="live-kelement">
@@ -47,7 +47,7 @@
       </div>
       <div id="live-context-datatypes">
         <ul>
-          <li class="live-dtitem">
+          <!-- <li class="live-dtitem">
             <header>X-axis</header>
             <ul>
               <li>
@@ -75,10 +75,10 @@
             <div v-if="feedback.datatypes" class="feedback">
               ---
             </div>
-          </li>
+          </li> -->
         </ul>
       </div>
-      <div id="live-context-category" class="live-kelement">
+      <!-- <div id="live-context-category" class="live-kelement">
         <header>Category</header>
           <ul>
             <li id="cat-items">
@@ -126,7 +126,7 @@
         <li>
           <button id="learn-update" @click.prevent="learnUpdate($event)">Learn</button>
         </li>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

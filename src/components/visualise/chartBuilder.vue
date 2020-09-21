@@ -56,7 +56,10 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      if (!this.shellID) {
+      console.log('vis toolbar chart buiders')
+      console.log(this.$store.state.toolbarVisStatus)
+      console.log(this.shellID)
+      if (this.$store.state.toolbarVisStatus === undefined) {
         return {}
       } else {
         return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
