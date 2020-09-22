@@ -61,15 +61,16 @@
         </template>
         <template v-slot:compute>
           <header>Compute</header>
-          <li>
+          <!-- <li>
             <label for="compute-select-source">Select compute source:</label>
             <select class="select-compute-source" @change="computeSelect" v-model="selectJoin.compute" id="">Please select
               <option v-for="ds in NXPJoinModuleCompute" :key="ds.key" v-bind:value="ds.option.key">
                 {{ ds.option.value.computational.name }}
               </option>
             </select>
-          </li>
+          </li> -->
           <li class="compute-form-item">
+            Select start date of data:
             <calendar-select></calendar-select>
             <label for="compute-add-source">Controls</label>
             <select class="select-compute-source" @change="controlsSave" v-model="newCompute.controls" id="">Please select
@@ -147,9 +148,11 @@ export default {
       return this.$store.state.joinNXPlive.compute
     },
     NXPJoinModuleVisualise: function () {
-      console.log('compute vis options')
-      console.log(this.$store.state.joinNXPlive.visualise)
-      return this.$store.state.joinNXPlive.visualise
+      if (this.$store.state.joinNXPlive.visualise === undefined) {
+        return {}
+      } else {
+        return this.$store.state.joinNXPlive.visualise
+      }
     },
     NXPprogress: function () {
       return this.$store.state.nxpProgress[this.shellContract]

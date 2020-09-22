@@ -47,14 +47,14 @@
       </div>
       <div id="live-context-datatypes">
         <ul>
-          <!-- <li class="live-dtitem">
+          <li class="live-dtitem">
             <header>X-axis</header>
             <ul>
-              <li>
+              <li v-if="refContractPackage.length > 0">
                 <label for="xaxis-select"></label>
                 <select class="select-xaxis-id" id="xaxis-mapping-build" @change="xaxisSelect" v-model="visualsettings.xaxis">
                   <option value="none" selected="">please select</option>
-                  <option v-for="colpair in refContractPackage.option.value.concept.tablestructure" :key="colpair.refcontract" v-bind:value="colpair.refcontract">
+                  <option v-for="colpair in refContractPackage" :key="colpair.refcontract" v-bind:value="colpair.refcontract">
                   {{ colpair.column }}
                   </option>
                 </select>
@@ -63,11 +63,11 @@
           </li>
           <li class="live-item">
             <header>Y-axis</header>
-            <ul>
+            <ul v-if="refContractPackage.length > 0">
               <label for="yaxis-select"></label>
               <select class="select-yaxis-id" id="yaxis-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
                 <option value="none" selected="">please select</option>
-                <option v-for="colpairy in refContractPackage.option.value.concept.tablestructure" :key="colpairy.refcontract" v-bind:value="colpairy.refcontract">
+                <option v-for="colpairy in refContractPackage" :key="colpairy.refcontract" v-bind:value="colpairy.refcontract">
                 {{ colpairy.column }}
                 </option>
               </select>
@@ -75,10 +75,10 @@
             <div v-if="feedback.datatypes" class="feedback">
               ---
             </div>
-          </li> -->
+          </li>
         </ul>
       </div>
-      <!-- <div id="live-context-category" class="live-kelement">
+      <div id="live-context-category" class="live-kelement">
         <header>Category</header>
           <ul>
             <li id="cat-items">
@@ -126,7 +126,7 @@
         <li>
           <button id="learn-update" @click.prevent="learnUpdate($event)">Learn</button>
         </li>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -144,33 +144,46 @@ export default {
   },
   computed: {
     dataSource: function () {
+      console.log('data sore klive')
+      console.log(this.$store.state.datasourceCount)
       return this.$store.state.datasourceCount
     },
     refContractCompute: function () {
-      let computeLive = this.$store.state.joinNXPlive.compute // this.$store.state.refcontractCompute
+      let computeLive = this.$store.state.joinNXPlive.compute
       return computeLive
     },
     resultsDTs: function () {
       return []
     },
     refContractPackage: function () {
-      return this.$store.state.refcontractPackaging[this.dataSource]
+      console.log('packaging table structure')
+      console.log(this.$store.state.refcontractPackaging)
+      if (this.$store.state.refcontractPackaging.length === 0) {
+        return []
+      } else {
+        return this.$store.state.refcontractPackaging[this.dataSource].value.concept.tablestructure
+      }
     },
     category: function () {
-      const catLive = this.$store.state.refcontractPackaging[this.dataSource].option.value.concept.category
-      const catIndex = Object.keys(catLive)
-      let catList = []
-      for (let cat of catIndex) {
-        if (catLive[cat].category !== undefined) {
-          catList.push(catLive[cat].category)
+      if (this.$store.state.refcontractPackaging.length === 0) {
+        return []
+      } else {
+        const catLive = this.$store.state.refcontractPackaging[this.dataSource].value.concept.category
+        const catIndex = Object.keys(catLive)
+        let catList = []
+        for (let cat of catIndex) {
+          if (catLive[cat].category !== undefined) {
+            catList.push(catLive[cat].category)
+          }
         }
+
+        function onlyUnique (value, index, self) {
+          return self.indexOf(value) === index
+        }
+        // usage example:
+        let unique = catList.filter(onlyUnique)
+        return unique
       }
-      function onlyUnique (value, index, self) {
-        return self.indexOf(value) === index
-      }
-      // usage example:
-      let unique = catList.filter(onlyUnique)
-      return unique
     },
     time: function () {
       // mock time unit refContracts

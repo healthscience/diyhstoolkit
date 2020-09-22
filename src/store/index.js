@@ -347,6 +347,8 @@ const store = new Vuex.Store({
           joinNXP = ep
         }
       }
+      // set preview experiment live
+      Vue.set(this.state.joinNXPlive, 'experiment', joinNXP)
       // break out the module via sending message to network library utility
       let displayLibUtil = {}
       displayLibUtil.type = 'library'

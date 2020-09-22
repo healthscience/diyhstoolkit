@@ -38,6 +38,7 @@ export default {
         console.log('save successful')
         // what type of save?
         if (backJSON.type === 'module') {
+          console.log('module back refcontract')
           this.state.moduleGenesisList.push(backJSON)
           // keep track of how many modules
           this.state.lengthMholder--
@@ -51,14 +52,14 @@ export default {
         }
         if (this.state.moduleListEnd === true) {
           // pass to Network Library Composer to make New Network Experiment Reference Contract ie. extract genesis module contract keys
-          // const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.moduleGenesisList)
-          // const referenceContractReady = JSON.stringify(prepareNXPrefcont)
-          // Vue.prototype.$socket.send(referenceContractReady)
+          const prepareNXPrefcont = {} //  this.state.livesafeFLOW.refcontComposerLive.experimentComposerGenesis(this.state.moduleGenesisList)
+          const referenceContractReady = JSON.stringify(prepareNXPrefcont)
+          Vue.prototype.$socket.send(referenceContractReady)
         } else if (this.state.moduleJoinedListEnd === true) {
           // pass to Network Library Composer to make New Network Experiment Reference Contract ie. extract genesis module contract keys
-          // const prepareNXPrefcont = this.state.livesafeFLOW.refcontComposerLive.experimentComposerJoin(this.state.moduleGenesisList)
-          // const referenceContractReady = JSON.stringify(prepareNXPrefcont)
-          // Vue.prototype.$socket.send(referenceContractReady)
+          const prepareNXPrefcont = {} // this.state.livesafeFLOW.refcontComposerLive.experimentComposerJoin(this.state.moduleGenesisList)
+          const referenceContractReady = JSON.stringify(prepareNXPrefcont)
+          Vue.prototype.$socket.send(referenceContractReady)
         }
       } else if (backJSON.safeflow === true) {
         // safeFLOW inflow
@@ -73,6 +74,14 @@ export default {
           const refCJSON = JSON.stringify(refContract)
           Vue.prototype.$socket.send(refCJSON)
         }
+      } else if (backJSON.type === 'modulesNew') {
+        console.log('new Modules for new experiment')
+        console.log(backJSON.data)
+        // this.state = backJSON.data
+      } else if (backJSON.type === 'modulesTemp') {
+        console.log('tempModules LIst back library')
+        console.log(backJSON.data)
+        this.state.nxpModulesList = backJSON.data
       } else if (backJSON.type === 'extractexperiment') {
         console.log('data ref contract extract')
         console.log(backJSON)
@@ -107,9 +116,14 @@ export default {
         // NETWORK tap into -- N B over time need to filter as info overload
         let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
         let gridData = []
+        let question = {}
         for (let nxp of backJSON.networkExpModules) {
           // look up question
-          let question = { text: 111 } // this.state.livesafeFLOW.refcontUtilityLive.extractQuestion(nxp.modules, 'question')
+          for (const mod of nxp.modules) {
+            if (mod.value.concept.moduleinfo.name === 'question') {
+              question = mod.value.concept.question
+            }
+          }
           gridData.push({ id: nxp.exp.key, name: question.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'Preview / Join' })
         }
         let gridAnnon = {}
@@ -133,9 +147,20 @@ export default {
         }
         // prepare PEER JOINED LIST
         let gridDatapeer = []
+        let question2 = {}
         for (let nxp of backJSON.networkPeerExpModules) {
-          let question = 222 //  this.state.livesafeFLOW.refcontUtilityLive.extractQuestionJOINED(nxp.modules, 'question')
-          gridDatapeer.push({ id: nxp.exp.key, name: question, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
+          // look up question
+          // console.log(nxp)
+          for (const mod of nxp.modules) {
+            if (typeof mod.value.concept === 'object' && Object.keys(mod.value.concept).length > 0) {
+              if (mod.value.concept.type === 'question') {
+                question2 = mod.value.concept.question
+              } else {
+                question2 = 'none'
+              }
+            }
+          }
+          gridDatapeer.push({ id: nxp.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
         }
         let gridPeer = {}
         gridPeer.columns = gridColumns
@@ -206,9 +231,22 @@ export default {
       this.state.newNXPmakeRefs.push(this.state.refcontractQuestion.moduleinfo.refcont)
     },
     SET_JOIN_NXP_SOURCE (state, inVerified) {
+      console.log('packaging selected')
+      console.log(inVerified)
       Vue.set(this.state.joinNXPselected, 'data', inVerified)
       console.log('set data source selected')
       console.log(this.state.joinNXPselected)
+      // lookup details for this packaging contract
+      let packContract = {}
+      for (let pack of this.state.liveRefContIndex.packaging) {
+        console.log(pack)
+        if (inVerified === pack.key) {
+          console.log('match')
+          packContract = pack
+        }
+      }
+      this.state.refcontractPackaging.push(packContract)
+      console.log(this.state.refcontractPackaging)
     },
     SET_DATE_STARTNXP (state, inVerified) {
       console.log('set date data flow starts')
@@ -377,7 +415,15 @@ export default {
       dataCNRLbundle13.grid = []
       moduleContracts.push(dataCNRLbundle13)
       // console.log(moduleContracts)
-      let modCount = 1
+      let tempModules = {}
+      tempModules.type = 'library'
+      tempModules.reftype = 'moduletemp'
+      tempModules.action = 'moduletemp'
+      tempModules.data = moduleContracts
+      // send to Library to create new temp modules
+      const newTempModules = JSON.stringify(tempModules)
+      Vue.prototype.$socket.send(newTempModules)
+      /* let modCount = 1
       let moduleHolder = []
       for (const mc of moduleContracts) {
         // console.log(mc)
@@ -389,7 +435,7 @@ export default {
         moduleHolder.push(moduleContainer)
         modCount++
       }
-      context.commit('SET_MODULE_LIST', moduleHolder)
+      context.commit('SET_MODULE_LIST', moduleHolder) */
     },
     actionSetQuestionRefContract (context, update) {
       // console.log('look up peer store for refContract')
@@ -488,7 +534,7 @@ export default {
       // map experiment refcont to genesis contract
       // make first module contracts for this peer to record start and other module refs with new computations
       console.log('JOIN NXP START-----')
-      const genesisExpRefCont = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.genesis, this.state.referenceContract.experiment)
+      const genesisExpRefCont = this.state.joinNXPlive.experiment // this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.genesis, this.state.referenceContract.experiment)
       // for each module in experiment, add peer selections
       // loop over list of module contract to make genesis ie first
       this.state.lengthMholderj = genesisExpRefCont.value.modules.length
@@ -498,7 +544,7 @@ export default {
         // look up module template genesis contract
         // console.log('module')
         // console.log(mh)
-        let moduleExpanded = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(mh.key, this.state.referenceContract.module)
+        let moduleExpanded = {} // this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(mh.key, this.state.referenceContract.module)
         if (moduleExpanded.value.concept.moduleinfo.name === 'question') {
           peerModules.type = 'question'
           peerModules.question = moduleExpanded.value.concept.question
@@ -514,10 +560,13 @@ export default {
           peerModules.type = 'visualise'
           peerModules.visualise = moduleExpanded.value.concept.refcont
         }
-        let moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(peerModules, 'join', '')
-        let moduleRefContractReady = JSON.stringify(moduleRefContract)
-        // console.log('send to NetworkLibrary to record in peers LEDGER')
-        // console.log(moduleRefContractReady)
+        // send to Library to create new experiment and modules for peer
+        let newJoinExperiment = {}
+        newJoinExperiment.type = library
+        newJoinExperiment.reftype = 'newmodules'
+        newJoinExperiment.action = 'newmodules'
+        newJoinExperiment.data = moduleRefContract
+        let moduleRefContractReady = JSON.stringify(newJoinExperiment)
         Vue.prototype.$socket.send(moduleRefContractReady)
       }
     }

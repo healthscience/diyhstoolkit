@@ -56,17 +56,19 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      console.log('vis toolbar chart buiders')
-      console.log(this.$store.state.toolbarVisStatus)
-      console.log(this.shellID)
-      if (this.$store.state.toolbarVisStatus === undefined) {
+      let objectKeys = Object.keys(this.$store.state.toolbarVisStatus)
+      if (objectKeys.length === 0) {
         return {}
       } else {
         return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
       }
     },
     openDataLive: function () {
-      return this.$store.state.opendataTools[this.moduleCNRL][this.mData]
+      if (this.$store.state.opendataTools === undefined) {
+        return {}
+      } else {
+        return this.$store.state.opendataTools[this.moduleCNRL][this.mData]
+      }
     },
     liveData: function () {
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
