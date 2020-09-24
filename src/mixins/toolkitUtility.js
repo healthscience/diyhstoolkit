@@ -29,11 +29,51 @@ util.inherits(ToolkitUtility, events.EventEmitter)
 */
 ToolkitUtility.prototype.prepareJoinedNXPlist = function (peerExpModules) {
   let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
+  let gridDatapeer = this.prepareExperimentSummary(peerExpModules)
+  let gridPeer = {}
+  gridPeer.columns = gridColumns
+  gridPeer.data = gridDatapeer
+  return gridPeer
+}
+
+/**
+* Prepare experiment data list
+* @method prepareExperimentSummarySingle
+*
+*/
+ToolkitUtility.prototype.prepareExperimentSummarySingle = function (peerExpModules) {
+  console.log('tkutility')
+  console.log(peerExpModules.modules)
+  let gridDatapeer = {}
+  let question2 = {}
+  for (const mod of peerExpModules.modules) {
+    console.log(mod)
+    if (typeof mod.contract.concept === 'object' && Object.keys(mod.contract.concept).length > 0) {
+      if (mod.contract.concept.type === 'question') {
+        console.log(mod)
+        question2 = mod.contract.concept.question
+      } else {
+        question2 = 'none'
+      }
+    }
+  }
+  gridDatapeer = { id: peerExpModules.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' }
+  return gridDatapeer
+}
+
+/**
+* Prepare experiment data list
+* @method prepareExperimentSummary
+*
+*/
+ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
+  console.log('tkutility')
+  console.log(peerExpModules)
   let gridDatapeer = []
   let question2 = {}
   for (let nxp of peerExpModules) {
     // look up question
-    // console.log(nxp)
+    console.log(nxp)
     for (const mod of nxp.modules) {
       if (typeof mod.value.concept === 'object' && Object.keys(mod.value.concept).length > 0) {
         if (mod.value.concept.type === 'question') {
@@ -45,10 +85,7 @@ ToolkitUtility.prototype.prepareJoinedNXPlist = function (peerExpModules) {
     }
     gridDatapeer.push({ id: nxp.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
   }
-  let gridPeer = {}
-  gridPeer.columns = gridColumns
-  gridPeer.data = gridDatapeer
-  return gridPeer
+  return gridDatapeer
 }
 
 /**

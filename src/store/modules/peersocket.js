@@ -48,26 +48,34 @@ export default {
           if (this.state.lengthMholder === 0) {
             this.state.moduleListEnd = true
           }
+          console.log('new Modules for new experiment')
+          console.log(backJSON.data)
+          this.state.lengthMholderj--
+          console.log(this.state.lengthMholderj)
+          if (this.state.lengthMholderj === 1) {
+            this.state.moduleJoinedListEnd = true
+          }
+          if (this.state.moduleJoinedListEnd === true) {
+            // pass to Network Library Composer to make New Network Experiment Reference Contract ie. extract genesis module contract keys
+            const prepareNXPrefcont = {}
+            prepareNXPrefcont.type = 'library'
+            prepareNXPrefcont.reftype = 'joinexperiment'
+            prepareNXPrefcont.action = 'joinexperiment'
+            prepareNXPrefcont.data = this.state.moduleGenesisList
+            const referenceContractReady = JSON.stringify(prepareNXPrefcont)
+            Vue.prototype.$socket.send(referenceContractReady)
+          }
+        } else if (backJSON.type === 'experiment') {
+          console.log('network experiment back single i')
+          console.log(backJSON)
+          // standard from key value
+          let standardExp = {}
+          standardExp.exp = backJSON
+          standardExp.modules = backJSON.contract.modules
+          // need to add to joined list of experiments
+          let newExpJoinedDataItem = ToolUtility.prepareExperimentSummarySingle(standardExp)
+          this.state.joinedNXPlist.data.push(newExpJoinedDataItem)
         }
-      } else if (backJSON.type === 'modulesNew') {
-        console.log('new Modules for new experiment')
-        console.log(backJSON.data)
-        this.state.lengthMholderj--
-        console.log(this.state.lengthMholderj)
-        if (this.state.lengthMholderj === 0) {
-          this.state.moduleJoinedListEnd = true
-        }
-        if (this.state.moduleJoinedListEnd === true) {
-          // pass to Network Library Composer to make New Network Experiment Reference Contract ie. extract genesis module contract keys
-          const prepareNXPrefcont = {}
-          prepareNXPrefcont.type = 'library'
-          prepareNXPrefcont.reftype = 'joinexperiment'
-          prepareNXPrefcont.action = 'joinexperiment'
-          prepareNXPrefcont.data = this.state.moduleGenesisList
-          const referenceContractReady = JSON.stringify(prepareNXPrefcont)
-          Vue.prototype.$socket.send(referenceContractReady)
-        }
-        // this.state = backJSON.data
       } else if (backJSON.type === 'modulesTemp') {
         console.log('tempModules LIst back library')
         console.log(backJSON.data)
@@ -104,10 +112,6 @@ export default {
         /* this.$store.dispatch('actionSetDataRefContract', dataMod)
         this.$store.dispatch('actionSetTempToolbarVis', tempNew)
         this.$store.dispatch('actionSetVisualiseRefContract', visMod) */
-      } else if (backJSON.reftype === 'experiment') {
-        console.log('network experiment back single')
-        console.log(backJSON)
-        // need to add to joined list of experiments
       } else if (backJSON.safeflow === true) {
         // safeFLOW inflow
         if (backJSON.type === 'auth') {
@@ -128,7 +132,6 @@ export default {
         // prepare NPXs in NETWORK
         this.state.networkExpModules = backJSON.networkExpModules
         let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)
-        this.state.joinedNXPlist = gridPeer
         this.state.NXPexperimentList = gridAnnon
         // set the dashboard toolbar status settings
         for (let exl of backJSON.networkExpModules) {
@@ -516,9 +519,7 @@ export default {
       // map experiment refcont to genesis contract
       // make first module contracts for this peer to record start and other module refs with new computations
       console.log('JOIN NXP START-----')
-      const genesisExpRefCont = this.state.joinNXPlive.experiment // this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.genesis, this.state.referenceContract.experiment)
-      console.log('live experiment')
-      console.log(genesisExpRefCont)
+      const genesisExpRefCont = this.state.joinNXPlive.experiment
       // for each module in experiment, add peer selections
       // loop over list of module contract to make genesis ie first
       this.state.lengthMholderj = genesisExpRefCont.modules.length
@@ -528,8 +529,6 @@ export default {
         // prepare new modules for this peer  ledger
         let peerModules = {}
         // look up module template genesis contract
-        // console.log('module')
-        // console.log(mh)
         if (mh.value.concept.moduleinfo.name === 'question') {
           peerModules.type = 'question'
           peerModules.question = mh.value.concept.question
