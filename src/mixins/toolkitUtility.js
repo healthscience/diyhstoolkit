@@ -63,6 +63,31 @@ ToolkitUtility.prototype.prepareExperimentSummarySingle = function (peerExpModul
 
 /**
 * Prepare experiment data list
+* @method prepareExperimentSummarySingleGenesis
+*
+*/
+ToolkitUtility.prototype.prepareExperimentSummarySingleGenesis = function (peerExpModules) {
+  console.log('tkutility')
+  console.log(peerExpModules.modules)
+  let gridDatapeer = {}
+  let question2 = {}
+  for (const mod of peerExpModules.modules) {
+    console.log(mod)
+    if (typeof mod.concept === 'object' && Object.keys(mod.concept).length > 0) {
+      if (mod.concept.type === 'question') {
+        console.log(mod)
+        question2 = mod.concept.question
+      } else {
+        question2 = 'none'
+      }
+    }
+  }
+  gridDatapeer = { id: peerExpModules.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' }
+  return gridDatapeer
+}
+
+/**
+* Prepare experiment data list
 * @method prepareExperimentSummary
 *
 */

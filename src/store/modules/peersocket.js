@@ -81,9 +81,10 @@ export default {
             // genesis contract
             let standardExp = {}
             standardExp.exp = backJSON
-            standardExp.modules = backJSON.contract.modules
-            ToolUtility.prepareExperimentSummarySingle(standardExp)
-            this.state.NXPexperimentList.push(newExpJoinedDataItem)
+            standardExp.modules = backJSON.expanded
+            let newExpGenesisDataItem = ToolUtility.prepareExperimentSummarySingleGenesis(standardExp)
+            console.log(this.state.NXPexperimentList)
+            this.state.NXPexperimentList.data.push(newExpGenesisDataItem)
             // need to set toolbar settings TODO
           }
         }
