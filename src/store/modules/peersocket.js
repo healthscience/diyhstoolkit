@@ -68,13 +68,24 @@ export default {
         } else if (backJSON.type === 'experiment') {
           console.log('network experiment back single i')
           console.log(backJSON)
-          // standard from key value
-          let standardExp = {}
-          standardExp.exp = backJSON
-          standardExp.modules = backJSON.contract.modules
-          // need to add to joined list of experiments
-          let newExpJoinedDataItem = ToolUtility.prepareExperimentSummarySingle(standardExp)
-          this.state.joinedNXPlist.data.push(newExpJoinedDataItem)
+          // what is the state of the experiment Genesis or Joined?
+          if (backJSON.contract.concept.state === 'joined') {
+            // standard from key value
+            let standardExp = {}
+            standardExp.exp = backJSON
+            standardExp.modules = backJSON.contract.modules
+            // need to add to joined list of experiments
+            let newExpJoinedDataItem = ToolUtility.prepareExperimentSummarySingle(standardExp)
+            this.state.joinedNXPlist.data.push(newExpJoinedDataItem)
+          } else {
+            // genesis contract
+            let standardExp = {}
+            standardExp.exp = backJSON
+            standardExp.modules = backJSON.contract.modules
+            ToolUtility.prepareExperimentSummarySingle(standardExp)
+            this.state.NXPexperimentList.push(newExpJoinedDataItem)
+            // need to set toolbar settings TODO
+          }
         }
       } else if (backJSON.type === 'modulesTemp') {
         console.log('tempModules LIst back library')
@@ -167,7 +178,7 @@ export default {
       // add to module list
       this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
       // feedback on option for UI
-      this.state.refcontractPackaging.push(inVerified)
+      this.state.refcontractPackaging.push(inVerified.option)
     },
     SET_COMPUTE_REFCONTRACT (state, inVerified) {
       // add to module list full details
@@ -247,17 +258,19 @@ export default {
       Vue.set(this.state.joinNXPselected.compute, 'automate', inVerified)
     },
     NEW_NXP_SHELL (state, inVerified) {
-      Vue.set(state.newNXshell, 'tempshell', inVerified)
+      console.log('new shell for visuasation')
+      console.log(inVerified)
+      Vue.set(this.state.newNXshell, 'tempshell', inVerified)
     },
     SET_VISTOOLS_TEMP (state, inVerified) {
       let setVisTools = {}
       setVisTools[inVerified.mData] = { text: 'open tools', active: true }
-      Vue.set(state.toolbarVisStatus, inVerified.moduleCNRL, setVisTools)
+      Vue.set(this.state.toolbarVisStatus, inVerified.moduleCNRL, setVisTools)
     },
     SETOPEN_DATABAR_TEMP (state, inVerified) {
       let setToolbar = {}
       setToolbar[inVerified.mData] = { text: 'open data', active: true }
-      Vue.set(state.opendataTools, inVerified.moduleCNRL, setToolbar)
+      Vue.set(this.state.opendataTools, inVerified.moduleCNRL, setToolbar)
     }
   },
   actions: {
@@ -427,13 +440,13 @@ export default {
       context.commit('SET_QUESTION_REFCONTRACT', update)
     },
     actionSetDataRefContract (context, update) {
-      let refContractLookup = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.refcont, this.state.referenceContract.packaging)
+      let refContractLookup = ToolUtility.refcontractLookup(update.refcont, this.state.liveRefContIndex.packaging)
       update.option = refContractLookup
       context.commit('SET_PACKAGING_REFCONTRACT', update)
     },
     actionSetComputeRefContract (context, update) {
       // console.log('look compute refContracts')
-      let refContractLookup = this.state.livesafeFLOW.refcontUtilityLive.refcontractLookup(update.refcont, this.state.referenceContract.compute)
+      let refContractLookup = ToolUtility.refcontractLookup(update.refcont, this.state.liveRefContIndex.compute)
       update.option = refContractLookup
       context.commit('SET_COMPUTE_REFCONTRACT', update)
     },
@@ -444,20 +457,34 @@ export default {
       // console.log('toolbar set')
     },
     actionSetVisualiseRefContract (context, update) {
+      // loop up vis contract details
+      let refContractLookup = ToolUtility.refcontractLookup(update.refcont, this.state.liveRefContIndex.visualise)
+      update.option = refContractLookup
       context.commit('SET_VISUALISE_REFCONTRACT', update)
+      // need to set Temporary vis toolbar settings
+      context.commit('NEW_NXP_SHELL', update.shellID)
+      context.commit('SET_VISTOOLS_TEMP', update)
+      context.commit('SETOPEN_DATABAR_TEMP', update)
     },
     actionNewNXPrefcontract (context, update) {
       // add the question module
       context.commit('SET_QUESTION_MODULE')
       // prepare the genesis modules please
       // loop over list of module contract to make genesis ie first
-      this.state.lengthMholder = this.state.moduleHolder.length
-      // bring together defaults i.e. setting for compute/vis
-      for (let mh of this.state.moduleHolder) {
+      // this.state.lengthMholder = this.state.moduleHolder.length
+      // bring together genesis experiment ref contracts & defauts
+      let setNewNXPplusModules = {}
+      setNewNXPplusModules.type = 'library'
+      setNewNXPplusModules.reftype = 'newexperimentmodule'
+      setNewNXPplusModules.action = 'newexperimentmodule'
+      setNewNXPplusModules.data = this.state.moduleHolder
+      const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
+      Vue.prototype.$socket.send(genesisNXPjson)
+      /* for (let mh of this.state.moduleHolder) {
         const moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mh, '', this.state.visModuleHolder)
         const moduleRefContractReady = JSON.stringify(moduleRefContract)
         Vue.prototype.$socket.send(moduleRefContractReady)
-      }
+      } */
     },
     actionMakeKBIDtemplate (context, message) {
       console.log('make KBID template entry')

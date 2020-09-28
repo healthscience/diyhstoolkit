@@ -49,7 +49,7 @@ export default {
     refContractPackage: function () {
       let livePackage = {}
       if (this.$store.state.refcontractPackaging[this.datID] !== undefined) {
-        livePackage = this.$store.state.refcontractPackaging[0].option
+        livePackage = this.$store.state.refcontractPackaging[0] // .option
       } else {
         livePackage = {}
       }

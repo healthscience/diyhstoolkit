@@ -1,5 +1,5 @@
 <template>
-  <div id="module-builder">hhhold--{{ testHolder }}
+  <div id="module-builder">
     <div class="row">
       <div class="col-3">
         <h3>Modules available</h3>

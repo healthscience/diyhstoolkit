@@ -25,9 +25,9 @@ export default {
   },
   computed: {
     refContractVisualise: function () {
-      // console.log(this.$store.state.refcontractVisualise)
       console.log('vis live???')
       console.log(this.$store.state.refcontractVisualise.length)
+      console.log(this.$store.state.refcontractVisualise)
       let liveVis = []
       if (this.$store.state.refcontractVisualise.length !== 0) {
         liveVis = this.$store.state.refcontractVisualise
@@ -44,10 +44,10 @@ export default {
   },
   data: () => ({
     type: 'chart.js',
-    shellID: null,
+    shellID: '1234567',
     moduleCNRL: 'cnrl-001234543458',
     moduleType: 'vis',
-    mData: '',
+    mData: '98889',
     visualRefCont: ''
   }),
   created () {
@@ -61,17 +61,20 @@ export default {
       console.log('lookup ref contract for api data info')
       console.log(this.visualRefCont)
       // create new temp shellID
-      this.shellID = '1234567'
+      /* this.shellID = '1234567'
       this.mData = '98889'
       let tempNew = {}
       tempNew.shellID = this.shellID
       tempNew.moduleCNRL = 'cnrl-001234543458'
       tempNew.mData = this.mData
       // setup toolbar info.
-      this.$store.dispatch('actionSetTempToolbarVis', tempNew)
+      this.$store.dispatch('actionSetTempToolbarVis', tempNew) */
       let visMod = {}
       visMod.moduleinfo = this.modData
       visMod.refcont = this.visualRefCont
+      visMod.shellID = this.shellID
+      visMod.mData = this.mData
+      visMod.moduleCNRL = this.moduleCNRL
       this.$store.dispatch('actionSetVisualiseRefContract', visMod)
     }
   }

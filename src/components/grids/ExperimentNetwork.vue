@@ -95,7 +95,7 @@
           <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
         </template>
       </join-experiment>
-      <button v-show="isModalJoinVisible" @click="contributeNXP">contribute experiment</button>
+      <!-- <button v-show="isModalJoinVisible" @click="contributeNXP">contribute experiment</button> -->
     </div>
   </div>
 </template>

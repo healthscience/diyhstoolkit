@@ -112,4 +112,22 @@ ToolkitUtility.prototype.prepareAnnonNXPlist = function (peerExpModules) {
   return gridAnnon
 }
 
+/**
+* Check if ref contract is in toolkit if not ask network library via peerlink
+* @method refcontractLookup
+*
+*/
+ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
+  console.log('lookpup')
+  console.log(refCont)
+  console.log(allContracts)
+  let matchKey = {}
+  for (const rc of allContracts) {
+    if (refCont.trim() === rc.key) {
+      matchKey = rc
+    }
+  }
+  return matchKey
+}
+
 export default ToolkitUtility
