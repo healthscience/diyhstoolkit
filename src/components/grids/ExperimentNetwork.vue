@@ -95,7 +95,6 @@
           <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
         </template>
       </join-experiment>
-      <!-- <button v-show="isModalJoinVisible" @click="contributeNXP">contribute experiment</button> -->
     </div>
   </div>
 </template>
@@ -229,9 +228,6 @@ export default {
       this.mData = '98889'
     },
     actionPreviewExperiment (shellCNRL, NXPcontract) {
-      console.log('View or Preview/join clicked')
-      console.log(shellCNRL)
-      console.log(NXPcontract)
       this.shellContract = shellCNRL
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {

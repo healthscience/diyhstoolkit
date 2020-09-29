@@ -353,7 +353,7 @@ const store = new Vuex.Store({
       let displayLibUtil = {}
       displayLibUtil.type = 'library'
       displayLibUtil.reftype = 'ignore'
-      displayLibUtil.action = 'extractexperiment'
+      displayLibUtil.action = 'extractexperimentmodules'
       displayLibUtil.data = joinNXP
       const displayMessage = JSON.stringify(displayLibUtil)
       Vue.prototype.$socket.send(displayMessage)

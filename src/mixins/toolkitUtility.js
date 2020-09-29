@@ -42,33 +42,6 @@ ToolkitUtility.prototype.prepareJoinedNXPlist = function (peerExpModules) {
 *
 */
 ToolkitUtility.prototype.prepareExperimentSummarySingle = function (peerExpModules) {
-  console.log('tkutility')
-  console.log(peerExpModules.modules)
-  let gridDatapeer = {}
-  let question2 = {}
-  for (const mod of peerExpModules.modules) {
-    console.log(mod)
-    if (typeof mod.contract.concept === 'object' && Object.keys(mod.contract.concept).length > 0) {
-      if (mod.contract.concept.type === 'question') {
-        console.log(mod)
-        question2 = mod.contract.concept.question
-      } else {
-        question2 = 'none'
-      }
-    }
-  }
-  gridDatapeer = { id: peerExpModules.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' }
-  return gridDatapeer
-}
-
-/**
-* Prepare experiment data list
-* @method prepareExperimentSummarySingleGenesis
-*
-*/
-ToolkitUtility.prototype.prepareExperimentSummarySingleGenesis = function (peerExpModules) {
-  console.log('tkutility')
-  console.log(peerExpModules.modules)
   let gridDatapeer = {}
   let question2 = {}
   for (const mod of peerExpModules.modules) {
@@ -88,17 +61,37 @@ ToolkitUtility.prototype.prepareExperimentSummarySingleGenesis = function (peerE
 
 /**
 * Prepare experiment data list
+* @method prepareExperimentSummarySingleGenesis
+*
+*/
+ToolkitUtility.prototype.prepareExperimentSummarySingleGenesis = function (peerExpModules) {
+  let gridDatapeer = {}
+  let question2 = {}
+  for (const mod of peerExpModules.modules) {
+    console.log(mod)
+    if (typeof mod.concept === 'object' && Object.keys(mod.concept).length > 0) {
+      if (mod.concept.moduleinfo.name === 'question') {
+        console.log(mod)
+        question2 = mod.concept.question
+      } else {
+        question2 = 'none'
+      }
+    }
+  }
+  gridDatapeer = { id: peerExpModules.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'Preview/ Join' }
+  return gridDatapeer
+}
+
+/**
+* Prepare experiment data list
 * @method prepareExperimentSummary
 *
 */
 ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
-  console.log('tkutility')
-  console.log(peerExpModules)
   let gridDatapeer = []
   let question2 = {}
   for (let nxp of peerExpModules) {
     // look up question
-    console.log(nxp)
     for (const mod of nxp.modules) {
       if (typeof mod.value.concept === 'object' && Object.keys(mod.value.concept).length > 0) {
         if (mod.value.concept.type === 'question') {
@@ -115,7 +108,7 @@ ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
 
 /**
 * Prepare table list view of experiments joined
-* @method prepareJoinedNXPlist
+* @method prepareAnnonNXPlist
 *
 */
 ToolkitUtility.prototype.prepareAnnonNXPlist = function (peerExpModules) {
@@ -143,9 +136,6 @@ ToolkitUtility.prototype.prepareAnnonNXPlist = function (peerExpModules) {
 *
 */
 ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
-  console.log('lookpup')
-  console.log(refCont)
-  console.log(allContracts)
   let matchKey = {}
   for (const rc of allContracts) {
     if (refCont.trim() === rc.key) {

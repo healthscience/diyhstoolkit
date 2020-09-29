@@ -70,20 +70,32 @@ export default {
           console.log(backJSON)
           // what is the state of the experiment Genesis or Joined?
           if (backJSON.contract.concept.state === 'joined') {
+            // set local state exp expaneded
+            let newFormed = {}
+            newFormed.key = backJSON.key
+            newFormed.value = backJSON.contract
+            let addExpMod = {}
+            addExpMod.exp = newFormed
+            addExpMod.modules = backJSON.expanded
+            this.state.networkExpModules.push(addExpMod)
             // standard from key value
             let standardExp = {}
             standardExp.exp = backJSON
-            standardExp.modules = backJSON.contract.modules
+            standardExp.modules = backJSON.expanded
             // need to add to joined list of experiments
             let newExpJoinedDataItem = ToolUtility.prepareExperimentSummarySingle(standardExp)
             this.state.joinedNXPlist.data.push(newExpJoinedDataItem)
           } else {
             // genesis contract
+            let newFormed = {}
+            newFormed.key = backJSON.key
+            newFormed.value = backJSON.contract
             let standardExp = {}
-            standardExp.exp = backJSON
+            standardExp.exp = newFormed
             standardExp.modules = backJSON.expanded
+            // add to local modules ref contract list
+            this.state.networkExpModules.push(standardExp)
             let newExpGenesisDataItem = ToolUtility.prepareExperimentSummarySingleGenesis(standardExp)
-            console.log(this.state.NXPexperimentList)
             this.state.NXPexperimentList.data.push(newExpGenesisDataItem)
             // need to set toolbar settings TODO
           }
@@ -102,7 +114,7 @@ export default {
           const referenceContractReady = JSON.stringify(prepareNXPrefcont)
           Vue.prototype.$socket.send(referenceContractReady)
         }
-      } else if (backJSON.type === 'extractexperiment') {
+      } else if (backJSON.type === 'extractexperimentmodules') {
         console.log('data ref contract extract')
         console.log(backJSON)
         Vue.set(this.state.joinNXPlive, 'data', backJSON.data)
@@ -147,7 +159,6 @@ export default {
         this.state.NXPexperimentList = gridAnnon
         // set the dashboard toolbar status settings
         for (let exl of backJSON.networkExpModules) {
-          console.log(exl)
           let experBundle = {}
           experBundle.cnrl = exl.exp.key
           experBundle.status = false
@@ -481,11 +492,6 @@ export default {
       setNewNXPplusModules.data = this.state.moduleHolder
       const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
       Vue.prototype.$socket.send(genesisNXPjson)
-      /* for (let mh of this.state.moduleHolder) {
-        const moduleRefContract = this.state.livesafeFLOW.refcontComposerLive.moduleComposer(mh, '', this.state.visModuleHolder)
-        const moduleRefContractReady = JSON.stringify(moduleRefContract)
-        Vue.prototype.$socket.send(moduleRefContractReady)
-      } */
     },
     actionMakeKBIDtemplate (context, message) {
       console.log('make KBID template entry')
@@ -550,10 +556,10 @@ export default {
       const genesisExpRefCont = this.state.joinNXPlive.experiment
       // for each module in experiment, add peer selections
       // loop over list of module contract to make genesis ie first
-      this.state.lengthMholderj = genesisExpRefCont.modules.length
-      console.log('length of new peer join modules list')
-      console.log(this.state.lengthMholderj)
-      for (let mh of genesisExpRefCont.modules) {
+      // this.state.lengthMholderj = genesisExpRefCont.modules.length
+      // console.log('length of new peer join modules list')
+      // console.log(this.state.lengthMholderj)
+      /* for (let mh of genesisExpRefCont.modules) {
         // prepare new modules for this peer  ledger
         let peerModules = {}
         // look up module template genesis contract
@@ -571,16 +577,22 @@ export default {
         } else if (mh.value.concept.moduleinfo.name === 'visualise') {
           peerModules.type = 'visualise'
           peerModules.visualise = mh.value.concept.refcont
-        }
-        // send to Library to create new experiment and modules for peer
-        let newJoinExperiment = {}
-        newJoinExperiment.type = 'library'
-        newJoinExperiment.reftype = 'newmodules'
-        newJoinExperiment.action = 'newmodules'
-        newJoinExperiment.data = peerModules
-        let moduleRefContractReady = JSON.stringify(newJoinExperiment)
-        Vue.prototype.$socket.send(moduleRefContractReady)
-      }
+        } */
+      // send to Library to create new experiment and modules for peer
+      let dataChoices = {}
+      dataChoices.exp = genesisExpRefCont
+      let optionsSelected = {}
+      optionsSelected.data = this.state.joinNXPselected.data
+      optionsSelected.compute = this.state.joinNXPselected.compute
+      optionsSelected.visualise = this.state.visModuleHolder
+      dataChoices.options = optionsSelected
+      let newJoinExperiment = {}
+      newJoinExperiment.type = 'library'
+      newJoinExperiment.reftype = 'joinexperiment'
+      newJoinExperiment.action = 'joinexperiment'
+      newJoinExperiment.data = dataChoices
+      let ExpmoduleRefContract = JSON.stringify(newJoinExperiment)
+      Vue.prototype.$socket.send(ExpmoduleRefContract)
     }
   }
 }
