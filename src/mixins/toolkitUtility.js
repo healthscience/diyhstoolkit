@@ -69,10 +69,10 @@ ToolkitUtility.prototype.prepareExperimentSummarySingleGenesis = function (peerE
   let question2 = {}
   for (const mod of peerExpModules.modules) {
     console.log(mod)
-    if (typeof mod.concept === 'object' && Object.keys(mod.concept).length > 0) {
-      if (mod.concept.moduleinfo.name === 'question') {
+    if (typeof mod.value.concept === 'object' && Object.keys(mod.value.concept).length > 0) {
+      if (mod.value.concept.moduleinfo.name === 'question') {
         console.log(mod)
-        question2 = mod.concept.question
+        question2 = mod.value.concept.question
       } else {
         question2 = 'none'
       }

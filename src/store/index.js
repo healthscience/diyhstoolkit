@@ -339,8 +339,6 @@ const store = new Vuex.Store({
     },
     actionJOINViewexperiment (context, update) {
       console.log('PREVIEW / JOIN vuex')
-      console.log(update)
-      console.log(this.state.networkExpModules)
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
         if (ep.exp.key === update) {
@@ -375,8 +373,6 @@ const store = new Vuex.Store({
       context.commit('setOpendataBar', update)
     },
     async actionVisUpdate (context, update) {
-      console.log('inputinputinput')
-      console.log(update)
       // display processing
       context.commit('setVisProgressUpdate', update)
       // send ref contract and update time?

@@ -144,8 +144,6 @@ export default {
   },
   computed: {
     dataSource: function () {
-      console.log('data sore klive')
-      console.log(this.$store.state.datasourceCount)
       return this.$store.state.datasourceCount
     },
     refContractCompute: function () {
@@ -156,8 +154,6 @@ export default {
       return []
     },
     refContractPackage: function () {
-      console.log('packaging table structure')
-      console.log(this.$store.state.refcontractPackaging)
       if (this.$store.state.refcontractPackaging.length === 0) {
         return []
       } else {
@@ -176,12 +172,8 @@ export default {
             catList.push(catLive[cat].category)
           }
         }
-
-        function onlyUnique (value, index, self) {
-          return self.indexOf(value) === index
-        }
         // usage example:
-        let unique = catList.filter(onlyUnique)
+        let unique = catList.filter(this.onlyUnique)
         return unique
       }
     },
@@ -237,6 +229,9 @@ export default {
   methods: {
     clearKnowledgeBox () {
       // set defaults
+    },
+    onlyUnique (value, index, self) {
+      return self.indexOf(value) === index
     },
     xaxisSelect () {
       // set default x-axis chart setting

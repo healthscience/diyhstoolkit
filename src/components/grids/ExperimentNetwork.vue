@@ -1,7 +1,7 @@
 <template>
   <div id="live-network-grid">
     <!-- peer network experiment added -->
-    <div id="grid-template">
+    <div id="grid-template">live dashboard --
       <table>
         <thead>
           <tr>
@@ -27,7 +27,7 @@
           </tr>
         </tbody>
       </table>
-      <!-- loop over the different modules included --> live dashboard -- {{ shellContract }}
+      <!-- loop over the different modules included -->
       <div id="module-list" v-if="NXPstatusData[shellContract]" >
         <progress-message v-if="NXPprogress.active === true"></progress-message>
         <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
