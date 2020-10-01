@@ -145,4 +145,67 @@ ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
   return matchKey
 }
 
+/**
+*
+* @method diplayFilter
+*
+*/
+ToolkitUtility.prototype.displayFilter = function (shellID, modules, time, entityData) {
+  // setup return vis Object
+  // console.log('DISPLAYflitttter')
+  // console.log(entityData)
+  // console.log(modules)
+  let TestDataBundle = {}
+  let gridPerModule = {}
+  for (let mod of modules) {
+    // need to match each modules to Component Data
+    if (mod.type === 'Question') {
+      gridPerModule[mod.cnrl] = mod.grid
+      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true }, 'grid': mod.grid, 'data': [{ 'form': 'html' }, { 'content': 'Movement Summary' }], 'message': 'compute-complete' }
+    } else if (mod.type === 'Device') {
+      gridPerModule[mod.cnrl] = mod.grid
+      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': mod.grid, 'data': entityData.liveDeviceC.devices, 'message': 'compute-complete' }
+    } else if (mod.type === 'Dapp') {
+      gridPerModule[mod.cnrl] = mod.grid
+      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true }, 'grid': mod.grid, 'data': [{ 'content': 'Gadgetbridge android' }, { 'content2': 'Xdrip android' }], 'message': 'compute-complete' }
+    } else if (mod.type === 'compute') {
+      gridPerModule[mod.cnrl] = mod.grid
+      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-compute', 'text': 'Compute', 'active': true }, 'grid': mod.grid, 'message': 'compute-complete' }
+    } else if (mod.type === 'Errors') {
+      // gridPerModule[mod.cnrl] = mod.grid
+      // [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} }], '1': { 'chartPackage': { 'labels': [2, 4] }, { 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} } }, 'message': 'compute-complete'
+    } else if (mod.type === 'Visualise') {
+      // loop over data vis read
+      mod.grid = []
+      let makeGrid = []
+      // let dataIndex = Object.keys(entityData.liveVisualC.visualData)
+      if (entityData.liveVisualC.singlemulti.chartPackage) {
+        // single chart multi datasets
+        let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'singlemulti', static: false }
+        makeGrid.push(newGriditem)
+        // gridPerModule = {}
+        gridPerModule[mod.cnrl] = makeGrid
+        TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': { 'singlemulti': entityData.liveVisualC.singlemulti } }
+      } else {
+        // normal display indivduals charts
+        for (let dr of entityData.liveVisualC.liveVislist) {
+          // need to add to grid for multi charts asked for
+          // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
+          let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
+          makeGrid.push(newGriditem)
+        }
+        // gridPerModule = {}
+        gridPerModule[mod.cnrl] = makeGrid
+        TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': entityData.liveVisualC.visualData }
+      }
+    }
+  }
+  console.log('TIMEPLATE DATA XLP')
+  console.log(TestDataBundle)
+  let displayData = {}
+  displayData.data = TestDataBundle
+  displayData.grid = gridPerModule
+  return displayData
+}
+
 export default ToolkitUtility

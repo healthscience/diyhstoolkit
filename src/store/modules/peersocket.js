@@ -139,12 +139,55 @@ export default {
           const refCJSON = JSON.stringify(refContract)
           Vue.prototype.$socket.send(refCJSON)
         }
+      } else if (backJSON.type === 'ecssummary') {
+        console.log('ECS data summary')
+        console.log(backJSON)
+        // context.commit('SET_ENTITY_RETURN', entityReturn)
+        this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
+        console.log('UUID shell set for dashboard')
+        console.log(this.state.entityUUIDReturn)
+      } else if (backJSON.type === 'ecsflow') {
+        console.log('ECS flow')
+        console.log(backJSON)
+        // format data for DashBoard
+        console.log('action display start i.e. ECS data back')
+        let mod = []
+        if (this.state.entityUUIDReturn === undefined) {
+          mod = this.state.nxpModulesLive
+        } else {
+          // only update modules returned
+          mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
+        }
+        console.log(mod)
+        // remove existing vis component if in single mode (default)
+        // context.commit('setClearGrid')
+        // update or first time
+        let displayReady = ToolUtility.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, backJSON.data)
+        // prepare toolbar status object
+        // context.commit('setToolbarState', mod)
+        // context.commit('setVisProgressStart', displayReady)
+        // context.commit('setVisToolbarState', displayReady)
+        // context.commit('setOpendataState', displayReady)
+        // context.commit('setVisProgressComplete', displayReady) // setVisProgressComplete
+        // context.commit('setProgressComplete', this.state.liveNXP)
+        // context.commit('setLiveDisplayNXPModules', displayReady)
+        // extract out the time
+        /* for (let mmod of mod) {
+          if (mmod.type === 'compute') {
+            let newStartTime = 0
+            if (this.state.timeStartperiod === 0) {
+              newStartTime = mmod.time.startperiod
+              context.commit('setTimeAsk', newStartTime)
+            }
+          }
+        } */
       } else {
         console.log('starting network experiment data BACK FAE NetworkLibrary')
         // save copy of ref contract indexes
         this.state.liveRefContIndex = backJSON.referenceContracts
         // prepare NPXs in NETWORK
         this.state.networkExpModules = backJSON.networkExpModules
+        this.state.networkPeerExpModules = backJSON.networkPeerExpModules
         let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)
         this.state.NXPexperimentList = gridAnnon
         // set the dashboard toolbar status settings

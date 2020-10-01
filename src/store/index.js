@@ -60,6 +60,7 @@ const store = new Vuex.Store({
     moduleListEnd: false,
     moduleJoinedListEnd: false,
     networkExpModules: [],
+    networkPeerExpModules: [],
     refcontractQuestion: {},
     refcontractPackaging: [],
     refcontractCompute: [],
@@ -316,15 +317,30 @@ const store = new Vuex.Store({
       // context.commit('setProgressStart', nsNXPlive)
     },
     async actionDashboardState (context, update) {
-      console.log('preview start learn')
+      console.log('VIEW DASHBORD -safeflow start')
       console.log(update)
       context.commit('setLiveNXP', update)
-      context.commit('setDashboardNXP', update)
-      context.commit('setProgressUpdate', update)
-      context.commit('setUpdatesOUT', update)
+      // context.commit('setDashboardNXP', update)
+      // context.commit('setProgressUpdate', update)
+      // context.commit('setUpdatesOUT', update)
       // pass the safeFLOW-ECS input bundle
       console.log('ECS bundle')
-      console.log(this.state.experimentStatus[update])
+      console.log(this.state.networkPeerExpModules)
+      let matchExp = {}
+      for (let nxp of this.state.networkPeerExpModules) {
+        if (nxp.exp.key === update) {
+          matchExp = nxp
+        }
+      }
+      // send message to PeerLink for safeFLOW
+      let message = {}
+      message.type = 'safeflow'
+      message.reftype = 'ignore'
+      message.action = 'networkexperiment'
+      message.data = matchExp
+      console.log(message)
+      const safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage)
       // look up the module reference Contracts
       /* let moduleExpandLive = this.state.livesafeFLOW.refcontUtilityLive.expMatchModuleLive(this.state.referenceContract.module, this.state.experimentStatus[update].modules)
       console.log('live modules NXP')

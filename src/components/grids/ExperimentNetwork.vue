@@ -21,7 +21,7 @@
               {{entry[key]}}
               </div>
               <div v-else>
-                <button type="button" class="btn" @click="actionPreviewExperiment(entry.id, entry)">{{ entry[key] }}</button>
+                <button type="button" class="btn" @click="actionExperiment(entry.id, entry)">{{ entry[key] }}</button>
               </div>
             </td>
           </tr>
@@ -227,7 +227,7 @@ export default {
       this.shellID = '1234567'
       this.mData = '98889'
     },
-    actionPreviewExperiment (shellCNRL, NXPcontract) {
+    actionExperiment (shellCNRL, NXPcontract) {
       this.shellContract = shellCNRL
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
