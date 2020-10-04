@@ -1,7 +1,8 @@
 <template>
   <div id="device-add-nxp">
       <li class="device-item">
-        Network Library Reference Contract:<input v-model="packageRefCont" placeholder="Reference Contract">
+        Network Library Reference Contract:
+        <input v-model="packageRefCont" placeholder="Reference Contract">
         <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
       </li>
       <li>
@@ -75,6 +76,7 @@ export default {
       dataModHolder.moduleinfo = this.modData
       dataModHolder.refcont = this.packageRefCont
       this.$store.dispatch('actionSetDataRefContract', dataModHolder)
+      this.packageRefCont = ''
     }
   }
 }

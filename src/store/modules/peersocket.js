@@ -71,7 +71,7 @@ export default {
             let addExpMod = {}
             addExpMod.exp = newFormed
             addExpMod.modules = backJSON.expanded
-            this.state.networkExpModules.push(addExpMod)
+            this.state.networkPeerExpModules.push(addExpMod)
             // standard from key value
             let standardExp = {}
             standardExp.exp = backJSON
@@ -163,6 +163,7 @@ export default {
         // context.commit('setClearGrid')
         // update or first time
         let displayReady = ToolUtility.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, backJSON.data)
+        console.log(displayReady)
         // prepare toolbar status object
         // context.commit('setToolbarState', mod)
         // context.commit('setVisProgressStart', displayReady)
@@ -272,6 +273,8 @@ export default {
       this.state.newNXPmakeRefs.push(this.state.refcontractQuestion.moduleinfo.refcont)
     },
     SET_JOIN_NXP_SOURCE (state, inVerified) {
+      console.log('set packing selected to JOIN')
+      console.log(inVerified)
       Vue.set(this.state.joinNXPselected, 'data', inVerified)
       // lookup details for this packaging contract
       let packContract = {}
@@ -282,6 +285,8 @@ export default {
         }
       }
       this.state.refcontractPackaging.push(packContract)
+      console.log('packaing contract selected')
+      console.log(this.state.refcontractPackaging)
     },
     SET_DATE_STARTNXP (state, inVerified) {
       Vue.set(this.state.joinNXPselected.compute, 'date', inVerified)
@@ -304,6 +309,11 @@ export default {
       let setToolbar = {}
       setToolbar[inVerified.mData] = { text: 'open data', active: true }
       Vue.set(this.state.opendataTools, inVerified.moduleCNRL, setToolbar)
+    },
+    SET_MODULE_HOLDER (state, inVerified) {
+      console.log('clear for new NXP')
+      this.state.moduleHolder = []
+      this.state.refcontractPackaging = []
     }
   },
   actions: {
@@ -333,6 +343,8 @@ export default {
       // Vue.prototype.$socket.send(message)
     },
     actionMakeModuleRefContract (context, update) {
+      // reset the module forms
+      context.commit('SET_MODULE_HOLDER')
       const moduleContracts = []
       const dataCNRLbundle = {}
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
@@ -552,8 +564,12 @@ export default {
       setNewNXPplusModules.reftype = 'newexperimentmodule'
       setNewNXPplusModules.action = 'newexperimentmodule'
       setNewNXPplusModules.data = this.state.moduleHolder
-      const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
-      Vue.prototype.$socket.send(genesisNXPjson)
+      console.log('contribute modules put forward')
+      console.log(setNewNXPplusModules)
+      // const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
+      // Vue.prototype.$socket.send(genesisNXPjson)
+      // reset the module holder
+      // context.commit('SET_MODULE_HOLDER')
     },
     actionJoinExperiment (context, update) {
       // map experiment refcont to genesis contract

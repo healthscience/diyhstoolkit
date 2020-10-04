@@ -339,8 +339,8 @@ const store = new Vuex.Store({
       message.action = 'networkexperiment'
       message.data = matchExp
       console.log(message)
-      const safeFlowMessage = JSON.stringify(message)
-      Vue.prototype.$socket.send(safeFlowMessage)
+      // const safeFlowMessage = JSON.stringify(message)
+      // Vue.prototype.$socket.send(safeFlowMessage)
       // look up the module reference Contracts
       /* let moduleExpandLive = this.state.livesafeFLOW.refcontUtilityLive.expMatchModuleLive(this.state.referenceContract.module, this.state.experimentStatus[update].modules)
       console.log('live modules NXP')
@@ -354,7 +354,6 @@ const store = new Vuex.Store({
       context.commit('SET_ENTITY_RETURN', entityReturn) */
     },
     actionJOINViewexperiment (context, update) {
-      console.log('PREVIEW / JOIN vuex')
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
         if (ep.exp.key === update) {
