@@ -45,11 +45,9 @@ ToolkitUtility.prototype.prepareExperimentSummarySingle = function (peerExpModul
   let gridDatapeer = {}
   let question2 = {}
   for (const mod of peerExpModules.modules) {
-    console.log(mod)
-    if (typeof mod.concept === 'object' && Object.keys(mod.concept).length > 0) {
-      if (mod.concept.type === 'question') {
-        console.log(mod)
-        question2 = mod.concept.question
+    if (typeof mod.info === 'object' && Object.keys(mod.info).length > 0) {
+      if (mod.info.type === 'question') {
+        question2 = mod.info.question
       } else {
         question2 = 'none'
       }
@@ -68,11 +66,9 @@ ToolkitUtility.prototype.prepareExperimentSummarySingleGenesis = function (peerE
   let gridDatapeer = {}
   let question2 = {}
   for (const mod of peerExpModules.modules) {
-    console.log(mod)
-    if (typeof mod.value.concept === 'object' && Object.keys(mod.value.concept).length > 0) {
-      if (mod.value.concept.moduleinfo.name === 'question') {
-        console.log(mod)
-        question2 = mod.value.concept.question
+    if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
+      if (mod.value.info.moduleinfo.name === 'question') {
+        question2 = mod.value.info.question
       } else {
         question2 = 'none'
       }
@@ -93,9 +89,9 @@ ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
   for (let nxp of peerExpModules) {
     // look up question
     for (const mod of nxp.modules) {
-      if (typeof mod.value.concept === 'object' && Object.keys(mod.value.concept).length > 0) {
-        if (mod.value.concept.type === 'question') {
-          question2 = mod.value.concept.question
+      if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
+        if (mod.value.info.type === 'question') {
+          question2 = mod.value.info.question
         } else {
           question2 = 'none'
         }
@@ -118,8 +114,8 @@ ToolkitUtility.prototype.prepareAnnonNXPlist = function (peerExpModules) {
   for (let nxp of peerExpModules) {
     // look up question
     for (const mod of nxp.modules) {
-      if (mod.value.concept.moduleinfo.name === 'question') {
-        question = mod.value.concept.question
+      if (mod.value.info.moduleinfo.name === 'question') {
+        question = mod.value.info.question
       }
     }
     gridData.push({ id: nxp.exp.key, name: question.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'Preview / Join' })
@@ -136,6 +132,8 @@ ToolkitUtility.prototype.prepareAnnonNXPlist = function (peerExpModules) {
 *
 */
 ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
+  console.log(refCont)
+  console.log(allContracts)
   let matchKey = {}
   for (const rc of allContracts) {
     if (refCont.trim() === rc.key) {

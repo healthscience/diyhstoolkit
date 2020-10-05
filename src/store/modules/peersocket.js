@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
-
+import moment from 'moment'
 const ToolUtility = new ToolkitUtility()
+
 
 export default {
   state: {
@@ -289,7 +290,13 @@ export default {
       console.log(this.state.refcontractPackaging)
     },
     SET_DATE_STARTNXP (state, inVerified) {
-      Vue.set(this.state.joinNXPselected.compute, 'date', inVerified)
+      // ECS use ms time only, please convert
+      console.log('start time for entity ms please')
+      let timeFormat = moment(inVerified).toDate()
+      console.log(timeFormat)
+      let tsimp = moment(timeFormat).format('llll')
+      console.log(tsimp)
+      Vue.set(this.state.joinNXPselected.compute, 'date', tsimp)
     },
     SET_JOIN_NXP_COMPUTE_CONTROLS (state, inVerified) {
       Vue.set(this.state.joinNXPselected.compute, 'controls', inVerified)
@@ -566,10 +573,8 @@ export default {
       setNewNXPplusModules.data = this.state.moduleHolder
       console.log('contribute modules put forward')
       console.log(setNewNXPplusModules)
-      // const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
-      // Vue.prototype.$socket.send(genesisNXPjson)
-      // reset the module holder
-      // context.commit('SET_MODULE_HOLDER')
+      const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
+      Vue.prototype.$socket.send(genesisNXPjson)
     },
     actionJoinExperiment (context, update) {
       // map experiment refcont to genesis contract
@@ -591,6 +596,8 @@ export default {
       newJoinExperiment.data = dataChoices
       let ExpmoduleRefContract = JSON.stringify(newJoinExperiment)
       Vue.prototype.$socket.send(ExpmoduleRefContract)
+      console.log('new jion experiment infor bundle')
+      console.log(newJoinExperiment)
     }
   }
 }

@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
+import ToolkitUtility from '@/mixins/toolkitUtility.js'
 const moment = require('moment')
+
+const ToolUtility = new ToolkitUtility()
 
 Vue.use(Vuex)
 
@@ -332,15 +335,41 @@ const store = new Vuex.Store({
           matchExp = nxp
         }
       }
+      // lookup peer selected module options
+      let peerOptions = []
+      for (let pmod of matchExp.modules) {
+        console.log(pmod)
+        // for each type of module look up ref contract
+        if (pmod.value.type === 'question') {
+          peerOptions.push(pmod)
+        } else if (pmod.value.type === 'data') {
+          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.data, this.state.liveRefContIndex.packaging)
+          pmod.value.info.data = peerDataRC
+          peerOptions.push(pmod)
+        } else if (pmod.value.type === 'compute') {
+          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, this.state.liveRefContIndex.compute)
+          pmod.value.info.compute = peerDataRC
+          peerOptions.push(pmod)
+        } else if (pmod.value.type === 'visualise') {
+          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.visualise, this.state.liveRefContIndex.visualise)
+          pmod.value.info.visualise = peerDataRC
+          peerOptions.push(pmod)
+        }
+      }
+      console.log('expand peer modules for ref const. selected')
+      console.log(peerOptions)
+      let ECSbundle = {}
+      ECSbundle.exp = matchExp
+      ECSbundle.modules = peerOptions
       // send message to PeerLink for safeFLOW
       let message = {}
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.action = 'networkexperiment'
-      message.data = matchExp
+      message.data = ECSbundle
       console.log(message)
-      // const safeFlowMessage = JSON.stringify(message)
-      // Vue.prototype.$socket.send(safeFlowMessage)
+      const safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage)
       // look up the module reference Contracts
       /* let moduleExpandLive = this.state.livesafeFLOW.refcontUtilityLive.expMatchModuleLive(this.state.referenceContract.module, this.state.experimentStatus[update].modules)
       console.log('live modules NXP')
@@ -354,6 +383,7 @@ const store = new Vuex.Store({
       context.commit('SET_ENTITY_RETURN', entityReturn) */
     },
     actionJOINViewexperiment (context, update) {
+      console.log('viewJOIN NXP')
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
         if (ep.exp.key === update) {
