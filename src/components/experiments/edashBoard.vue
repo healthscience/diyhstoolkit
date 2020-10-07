@@ -70,6 +70,9 @@ import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
 export default {
   name: 'visual-dashview',
   components: {
+    // progressMessage,
+    // learnReport,
+    // learnAction
     ModuleBoard,
     ProgressMessage,
     GridLayout: VueGridLayout.GridLayout,
@@ -79,9 +82,6 @@ export default {
     nxpCompute,
     nxpVisualise,
     nxpPlain
-    // progressMessage,
-    // learnReport,
-    // learnAction
   },
   created: function () {
   },

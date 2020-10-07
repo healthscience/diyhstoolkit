@@ -38,6 +38,30 @@ ToolkitUtility.prototype.prepareJoinedNXPlist = function (peerExpModules) {
 
 /**
 * Prepare experiment data list
+* @method prepareExperimentSummary
+*
+*/
+ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
+  let gridDatapeer = []
+  let question2 = {}
+  for (let nxp of peerExpModules) {
+    // look up question
+    for (const mod of nxp.modules) {
+      if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
+        if (mod.value.info.type === 'question') {
+          question2 = mod.value.info.question
+        } else {
+          question2 = 'none'
+        }
+      }
+    }
+    gridDatapeer.push({ id: nxp.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
+  }
+  return gridDatapeer
+}
+
+/**
+* Prepare experiment data list
 * @method prepareExperimentSummarySingle
 *
 */
@@ -45,9 +69,10 @@ ToolkitUtility.prototype.prepareExperimentSummarySingle = function (peerExpModul
   let gridDatapeer = {}
   let question2 = {}
   for (const mod of peerExpModules.modules) {
-    if (typeof mod.info === 'object' && Object.keys(mod.info).length > 0) {
+    console.log(mod)
+    if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
       if (mod.info.type === 'question') {
-        question2 = mod.info.question
+        question2 = mod.value.info.question
       } else {
         question2 = 'none'
       }
@@ -79,31 +104,7 @@ ToolkitUtility.prototype.prepareExperimentSummarySingleGenesis = function (peerE
 }
 
 /**
-* Prepare experiment data list
-* @method prepareExperimentSummary
-*
-*/
-ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
-  let gridDatapeer = []
-  let question2 = {}
-  for (let nxp of peerExpModules) {
-    // look up question
-    for (const mod of nxp.modules) {
-      if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
-        if (mod.value.info.type === 'question') {
-          question2 = mod.value.info.question
-        } else {
-          question2 = 'none'
-        }
-      }
-    }
-    gridDatapeer.push({ id: nxp.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
-  }
-  return gridDatapeer
-}
-
-/**
-* Prepare table list view of experiments joined
+* Prepare table list view of experiments
 * @method prepareAnnonNXPlist
 *
 */
@@ -132,8 +133,6 @@ ToolkitUtility.prototype.prepareAnnonNXPlist = function (peerExpModules) {
 *
 */
 ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
-  console.log(refCont)
-  console.log(allContracts)
   let matchKey = {}
   for (const rc of allContracts) {
     if (refCont.trim() === rc.key) {

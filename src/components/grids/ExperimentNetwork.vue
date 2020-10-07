@@ -27,16 +27,16 @@
           </tr>
         </tbody>
       </table>
-      <!-- loop over the different modules included -->
+      <!-- loop over the different modules included  ee {{ NXPstatusData  }} ----------ss {{ shellContract }} -------pp {{ NXPprogress}}-->
       <div id="module-list" v-if="NXPstatusData[shellContract]" >
         <progress-message v-if="NXPprogress.active === true"></progress-message>
-        <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
-          <dash-board v-if="isModalDashboardVisible" :shellCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>
-        </ul>
+        <!-- <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
+          <dash-board v-if="isModalDashboardVisible === true" :shellCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>
+        </ul> -->
       </div>
       <!-- join network experiment modal -->
       <join-experiment v-show="isModalJoinVisible && NXPJoinModuleData.length !== 0" @close="closeModalJoin">
-        <template v-slot:header> sl-- {{ selectedOptions }} --vv {{ visDefaults }}
+        <template v-slot:header>
         <!-- The code below goes into the header slot -->
           N=1 Network Experiment {{ actionKBundle.name }}
         </template>
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import DashBoard from '@/components/experiments/edashBoard.vue'
+// import DashBoard from '@/components/experiments/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
 import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
 import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
@@ -109,7 +109,7 @@ import ChartBuilder from '@/components/visualise/chartBuilder'
 export default {
   name: 'ExperimentNetwork',
   components: {
-    DashBoard,
+    // DashBoard,
     ProgressMessage,
     JoinExperiment,
     CalendarSelect,
@@ -228,11 +228,14 @@ export default {
       this.mData = '98889'
     },
     actionExperiment (shellCNRL, NXPcontract) {
+      console.log(shellCNRL)
+      console.log(NXPcontract)
       this.shellContract = shellCNRL
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
         this.$store.dispatch('actionDashboardState', shellCNRL)
         this.isModalDashboardVisible = true
+        console.log('view dashbaor modal true now')
       } else {
         // preview network experiment
         this.$store.dispatch('actionJOINViewexperiment', shellCNRL)
@@ -260,10 +263,6 @@ export default {
     },
     datastartLookup () {
       this.newCompute.startperiod = 12345123451
-    },
-    contributeNXP () {
-      console.log('new NXP to save progess')
-      this.$store.dispatch('actionNewNXPrefcontract')
     },
     joinNetworkExperiment () {
       console.log('save and join network exerpiment')

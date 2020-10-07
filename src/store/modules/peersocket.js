@@ -3,7 +3,6 @@ import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import moment from 'moment'
 const ToolUtility = new ToolkitUtility()
 
-
 export default {
   state: {
     socket: {
@@ -145,19 +144,21 @@ export default {
         console.log(backJSON)
         // context.commit('SET_ENTITY_RETURN', entityReturn)
         this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
+        this.state.entityUUIDsummary = backJSON
         console.log('UUID shell set for dashboard')
         console.log(this.state.entityUUIDReturn)
       } else if (backJSON.type === 'ecsflow') {
         console.log('ECS flow')
         console.log(backJSON)
+        console.log(this.state.liveNXP)
         // format data for DashBoard
-        console.log('action display start i.e. ECS data back')
         let mod = []
         if (this.state.entityUUIDReturn === undefined) {
           mod = this.state.nxpModulesLive
         } else {
           // only update modules returned
-          mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
+          console.log(this.state.entityUUIDsummary.data)
+          mod = this.state.entityUUIDsummary.data[this.state.liveNXP].modules
         }
         console.log(mod)
         // remove existing vis component if in single mode (default)
@@ -167,22 +168,65 @@ export default {
         console.log(displayReady)
         // prepare toolbar status object
         // context.commit('setToolbarState', mod)
+        for (let mo of mod) {
+          let setToolbar = { text: 'show', active: false }
+          Vue.set(this.state.toolbarStatus, mo.key, setToolbar)
+        }
         // context.commit('setVisProgressStart', displayReady)
+        console.log('vis start newnewnew')
+        let setVisProg = {}
+        let moduleKeys = Object.keys(displayReady.grid)
+        for (let mod of moduleKeys) {
+          for (let dti of displayReady.grid[mod]) {
+            setVisProg[dti.i] = { text: 'Preparing visualisation', active: false }
+          }
+          Vue.set(this.state.visProgress, mod, setVisProg)
+          setVisProg = {}
+        }
         // context.commit('setVisToolbarState', displayReady)
+        let setVistoolbar = {}
+        let moduleKeys1 = Object.keys(displayReady.grid)
+        for (let mod of moduleKeys1) {
+          for (let dti of displayReady.grid[mod]) {
+            setVistoolbar[dti.i] = { text: 'open tools', active: false }
+          }
+          Vue.set(this.state.toolbarVisStatus, mod, setVistoolbar)
+          setVistoolbar = {}
+        }
         // context.commit('setOpendataState', displayReady)
+        let setOpendata = {}
+        let moduleKeys2 = Object.keys(displayReady.grid)
+        for (let mod of moduleKeys2) {
+          for (let dti of displayReady.grid[mod]) {
+            setOpendata[dti.i] = { text: 'open data', active: false }
+          }
+          Vue.set(this.state.opendataTools, mod, setOpendata)
+          setOpendata = {}
+        }
         // context.commit('setVisProgressComplete', displayReady) // setVisProgressComplete
+        let setProgress2 = {}
+        setProgress2[displayReady.mData] = { text: 'Preparing visualisation', active: false }
+        Vue.set(this.state.visProgress, displayReady.moduleCNRL, setProgress2)
         // context.commit('setProgressComplete', this.state.liveNXP)
+        let setProgress3 = { text: 'Experiment in progress', active: false }
+        Vue.set(this.state.nxpProgress, this.state.liveNXP, setProgress3)
         // context.commit('setLiveDisplayNXPModules', displayReady)
+        state.moduleGrid = displayReady.grid
+        Vue.set(this.state.NXPexperimentData, state.liveNXP, displayReady.data)
         // extract out the time
-        /* for (let mmod of mod) {
-          if (mmod.type === 'compute') {
+        for (let mmod of mod) {
+          console.log(mmod)
+          if (mmod.value.type === 'compute') {
+            console.log('extract time')
+            console.log(mmod)
             let newStartTime = 0
             if (this.state.timeStartperiod === 0) {
-              newStartTime = mmod.time.startperiod
-              context.commit('setTimeAsk', newStartTime)
+              newStartTime = mmod.value.info.controls.date
+              // context.commit('setTimeAsk', newStartTime)
+              this.state.timeStartperiod = newStartTime
             }
           }
-        } */
+        }
       } else {
         console.log('starting network experiment data BACK FAE NetworkLibrary')
         // save copy of ref contract indexes
@@ -197,12 +241,23 @@ export default {
           let experBundle = {}
           experBundle.cnrl = exl.exp.key
           experBundle.status = false
+          experBundle.active = false
           experBundle.contract = exl.exp
           experBundle.modules = exl.modules
           let objectPropC = exl.exp.key
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }
-        for (let nxp of backJSON.networkExpModules) {
+        for (let exl of backJSON.networkPeerExpModules) {
+          let experBundle = {}
+          experBundle.cnrl = exl.exp.key
+          experBundle.status = false
+          experBundle.active = false
+          experBundle.contract = exl.exp
+          experBundle.modules = exl.modules
+          let objectPropC = exl.exp.key
+          Vue.set(this.state.experimentStatus, objectPropC, experBundle)
+        }
+        for (let nxp of backJSON.networkPeerExpModules) {
           let setProgress = { text: 'Experiment in progress', active: false }
           Vue.set(this.state.nxpProgress, nxp.exp.key, setProgress)
         }
@@ -255,7 +310,9 @@ export default {
       Vue.set(this.state.visModuleHolder, 'xaxis', inVerified)
     },
     SET_NEWNXP_VISYAXIS (state, inVerified) {
-      Vue.set(this.state.visModuleHolder, 'yaxis', inVerified)
+      // y axis can hold many datatypes
+      this.state.visModuleHolder.yaxis.push(inVerified)
+      // Vue.set(this.state.visModuleHolder, 'yaxis', inVerified)
     },
     SET_NEWNXP_VISCATEGORY (state, inVerified) {
       Vue.set(this.state.visModuleHolder, 'category', inVerified)
@@ -292,11 +349,9 @@ export default {
     SET_DATE_STARTNXP (state, inVerified) {
       // ECS use ms time only, please convert
       console.log('start time for entity ms please')
-      let timeFormat = moment(inVerified).toDate()
+      let timeFormat = moment(inVerified).valueOf()
       console.log(timeFormat)
-      let tsimp = moment(timeFormat).format('llll')
-      console.log(tsimp)
-      Vue.set(this.state.joinNXPselected.compute, 'date', tsimp)
+      Vue.set(this.state.joinNXPselected.compute, 'date', timeFormat)
     },
     SET_JOIN_NXP_COMPUTE_CONTROLS (state, inVerified) {
       Vue.set(this.state.joinNXPselected.compute, 'controls', inVerified)

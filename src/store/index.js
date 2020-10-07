@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
-import ToolkitUtility from '@/mixins/toolkitUtility.js'
+// import ToolkitUtility from '@/mixins/toolkitUtility.js'
 const moment = require('moment')
-
-const ToolUtility = new ToolkitUtility()
+// const ToolUtility = new ToolkitUtility()
 
 Vue.use(Vuex)
 
@@ -26,7 +25,18 @@ const store = new Vuex.Store({
     {
       compute: {}
     },
-    visModuleHolder: {},
+    visModuleHolder:
+    {
+      devices: null,
+      data: null,
+      compute: null,
+      visualise: null,
+      category: null,
+      timeperiod: null,
+      xaxis: null,
+      yaxis: [],
+      resolution: null
+    },
     dashboardNXP: {},
     ECSupdateOUT: {},
     referenceContract: {},
@@ -34,8 +44,10 @@ const store = new Vuex.Store({
     NXPexperimentList: {},
     joinedNXPlist: {},
     experimentStatus: {},
+    experimentPeerStatus: {},
     NXPexperimentData: {},
     entityUUIDReturn: {},
+    entityUUIDsummary: {},
     updateentityUUIDReturn: {},
     moduleGrid: {},
     toolbarStatus:
@@ -321,15 +333,12 @@ const store = new Vuex.Store({
     },
     async actionDashboardState (context, update) {
       console.log('VIEW DASHBORD -safeflow start')
-      console.log(update)
       context.commit('setLiveNXP', update)
-      // context.commit('setDashboardNXP', update)
-      // context.commit('setProgressUpdate', update)
+      context.commit('setDashboardNXP', update)
+      context.commit('setProgressUpdate', update)
       // context.commit('setUpdatesOUT', update)
       // pass the safeFLOW-ECS input bundle
-      console.log('ECS bundle')
-      console.log(this.state.networkPeerExpModules)
-      let matchExp = {}
+      /* let matchExp = {}
       for (let nxp of this.state.networkPeerExpModules) {
         if (nxp.exp.key === update) {
           matchExp = nxp
@@ -338,7 +347,6 @@ const store = new Vuex.Store({
       // lookup peer selected module options
       let peerOptions = []
       for (let pmod of matchExp.modules) {
-        console.log(pmod)
         // for each type of module look up ref contract
         if (pmod.value.type === 'question') {
           peerOptions.push(pmod)
@@ -356,8 +364,6 @@ const store = new Vuex.Store({
           peerOptions.push(pmod)
         }
       }
-      console.log('expand peer modules for ref const. selected')
-      console.log(peerOptions)
       let ECSbundle = {}
       ECSbundle.exp = matchExp
       ECSbundle.modules = peerOptions
@@ -369,7 +375,7 @@ const store = new Vuex.Store({
       message.data = ECSbundle
       console.log(message)
       const safeFlowMessage = JSON.stringify(message)
-      Vue.prototype.$socket.send(safeFlowMessage)
+      Vue.prototype.$socket.send(safeFlowMessage) */
       // look up the module reference Contracts
       /* let moduleExpandLive = this.state.livesafeFLOW.refcontUtilityLive.expMatchModuleLive(this.state.referenceContract.module, this.state.experimentStatus[update].modules)
       console.log('live modules NXP')
