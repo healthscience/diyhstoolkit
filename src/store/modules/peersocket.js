@@ -143,14 +143,11 @@ export default {
         console.log('ECS data summary')
         console.log(backJSON)
         // context.commit('SET_ENTITY_RETURN', entityReturn)
+        // Vue.set(this.state.entityUUIDReturn, mo.key, setToolbar)
         this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
         this.state.entityUUIDsummary = backJSON
-        console.log('UUID shell set for dashboard')
-        console.log(this.state.entityUUIDReturn)
       } else if (backJSON.type === 'ecsflow') {
         console.log('ECS flow')
-        console.log(backJSON)
-        console.log(this.state.liveNXP)
         // format data for DashBoard
         let mod = []
         if (this.state.entityUUIDReturn === undefined) {

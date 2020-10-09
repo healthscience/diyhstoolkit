@@ -434,20 +434,21 @@ const store = new Vuex.Store({
       console.log('set muilt or single or back or forward day in time')
       console.log(update)
       // display processing
-      context.commit('setVisProgressUpdate', update)
-      // send ref contract and update time?
+      // context.commit('setVisProgressUpdate', update)
       // entity container
-      let entityUUID = this.state.entityUUIDReturn[update.shellCNRL].shellID
+      let entityUUID = this.state.entityUUIDReturn // [update.shellCNRL].shellID
+      // prepare info. to update library ref contracts
       let updateContract = {}
-      // updateContract = update
-      updateContract.entityUUID = entityUUID
       // the visulisation and compute module contract need updating for time which when how????
-      let nxpModules = this.state.entityUUIDReturn[update.shellCNRL].modules
+      console.log(this.state.entityUUIDsummary)
+      let nxpModules = this.state.entityUUIDsummary.data[update.nxpCNRL].modules
       let updateModules = []
       for (let mmod of nxpModules) {
-        if (mmod.type === 'compute') {
+        if (mmod.value.type === 'compute') {
+          console.log('compute')
+          console.log(mmod)
           // update the Compute RefContract
-          mmod.automation = false
+          mmod.value.automation = false
           let newStartTime = []
           if (this.state.timeStartperiod === 0) {
             let freshStart = Date.now() + update.startperiodchange
@@ -460,7 +461,7 @@ const store = new Vuex.Store({
             } else if (update.rangechange.length > 0) {
               console.log('chage range above zero')
               newStartTime = update.rangechange
-              mmod.time.timeseg = update.startperiodchange
+              mmod.value.info.settings.timeseg = update.startperiodchange
             } else if (update.startperiod === 0 && update.startperiodchange) {
               console.log('update starp0 but range above 1')
               console.log(this.state.timeStartperiod)
@@ -470,45 +471,48 @@ const store = new Vuex.Store({
               let convertTime = timeCon.getTime()
               let updateT = parseInt(convertTime) + update.startperiodchange
               newStartTime.push(updateT)
-              mmod.time.timeseg = update.startperiodchange
+              mmod.value.info.settings.timeseg = update.startperiodchange
             } else {
               console.log('elas all otehr opieons')
               let updateSum = parseInt(this.state.timeStartperiod) + update.startperiodchange
               newStartTime.push(updateSum)
-              mmod.time.timeseg = update.startperiodchange
+              mmod.value.info.settings.timeseg = update.startperiodchange
             }
           }
           context.commit('setTimeAsk', newStartTime)
-          mmod.time.startperiod = newStartTime
-          mmod.time.timeseg = update.startperiodchange
+          mmod.value.info.settings.date = newStartTime
+          mmod.value.info.settings.timeseg = update.startperiodchange
           updateModules.push(mmod)
-        } else if (mmod.cnrl === update.moduleCNRL) {
-          mmod.singlemulti = update.singlemulti
+        } else if (mmod.key === update.moduleCNRL) {
+          mmod.value.info.settings.singlemulti = update.singlemulti
           updateModules.push(mmod)
         }
+        console.log('updated MMOD')
+        console.log(mmod)
       }
       // keep state of live modules
-      context.commit('setModulesLive', updateModules)
-      updateContract.cnrl = update.shellCNRL
+      // context.commit('setModulesLive', updateModules)
+      updateContract.cnrl = update.nxpCNRL
       updateContract.modules = updateModules
       updateContract.entityUUID = entityUUID
       updateContract.modules = updateModules
       updateContract.input = 'refUpdate'
       context.commit('setUpdatesOUT', updateContract)
+      console.log(updateContract)
       // let entityReturn = await safeAPI.ECSinput(updateContract)
       // context.commit('setUpdateentityReturn', entityReturn)
-      /* update existing ecs bundle send to peerLink
+      // update existing ecs bundle send to peerLink
       let ECSbundle = {}
-      ECSbundle.exp = matchExp
-      ECSbundle.modules = peerOptions
+      ECSbundle.exp = update.nxpCNRL
+      ECSbundle.update = updateContract
       // send message to PeerLink for safeFLOW
       let message = {}
       message.type = 'safeflow'
-      message.reftype = 'ignore'
-      message.action = 'networkexperiment'
+      message.reftype = 'update'
+      message.action = 'updatenetworkexperiment'
       message.data = ECSbundle
       console.log(message)
-      const safeFlowMessage = JSON.stringify(message)
+      /* const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage) */
     },
     actionFuture (context, update) {

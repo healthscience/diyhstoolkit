@@ -98,10 +98,10 @@ export default {
       return this.$store.state.toolbarStatus[this.moduleCNRL]
     },
     moduleContent: function () {
-      console.log('module content')
-      console.log(this.shellCNRL)
-      console.log(this.moduleCNRL)
-      console.log(this.$store.state.NXPexperimentData[this.shellCNRL])
+      // console.log('module content')
+      // console.log(this.shellCNRL)
+      // console.log(this.moduleCNRL)
+      // console.log(this.$store.state.NXPexperimentData[this.shellCNRL])
       let contentModule = this.$store.state.NXPexperimentData[this.shellCNRL]
       if (contentModule === undefined) {
         return false

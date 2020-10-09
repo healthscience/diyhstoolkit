@@ -169,7 +169,7 @@ export default {
         timeRange = this.calendarListMS
       }
       let contextK = {}
-      contextK.shellCNRL = this.shellID
+      contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
       contextK.moduleType = this.moduleType
       contextK.mData = this.mData
@@ -181,7 +181,7 @@ export default {
     singleChartday (cm) {
       // prepare update for safeFLOW
       let contextK = {}
-      contextK.shellCNRL = this.shellID
+      contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
       contextK.moduleType = this.moduleType
       contextK.mData = this.mData
@@ -194,7 +194,7 @@ export default {
     setTimeData (seg) {
       // back and forward and time
       let contextK = {}
-      contextK.shellCNRL = this.shellID
+      contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
       contextK.moduleType = this.moduleType
       contextK.mData = this.mData
