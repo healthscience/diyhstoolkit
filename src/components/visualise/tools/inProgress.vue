@@ -1,6 +1,6 @@
 <template>
   <div id="inprogress-view">
-    <section id="safeflow-status">
+    <section v-if="progressMessage.active === true" id="safeflow-status">
       preparing
     </section>
   </div>

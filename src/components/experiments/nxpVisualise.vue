@@ -47,7 +47,7 @@ export default {
     shellID: '1234567',
     moduleCNRL: 'cnrl-001234543458',
     moduleType: 'vis',
-    mData: '98889',
+    mData: '1',
     visualRefCont: ''
   }),
   created () {

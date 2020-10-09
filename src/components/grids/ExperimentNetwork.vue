@@ -27,12 +27,13 @@
           </tr>
         </tbody>
       </table>
-      <!-- loop over the different modules included  ee {{ NXPstatusData  }} ----------ss {{ shellContract }} -------pp {{ NXPprogress}}-->
-      <div id="module-list" v-if="NXPstatusData[shellContract]" >
-        <progress-message v-if="NXPprogress.active === true"></progress-message>
-        <!-- <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
-          <dash-board v-if="isModalDashboardVisible === true" :shellCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>
-        </ul> -->
+      <div id="module-list" v-if="NXPstatusData[shellContract]">
+        <progress-message v-if="NXPprogress" :progressMessage="NXPprogress"></progress-message>
+        <div id="module-ready" v-if="NXPstatusData[shellContract].modules">
+          <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
+            <dash-board v-if="isModalDashboardVisible === true" :shellCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>
+          </ul>
+        </div>
       </div>
       <!-- join network experiment modal -->
       <join-experiment v-show="isModalJoinVisible && NXPJoinModuleData.length !== 0" @close="closeModalJoin">
@@ -87,8 +88,8 @@
         </template>
         <template v-slot:dashboard-visualisation>
           <header>Visualisation</header>
-          <li>newVisualise --{{  NXPJoinModuleVisualise }}
-            <chart-builder v-if="type === 'chart.js'" :shellID="'1234567'" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="'98889'" ></chart-builder>
+          <li>
+            <chart-builder v-if="NXPJoinModuleVisualise" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" ></chart-builder>
           </li>
         </template>
         <template v-slot:submit-join>
@@ -100,7 +101,7 @@
 </template>
 
 <script>
-// import DashBoard from '@/components/experiments/edashBoard.vue'
+import DashBoard from '@/components/experiments/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
 import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
 import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
@@ -109,7 +110,7 @@ import ChartBuilder from '@/components/visualise/chartBuilder'
 export default {
   name: 'ExperimentNetwork',
   components: {
-    // DashBoard,
+    DashBoard,
     ProgressMessage,
     JoinExperiment,
     CalendarSelect,
@@ -213,7 +214,7 @@ export default {
       shellID: null,
       moduleCNRL: 'cnrl-001234543458',
       moduleType: 'vis',
-      mData: '',
+      mData: '98889',
       visualRefCont: ''
     }
   },

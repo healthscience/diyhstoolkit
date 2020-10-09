@@ -1,5 +1,5 @@
 <template>
-  <div id="k-toolkit">tt--{{ visToolbarStatusLive }}
+  <div id="k-toolkit">
     <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>
     <div id="diy-tools" v-if="visToolbarStatusLive.active">
       <div id="chart-type">
@@ -56,9 +56,13 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
+      console.log('visToolbarstatuslive')
+      console.log(this.$store.state.toolbarVisStatus)
+      console.log(this.moduleCNRL)
+      console.log(this.mData)
       let objectKeys = Object.keys(this.$store.state.toolbarVisStatus)
       if (objectKeys.length === 0) {
-        return {}
+        return 'notset'
       } else {
         return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
       }

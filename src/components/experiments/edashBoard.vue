@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard-holder" v-if="moduleContent === true">
+  <div id="dashboard-holder" v-if="moduleContent.prime.active === true">
     <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
@@ -99,6 +99,8 @@ export default {
     },
     moduleContent: function () {
       console.log('module content')
+      console.log(this.shellCNRL)
+      console.log(this.moduleCNRL)
       console.log(this.$store.state.NXPexperimentData[this.shellCNRL])
       let contentModule = this.$store.state.NXPexperimentData[this.shellCNRL]
       if (contentModule === undefined) {
@@ -185,7 +187,7 @@ export default {
 
 <style>
 #dashboard-holder {
-  border: 0px solid red;
+  border: 2px solid red;
 }
 #dashboard-view {
   border: 1px solid white;

@@ -149,29 +149,37 @@ ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
 */
 ToolkitUtility.prototype.displayFilter = function (shellID, modules, time, entityData) {
   // setup return vis Object
-  // console.log('DISPLAYflitttter')
-  // console.log(entityData)
-  // console.log(modules)
-  let TestDataBundle = {}
+  console.log('DISPLAYflitttter')
+  console.log(shellID)
+  console.log(modules)
+  console.log(time)
+  console.log(entityData)
+  let testDataBundle = {}
   let gridPerModule = {}
   for (let mod of modules) {
+    console.log('prepare display modules')
+    console.log(mod.type)
     // need to match each modules to Component Data
-    if (mod.type === 'Question') {
-      gridPerModule[mod.cnrl] = mod.grid
-      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true }, 'grid': mod.grid, 'data': [{ 'form': 'html' }, { 'content': 'Movement Summary' }], 'message': 'compute-complete' }
-    } else if (mod.type === 'Device') {
-      gridPerModule[mod.cnrl] = mod.grid
-      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': mod.grid, 'data': entityData.liveDeviceC.devices, 'message': 'compute-complete' }
-    } else if (mod.type === 'Dapp') {
-      gridPerModule[mod.cnrl] = mod.grid
-      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true }, 'grid': mod.grid, 'data': [{ 'content': 'Gadgetbridge android' }, { 'content2': 'Xdrip android' }], 'message': 'compute-complete' }
-    } else if (mod.type === 'compute') {
-      gridPerModule[mod.cnrl] = mod.grid
-      TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-compute', 'text': 'Compute', 'active': true }, 'grid': mod.grid, 'message': 'compute-complete' }
-    } else if (mod.type === 'Errors') {
+    if (mod.value.type === 'question') {
+      let qgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: true }]
+      gridPerModule[mod.key] = qgrid // mod.grid
+      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true }, 'grid': qgrid, 'data': [{ 'form': 'html' }, { 'content': 'Movement Summary' }], 'message': 'compute-complete' }
+    } else if (mod.value.type === 'device') {
+      let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }]
+      gridPerModule[mod.key] = dgrid // mod.grid
+      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': dgrid, 'data': entityData.liveDeviceC.devices, 'message': 'compute-complete' }
+    } else if (mod.value.type === 'dapp') {
+      let ddgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }]
+      gridPerModule[mod.key] = ddgrid // mod.grid
+      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true }, 'grid': ddgrid, 'data': [{ 'content': 'Gadgetbridge android' }, { 'content2': 'Xdrip android' }], 'message': 'compute-complete' }
+    } else if (mod.value.type === 'compute') {
+      let cgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }]
+      gridPerModule[mod.key] = cgrid // mod.grid
+      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-compute', 'text': 'Compute', 'active': true }, 'grid': cgrid, 'message': 'compute-complete' }
+    } else if (mod.value.type === 'Errors') {
       // gridPerModule[mod.cnrl] = mod.grid
       // [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} }], '1': { 'chartPackage': { 'labels': [2, 4] }, { 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} } }, 'message': 'compute-complete'
-    } else if (mod.type === 'Visualise') {
+    } else if (mod.value.type === 'visualise') {
       // loop over data vis read
       mod.grid = []
       let makeGrid = []
@@ -181,8 +189,8 @@ ToolkitUtility.prototype.displayFilter = function (shellID, modules, time, entit
         let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'singlemulti', static: false }
         makeGrid.push(newGriditem)
         // gridPerModule = {}
-        gridPerModule[mod.cnrl] = makeGrid
-        TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': { 'singlemulti': entityData.liveVisualC.singlemulti } }
+        gridPerModule[mod.key] = makeGrid
+        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': { 'singlemulti': entityData.liveVisualC.singlemulti } }
       } else {
         // normal display indivduals charts
         for (let dr of entityData.liveVisualC.liveVislist) {
@@ -192,15 +200,15 @@ ToolkitUtility.prototype.displayFilter = function (shellID, modules, time, entit
           makeGrid.push(newGriditem)
         }
         // gridPerModule = {}
-        gridPerModule[mod.cnrl] = makeGrid
-        TestDataBundle[mod.cnrl] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': entityData.liveVisualC.visualData }
+        gridPerModule[mod.key] = makeGrid
+        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': entityData.liveVisualC.visualData }
       }
     }
   }
   console.log('TIMEPLATE DATA XLP')
-  console.log(TestDataBundle)
+  console.log(testDataBundle)
   let displayData = {}
-  displayData.data = TestDataBundle
+  displayData.data = testDataBundle
   displayData.grid = gridPerModule
   return displayData
 }

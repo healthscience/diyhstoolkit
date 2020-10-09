@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
-// import ToolkitUtility from '@/mixins/toolkitUtility.js'
+import ToolkitUtility from '@/mixins/toolkitUtility.js'
 const moment = require('moment')
-// const ToolUtility = new ToolkitUtility()
+const ToolUtility = new ToolkitUtility()
 
 Vue.use(Vuex)
 
@@ -114,19 +114,6 @@ const store = new Vuex.Store({
     SET_DATASOURCECOUNT: (state, inVerified) => {
       state.datasourceCount = inVerified
     },
-    setExperimentList: (state, inVerified) => {
-      // check if peerlink has been called if not get ref contracts
-      /* let gridData = []
-      let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
-      for (let nxp of inVerified) { // state.joinedNXPlist.data) {
-        // console.log(nxp.contract)
-        gridData.push({ id: nxp.contract.prime.cnrl, name: nxp.contract.prime.text, description: '--', time: Infinity, dapps: 'GadgetBridge', device: 'Yes', action: 'View' })
-      }
-      let gridTest2 = {}
-      gridTest2.columns = gridColumns
-      gridTest2.data = gridData
-      state.experimentList = gridTest2 */
-    },
     setOutflowWatch: (state, inVerified) => {
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
     },
@@ -145,8 +132,6 @@ const store = new Vuex.Store({
     },
     setDashboardNXP: (state, inVerified) => {
       console.log('set dashboard status')
-      console.log(inVerified)
-      console.log(state.experimentStatus)
       let dStatus = state.experimentStatus[inVerified].active
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
@@ -338,13 +323,13 @@ const store = new Vuex.Store({
       context.commit('setProgressUpdate', update)
       // context.commit('setUpdatesOUT', update)
       // pass the safeFLOW-ECS input bundle
-      /* let matchExp = {}
+      let matchExp = {}
       for (let nxp of this.state.networkPeerExpModules) {
         if (nxp.exp.key === update) {
           matchExp = nxp
         }
       }
-      // lookup peer selected module options
+      // prepare ECS inputs- lookup peer selected module options
       let peerOptions = []
       for (let pmod of matchExp.modules) {
         // for each type of module look up ref contract
@@ -375,18 +360,7 @@ const store = new Vuex.Store({
       message.data = ECSbundle
       console.log(message)
       const safeFlowMessage = JSON.stringify(message)
-      Vue.prototype.$socket.send(safeFlowMessage) */
-      // look up the module reference Contracts
-      /* let moduleExpandLive = this.state.livesafeFLOW.refcontUtilityLive.expMatchModuleLive(this.state.referenceContract.module, this.state.experimentStatus[update].modules)
-      console.log('live modules NXP')
-      console.log(moduleExpandLive)
-      let ECSbundle = {}
-      ECSbundle.cnrl = this.state.experimentStatus[update].cnrl
-      ECSbundle.module = moduleExpandLive
-      console.log('ECS bundle mod expaneded')
-      console.log(ECSbundle)
-      let entityReturn = await safeAPI.ECSinput(ECSbundle)
-      context.commit('SET_ENTITY_RETURN', entityReturn) */
+      Vue.prototype.$socket.send(safeFlowMessage)
     },
     actionJOINViewexperiment (context, update) {
       console.log('viewJOIN NXP')

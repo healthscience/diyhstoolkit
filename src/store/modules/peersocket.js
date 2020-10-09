@@ -164,7 +164,7 @@ export default {
         // remove existing vis component if in single mode (default)
         // context.commit('setClearGrid')
         // update or first time
-        let displayReady = ToolUtility.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, backJSON.data)
+        let displayReady = ToolUtility.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, backJSON)
         console.log(displayReady)
         // prepare toolbar status object
         // context.commit('setToolbarState', mod)
@@ -193,6 +193,8 @@ export default {
           Vue.set(this.state.toolbarVisStatus, mod, setVistoolbar)
           setVistoolbar = {}
         }
+        console.log('vis toolbar status')
+        console.log(this.state.toolbarVisStatus)
         // context.commit('setOpendataState', displayReady)
         let setOpendata = {}
         let moduleKeys2 = Object.keys(displayReady.grid)
@@ -211,8 +213,8 @@ export default {
         let setProgress3 = { text: 'Experiment in progress', active: false }
         Vue.set(this.state.nxpProgress, this.state.liveNXP, setProgress3)
         // context.commit('setLiveDisplayNXPModules', displayReady)
-        state.moduleGrid = displayReady.grid
-        Vue.set(this.state.NXPexperimentData, state.liveNXP, displayReady.data)
+        this.state.moduleGrid = displayReady.grid
+        Vue.set(this.state.NXPexperimentData, this.state.liveNXP, displayReady.data)
         // extract out the time
         for (let mmod of mod) {
           console.log(mmod)
