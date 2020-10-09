@@ -193,8 +193,8 @@ export default {
           Vue.set(this.state.toolbarVisStatus, mod, setVistoolbar)
           setVistoolbar = {}
         }
-        console.log('vis toolbar status')
-        console.log(this.state.toolbarVisStatus)
+        // console.log('vis toolbar status')
+        // console.log(this.state.toolbarVisStatus)
         // context.commit('setOpendataState', displayReady)
         let setOpendata = {}
         let moduleKeys2 = Object.keys(displayReady.grid)

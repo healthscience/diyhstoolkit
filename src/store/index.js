@@ -397,7 +397,42 @@ const store = new Vuex.Store({
     actionVisOpenData (context, update) {
       context.commit('setOpendataBar', update)
     },
+    actionDisplay (context, update) {
+      console.log('action display start i.e. ECS data back')
+      let mod = []
+      if (this.state.entityUUIDReturn === undefined) {
+        mod = this.state.nxpModulesLive
+      } else {
+        // only update modules returned
+        mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
+      }
+      console.log(mod)
+      // remove existing vis component if in single mode (default)
+      // context.commit('setClearGrid')
+      // update or first time
+      // let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
+      // prepare toolbar status object
+      // context.commit('setToolbarState', mod)
+      // context.commit('setVisProgressStart', displayReady)
+      // context.commit('setVisToolbarState', displayReady)
+      // context.commit('setOpendataState', displayReady)
+      // context.commit('setVisProgressComplete', displayReady) // setVisProgressComplete
+      // context.commit('setProgressComplete', this.state.liveNXP)
+      // context.commit('setLiveDisplayNXPModules', displayReady)
+      // extract out the time
+      /* for (let mmod of mod) {
+        if (mmod.type === 'compute') {
+          let newStartTime = 0
+          if (this.state.timeStartperiod === 0) {
+            newStartTime = mmod.time.startperiod
+            context.commit('setTimeAsk', newStartTime)
+          }
+        }
+      } */
+    },
     async actionVisUpdate (context, update) {
+      console.log('set muilt or single or back or forward day in time')
+      console.log(update)
       // display processing
       context.commit('setVisProgressUpdate', update)
       // send ref contract and update time?
@@ -462,39 +497,19 @@ const store = new Vuex.Store({
       context.commit('setUpdatesOUT', updateContract)
       // let entityReturn = await safeAPI.ECSinput(updateContract)
       // context.commit('setUpdateentityReturn', entityReturn)
-    },
-    actionDisplay (context, update) {
-      console.log('action display start i.e. ECS data back')
-      let mod = []
-      if (this.state.entityUUIDReturn === undefined) {
-        mod = this.state.nxpModulesLive
-      } else {
-        // only update modules returned
-        mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
-      }
-      console.log(mod)
-      // remove existing vis component if in single mode (default)
-      // context.commit('setClearGrid')
-      // update or first time
-      // let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
-      // prepare toolbar status object
-      // context.commit('setToolbarState', mod)
-      // context.commit('setVisProgressStart', displayReady)
-      // context.commit('setVisToolbarState', displayReady)
-      // context.commit('setOpendataState', displayReady)
-      // context.commit('setVisProgressComplete', displayReady) // setVisProgressComplete
-      // context.commit('setProgressComplete', this.state.liveNXP)
-      // context.commit('setLiveDisplayNXPModules', displayReady)
-      // extract out the time
-      /* for (let mmod of mod) {
-        if (mmod.type === 'compute') {
-          let newStartTime = 0
-          if (this.state.timeStartperiod === 0) {
-            newStartTime = mmod.time.startperiod
-            context.commit('setTimeAsk', newStartTime)
-          }
-        }
-      } */
+      /* update existing ecs bundle send to peerLink
+      let ECSbundle = {}
+      ECSbundle.exp = matchExp
+      ECSbundle.modules = peerOptions
+      // send message to PeerLink for safeFLOW
+      let message = {}
+      message.type = 'safeflow'
+      message.reftype = 'ignore'
+      message.action = 'networkexperiment'
+      message.data = ECSbundle
+      console.log(message)
+      const safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage) */
     },
     actionFuture (context, update) {
       console.log('future data')

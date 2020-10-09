@@ -20,7 +20,7 @@
                 <button id="multi-day-chart" @click.prevent="chartMultiday($event)">Multi-chart</button>
               </li>
               <li>
-                <button id="single-day-chart" @click.prevent="singlechartMultiday($event)">Single-chart</button>
+                <button id="single-day-chart" @click.prevent="singleChartday($event)">Single-chart</button>
               </li>
               <li>
                 <button id="multi-day-clear" @click.prevent="clearMultidays($event)">Clear</button>
@@ -178,7 +178,7 @@ export default {
       contextK.rangechange = timeRange
       this.$store.dispatch('actionVisUpdate', contextK)
     },
-    singlechartMultiday (cm) {
+    singleChartday (cm) {
       // prepare update for safeFLOW
       let contextK = {}
       contextK.shellCNRL = this.shellID

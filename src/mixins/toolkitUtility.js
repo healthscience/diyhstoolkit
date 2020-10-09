@@ -66,6 +66,7 @@ ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
 *
 */
 ToolkitUtility.prototype.prepareExperimentSummarySingle = function (peerExpModules) {
+  console.log(peerExpModules)
   let gridDatapeer = {}
   let question2 = {}
   for (const mod of peerExpModules.modules) {
