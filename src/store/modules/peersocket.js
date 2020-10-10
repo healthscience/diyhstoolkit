@@ -185,7 +185,7 @@ export default {
         let moduleKeys1 = Object.keys(displayReady.grid)
         for (let mod of moduleKeys1) {
           for (let dti of displayReady.grid[mod]) {
-            setVistoolbar[dti.i] = { text: 'open tools', active: false }
+            setVistoolbar[dti.i] = { text: 'open tools', active: true }
           }
           Vue.set(this.state.toolbarVisStatus, mod, setVistoolbar)
           setVistoolbar = {}

@@ -350,7 +350,7 @@ const store = new Vuex.Store({
         }
       }
       let ECSbundle = {}
-      ECSbundle.exp = matchExp
+      ECSbundle.exp = matchExp.exp
       ECSbundle.modules = peerOptions
       // send message to PeerLink for safeFLOW
       let message = {}
@@ -508,12 +508,12 @@ const store = new Vuex.Store({
       // send message to PeerLink for safeFLOW
       let message = {}
       message.type = 'safeflow'
-      message.reftype = 'update'
+      message.reftype = 'ignore'
       message.action = 'updatenetworkexperiment'
       message.data = ECSbundle
       console.log(message)
-      /* const safeFlowMessage = JSON.stringify(message)
-      Vue.prototype.$socket.send(safeFlowMessage) */
+      const safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage)
     },
     actionFuture (context, update) {
       console.log('future data')
