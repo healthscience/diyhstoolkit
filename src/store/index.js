@@ -436,7 +436,7 @@ const store = new Vuex.Store({
       // display processing
       // context.commit('setVisProgressUpdate', update)
       // entity container
-      let entityUUID = this.state.entityUUIDReturn // [update.shellCNRL].shellID
+      let entityUUID = this.state.entityUUIDReturn
       // prepare info. to update library ref contracts
       let updateContract = {}
       // the visulisation and compute module contract need updating for time which when how????
@@ -449,37 +449,10 @@ const store = new Vuex.Store({
           console.log(mmod)
           // update the Compute RefContract
           mmod.value.automation = false
-          let newStartTime = []
-          if (this.state.timeStartperiod === 0) {
-            let freshStart = Date.now() + update.startperiodchange
-            newStartTime.push(freshStart)
-          } else {
-            // time state available
-            if (update.startperiod !== 0 && update.rangechange.length === 0) {
-              console.log('update starp0 but range above 1')
-              newStartTime.push(update.startperiod)
-            } else if (update.rangechange.length > 0) {
-              console.log('chage range above zero')
-              newStartTime = update.rangechange
-              mmod.value.info.settings.timeseg = update.startperiodchange
-            } else if (update.startperiod === 0 && update.startperiodchange) {
-              console.log('update starp0 but range above 1')
-              console.log(this.state.timeStartperiod)
-              let timeCon = new Date(this.state.timeStartperiod)
-              console.log(timeCon)
-              console.log(timeCon.getTime())
-              let convertTime = timeCon.getTime()
-              let updateT = parseInt(convertTime) + update.startperiodchange
-              newStartTime.push(updateT)
-              mmod.value.info.settings.timeseg = update.startperiodchange
-            } else {
-              console.log('elas all otehr opieons')
-              let updateSum = parseInt(this.state.timeStartperiod) + update.startperiodchange
-              newStartTime.push(updateSum)
-              mmod.value.info.settings.timeseg = update.startperiodchange
-            }
-          }
-          context.commit('setTimeAsk', newStartTime)
+          let newStartTime = ToolUtility.prepareTime(this.state.timeStartperiod, update)
+          console.log('time udpated prepared')
+          console.log(newStartTime)
+          context.commit('setTimeAsk', newStartTime[0])
           mmod.value.info.controls.date = newStartTime[0]
           mmod.value.info.settings.date = newStartTime[0]
           mmod.value.info.settings.timeseg = update.startperiodchange
@@ -497,7 +470,7 @@ const store = new Vuex.Store({
       updateContract.modules = updateModules
       updateContract.input = 'refUpdate'
       context.commit('setUpdatesOUT', updateContract)
-      console.log(updateContract)
+      // console.log(updateContract)
       // update existing ecs bundle send to peerLink
       let ECSbundle = {}
       ECSbundle.exp = update.nxpCNRL

@@ -214,4 +214,46 @@ ToolkitUtility.prototype.displayFilter = function (shellID, modules, time, entit
   return displayData
 }
 
+/**
+* givin input time and context work work current time data request
+* @method prepareTime
+*
+*/
+ToolkitUtility.prototype.prepareTime = function (timeIN, update) {
+  console.log('PREPARE timmmmee')
+  console.log(timeIN)
+  console.log(update)
+  let newStartTime = []
+  if (timeIN === 0) {
+    let freshStart = Date.now() + update.startperiodchange
+    newStartTime.push(freshStart)
+  } else {
+    // time state available
+    if (update.startperiod !== 0 && update.rangechange.length === 0) {
+      console.log('update starp0 but range above 1')
+      newStartTime.push(update.startperiod)
+    } else if (update.rangechange.length > 0) {
+      console.log('chage range above zero')
+      newStartTime = update.rangechange
+      // mmod.value.info.settings.timeseg = update.startperiodchange
+    } else if (update.startperiod === 0 && update.startperiodchange) {
+      console.log('update starp0 but range above 1')
+      console.log(timeIN)
+      let timeCon = new Date(timeIN)
+      console.log(timeCon)
+      console.log(timeCon.getTime())
+      let convertTime = timeCon.getTime()
+      let updateT = parseInt(convertTime) + update.startperiodchange
+      newStartTime.push(updateT)
+      // mmod.value.info.settings.timeseg = update.startperiodchange
+    } else {
+      console.log('elas all otehr opieons')
+      let updateSum = parseInt(timeIN) + update.startperiodchange
+      newStartTime.push(updateSum)
+      // mmod.value.info.settings.timeseg = update.startperiodchange
+    }
+  }
+  return newStartTime
+}
+
 export default ToolkitUtility
