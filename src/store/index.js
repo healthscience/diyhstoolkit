@@ -480,15 +480,14 @@ const store = new Vuex.Store({
             }
           }
           context.commit('setTimeAsk', newStartTime)
-          mmod.value.info.settings.date = newStartTime
+          mmod.value.info.controls.date = newStartTime[0]
+          mmod.value.info.settings.date = newStartTime[0]
           mmod.value.info.settings.timeseg = update.startperiodchange
           updateModules.push(mmod)
         } else if (mmod.key === update.moduleCNRL) {
           mmod.value.info.settings.singlemulti = update.singlemulti
           updateModules.push(mmod)
         }
-        console.log('updated MMOD')
-        console.log(mmod)
       }
       // keep state of live modules
       // context.commit('setModulesLive', updateModules)
@@ -499,8 +498,6 @@ const store = new Vuex.Store({
       updateContract.input = 'refUpdate'
       context.commit('setUpdatesOUT', updateContract)
       console.log(updateContract)
-      // let entityReturn = await safeAPI.ECSinput(updateContract)
-      // context.commit('setUpdateentityReturn', entityReturn)
       // update existing ecs bundle send to peerLink
       let ECSbundle = {}
       ECSbundle.exp = update.nxpCNRL
