@@ -56,10 +56,10 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      console.log('visToolbarstatuslive')
-      console.log(this.$store.state.toolbarVisStatus)
-      console.log(this.moduleCNRL)
-      console.log(this.mData)
+      // console.log('visToolbarstatuslive')
+      // console.log(this.$store.state.toolbarVisStatus)
+      // console.log(this.moduleCNRL)
+      // console.log(this.mData)
       let objectKeys = Object.keys(this.$store.state.toolbarVisStatus)
       if (objectKeys.length === 0) {
         return 'notset'
@@ -75,8 +75,8 @@ export default {
       }
     },
     liveData: function () {
-      console.log('chart builder')
-      console.log(this.$store.state.NXPexperimentData[this.shellID])
+      // console.log('chart builder')
+      // console.log(this.$store.state.NXPexperimentData[this.shellID])
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
         return {}
       } else {

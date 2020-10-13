@@ -28,7 +28,7 @@
         </tbody>
       </table>
       <div id="module-list" v-if="NXPstatusData[shellContract]">
-        <progress-message v-if="NXPprogress" :progressMessage="NXPprogress"></progress-message>
+        <progress-message v-if="NXPprogress" :progressMessage="NXPprogress"></progress-message>{{ NXPstatusData[shellContract] }}
         <div id="module-ready" v-if="NXPstatusData[shellContract].modules">
           <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
             <dash-board v-if="isModalDashboardVisible === true" :expCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>

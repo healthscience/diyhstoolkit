@@ -20,7 +20,7 @@
               <input type='checkbox' v-model='resizable'/> Resizable
             </div>
             <br/>
-            <div class="grid-section">
+            <div class="grid-section">local grid -- {{ localGrid }}
               <grid-layout v-if="localGrid"
                            :layout='localGrid'
                            :col-num='12'
@@ -116,6 +116,8 @@ export default {
   },
   watch: {
     storeGrid (newValue) {
+      console.log('store grid')
+      console.log(newValue)
       this.localGrid = newValue
     }
   },

@@ -229,7 +229,8 @@ export default {
           }
         }
       } else if (backJSON.type === 'updateEntity') {
-        console.log('update for existing entity for toolkit')
+        console.log('update for existing entity-----------')
+        console.log(backJSON)
         // need to exactly update exp, module and grid ID of vis/chart data
         // prepare new data object
         let updateDisplay = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
@@ -241,6 +242,23 @@ export default {
         Vue.set(this.state.toolbarVisStatus, updateDisplay.module, updateDisplay.vistoolbar)
         // update vid data
         Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplay.module], 'data', updateDisplay.update)
+      } else if (backJSON.type === 'updateEntityRange') {
+        console.log('update existing entity RANGE----------')
+        console.log(backJSON)
+        let updateDisplayRange = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
+        console.log('range update display back')
+        console.log(updateDisplayRange)
+        // set the grid, data and toolbar settings
+        // update the display grid
+        // Vue.set(this.state.moduleGrid, updateDisplayRange.module, updateDisplayRange.grid)
+        this.state.moduleGrid[updateDisplayRange.module].push(updateDisplayRange.grid[0])
+        console.log(this.state.moduleGrid)
+        // update tools id reference
+        Vue.set(this.state.opendataTools, updateDisplayRange.module, updateDisplayRange.opendata)
+        // update toolbar vis status
+        Vue.set(this.state.toolbarVisStatus, updateDisplayRange.module, updateDisplayRange.vistoolbar)
+        // update vid data
+        Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayRange.module], 'data', updateDisplayRange.update)
       } else {
         console.log('starting network experiment data BACK FAE NetworkLibrary')
         // save copy of ref contract indexes
