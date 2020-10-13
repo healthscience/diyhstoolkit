@@ -19,7 +19,7 @@
               <input type='checkbox' v-model='draggable'/> Draggable
               <input type='checkbox' v-model='resizable'/> Resizable
             </div>
-            <br/> <!-- @changes="updateLayout"  -->
+            <br/>
             <div class="grid-section">
               <grid-layout v-if="localGrid"
                            :layout='localGrid'
@@ -39,7 +39,7 @@
                            :i='item.i'
                         >
                     <!-- <span class='text'>box{{itemTitle(item)}}</span> -->
-                    <component v-bind:is="moduleContent.prime.vistype" :shellID="shellCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
+                    <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
                     {{ item.i }}
                 </grid-item>
               </grid-layout>
@@ -86,23 +86,23 @@ export default {
   created: function () {
   },
   props: {
-    shellCNRL: String,
+    expCNRL: String,
     moduleCNRL: String
   },
   computed: {
     dashState: function () {
       let dashStateNXP = this.$store.state.experimentStatus
-      return dashStateNXP[this.shellCNRL]
+      return dashStateNXP[this.expCNRL]
     },
     toolbarStatusLive: function () {
       return this.$store.state.toolbarStatus[this.moduleCNRL]
     },
     moduleContent: function () {
-      // console.log('module content')
-      // console.log(this.shellCNRL)
+      // console.log('module content data')
+      // console.log(this.expCNRL)
       // console.log(this.moduleCNRL)
-      // console.log(this.$store.state.NXPexperimentData[this.shellCNRL])
-      let contentModule = this.$store.state.NXPexperimentData[this.shellCNRL]
+      console.log(this.$store.state.NXPexperimentData[this.expCNRL])
+      let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
       if (contentModule === undefined) {
         return false
       } else {

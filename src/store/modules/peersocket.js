@@ -34,8 +34,8 @@ export default {
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
       const backJSON = JSON.parse(message.data)
-      console.log('back message')
-      console.log(backJSON)
+      // console.log('back message')
+      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         console.log('save successful')
@@ -146,8 +146,9 @@ export default {
         // Vue.set(this.state.entityUUIDReturn, mo.key, setToolbar)
         this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
         this.state.entityUUIDsummary = backJSON
-      } else if (backJSON.type === 'ecsflow') {
-        console.log('ECS flow')
+      } else if (backJSON.type === 'newEntity') {
+        console.log('entity NEW')
+        console.log(backJSON)
         // format data for DashBoard
         let mod = []
         if (this.state.entityUUIDReturn === undefined) {
@@ -157,11 +158,11 @@ export default {
           console.log(this.state.entityUUIDsummary.data)
           mod = this.state.entityUUIDsummary.data[this.state.liveNXP].modules
         }
-        console.log(mod)
+        // console.log(mod)
         // remove existing vis component if in single mode (default)
         // context.commit('setClearGrid')
         // update or first time
-        let displayReady = ToolUtility.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, backJSON)
+        let displayReady = ToolUtility.displayFilter(mod, backJSON)
         console.log(displayReady)
         // prepare toolbar status object
         // context.commit('setToolbarState', mod)
@@ -170,7 +171,7 @@ export default {
           Vue.set(this.state.toolbarStatus, mo.key, setToolbar)
         }
         // context.commit('setVisProgressStart', displayReady)
-        console.log('vis start newnewnew')
+        console.log('vis update of exsting progress message')
         let setVisProg = {}
         let moduleKeys = Object.keys(displayReady.grid)
         for (let mod of moduleKeys) {
@@ -210,14 +211,15 @@ export default {
         let setProgress3 = { text: 'Experiment in progress', active: false }
         Vue.set(this.state.nxpProgress, this.state.liveNXP, setProgress3)
         // context.commit('setLiveDisplayNXPModules', displayReady)
+        // set the GRID layout and module data
         this.state.moduleGrid = displayReady.grid
         Vue.set(this.state.NXPexperimentData, this.state.liveNXP, displayReady.data)
         // extract out the time
         for (let mmod of mod) {
-          console.log(mmod)
+          // console.log(mmod)
           if (mmod.value.type === 'compute') {
-            console.log('extract time')
-            console.log(mmod)
+            // console.log('extract time')
+            // console.log(mmod)
             let newStartTime = 0
             if (this.state.timeStartperiod === 0) {
               newStartTime = mmod.value.info.controls.date
@@ -226,6 +228,19 @@ export default {
             }
           }
         }
+      } else if (backJSON.type === 'updateEntity') {
+        console.log('update for existing entity for toolkit')
+        // need to exactly update exp, module and grid ID of vis/chart data
+        // prepare new data object
+        let updateDisplay = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
+        // update the display grid
+        Vue.set(this.state.moduleGrid, updateDisplay.module, updateDisplay.grid)
+        // update tools id reference
+        Vue.set(this.state.opendataTools, updateDisplay.module, updateDisplay.opendata)
+        // update toolbar vis status
+        Vue.set(this.state.toolbarVisStatus, updateDisplay.module, updateDisplay.vistoolbar)
+        // update vid data
+        Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplay.module], 'data', updateDisplay.update)
       } else {
         console.log('starting network experiment data BACK FAE NetworkLibrary')
         // save copy of ref contract indexes

@@ -176,6 +176,7 @@ export default {
       contextK.startperiod = 0
       contextK.startperiodchange = 0
       contextK.rangechange = timeRange
+      contextK.singlemulti = true
       this.$store.dispatch('actionVisUpdate', contextK)
     },
     singleChartday (cm) {

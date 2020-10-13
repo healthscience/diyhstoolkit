@@ -144,22 +144,19 @@ ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
 }
 
 /**
-*
+* prepare grid layout for display and set data ids and data for visualisation e.g. charts etc.
 * @method diplayFilter
 *
 */
-ToolkitUtility.prototype.displayFilter = function (shellID, modules, time, entityData) {
-  // setup return vis Object
+ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
   console.log('DISPLAYflitttter')
-  console.log(shellID)
-  console.log(modules)
-  console.log(time)
-  console.log(entityData)
+  // console.log(shellID)
+  // console.log(modules)
+  // console.log(time)
+  // console.log(entityData)
   let testDataBundle = {}
   let gridPerModule = {}
   for (let mod of modules) {
-    console.log('prepare display modules')
-    console.log(mod.type)
     // need to match each modules to Component Data
     if (mod.value.type === 'question') {
       let qgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: true }]
@@ -181,11 +178,13 @@ ToolkitUtility.prototype.displayFilter = function (shellID, modules, time, entit
       // gridPerModule[mod.cnrl] = mod.grid
       // [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} }], '1': { 'chartPackage': { 'labels': [2, 4] }, { 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} } }, 'message': 'compute-complete'
     } else if (mod.value.type === 'visualise') {
+      console.log('visualise display tk-- start')
       // loop over data vis read
       mod.grid = []
       let makeGrid = []
       // let dataIndex = Object.keys(entityData.liveVisualC.visualData)
       if (entityData.liveVisualC.singlemulti.chartPackage) {
+        console.log('single')
         // single chart multi datasets
         let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'singlemulti', static: false }
         makeGrid.push(newGriditem)
@@ -194,6 +193,7 @@ ToolkitUtility.prototype.displayFilter = function (shellID, modules, time, entit
         testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': { 'singlemulti': entityData.liveVisualC.singlemulti } }
       } else {
         // normal display indivduals charts
+        console.log('mulit')
         for (let dr of entityData.liveVisualC.liveVislist) {
           // need to add to grid for multi charts asked for
           // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
@@ -209,9 +209,45 @@ ToolkitUtility.prototype.displayFilter = function (shellID, modules, time, entit
   console.log('TIMEPLATE DATA XLP')
   console.log(testDataBundle)
   let displayData = {}
-  displayData.data = testDataBundle
   displayData.grid = gridPerModule
+  displayData.data = testDataBundle
   return displayData
+}
+
+/**
+* prepare grid layout for display and set data ids and data for visualisation e.g. charts etc.
+* @method diplayFilter
+*
+*/
+ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
+  // setup return vis Object
+  console.log('update Visual data')
+  let moduleKeys = Object.keys(liveData)
+  let updateVisData = {}
+  // loop over the modules in the NXP and match to compute and update data
+  for (let mod of moduleKeys) {
+    if (liveData[mod].prime.text === 'Visualise') {
+      // for (let ms of entityData.liveVislist) {
+      updateVisData.update = entityData.visualData
+      updateVisData.module = mod
+      // }
+    }
+  }
+  // make new grid
+  let updateGrid = []
+  // make updated tools settings
+  let setOpendata = {}
+  let setVistoolbar = {}
+  for (let dr of entityData.liveVislist) {
+    let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
+    updateGrid.push(newGriditem)
+    setOpendata[dr] = { text: 'open data', active: false }
+    setVistoolbar[dr] = { text: 'open tools', active: true }
+  }
+  updateVisData.grid = updateGrid
+  updateVisData.vistoolbar = setVistoolbar
+  updateVisData.opendata = setOpendata
+  return updateVisData
 }
 
 /**
@@ -220,9 +256,9 @@ ToolkitUtility.prototype.displayFilter = function (shellID, modules, time, entit
 *
 */
 ToolkitUtility.prototype.prepareTime = function (timeIN, update) {
-  console.log('PREPARE timmmmee')
-  console.log(timeIN)
-  console.log(update)
+  // console.log('PREPARE timmmmee')
+  // console.log(timeIN)
+  // console.log(update)
   let newStartTime = []
   if (timeIN === 0) {
     let freshStart = Date.now() + update.startperiodchange
@@ -230,24 +266,24 @@ ToolkitUtility.prototype.prepareTime = function (timeIN, update) {
   } else {
     // time state available
     if (update.startperiod !== 0 && update.rangechange.length === 0) {
-      console.log('update starp0 but range above 1')
+      // console.log('update starp0 but range above 1')
       newStartTime.push(update.startperiod)
     } else if (update.rangechange.length > 0) {
-      console.log('chage range above zero')
+      // console.log('chage range above zero')
       newStartTime = update.rangechange
       // mmod.value.info.settings.timeseg = update.startperiodchange
     } else if (update.startperiod === 0 && update.startperiodchange) {
-      console.log('update starp0 but range above 1')
-      console.log(timeIN)
+      // console.log('update starp0 but range above 1')
+      // console.log(timeIN)
       let timeCon = new Date(timeIN)
-      console.log(timeCon)
-      console.log(timeCon.getTime())
+      // console.log(timeCon)
+      // console.log(timeCon.getTime())
       let convertTime = timeCon.getTime()
       let updateT = parseInt(convertTime) + update.startperiodchange
       newStartTime.push(updateT)
       // mmod.value.info.settings.timeseg = update.startperiodchange
     } else {
-      console.log('elas all otehr opieons')
+      // console.log('elas all otehr opieons')
       let updateSum = parseInt(timeIN) + update.startperiodchange
       newStartTime.push(updateSum)
       // mmod.value.info.settings.timeseg = update.startperiodchange

@@ -431,7 +431,7 @@ const store = new Vuex.Store({
       } */
     },
     async actionVisUpdate (context, update) {
-      console.log('set muilt or single or back or forward day in time')
+      console.log('UI set muilt or single or back or forward day in time')
       console.log(update)
       // display processing
       // context.commit('setVisProgressUpdate', update)
@@ -440,24 +440,25 @@ const store = new Vuex.Store({
       // prepare info. to update library ref contracts
       let updateContract = {}
       // the visulisation and compute module contract need updating for time which when how????
-      console.log(this.state.entityUUIDsummary)
+      // console.log(this.state.entityUUIDsummary)
       let nxpModules = this.state.entityUUIDsummary.data[update.nxpCNRL].modules
       let updateModules = []
       for (let mmod of nxpModules) {
         if (mmod.value.type === 'compute') {
-          console.log('compute')
-          console.log(mmod)
+          // console.log('compute')
+          // console.log(mmod)
           // update the Compute RefContract
           mmod.value.automation = false
           let newStartTime = ToolUtility.prepareTime(this.state.timeStartperiod, update)
-          console.log('time udpated prepared')
-          console.log(newStartTime)
+          // console.log('time udpated prepared')
+          // console.log(newStartTime)
           context.commit('setTimeAsk', newStartTime[0])
           mmod.value.info.controls.date = newStartTime[0]
+          mmod.value.info.controls.rangedate = newStartTime
           mmod.value.info.settings.date = newStartTime[0]
           mmod.value.info.settings.timeseg = update.startperiodchange
           updateModules.push(mmod)
-        } else if (mmod.key === update.moduleCNRL) {
+        } else if (mmod.value.type === 'visualise') {
           mmod.value.info.settings.singlemulti = update.singlemulti
           updateModules.push(mmod)
         }
@@ -470,7 +471,6 @@ const store = new Vuex.Store({
       updateContract.modules = updateModules
       updateContract.input = 'refUpdate'
       context.commit('setUpdatesOUT', updateContract)
-      // console.log(updateContract)
       // update existing ecs bundle send to peerLink
       let ECSbundle = {}
       ECSbundle.exp = update.nxpCNRL

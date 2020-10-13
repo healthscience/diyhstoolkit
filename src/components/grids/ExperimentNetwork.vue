@@ -31,7 +31,7 @@
         <progress-message v-if="NXPprogress" :progressMessage="NXPprogress"></progress-message>
         <div id="module-ready" v-if="NXPstatusData[shellContract].modules">
           <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
-            <dash-board v-if="isModalDashboardVisible === true" :shellCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>
+            <dash-board v-if="isModalDashboardVisible === true" :expCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>
           </ul>
         </div>
       </div>
@@ -228,18 +228,18 @@ export default {
       this.shellID = '1234567'
       this.mData = '98889'
     },
-    actionExperiment (shellCNRL, NXPcontract) {
-      console.log(shellCNRL)
+    actionExperiment (expCNRL, NXPcontract) {
+      console.log(expCNRL)
       console.log(NXPcontract)
-      this.shellContract = shellCNRL
+      this.shellContract = expCNRL
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
-        this.$store.dispatch('actionDashboardState', shellCNRL)
+        this.$store.dispatch('actionDashboardState', expCNRL)
         this.isModalDashboardVisible = true
         console.log('view dashbaor modal true now')
       } else {
         // preview network experiment
-        this.$store.dispatch('actionJOINViewexperiment', shellCNRL)
+        this.$store.dispatch('actionJOINViewexperiment', expCNRL)
         this.refContractLookup()
         this.isModalJoinVisible = true
       }

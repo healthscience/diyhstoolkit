@@ -92,7 +92,7 @@ export default {
       }
     },
     log: function (evt) {
-      window.console.log(evt)
+      // window.console.log(evt)
     }
   }
 }
