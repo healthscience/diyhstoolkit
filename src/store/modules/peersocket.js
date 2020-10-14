@@ -250,8 +250,9 @@ export default {
         console.log(updateDisplayRange)
         // set the grid, data and toolbar settings
         // update the display grid
-        // Vue.set(this.state.moduleGrid, updateDisplayRange.module, updateDisplayRange.grid)
-        this.state.moduleGrid[updateDisplayRange.module].push(updateDisplayRange.grid[0])
+        for (let gup of updateDisplayRange.grid) {
+          this.state.moduleGrid[updateDisplayRange.module].push(gup)
+        }
         console.log(this.state.moduleGrid)
         // update tools id reference
         Vue.set(this.state.opendataTools, updateDisplayRange.module, updateDisplayRange.opendata)

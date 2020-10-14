@@ -431,7 +431,7 @@ const store = new Vuex.Store({
       } */
     },
     async actionVisUpdate (context, update) {
-      console.log('UI set muilt or single or back or forward day in time')
+      console.log('display ACTION--##############')
       console.log(update)
       // display processing
       // context.commit('setVisProgressUpdate', update)
@@ -443,13 +443,14 @@ const store = new Vuex.Store({
       // console.log(this.state.entityUUIDsummary)
       let nxpModules = this.state.entityUUIDsummary.data[update.nxpCNRL].modules
       let updateModules = []
+      let newStartTime = []
       for (let mmod of nxpModules) {
         if (mmod.value.type === 'compute') {
           // console.log('compute')
           // console.log(mmod)
           // update the Compute RefContract
           mmod.value.automation = false
-          let newStartTime = ToolUtility.prepareTime(this.state.timeStartperiod, update)
+          newStartTime = ToolUtility.prepareTime(this.state.timeStartperiod, update)
           // console.log('time udpated prepared')
           // console.log(newStartTime)
           context.commit('setTimeAsk', newStartTime[0])
@@ -459,7 +460,13 @@ const store = new Vuex.Store({
           mmod.value.info.settings.timeseg = update.startperiodchange
           updateModules.push(mmod)
         } else if (mmod.value.type === 'visualise') {
-          mmod.value.info.settings.singlemulti = update.singlemulti
+          // both range and single set?
+          console.log(newStartTime)
+          let singleMultiSet = false
+          if (update.singlechart === true && newStartTime.length > 1) {
+            singleMultiSet = true
+          }
+          mmod.value.info.settings.singlemulti = singleMultiSet
           updateModules.push(mmod)
         }
       }
@@ -481,6 +488,7 @@ const store = new Vuex.Store({
       message.reftype = 'ignore'
       message.action = 'updatenetworkexperiment'
       message.data = ECSbundle
+      console.log('updateOUT###################')
       console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)

@@ -194,11 +194,15 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
       } else {
         // normal display indivduals charts
         console.log('mulit')
-        for (let dr of entityData.liveVisualC.liveVislist) {
-          // need to add to grid for multi charts asked for
-          // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
-          let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
-          makeGrid.push(newGriditem)
+        console.log(entityData.liveVisualC.liveVislist)
+        let devicesList = Object.keys(entityData.liveVisualC.liveVislist)
+        for (let dl of devicesList) {
+          for (let dr of entityData.liveVisualC.liveVislist[dl]) {
+            // need to add to grid for multi charts asked for
+            // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
+            let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
+            makeGrid.push(newGriditem)
+          }
         }
         // gridPerModule = {}
         gridPerModule[mod.key] = makeGrid
@@ -238,11 +242,18 @@ ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
   // make updated tools settings
   let setOpendata = {}
   let setVistoolbar = {}
-  for (let dr of entityData.liveVislist) {
-    let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
-    updateGrid.push(newGriditem)
-    setOpendata[dr] = { text: 'open data', active: false }
-    setVistoolbar[dr] = { text: 'open tools', active: true }
+  console.log('vis list per device???')
+  console.log(entityData.liveVislist)
+  let devicesList = Object.keys(entityData.liveVislist)
+  for (let dl of devicesList) {
+    // nB temp measure
+    let unique = Array.from(new Set(entityData.liveVislist[dl]))
+    for (let dr of unique) {
+      let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
+      updateGrid.push(newGriditem)
+      setOpendata[dr] = { text: 'open data', active: false }
+      setVistoolbar[dr] = { text: 'open tools', active: true }
+    }
   }
   updateVisData.grid = updateGrid
   updateVisData.vistoolbar = setVistoolbar

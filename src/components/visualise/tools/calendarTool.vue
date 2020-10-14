@@ -17,7 +17,7 @@
                 </ul>
               </li>
               <li>
-                <button id="multi-day-chart" @click.prevent="chartMultiday($event)">Multi-chart</button>
+                <button id="multi-day-chart" @click.prevent="chartMultiday($event)">Many-charts</button>
               </li>
               <li>
                 <button id="single-day-chart" @click.prevent="singleChartday($event)">Single-chart</button>
@@ -176,7 +176,7 @@ export default {
       contextK.startperiod = 0
       contextK.startperiodchange = 0
       contextK.rangechange = timeRange
-      contextK.singlemulti = true
+      contextK.singlechart = false
       this.$store.dispatch('actionVisUpdate', contextK)
     },
     singleChartday (cm) {
@@ -189,7 +189,7 @@ export default {
       contextK.startperiod = moment(this.value).valueOf()
       contextK.startperiodchange = 0
       contextK.rangechange = this.calendarListMS
-      contextK.singlemulti = true
+      contextK.singlechart = true
       this.$store.dispatch('actionVisUpdate', contextK)
     },
     setTimeData (seg) {
