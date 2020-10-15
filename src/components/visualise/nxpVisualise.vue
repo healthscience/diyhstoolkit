@@ -1,5 +1,5 @@
 <template>
-  <div id="visualise-nxp">{{ shellID }}----{{ moduleCNRL}}----{{ moduleType }}----{{ mData }}
+  <div id="visualise-nxp">
     <div id="prime-visualise">
       <progress-vismessage v-if="entityPrepareStatus.active === true"></progress-vismessage>
       <component v-bind:is="moduleVisType" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></component>

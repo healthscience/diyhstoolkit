@@ -20,7 +20,7 @@
               <input type='checkbox' v-model='resizable'/> Resizable
             </div>
             <br/>
-            <div class="grid-section">local grid -- {{ localGrid }}
+            <div class="grid-section">
               <grid-layout v-if="localGrid"
                            :layout='localGrid'
                            :col-num='12'
@@ -40,7 +40,6 @@
                         >
                     <!-- <span class='text'>box{{itemTitle(item)}}</span> -->
                     <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
-                    {{ item.i }}
                 </grid-item>
               </grid-layout>
             </div>

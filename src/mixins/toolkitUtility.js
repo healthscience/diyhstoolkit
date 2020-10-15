@@ -242,8 +242,6 @@ ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
   // make updated tools settings
   let setOpendata = {}
   let setVistoolbar = {}
-  console.log('vis list per device???')
-  console.log(entityData.liveVislist)
   let devicesList = Object.keys(entityData.liveVislist)
   for (let dl of devicesList) {
     // nB temp measure
@@ -259,6 +257,27 @@ ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
   updateVisData.vistoolbar = setVistoolbar
   updateVisData.opendata = setOpendata
   return updateVisData
+}
+
+/**
+* prepare multi datasets one chart
+* @method displayUpdateSingle
+*
+*/
+ToolkitUtility.prototype.displayUpdateSingle = function (liveData, entityData) {
+  let singleBundle = {}
+  console.log('update Visual Single bundle')
+  let moduleKeys = Object.keys(liveData)
+  // loop over the modules in the NXP and match to compute and update data
+  for (let mod of moduleKeys) {
+    if (liveData[mod].prime.text === 'Visualise') {
+      // for (let ms of entityData.liveVislist) {
+      singleBundle.update = liveData[mod].data
+      singleBundle.module = mod
+      // }
+    }
+  }
+  return singleBundle
 }
 
 /**

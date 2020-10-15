@@ -245,21 +245,37 @@ export default {
       } else if (backJSON.type === 'updateEntityRange') {
         console.log('update existing entity RANGE----------')
         console.log(backJSON)
-        let updateDisplayRange = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
-        console.log('range update display back')
-        console.log(updateDisplayRange)
-        // set the grid, data and toolbar settings
-        // update the display grid
-        for (let gup of updateDisplayRange.grid) {
-          this.state.moduleGrid[updateDisplayRange.module].push(gup)
+        // single or many chart display?
+        let mulitSingleDisplay = Object.entries(backJSON.data.liveVisualC.singlemulti).length
+        if (mulitSingleDisplay > 0) {
+          // single chart display
+          console.log('single chart many datasets')
+          // update vid data
+          console.log(this.state.NXPexperimentData[backJSON.context.cnrl])
+          let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
+          let displayIdentifier = Object.keys(updateDisplayOne.update)
+          let mergDatasets = [...this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data[displayIdentifier[0]].chartPackage.datasets, ...backJSON.data.liveVisualC.singlemulti.chartPackage.datasets]
+          backJSON.data.liveVisualC.singlemulti.chartPackage.datasets = mergDatasets
+          Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, displayIdentifier[0], backJSON.data.liveVisualC.singlemulti)
+        } else {
+          // many individual charts
+          console.log('many individaul charts')
+          let updateDisplayRange = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
+          console.log('range update display back')
+          console.log(updateDisplayRange)
+          // set the grid, data and toolbar settings
+          // update the display grid
+          for (let gup of updateDisplayRange.grid) {
+            this.state.moduleGrid[updateDisplayRange.module].push(gup)
+          }
+          console.log(this.state.moduleGrid)
+          // update tools id reference
+          Vue.set(this.state.opendataTools, updateDisplayRange.module, updateDisplayRange.opendata)
+          // update toolbar vis status
+          Vue.set(this.state.toolbarVisStatus, updateDisplayRange.module, updateDisplayRange.vistoolbar)
+          // update vis data
+          Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayRange.module], 'data', updateDisplayRange.update)
         }
-        console.log(this.state.moduleGrid)
-        // update tools id reference
-        Vue.set(this.state.opendataTools, updateDisplayRange.module, updateDisplayRange.opendata)
-        // update toolbar vis status
-        Vue.set(this.state.toolbarVisStatus, updateDisplayRange.module, updateDisplayRange.vistoolbar)
-        // update vid data
-        Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayRange.module], 'data', updateDisplayRange.update)
       } else {
         console.log('starting network experiment data BACK FAE NetworkLibrary')
         // save copy of ref contract indexes
