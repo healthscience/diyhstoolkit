@@ -17,6 +17,7 @@ const store = new Vuex.Store({
     liveNXP: '',
     liveNXPcontract: {},
     liveNXPbundle: {},
+    devicesLive: [],
     nxpModulesLive: [],
     joinNXPlive: {},
     lengthMholder: 0,
@@ -131,7 +132,6 @@ const store = new Vuex.Store({
       state.NXPexperimentList = gridAnnon
     },
     setDashboardNXP: (state, inVerified) => {
-      console.log('set dashboard status')
       let dStatus = state.experimentStatus[inVerified].active
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
@@ -397,8 +397,8 @@ const store = new Vuex.Store({
     actionVisOpenData (context, update) {
       context.commit('setOpendataBar', update)
     },
-    actionDisplay (context, update) {
-      console.log('action display start i.e. ECS data back')
+    actionDisplayLearn (context, update) {
+      console.log('action learn button pressed##########')
       let mod = []
       if (this.state.entityUUIDReturn === undefined) {
         mod = this.state.nxpModulesLive
@@ -407,31 +407,23 @@ const store = new Vuex.Store({
         mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
       }
       console.log(mod)
-      // remove existing vis component if in single mode (default)
-      // context.commit('setClearGrid')
-      // update or first time
-      // let displayReady = safeAPI.displayFilter(this.state.liveNXP, mod, this.state.timeStartperiod, update)
-      // prepare toolbar status object
-      // context.commit('setToolbarState', mod)
-      // context.commit('setVisProgressStart', displayReady)
-      // context.commit('setVisToolbarState', displayReady)
-      // context.commit('setOpendataState', displayReady)
-      // context.commit('setVisProgressComplete', displayReady) // setVisProgressComplete
-      // context.commit('setProgressComplete', this.state.liveNXP)
-      // context.commit('setLiveDisplayNXPModules', displayReady)
-      // extract out the time
-      /* for (let mmod of mod) {
-        if (mmod.type === 'compute') {
-          let newStartTime = 0
-          if (this.state.timeStartperiod === 0) {
-            newStartTime = mmod.time.startperiod
-            context.commit('setTimeAsk', newStartTime)
-          }
-        }
-      } */
+      // update existing ecs bundle send to peerLink
+      /* let ECSbundle = {}
+      ECSbundle.exp = update.nxpCNRL
+      ECSbundle.update = updateContract
+      // send message to PeerLink for safeFLOW
+      let message = {}
+      message.type = 'safeflow'
+      message.reftype = 'ignore'
+      message.action = 'updatenetworkexperiment'
+      message.data = ECSbundle
+      console.log('updateOUT###################')
+      console.log(message)
+      const safeFlowMessage = JSON.stringify(message) */
+      // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionVisUpdate (context, update) {
-      console.log('display ACTION--##############')
+      console.log('display ACTIONupdate--##############')
       console.log(update)
       // display processing
       // context.commit('setVisProgressUpdate', update)
@@ -440,7 +432,10 @@ const store = new Vuex.Store({
       // prepare info. to update library ref contracts
       let updateContract = {}
       // the visulisation and compute module contract need updating for time which when how????
-      // console.log(this.state.entityUUIDsummary)
+      if (update.opendata === 'updated') {
+        console.log('update time settings')
+        console.log(this.state.visModuleHolder)
+      }
       let nxpModules = this.state.entityUUIDsummary.data[update.nxpCNRL].modules
       let updateModules = []
       let newStartTime = []
@@ -471,7 +466,6 @@ const store = new Vuex.Store({
         }
       }
       // keep state of live modules
-      // context.commit('setModulesLive', updateModules)
       updateContract.cnrl = update.nxpCNRL
       updateContract.modules = updateModules
       updateContract.entityUUID = entityUUID

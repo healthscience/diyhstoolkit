@@ -106,7 +106,6 @@ export default {
       updateOpendata.state = this.openDataLive.active
       updateOpendata.module = this.moduleCNRL
       updateOpendata.dtid = this.mData
-      console.log('dispatch set open data toolbar state')
       this.$store.dispatch('actionVisOpenData', updateOpendata)
     }
   }

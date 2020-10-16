@@ -228,6 +228,20 @@ export default {
             }
           }
         }
+        // set data for open data toolbar
+        let packContract = {}
+        for (let pack of this.state.liveRefContIndex.packaging) {
+          if (displayReady.modules.packaging === pack.key) {
+            packContract = pack
+          }
+        }
+        this.state.refcontractPackaging.push(packContract)
+        // set the live compute options in open data toolbar
+        // done via liveindex.compute in component
+        // set the devices live for this experiment
+        console.log('devicesssss')
+        console.log(backJSON.liveDeviceC.devices)
+        this.state.devicesLive = backJSON.liveDeviceC.devices
       } else if (backJSON.type === 'updateEntity') {
         console.log('update for existing entity-----------')
         console.log(backJSON)
@@ -280,6 +294,8 @@ export default {
         console.log('starting network experiment data BACK FAE NetworkLibrary')
         // save copy of ref contract indexes
         this.state.liveRefContIndex = backJSON.referenceContracts
+        console.log('index of contracts')
+        console.log(this.state.liveRefContIndex)
         // prepare NPXs in NETWORK
         this.state.networkExpModules = backJSON.networkExpModules
         this.state.networkPeerExpModules = backJSON.networkPeerExpModules
@@ -634,10 +650,12 @@ export default {
     buildRefComputeAutomation (context, update) {
       context.commit('SET_JOIN_NXP_COMPUTE_AUTO', update)
     },
-    actionNewVisDevices (context, update) {
+    actionNewVisDevice (context, update) {
+      console.log('selelcted devices')
       context.commit('SET_NEWNXP_VISDEVICES', update)
     },
     actionNewVisCompute (context, update) {
+      console.log('comute open data')
       context.commit('SET_NEWNXP_VISCOMPUTE', update)
     },
     actionNewVisResults (context, update) {

@@ -7,10 +7,10 @@
           <ul>
             <li>
               <label for="devices-select"></label>
-              <select class="select-device-id" id="device-mapping-build" @change="deviceSelect" v-model="visualsettings.devices">
+              <select class="select-device-id" id="device-mapping-build" @change="deviceSelect" v-model="visualsettings.device">
                 <option value="none" selected="">please select</option>
-                <option v-for="dev in devices" :key="dev.refcont" v-bind:value="dev.key">
-                  {{ dev.text }}
+                <option v-for="dev in devices" :key="dev.device_mac" v-bind:value="dev.device_mac">
+                  {{ dev.device_name }}
                 </option>
               </select>
             </li>
@@ -25,6 +25,9 @@
                 <option value="none" selected="">please select</option>
                 <option v-for="comp in refContractCompute" :key="comp.option.key" v-bind:value="comp.option.key">
                 {{ comp.option.value.computational.name }}
+                </option>
+                <option v-for="compL in refContractComputeLive" :key="compL.key" v-bind:value="compL.key">
+                {{ compL.value.computational.name }}
                 </option>
               </select>
             </li>
@@ -65,7 +68,7 @@
             <header>Y-axis</header>
             <ul v-if="refContractPackage.length > 0">
               <label for="yaxis-select"></label>
-              <select class="select-yaxis-id" id="yaxis-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
+              <select multiple="true" class="select-yaxis-id" id="yaxis-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
                 <option value="none" selected="">please select</option>
                 <option v-for="colpairy in refContractPackage" :key="colpairy.refcontract" v-bind:value="colpairy.refcontract">
                 {{ colpairy.column }}
@@ -150,6 +153,10 @@ export default {
       let computeLive = this.$store.state.joinNXPlive.compute
       return computeLive
     },
+    refContractComputeLive: function () {
+      let computeLive = this.$store.state.liveRefContIndex.compute
+      return computeLive
+    },
     resultsDTs: function () {
       return []
     },
@@ -186,20 +193,20 @@ export default {
       timeList.push(timeItem2)
       const timeItem3 = { text: 'month', id: 'cnrl-t3', active: false }
       timeList.push(timeItem3)
-      return timeList // this.$store.state.refContractPackaging
+      return timeList
     },
     resolution: function () {
       // mock units refContract
       let resList = []
       const resItem = { text: 'minute', id: 'cnrl-t11', active: false }
       resList.push(resItem)
-      return resList // this.$store.state.refContractPackaging
+      return resList
     },
     results: function () {
       return this.$store.state.refContractPackaging
     },
     devices: function () {
-      return this.$store.state.refContractPackaging
+      return this.$store.state.devicesLive
     }
   },
   data () {
@@ -253,13 +260,28 @@ export default {
       this.$store.dispatch('actionNewVisResolution', this.visualsettings.resolution)
     },
     deviceSelect () {
-      this.$store.dispatch('actionNewVisdevices', this.visualsettings.devices)
+      console.log(this.visualsettings.device)
+      this.$store.dispatch('actionNewVisDevice', this.visualsettings.device)
     },
     computeSelect () {
       this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
     },
     resultsSelect () {
       this.$store.dispatch('actionNewVisResults', this.visualsettings.results)
+    },
+    learnUpdate () {
+      console.log('learn update from open data')
+      // this.$store.dispatch('actionDisplayLearn')
+      let contextK = {}
+      contextK.nxpCNRL = this.shellID
+      contextK.moduleCNRL = this.moduleCNRL
+      contextK.moduleType = this.moduleType
+      contextK.mData = this.mData
+      contextK.opendata = 'updated'
+      // contextK.startperiodchange = seg.text.number
+      // contextK.startperiod = 0
+      // contextK.rangechange = []
+      this.$store.dispatch('actionVisUpdate', contextK)
     }
   }
 }

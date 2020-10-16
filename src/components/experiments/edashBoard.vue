@@ -100,7 +100,7 @@ export default {
       // console.log('module content data')
       // console.log(this.expCNRL)
       // console.log(this.moduleCNRL)
-      console.log(this.$store.state.NXPexperimentData[this.expCNRL])
+      // console.log(this.$store.state.NXPexperimentData[this.expCNRL])
       let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
       if (contentModule === undefined) {
         return false
@@ -115,8 +115,8 @@ export default {
   },
   watch: {
     storeGrid (newValue) {
-      console.log('store grid')
-      console.log(newValue)
+      // console.log('store grid')
+      // console.log(newValue)
       this.localGrid = newValue
     }
   },
