@@ -295,6 +295,16 @@ const store = new Vuex.Store({
       let tempModcontract = inVerified
       console.log(tempModcontract)
       // Vue.set(state.newNXshell, '', tempModcontract)
+    },
+    SET_RESET_MODULEHOLDER (state, inVerified) {
+      Vue.set(this.state.visModuleHolder, 'devices', [])
+      Vue.set(this.state.visModuleHolder, 'compute', '')
+      Vue.set(this.state.visModuleHolder, 'visualise', '')
+      Vue.set(this.state.visModuleHolder, 'xaxis', '')
+      this.state.visModuleHolder.yaxis = []
+      Vue.set(this.state.visModuleHolder, 'category', '')
+      Vue.set(this.state.visModuleHolder, 'timeperiod', '')
+      Vue.set(this.state.visModuleHolder, 'resolution', '')
     }
   },
   actions: {
@@ -345,6 +355,11 @@ const store = new Vuex.Store({
           peerOptions.push(pmod)
         } else if (pmod.value.type === 'visualise') {
           let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.visualise, this.state.liveRefContIndex.visualise)
+          console.log('visu settings default')
+          console.log(peerDataRC)
+          if (pmod.value.info.settings.yaxis.length > 2) {
+            pmod.value.info.settings.singlemulti = true
+          }
           pmod.value.info.visualise = peerDataRC
           peerOptions.push(pmod)
         }
@@ -363,7 +378,9 @@ const store = new Vuex.Store({
       Vue.prototype.$socket.send(safeFlowMessage)
     },
     actionJOINViewexperiment (context, update) {
-      console.log('viewJOIN NXP')
+      console.log('viewJOIN NXPstart------------')
+      // reset state.visModuleHolder
+      context.commit('SET_RESET_MODULEHOLDER', null)
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
         if (ep.exp.key === update) {
@@ -461,6 +478,10 @@ const store = new Vuex.Store({
           if (update.singlechart === true && newStartTime.length > 1) {
             singleMultiSet = true
           }
+          // if muitlple data types per single chart
+          /* if (update.singlechart === true && newStartTime.length > 1) {
+            singleMultiSet = true
+          } */
           mmod.value.info.settings.singlemulti = singleMultiSet
           updateModules.push(mmod)
         }

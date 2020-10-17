@@ -242,6 +242,22 @@ export default {
         console.log('devicesssss')
         console.log(backJSON.liveDeviceC.devices)
         this.state.devicesLive = backJSON.liveDeviceC.devices
+      } else if (backJSON.type === 'newEntityRange') {
+        console.log('update range first')
+        console.log(backJSON)
+        let mulitSingleDisplay = Object.entries(backJSON.data.liveVisualC.singlemulti).length
+        if (mulitSingleDisplay > 0) {
+          // single chart display
+          console.log('single chart many datasets')
+          // update vid data
+          console.log(this.state.NXPexperimentData)
+          console.log(this.state.NXPexperimentData[backJSON.context.key])
+          let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data.liveVisualC)
+          let displayIdentifier = Object.keys(updateDisplayOne.update)
+          let mergDatasets = [...this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data[displayIdentifier[0]].chartPackage.datasets, ...backJSON.data.liveVisualC.singlemulti.chartPackage.datasets]
+          backJSON.data.liveVisualC.singlemulti.chartPackage.datasets = mergDatasets
+          Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, displayIdentifier[0], backJSON.data.liveVisualC.singlemulti)
+        }
       } else if (backJSON.type === 'updateEntity') {
         console.log('update for existing entity-----------')
         console.log(backJSON)
@@ -376,8 +392,7 @@ export default {
     },
     SET_NEWNXP_VISYAXIS (state, inVerified) {
       // y axis can hold many datatypes
-      this.state.visModuleHolder.yaxis.push(inVerified)
-      // Vue.set(this.state.visModuleHolder, 'yaxis', inVerified)
+      this.state.visModuleHolder.yaxis = inVerified
     },
     SET_NEWNXP_VISCATEGORY (state, inVerified) {
       Vue.set(this.state.visModuleHolder, 'category', inVerified)
@@ -716,10 +731,10 @@ export default {
       newJoinExperiment.reftype = 'joinexperiment'
       newJoinExperiment.action = 'joinexperiment'
       newJoinExperiment.data = dataChoices
+      console.log('join summary')
+      console.log(newJoinExperiment)
       let ExpmoduleRefContract = JSON.stringify(newJoinExperiment)
       Vue.prototype.$socket.send(ExpmoduleRefContract)
-      console.log('new jion experiment infor bundle')
-      console.log(newJoinExperiment)
     }
   }
 }
