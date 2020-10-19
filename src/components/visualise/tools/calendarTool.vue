@@ -158,6 +158,7 @@ export default {
       this.calendarList = []
       this.calendarListMS = []
       this.makeTimeBundles = []
+      this.calendarTools.active = false
     },
     chartMultiday (cm) {
       // prepare list of KnowledgeBundles to visualise

@@ -175,7 +175,6 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
       gridPerModule[mod.key] = ddgrid // mod.grid
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true }, 'grid': ddgrid, 'data': [{ 'content': 'Gadgetbridge android' }, { 'content2': 'Xdrip android' }], 'message': 'compute-complete' }
     } else if (mod.value.type === 'data') {
-      console.log(mod)
       moduleObject.data = mod.key
       moduleObject.packaging = mod.value.info.data.key
     } else if (mod.value.type === 'compute') {
@@ -188,7 +187,6 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
       // gridPerModule[mod.cnrl] = mod.grid
       // [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} }], '1': { 'chartPackage': { 'labels': [2, 4] }, { 'datasets': [{ label: 'Wearable', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', 'data': [1, 2] }] }, 'chartOptions': {} } }, 'message': 'compute-complete'
     } else if (mod.value.type === 'visualise') {
-      console.log('visualise display tk-- start')
       moduleObject.visualise = mod.key
       // loop over data vis read
       mod.grid = []
@@ -232,13 +230,12 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
 */
 ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
   // setup return vis Object
-  console.log('update Visual data')
+  console.log('update Visual data start')
   let moduleKeys = Object.keys(liveData)
   let updateVisData = {}
   // loop over the modules in the NXP and match to compute and update data
   for (let mod of moduleKeys) {
     if (liveData[mod].prime.text === 'Visualise') {
-      // for (let ms of entityData.liveVislist) {
       updateVisData.update = entityData.visualData
       updateVisData.module = mod
       // }
@@ -273,18 +270,86 @@ ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
 */
 ToolkitUtility.prototype.displayUpdateSingle = function (liveData, entityData) {
   let singleBundle = {}
-  console.log('update Visual Single bundle')
   let moduleKeys = Object.keys(liveData)
   // loop over the modules in the NXP and match to compute and update data
   for (let mod of moduleKeys) {
     if (liveData[mod].prime.text === 'Visualise') {
-      // for (let ms of entityData.liveVislist) {
-      singleBundle.update = liveData[mod].data
+      let dataMerge = {}
+      dataMerge.data = this.mergeDataSets(entityData.visualData)
+      singleBundle.update = dataMerge
       singleBundle.module = mod
-      // }
+      singleBundle.identifier = Object.keys(liveData[mod].data)
     }
   }
   return singleBundle
+}
+
+/**
+* take a list of data and make the one for chartint
+* @method mergeDataSets
+*
+*/
+ToolkitUtility.prototype.mergeDataSets = function (liveData) {
+  let chartOptions = {}
+  let singleData = {}
+  // how many data sets to merge?
+  let listDataLength = Object.keys(liveData)
+  // split out data and labels and update colors
+  let dataY = []
+  let dataX = []
+  let count = 0
+  for (let dui of listDataLength) {
+    if (count === 0) {
+      chartOptions = liveData[dui].data.chartOptions
+      console.log('first data item')
+      dataY.push(liveData[dui].data.chartPackage.datasets[0])
+      dataX.push(liveData[dui].data.chartPackage.labels)
+    } else {
+      console.log('need tupdate colors settings')
+      let colorUpdate = this.setColourDataset(liveData[dui].data.chartPackage.datasets[0])
+      dataY.push(colorUpdate)
+      dataX.push(liveData[dui].data.chartPackage.labels)
+    }
+  }
+  let updateChartOptions = {}
+  updateChartOptions = chartOptions
+  updateChartOptions.title = 'two dts'
+  // need to merge x axis time list to single array
+  let flatten = dataX[0].concat(dataX[1])
+  let unique = flatten.filter((v, i, a) => a.indexOf(v) === i)
+  let updatePackage = {}
+  updatePackage.datasets = dataY
+  updatePackage.labels = unique
+  singleData.chartPackage = updatePackage
+  singleData.chartOptions = updateChartOptions
+  return singleData
+}
+
+/**
+*  allocate new color to each dataset
+* @method setColourDataset
+*
+*/
+ToolkitUtility.prototype.setColourDataset = function (dataSet) {
+  let colourUpdated = dataSet
+  let newColour = this.colourList()
+  colourUpdated.borderColor = newColour
+  colourUpdated.fillColor = newColour
+  return colourUpdated
+}
+
+/**
+*  list of chart colours
+* @method colourList
+*
+*/
+ToolkitUtility.prototype.colourList = function () {
+  let colourRGB = ['rgb(255, 99, 132)', 'rgb(181, 212, 234)', 'rgb(45, 119, 175 )', 'rgb(90, 45, 175)', 'rgb(41, 20, 80)', 'rgb(46, 143, 22)', 'rgb(21, 81, 7)', 'rgb(153, 18, 186)']
+  let max = 6
+  let min = 0
+  let colorNumber = Math.floor(Math.random() * (max - min + 1)) + min
+  let selectColour = colourRGB[colorNumber]
+  return selectColour
 }
 
 /**

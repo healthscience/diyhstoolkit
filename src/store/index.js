@@ -132,6 +132,9 @@ const store = new Vuex.Store({
       state.NXPexperimentList = gridAnnon
     },
     setDashboardNXP: (state, inVerified) => {
+      console.log('set dashboar firs time view')
+      console.log(inVerified)
+      console.log(state.experimentStatus)
       let dStatus = state.experimentStatus[inVerified].active
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
@@ -354,11 +357,12 @@ const store = new Vuex.Store({
           pmod.value.info.compute = peerDataRC
           peerOptions.push(pmod)
         } else if (pmod.value.type === 'visualise') {
+          pmod.value.info.settings.single = true
           let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.visualise, this.state.liveRefContIndex.visualise)
-          console.log('visu settings default')
-          console.log(peerDataRC)
-          if (pmod.value.info.settings.yaxis.length > 2) {
-            pmod.value.info.settings.singlemulti = true
+          if (pmod.value.info.settings.yaxis.length > 1) {
+            pmod.value.info.settings.multidata = true
+          } else {
+            pmod.value.info.settings.multidata = false
           }
           pmod.value.info.visualise = peerDataRC
           peerOptions.push(pmod)
@@ -373,6 +377,7 @@ const store = new Vuex.Store({
       message.reftype = 'ignore'
       message.action = 'networkexperiment'
       message.data = ECSbundle
+      console.log('Dashabou FIRST OOUUUT=#############')
       console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
@@ -440,7 +445,7 @@ const store = new Vuex.Store({
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionVisUpdate (context, update) {
-      console.log('display ACTIONupdate--##############')
+      console.log('display ACTIONupdate--INININININ')
       console.log(update)
       // display processing
       // context.commit('setVisProgressUpdate', update)
@@ -474,15 +479,7 @@ const store = new Vuex.Store({
         } else if (mmod.value.type === 'visualise') {
           // both range and single set?
           console.log(newStartTime)
-          let singleMultiSet = false
-          if (update.singlechart === true && newStartTime.length > 1) {
-            singleMultiSet = true
-          }
-          // if muitlple data types per single chart
-          /* if (update.singlechart === true && newStartTime.length > 1) {
-            singleMultiSet = true
-          } */
-          mmod.value.info.settings.singlemulti = singleMultiSet
+          mmod.value.info.settings.singlemulti = update.singlechart
           updateModules.push(mmod)
         }
       }

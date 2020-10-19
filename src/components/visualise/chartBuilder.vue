@@ -75,12 +75,12 @@ export default {
       }
     },
     liveData: function () {
-      // console.log('chart builder')
-      // console.log(this.$store.state.NXPexperimentData[this.shellID])
+      console.log('chart builder')
+      console.log(this.$store.state.NXPexperimentData[this.shellID])
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
         return {}
       } else {
-        return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
+        return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData].data
       }
     }
   },

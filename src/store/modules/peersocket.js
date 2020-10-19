@@ -171,7 +171,7 @@ export default {
           Vue.set(this.state.toolbarStatus, mo.key, setToolbar)
         }
         // context.commit('setVisProgressStart', displayReady)
-        console.log('vis update of exsting progress message')
+        // console.log('vis update of exsting progress message')
         let setVisProg = {}
         let moduleKeys = Object.keys(displayReady.grid)
         for (let mod of moduleKeys) {
@@ -239,24 +239,25 @@ export default {
         // set the live compute options in open data toolbar
         // done via liveindex.compute in component
         // set the devices live for this experiment
-        console.log('devicesssss')
-        console.log(backJSON.liveDeviceC.devices)
         this.state.devicesLive = backJSON.liveDeviceC.devices
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('update range first')
+        console.log('update range first###################')
         console.log(backJSON)
-        let mulitSingleDisplay = Object.entries(backJSON.data.liveVisualC.singlemulti).length
-        if (mulitSingleDisplay > 0) {
+        // one data set per char tor many datasets?
+        let singleStateDisplay = true
+        if (singleStateDisplay === true) {
           // single chart display
-          console.log('single chart many datasets')
-          // update vid data
-          console.log(this.state.NXPexperimentData)
-          console.log(this.state.NXPexperimentData[backJSON.context.key])
+          console.log('single chart-- many or single datasets?')
           let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data.liveVisualC)
-          let displayIdentifier = Object.keys(updateDisplayOne.update)
-          let mergDatasets = [...this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data[displayIdentifier[0]].chartPackage.datasets, ...backJSON.data.liveVisualC.singlemulti.chartPackage.datasets]
-          backJSON.data.liveVisualC.singlemulti.chartPackage.datasets = mergDatasets
-          Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, displayIdentifier[0], backJSON.data.liveVisualC.singlemulti)
+          console.log(updateDisplayOne)
+          /* let mergDatasets = [...this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data[displayIdentifier[0]].chartPackage.datasets, ...backJSON.data.liveVisualC.singlemultidata.chartPackage.datasets]
+          backJSON.data.liveVisualC.singlemultidata.chartPackage.datasets = mergDatasets */
+          // update the liveData
+          Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
+        } else {
+          console.log('display individual datasets/charts')
+          // update the liveData
+          // Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, displayIdentifier[0], backJSON.data.liveVisualC.singlemultidata)
         }
       } else if (backJSON.type === 'updateEntity') {
         console.log('update for existing entity-----------')
@@ -279,14 +280,20 @@ export default {
         let mulitSingleDisplay = Object.entries(backJSON.data.liveVisualC.singlemulti).length
         if (mulitSingleDisplay > 0) {
           // single chart display
-          console.log('single chart many datasets')
-          // update vid data
-          console.log(this.state.NXPexperimentData[backJSON.context.cnrl])
+          console.log('single chart(s) many datasets')
           let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
-          let displayIdentifier = Object.keys(updateDisplayOne.update)
-          let mergDatasets = [...this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data[displayIdentifier[0]].chartPackage.datasets, ...backJSON.data.liveVisualC.singlemulti.chartPackage.datasets]
-          backJSON.data.liveVisualC.singlemulti.chartPackage.datasets = mergDatasets
-          Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, displayIdentifier[0], backJSON.data.liveVisualC.singlemulti)
+          // is there multiple data sets required per chart?
+          if (updateDisplayOne) {
+            // no produce individaul charts
+            // update vid data
+            let displayIdentifier = Object.keys(updateDisplayOne.update)
+            let mergDatasets = [...this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data[displayIdentifier[0]].chartPackage.datasets, ...backJSON.data.liveVisualC.singlemultidata.chartPackage.datasets]
+            backJSON.data.liveVisualC.singlemultidata.chartPackage.datasets = mergDatasets
+            Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, displayIdentifier[0], backJSON.data.liveVisualC.singlemultidata)
+          } else {
+            // bundle datasets into pairs, tripple ie. no of dataset ask for on one chart?
+            console.log('data set in to pairs or trebbles etc.')
+          }
         } else {
           // many individual charts
           console.log('many individaul charts')
