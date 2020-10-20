@@ -1,6 +1,6 @@
 # diy-toolkit
 
-The Do-it-yourself HealthScience toolkit gives the ability sense making by using data science through a graphical interface.  This includes charting data and performing computations on data. An asparing decentraised collective intellence tool.
+The Do-it-yourself HealthScience toolkit gives the ability to sense make by using data science through a graphical interface.  This includes charting data and performing computations on data. An aspiring decentraised collective intelligence tool. See video <a href="https://www.youtube.com/channel/UCoCgnBkZpB2oMn1Qa2nXKeg/playlists">DIY Toolkit</a>
 
 ## Project setup
 
