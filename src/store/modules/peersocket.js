@@ -247,7 +247,7 @@ export default {
         let singleStateDisplay = true
         if (singleStateDisplay === true) {
           // single chart display
-          console.log('single chart-- many or single datasets?')
+          console.log('single chart-- many or single datasets')
           let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data.liveVisualC)
           console.log(updateDisplayOne)
           // update the liveData
@@ -275,12 +275,7 @@ export default {
         console.log('update existing entity RANGE----------')
         console.log(backJSON)
         // single or many chart display?
-        console.log('single chart-- many or single datasets?')
-        console.log(this.state.NXPexperimentData)
-        console.log(backJSON.context.cnrl)
         let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
-        console.log('update')
-        console.log(updateDisplayOne)
         // loop over modues context to extract settings from vis contract
         let contextVisRefContract = {}
         for (let modL of backJSON.context.modules) {
@@ -289,8 +284,6 @@ export default {
             contextVisRefContract = modL
           }
         }
-        console.log('live VISSS ref Con')
-        console.log(contextVisRefContract)
         // one data set per char tor many datasets?
         let singleStateDisplay = contextVisRefContract.value.info.settings.singlemulti
         if (singleStateDisplay === true) {
@@ -301,14 +294,11 @@ export default {
           // many individual charts
           console.log('many individaul charts')
           let updateDisplayRange = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
-          console.log('range update display back')
-          console.log(updateDisplayRange)
           // set the grid, data and toolbar settings
           // update the display grid
           for (let gup of updateDisplayRange.grid) {
             this.state.moduleGrid[updateDisplayRange.module].push(gup)
           }
-          console.log(this.state.moduleGrid)
           // update tools id reference
           Vue.set(this.state.opendataTools, updateDisplayRange.module, updateDisplayRange.opendata)
           // update toolbar vis status
