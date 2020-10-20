@@ -75,8 +75,8 @@ export default {
       }
     },
     liveData: function () {
-      console.log('chart builder')
-      console.log(this.$store.state.NXPexperimentData[this.shellID])
+      // console.log('chart builder')
+      // console.log(this.$store.state.NXPexperimentData[this.shellID])
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
         return {}
       } else {

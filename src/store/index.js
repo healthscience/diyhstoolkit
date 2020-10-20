@@ -51,6 +51,7 @@ const store = new Vuex.Store({
     entityUUIDsummary: {},
     updateentityUUIDReturn: {},
     moduleGrid: {},
+    liveDate: 0,
     toolbarStatus:
     {
       'default': {
@@ -121,8 +122,6 @@ const store = new Vuex.Store({
     setNetworkExperimentList: (state, inVerified) => {
       let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
       let gridData = []
-      console.log('Peer join experiment list')
-      console.log(inVerified)
       for (let nxp of inVerified) {
         gridData.push({ id: nxp.prime.cnrl, name: nxp.prime.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'Preview / Join' })
       }
@@ -132,9 +131,6 @@ const store = new Vuex.Store({
       state.NXPexperimentList = gridAnnon
     },
     setDashboardNXP: (state, inVerified) => {
-      console.log('set dashboar firs time view')
-      console.log(inVerified)
-      console.log(state.experimentStatus)
       let dStatus = state.experimentStatus[inVerified].active
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
@@ -144,8 +140,6 @@ const store = new Vuex.Store({
       Vue.set(state.NXPexperimentData, state.liveNXP, inVerified.data)
     },
     setLiveDisplayNXPModulesItem: (state, inVerified) => {
-      console.log('update chart item per item')
-      console.log(inVerified)
       // update title in options
       let chartUpdateOptions = state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item].chartOptions
       chartUpdateOptions.title.text = 'future'
@@ -179,14 +173,10 @@ const store = new Vuex.Store({
       console.log(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item])
     },
     SET_ENTITY_RETURN: (state, inVerified) => {
-      console.log('ECS acknowledge inpue been processed')
-      console.log(inVerified)
       state.entityUUIDReturn = inVerified
       // Vue.set(state.entityUUIDReturn, , inVerified)
     },
     setUpdateentityReturn: (state, inVerified) => {
-      console.log('ECS acknowledge inpue been processed')
-      console.log(inVerified)
       state.updateentityUUIDReturn = inVerified
       // Vue.set(state.entityUUIDReturn, , inVerified)
     },
@@ -260,8 +250,6 @@ const store = new Vuex.Store({
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
     setVisProgressStart: (state, inVerified) => {
-      console.log('vis start newnewnew')
-      console.log(inVerified)
       let setVisProg = {}
       let moduleKeys = Object.keys(inVerified.grid)
       for (let mod of moduleKeys) {
@@ -299,6 +287,9 @@ const store = new Vuex.Store({
       console.log(tempModcontract)
       // Vue.set(state.newNXshell, '', tempModcontract)
     },
+    SET_LIVE_DATE (state, inVerified) {
+      state.liveDate = inVerified
+    },
     SET_RESET_MODULEHOLDER (state, inVerified) {
       Vue.set(this.state.visModuleHolder, 'devices', [])
       Vue.set(this.state.visModuleHolder, 'compute', '')
@@ -328,6 +319,9 @@ const store = new Vuex.Store({
       // let nsNXPlive = await safeAPI.connectNSnetwork()
       // context.commit('setNetworkExperimentList', nsNXPlive)
       // context.commit('setProgressStart', nsNXPlive)
+    },
+    singleDateUpdate (context, update) {
+      context.commit('SET_LIVE_DATE', update)
     },
     async actionDashboardState (context, update) {
       console.log('VIEW DASHBORD -safeflow start')

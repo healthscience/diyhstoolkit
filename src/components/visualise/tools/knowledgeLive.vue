@@ -184,6 +184,9 @@ export default {
         return unique
       }
     },
+    calendarDate: function () {
+      return this.$store.state.liveDate
+    },
     time: function () {
       // mock time unit refContracts
       let timeList = []
@@ -260,7 +263,6 @@ export default {
       this.$store.dispatch('actionNewVisResolution', this.visualsettings.resolution)
     },
     deviceSelect () {
-      console.log(this.visualsettings.device)
       this.$store.dispatch('actionNewVisDevice', this.visualsettings.device)
     },
     computeSelect () {
@@ -271,16 +273,15 @@ export default {
     },
     learnUpdate () {
       console.log('learn update from open data')
-      // this.$store.dispatch('actionDisplayLearn')
       let contextK = {}
       contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
       contextK.moduleType = this.moduleType
       contextK.mData = this.mData
       contextK.opendata = 'updated'
-      // contextK.startperiodchange = seg.text.number
-      // contextK.startperiod = 0
-      // contextK.rangechange = []
+      contextK.startperiodchange = ''
+      contextK.startperiod = this.calendarDate
+      contextK.rangechange = []
       this.$store.dispatch('actionVisUpdate', contextK)
     }
   }

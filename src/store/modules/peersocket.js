@@ -250,8 +250,6 @@ export default {
           console.log('single chart-- many or single datasets?')
           let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data.liveVisualC)
           console.log(updateDisplayOne)
-          /* let mergDatasets = [...this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data[displayIdentifier[0]].chartPackage.datasets, ...backJSON.data.liveVisualC.singlemultidata.chartPackage.datasets]
-          backJSON.data.liveVisualC.singlemultidata.chartPackage.datasets = mergDatasets */
           // update the liveData
           Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
         } else {
@@ -277,23 +275,28 @@ export default {
         console.log('update existing entity RANGE----------')
         console.log(backJSON)
         // single or many chart display?
-        let mulitSingleDisplay = Object.entries(backJSON.data.liveVisualC.singlemulti).length
-        if (mulitSingleDisplay > 0) {
-          // single chart display
-          console.log('single chart(s) many datasets')
-          let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
-          // is there multiple data sets required per chart?
-          if (updateDisplayOne) {
-            // no produce individaul charts
-            // update vid data
-            let displayIdentifier = Object.keys(updateDisplayOne.update)
-            let mergDatasets = [...this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data[displayIdentifier[0]].chartPackage.datasets, ...backJSON.data.liveVisualC.singlemultidata.chartPackage.datasets]
-            backJSON.data.liveVisualC.singlemultidata.chartPackage.datasets = mergDatasets
-            Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, displayIdentifier[0], backJSON.data.liveVisualC.singlemultidata)
-          } else {
-            // bundle datasets into pairs, tripple ie. no of dataset ask for on one chart?
-            console.log('data set in to pairs or trebbles etc.')
+        console.log('single chart-- many or single datasets?')
+        console.log(this.state.NXPexperimentData)
+        console.log(backJSON.context.cnrl)
+        let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
+        console.log('update')
+        console.log(updateDisplayOne)
+        // loop over modues context to extract settings from vis contract
+        let contextVisRefContract = {}
+        for (let modL of backJSON.context.modules) {
+          console.log(modL)
+          if (modL.key === updateDisplayOne.module) {
+            contextVisRefContract = modL
           }
+        }
+        console.log('live VISSS ref Con')
+        console.log(contextVisRefContract)
+        // one data set per char tor many datasets?
+        let singleStateDisplay = contextVisRefContract.value.info.settings.singlemulti
+        if (singleStateDisplay === true) {
+          // single chart display
+          // update the liveData
+          Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
         } else {
           // many individual charts
           console.log('many individaul charts')

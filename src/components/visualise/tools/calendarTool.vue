@@ -140,12 +140,13 @@ export default {
   },
   methods: {
     calendarSelect () {
+      console.log('caleander st')
       if (this.calendarTools.active !== true) {
         // convert to correct time format and update KBundle and build new visStyle
         let bTime = {}
         bTime.selectDate = this.value
         bTime.text = 'selectd'
-        this.$emit('updateLearn', bTime)
+        this.$store.dispatch('singleDateUpdate', moment(this.value).valueOf())
       } else if (this.calendarTools.active === true) {
         this.calendarList.push(this.value)
         this.calendarListMS.push(moment(this.value).valueOf())

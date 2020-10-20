@@ -295,26 +295,39 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData) {
   // how many data sets to merge?
   let listDataLength = Object.keys(liveData)
   // split out data and labels and update colors
+  let dataPairs = {}
   let dataY = []
   let dataX = []
   let count = 0
   for (let dui of listDataLength) {
     if (count === 0) {
       chartOptions = liveData[dui].data.chartOptions
-      console.log('first data item')
       dataY.push(liveData[dui].data.chartPackage.datasets[0])
       dataX.push(liveData[dui].data.chartPackage.labels)
+      let tempPair = {}
+      tempPair.dataset = dataY[0].data
+      tempPair.labelset = dataX[0]
+      dataPairs.first = tempPair
+      count++
     } else {
-      console.log('need tupdate colors settings')
+      // need to normalise data for length of longest timestamp ie fill in gaps
       let colorUpdate = this.setColourDataset(liveData[dui].data.chartPackage.datasets[0])
       dataY.push(colorUpdate)
       dataX.push(liveData[dui].data.chartPackage.labels)
+      let tempPair = {}
+      tempPair.dataset = dataY[1].data
+      tempPair.labelset = dataX[1]
+      dataPairs.second = tempPair
     }
   }
+  // console.log(dataPairs)
   let updateChartOptions = {}
   updateChartOptions = chartOptions
   updateChartOptions.title = 'two dts'
   // need to merge x axis time list to single array
+  let paddedData = this.timestampMatcher(dataPairs)
+  dataY[0].data = paddedData[0]
+  dataY[1].data = paddedData[1]
   let flatten = dataX[0].concat(dataX[1])
   let unique = flatten.filter((v, i, a) => a.indexOf(v) === i)
   let updatePackage = {}
@@ -325,6 +338,35 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData) {
   return singleData
 }
 
+/**
+*  timestampMatcher padding to unify array data with nulls
+* @method timestampMatcher
+*
+*/
+ToolkitUtility.prototype.timestampMatcher = function (dataPairs) {
+  let updateDatasets = []
+  let matchList = []
+  /* const manFilter = (e, datatype, rule) => {
+    let filterMat = null
+    return filterMat
+  } */
+  let count = 0
+  for (let tsi of dataPairs.second.labelset) {
+    // console.log(tsi)
+    let include = dataPairs.first.labelset.includes(tsi)
+    if (include === true) {
+      // console.log(include)
+      matchList.push(dataPairs.first.dataset[count])
+      count++
+    } else {
+      // console.log('not included')
+      matchList.push(null)
+    }
+  }
+  updateDatasets.push(matchList)
+  updateDatasets.push(dataPairs.second.dataset)
+  return updateDatasets
+}
 /**
 *  allocate new color to each dataset
 * @method setColourDataset
@@ -344,8 +386,8 @@ ToolkitUtility.prototype.setColourDataset = function (dataSet) {
 *
 */
 ToolkitUtility.prototype.colourList = function () {
-  let colourRGB = ['rgb(255, 99, 132)', 'rgb(181, 212, 234)', 'rgb(45, 119, 175 )', 'rgb(90, 45, 175)', 'rgb(41, 20, 80)', 'rgb(46, 143, 22)', 'rgb(21, 81, 7)', 'rgb(153, 18, 186)']
-  let max = 6
+  let colourRGB = ['rgb(181, 212, 234)', 'rgb(45, 119, 175 )', 'rgb(90, 45, 175)', 'rgb(41, 20, 80)', 'rgb(46, 143, 22)', 'rgb(21, 81, 7)', 'rgb(153, 18, 186)']
+  let max = 5
   let min = 0
   let colorNumber = Math.floor(Math.random() * (max - min + 1)) + min
   let selectColour = colourRGB[colorNumber]
@@ -368,27 +410,17 @@ ToolkitUtility.prototype.prepareTime = function (timeIN, update) {
   } else {
     // time state available
     if (update.startperiod !== 0 && update.rangechange.length === 0) {
-      // console.log('update starp0 but range above 1')
       newStartTime.push(update.startperiod)
     } else if (update.rangechange.length > 0) {
-      // console.log('chage range above zero')
       newStartTime = update.rangechange
-      // mmod.value.info.settings.timeseg = update.startperiodchange
     } else if (update.startperiod === 0 && update.startperiodchange) {
-      // console.log('update starp0 but range above 1')
-      // console.log(timeIN)
       let timeCon = new Date(timeIN)
-      // console.log(timeCon)
-      // console.log(timeCon.getTime())
       let convertTime = timeCon.getTime()
       let updateT = parseInt(convertTime) + update.startperiodchange
       newStartTime.push(updateT)
-      // mmod.value.info.settings.timeseg = update.startperiodchange
     } else {
-      // console.log('elas all otehr opieons')
       let updateSum = parseInt(timeIN) + update.startperiodchange
       newStartTime.push(updateSum)
-      // mmod.value.info.settings.timeseg = update.startperiodchange
     }
   }
   return newStartTime
