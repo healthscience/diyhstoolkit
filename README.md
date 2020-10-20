@@ -4,7 +4,7 @@ The Do-it-yourself HealthScience toolkit gives the ability to sense make by usin
 
 ## Project setup
 
-The DIY Toolkit operates on a peer to peer protocol and uses a <a href="https://github.com/DaMaHub/networklibrary">network library</a> to guranteed data interoperabilty between peers.  The Toolkit needs to connect to the network via PeerLink.  This is not currently included in the installation process.  Install struction here: <a href="https://github.com/DaMaHub/peerlink">Peer Link Install</a>
+The DIY Toolkit operates on a peer to peer protocol and uses a <a href="https://github.com/DaMaHub/networklibrary">network library</a> to guranteed data interoperabilty between peers.  The Toolkit needs to connect to the network via PeerLink.  This is not currently included in the installation process.  Install instructions here: <a href="https://github.com/DaMaHub/peerlink">Peer Link Install</a>
 
 DIY Toolkit setup: for web or desktop
 ```
