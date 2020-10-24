@@ -131,6 +131,9 @@ const store = new Vuex.Store({
       state.NXPexperimentList = gridAnnon
     },
     setDashboardNXP: (state, inVerified) => {
+      console.log('set dashboard err first time on list?')
+      console.log(inVerified)
+      console.log(state.experimentStatus)
       let dStatus = state.experimentStatus[inVerified].active
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)

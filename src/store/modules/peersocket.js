@@ -34,8 +34,8 @@ export default {
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
       const backJSON = JSON.parse(message.data)
-      // console.log('back message')
-      // console.log(backJSON)
+      console.log('back message')
+      console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         console.log('save successful')
@@ -134,10 +134,16 @@ export default {
           // get starting experiments
           const refContract = {}
           refContract.type = 'library'
-          refContract.reftype = 'datatype'
+          refContract.reftype = 'publiclibrary'
           refContract.action = 'GET'
           const refCJSON = JSON.stringify(refContract)
           Vue.prototype.$socket.send(refCJSON)
+          const refContractp = {}
+          refContractp.type = 'library'
+          refContractp.reftype = 'privatelibrary'
+          refContractp.action = 'GET'
+          const refCJSONp = JSON.stringify(refContractp)
+          Vue.prototype.$socket.send(refCJSONp)
         }
       } else if (backJSON.type === 'ecssummary') {
         console.log('ECS data summary')
@@ -306,28 +312,11 @@ export default {
           // update vis data
           Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayRange.module], 'data', updateDisplayRange.update)
         }
-      } else {
-        console.log('starting network experiment data BACK FAE NetworkLibrary')
-        // save copy of ref contract indexes
-        this.state.liveRefContIndex = backJSON.referenceContracts
-        console.log('index of contracts')
-        console.log(this.state.liveRefContIndex)
-        // prepare NPXs in NETWORK
-        this.state.networkExpModules = backJSON.networkExpModules
+      } else if (backJSON.type === 'peerprivate') {
+        // peer private library contracts
+        console.log('joined Private library contracts')
+        console.log(backJSON)
         this.state.networkPeerExpModules = backJSON.networkPeerExpModules
-        let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)
-        this.state.NXPexperimentList = gridAnnon
-        // set the dashboard toolbar status settings
-        for (let exl of backJSON.networkExpModules) {
-          let experBundle = {}
-          experBundle.cnrl = exl.exp.key
-          experBundle.status = false
-          experBundle.active = false
-          experBundle.contract = exl.exp
-          experBundle.modules = exl.modules
-          let objectPropC = exl.exp.key
-          Vue.set(this.state.experimentStatus, objectPropC, experBundle)
-        }
         for (let exl of backJSON.networkPeerExpModules) {
           let experBundle = {}
           experBundle.cnrl = exl.exp.key
@@ -346,6 +335,46 @@ export default {
         let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.networkPeerExpModules)
         this.state.joinedNXPlist = gridPeer
         console.log('complete start lists')
+      } else if (backJSON.type === 'publiclibrary') {
+        console.log('starting network experiment data BACK FAE NetworkLibrary')
+        // save copy of ref contract indexes
+        this.state.liveRefContIndex = backJSON.referenceContracts
+        console.log('index of contracts')
+        console.log(this.state.liveRefContIndex)
+        // prepare NPXs in NETWORK
+        this.state.networkExpModules = backJSON.networkExpModules
+        // this.state.networkPeerExpModules = backJSON.networkPeerExpModules
+        let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)
+        this.state.NXPexperimentList = gridAnnon
+        // set the dashboard toolbar status settings
+        for (let exl of backJSON.networkExpModules) {
+          let experBundle = {}
+          experBundle.cnrl = exl.exp.key
+          experBundle.status = false
+          experBundle.active = false
+          experBundle.contract = exl.exp
+          experBundle.modules = exl.modules
+          let objectPropC = exl.exp.key
+          Vue.set(this.state.experimentStatus, objectPropC, experBundle)
+        }
+        /* for (let exl of backJSON.networkPeerExpModules) {
+          let experBundle = {}
+          experBundle.cnrl = exl.exp.key
+          experBundle.status = false
+          experBundle.active = false
+          experBundle.contract = exl.exp
+          experBundle.modules = exl.modules
+          let objectPropC = exl.exp.key
+          Vue.set(this.state.experimentStatus, objectPropC, experBundle)
+        }
+        for (let nxp of backJSON.networkPeerExpModules) {
+          let setProgress = { text: 'Experiment in progress', active: false }
+          Vue.set(this.state.nxpProgress, nxp.exp.key, setProgress)
+        }
+        // prepare PEER JOINED LIST
+        let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.networkPeerExpModules)
+        this.state.joinedNXPlist = gridPeer
+        console.log('complete start lists') */
       }
     },
     SET_QUESTION_REFCONTRACT (state, inVerified) {

@@ -219,7 +219,7 @@ export default {
       },
       visualsettings: {
         xaxis: null,
-        yaxis: null
+        yaxis: []
       },
       feedback:
       {

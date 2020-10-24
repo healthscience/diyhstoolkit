@@ -45,6 +45,7 @@ ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
   let gridDatapeer = []
   let question2 = {}
   for (let nxp of peerExpModules) {
+    console.log(nxp)
     // look up question
     for (const mod of nxp.modules) {
       if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
