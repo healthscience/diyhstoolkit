@@ -64,6 +64,20 @@ export default {
         } else if (backJSON.type === 'experiment') {
           // what is the state of the experiment Genesis or Joined?
           if (backJSON.contract.concept.state === 'joined') {
+            // set the state of the experiment for the dashboard
+            // set the exeriment status object i.e. add to list
+            // context.commit('SET_EXP_JOINLIST', joinNXP)
+            // SET_EXP_JOINLIST (state, inVerified) {
+            // set state for experiment just joined
+            let experBundle = {}
+            experBundle.cnrl = backJSON.key
+            experBundle.status = false
+            experBundle.active = false
+            experBundle.contract = backJSON.contract
+            experBundle.modules = backJSON.expanded
+            let objectPropC = backJSON.key
+            Vue.set(this.state.experimentStatus, objectPropC, experBundle)
+            // }
             // set local state exp expaneded
             let newFormed = {}
             newFormed.key = backJSON.key

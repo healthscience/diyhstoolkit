@@ -67,11 +67,9 @@ ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
 *
 */
 ToolkitUtility.prototype.prepareExperimentSummarySingle = function (peerExpModules) {
-  console.log(peerExpModules)
   let gridDatapeer = {}
   let question2 = {}
   for (const mod of peerExpModules.modules) {
-    console.log(mod)
     if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
       if (mod.value.info.type === 'question') {
         question2 = mod.value.info.question
@@ -135,9 +133,16 @@ ToolkitUtility.prototype.prepareAnnonNXPlist = function (peerExpModules) {
 *
 */
 ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
+  let contractKey = ''
+  let objectTest = typeof refCont
+  if (objectTest === 'object') {
+    contractKey = refCont.key
+  } else {
+    contractKey = refCont
+  }
   let matchKey = {}
   for (const rc of allContracts) {
-    if (refCont.trim() === rc.key) {
+    if (contractKey.trim() === rc.key) {
       matchKey = rc
     }
   }
