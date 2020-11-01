@@ -34,8 +34,8 @@ export default {
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
       const backJSON = JSON.parse(message.data)
-      console.log('back message')
-      console.log(backJSON)
+      // console.log('back message')
+      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         console.log('save successful')
@@ -146,18 +146,19 @@ export default {
         // safeFLOW inflow
         if (backJSON.type === 'auth') {
           // get starting experiments
-          const refContract = {}
-          refContract.type = 'library'
-          refContract.reftype = 'publiclibrary'
-          refContract.action = 'GET'
-          const refCJSON = JSON.stringify(refContract)
-          Vue.prototype.$socket.send(refCJSON)
           const refContractp = {}
           refContractp.type = 'library'
-          refContractp.reftype = 'privatelibrary'
+          refContractp.reftype = 'publiclibrary'
           refContractp.action = 'GET'
           const refCJSONp = JSON.stringify(refContractp)
           Vue.prototype.$socket.send(refCJSONp)
+          // network library updates?
+          const refContract = {}
+          refContract.type = 'library'
+          refContract.reftype = 'privatelibrary'
+          refContract.action = 'GET'
+          const refCJSON = JSON.stringify(refContract)
+          Vue.prototype.$socket.send(refCJSON)
         }
       } else if (backJSON.type === 'ecssummary') {
         console.log('ECS data summary')
@@ -167,7 +168,7 @@ export default {
         this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
         this.state.entityUUIDsummary = backJSON
       } else if (backJSON.type === 'newEntity') {
-        console.log('entity NEW')
+        console.log('entity NEW-------------')
         console.log(backJSON)
         // format data for DashBoard
         let mod = []
@@ -299,20 +300,26 @@ export default {
         // loop over modues context to extract settings from vis contract
         let contextVisRefContract = {}
         for (let modL of backJSON.context.modules) {
-          console.log(modL)
+          // console.log(modL)
           if (modL.key === updateDisplayOne.module) {
             contextVisRefContract = modL
           }
         }
         // one data set per char tor many datasets?
-        let singleStateDisplay = contextVisRefContract.value.info.settings.singlemulti
+        let singleStateDisplay = true
+        if (contextVisRefContract.value.info.settings.single === true && contextVisRefContract.value.info.settings.multidata === true) {
+          singleStateDisplay = true
+        } else if (contextVisRefContract.value.info.settings.single === false && contextVisRefContract.value.info.settings.mutidata === true) {
+          singleStateDisplay = false
+        } else {
+          // mix of many dataset per chart but also many chart TODO
+          singleStateDisplay = false
+        }
         if (singleStateDisplay === true) {
           // single chart display
-          // update the liveData
           Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
         } else {
           // many individual charts
-          console.log('many individaul charts')
           let updateDisplayRange = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
           // set the grid, data and toolbar settings
           // update the display grid
@@ -329,7 +336,7 @@ export default {
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
         console.log('joined Private library contracts')
-        console.log(backJSON)
+        // console.log(backJSON)
         this.state.networkPeerExpModules = backJSON.networkPeerExpModules
         for (let exl of backJSON.networkPeerExpModules) {
           let experBundle = {}
@@ -348,7 +355,6 @@ export default {
         // prepare PEER JOINED LIST
         let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.networkPeerExpModules)
         this.state.joinedNXPlist = gridPeer
-        console.log('complete start lists')
       } else if (backJSON.type === 'publiclibrary') {
         console.log('starting network experiment data BACK FAE NetworkLibrary')
         // save copy of ref contract indexes
@@ -371,24 +377,6 @@ export default {
           let objectPropC = exl.exp.key
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }
-        /* for (let exl of backJSON.networkPeerExpModules) {
-          let experBundle = {}
-          experBundle.cnrl = exl.exp.key
-          experBundle.status = false
-          experBundle.active = false
-          experBundle.contract = exl.exp
-          experBundle.modules = exl.modules
-          let objectPropC = exl.exp.key
-          Vue.set(this.state.experimentStatus, objectPropC, experBundle)
-        }
-        for (let nxp of backJSON.networkPeerExpModules) {
-          let setProgress = { text: 'Experiment in progress', active: false }
-          Vue.set(this.state.nxpProgress, nxp.exp.key, setProgress)
-        }
-        // prepare PEER JOINED LIST
-        let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.networkPeerExpModules)
-        this.state.joinedNXPlist = gridPeer
-        console.log('complete start lists') */
       }
     },
     SET_QUESTION_REFCONTRACT (state, inVerified) {
@@ -466,8 +454,6 @@ export default {
         }
       }
       this.state.refcontractPackaging.push(packContract)
-      console.log('packaing contract selected')
-      console.log(this.state.refcontractPackaging)
     },
     SET_DATE_STARTNXP (state, inVerified) {
       // ECS use ms time only, please convert

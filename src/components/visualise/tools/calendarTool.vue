@@ -166,7 +166,7 @@ export default {
       // if single day selected use calendar list
       let timeRange = []
       if (this.calendarListMS.length === 0) {
-        timeRange.push(this.value)
+        timeRange.push(moment(this.value).valueOf())
       } else {
         timeRange = this.calendarListMS
       }

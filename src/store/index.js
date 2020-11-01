@@ -2,8 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
+import ContextUtility from '@/mixins/contextUtility.js'
 const moment = require('moment')
 const ToolUtility = new ToolkitUtility()
+const ContextOut = new ContextUtility()
 
 Vue.use(Vuex)
 
@@ -43,7 +45,7 @@ const store = new Vuex.Store({
     referenceContract: {},
     experimentList: {},
     NXPexperimentList: {},
-    joinedNXPlist: {},
+    joinedNXPlist: [],
     experimentStatus: {},
     experimentPeerStatus: {},
     NXPexperimentData: {},
@@ -450,10 +452,11 @@ const store = new Vuex.Store({
       let entityUUID = this.state.entityUUIDReturn
       // prepare info. to update library ref contracts
       let updateContract = {}
-      // the visulisation and compute module contract need updating for time which when how????
+      // the visulisation and compute module contract need updating
+      // is the context set from opendata tools or time nav tools?
+      let contextState = 'timeupdate'
       if (update.opendata === 'updated') {
-        console.log('update time settings')
-        console.log(this.state.visModuleHolder)
+        contextState = 'toolbarupdate'
       }
       let nxpModules = this.state.entityUUIDsummary.data[update.nxpCNRL].modules
       let updateModules = []
@@ -465,19 +468,24 @@ const store = new Vuex.Store({
           // update the Compute RefContract
           mmod.value.automation = false
           newStartTime = ToolUtility.prepareTime(this.state.timeStartperiod, update)
-          // console.log('time udpated prepared')
-          // console.log(newStartTime)
           context.commit('setTimeAsk', newStartTime[0])
-          mmod.value.info.controls.date = newStartTime[0]
-          mmod.value.info.controls.rangedate = newStartTime
-          mmod.value.info.settings.date = newStartTime[0]
-          mmod.value.info.settings.timeseg = update.startperiodchange
-          updateModules.push(mmod)
+          // what type of context update?
+          let updateSettings = {}
+          if (contextState === 'timeupdate') {
+            updateSettings = ContextOut.prepareSettingsTime(mmod, newStartTime, update, null)
+          } else if (contextState === 'toolbarupdate') {
+            updateSettings = ContextOut.prepareSettings(mmod, newStartTime, update, this.state.visModuleHolder)
+          }
+          updateModules.push(updateSettings)
         } else if (mmod.value.type === 'visualise') {
           // both range and single set?
-          console.log(newStartTime)
-          mmod.value.info.settings.singlemulti = update.singlechart
-          updateModules.push(mmod)
+          let updateSettings = {}
+          if (contextState === 'timeupdate') {
+            updateSettings = ContextOut.prepareSettingsVisTime(mmod, newStartTime, update, null)
+          } else if (contextState === 'toolbarupdate') {
+            updateSettings = ContextOut.prepareVisSettings(mmod, newStartTime, update, this.state.visModuleHolder)
+          }
+          updateModules.push(updateSettings)
         }
       }
       // keep state of live modules
@@ -497,7 +505,7 @@ const store = new Vuex.Store({
       message.reftype = 'ignore'
       message.action = 'updatenetworkexperiment'
       message.data = ECSbundle
-      console.log('updateOUT###################')
+      console.log('updateOUT##################')
       console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)

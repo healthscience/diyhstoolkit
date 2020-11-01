@@ -45,7 +45,6 @@ ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
   let gridDatapeer = []
   let question2 = {}
   for (let nxp of peerExpModules) {
-    console.log(nxp)
     // look up question
     for (const mod of nxp.modules) {
       if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
@@ -406,9 +405,6 @@ ToolkitUtility.prototype.colourList = function () {
 *
 */
 ToolkitUtility.prototype.prepareTime = function (timeIN, update) {
-  // console.log('PREPARE timmmmee')
-  // console.log(timeIN)
-  // console.log(update)
   let newStartTime = []
   if (timeIN === 0) {
     let freshStart = Date.now() + update.startperiodchange

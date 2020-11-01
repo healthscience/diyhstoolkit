@@ -89,7 +89,7 @@
               <select class="select-category-id" id="category-mapping-build" @change="categorySelect" v-model="visualsettings.category">
                 <option value="none" selected="">none</option>
                 <option v-for="catL in category" :key="catL" v-bind:value="catL.key">
-                  {{ catL }}
+                  {{ catL.name }}
                 </option>
               </select>
             </li>
@@ -181,7 +181,20 @@ export default {
         }
         // usage example:
         let unique = catList.filter(this.onlyUnique)
-        return unique
+        // need to look up each datatype id to get text name
+        let catDisplay = []
+        for (let uc of unique) {
+          for (let dtl of this.$store.state.liveRefContIndex.datatype) {
+            if (uc === dtl.key) {
+              // build pair
+              let catPair = {}
+              catPair.key = uc
+              catPair.name = dtl.value.concept.name
+              catDisplay.push(catPair)
+            }
+          }
+        }
+        return catDisplay
       }
     },
     calendarDate: function () {
