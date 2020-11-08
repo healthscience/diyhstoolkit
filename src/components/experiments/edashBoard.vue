@@ -188,7 +188,7 @@ export default {
 
 <style>
 #dashboard-holder {
-  border: 2px solid red;
+  border: 0px solid red;
 }
 #dashboard-view {
   border: 1px solid white;

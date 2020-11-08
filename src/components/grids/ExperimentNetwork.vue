@@ -292,7 +292,7 @@ body {
 }
 
 table {
-  border: 2px solid #42b4b9;
+  border: 1px solid #42b4b9;
   border-radius: 3px;
   background-color: #fff;
 }

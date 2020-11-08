@@ -14,13 +14,13 @@
         </draggable>
       </div>
       <div class="col-4">
-        <h3>Experiment</h3>
+        <h3>Experiment - drag modules across</h3>
         <draggable class="list-group" :list="nxpMakeList" group="people" @change="log">
           <div
             class="list-group-item"
             v-for="(element) in nxpMakeList"
             :key="element.name"
-          > {{ element }}
+          >
             <component v-bind:is="moduleNXPTemplate[element.name].prime.type" :modData="element" ></component>
           </div>
         </draggable>
@@ -100,10 +100,11 @@ export default {
 
 <style>
 #module-builder {
+
 }
 
 .row {
-  border: 3px solid green;
+  border: 0px solid green;
   min-height: 2em;
 }
 
@@ -112,7 +113,7 @@ export default {
   vertical-align: text-top;
   min-height: inherit;
   width: 15%;
-  border: 2px solid grey;
+  border: 1px solid grey;
   margin-right: 4em;
 }
 
@@ -121,12 +122,13 @@ export default {
   vertical-align: text-top;
   min-height: inherit;
   width: 80%;
-  border: 2px solid grey;
+  border: 0px solid grey;
 }
 
 .list-group {
-  border: 1px solid red;
-  min-height: inherit;
+  border: 1px solid orange;
+  min-height: 400px;
+  background-color: #ffefd5;
 }
 
 .list-group-item {
@@ -134,7 +136,7 @@ export default {
   width: 80%;
   padding: .5em;
   margin: 1em;
-  border: 1px solid lightgrey;
+  border: 0px solid lightgrey;
   background-color: #E6ECEC;
 }
 </style>

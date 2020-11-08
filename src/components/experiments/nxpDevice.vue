@@ -9,8 +9,7 @@
         <ul v-for="ds of datasource" :key="ds.id">
           <device-source :modData="modData" :datID="ds"></device-source>
         </ul>
-          <button type="button" class="btn" @click="addDatasource()">add data source</button>
-
+        <button id="add-source-button" type="button" class="btn" @click="addDatasource()">add data source</button>
       </form>
     </div>
   </div>
@@ -58,4 +57,9 @@ export default {
 .ref-pair {
   display: block;
 }
+
+#add-source-button {
+  margin-top: 2em;
+}
+
 </style>

@@ -70,7 +70,7 @@ export default {
 
 <style>
 #module-board {
-  border: 1px solid grey;
+  border: 0px solid grey;
   background-color: #E9EDF0;
 }
 

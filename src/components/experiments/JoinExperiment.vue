@@ -160,12 +160,12 @@ export default {
 
 .network-experiment {
   margin: 20px;
-  border: 1px solid blue;
+  border: 1px solid lightgrey;
 }
 
 .network-connect {
   margin: 20px;
-  border: 1px solid blue;
+  border: 1px solid lightgrey;
 }
 
 .network-dashboard {

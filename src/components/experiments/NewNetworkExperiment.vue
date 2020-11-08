@@ -155,17 +155,17 @@ export default {
 
 .network-experiment {
   margin: 20px;
-  border: 1px solid blue;
+  border: 0px solid blue;
 }
 
 .network-connect {
   margin: 20px;
-  border: 1px solid blue;
+  border: 0px solid blue;
 }
 
 .network-dashboard {
   margin: 20px;
-  border: 1px solid blue;
+  border: 1px solid lightgrey;
 }
 
 #setup-flow {
