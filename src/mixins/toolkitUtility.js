@@ -173,7 +173,7 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
       moduleObject.device = mod.key
       let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }]
       gridPerModule[mod.key] = dgrid // mod.grid
-      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': dgrid, 'data': entityData.liveDeviceC.devices, 'message': 'compute-complete' }
+      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': dgrid, 'data': entityData.devices, 'message': 'compute-complete' }
     } else if (mod.value.type === 'dapp') {
       moduleObject.dapp = mod.key
       let ddgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }]
@@ -197,18 +197,19 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
       mod.grid = []
       let makeGrid = []
       // let dataIndex = Object.keys(entityData.liveVisualC.visualData)
-      if (entityData.liveVisualC.singlemulti.chartPackage) {
+      // what to chart, device, datatypes, time  or what combinations?
+      if (entityData.singlemulti.chartPackage) {
         // single chart multi datasets
         let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'singlemulti', static: false }
         makeGrid.push(newGriditem)
         // gridPerModule = {}
         gridPerModule[mod.key] = makeGrid
-        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': { 'singlemulti': entityData.liveVisualC.singlemulti } }
+        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': { 'singlemulti': entityData.singlemulti } }
       } else {
         // normal display indivduals charts
-        let devicesList = Object.keys(entityData.liveVisualC.liveVislist)
+        let devicesList = Object.keys(entityData.liveVislist)
         for (let dl of devicesList) {
-          for (let dr of entityData.liveVisualC.liveVislist[dl]) {
+          for (let dr of entityData.liveVislist[dl]) {
             // need to add to grid for multi charts asked for
             // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
             let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
@@ -217,7 +218,7 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
         }
         // gridPerModule = {}
         gridPerModule[mod.key] = makeGrid
-        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': entityData.liveVisualC.visualData }
+        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': entityData.visualData }
       }
     }
   }
@@ -226,6 +227,27 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
   displayData.grid = gridPerModule
   displayData.data = testDataBundle
   return displayData
+}
+
+/**
+* prepare multi datasets one chart
+* @method displayUpdateSingle
+*
+*/
+ToolkitUtility.prototype.displayUpdateSingle = function (liveData, entityData) {
+  let singleBundle = {}
+  let moduleKeys = Object.keys(liveData)
+  // loop over the modules in the NXP and match to compute and update data
+  for (let mod of moduleKeys) {
+    if (liveData[mod].prime.text === 'Visualise') {
+      let dataMerge = {}
+      dataMerge.data = this.mergeDataSets(entityData.visualData)
+      singleBundle.update = dataMerge
+      singleBundle.module = mod
+      singleBundle.identifier = Object.keys(liveData[mod].data)
+    }
+  }
+  return singleBundle
 }
 
 /**
@@ -269,27 +291,6 @@ ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
 }
 
 /**
-* prepare multi datasets one chart
-* @method displayUpdateSingle
-*
-*/
-ToolkitUtility.prototype.displayUpdateSingle = function (liveData, entityData) {
-  let singleBundle = {}
-  let moduleKeys = Object.keys(liveData)
-  // loop over the modules in the NXP and match to compute and update data
-  for (let mod of moduleKeys) {
-    if (liveData[mod].prime.text === 'Visualise') {
-      let dataMerge = {}
-      dataMerge.data = this.mergeDataSets(entityData.visualData)
-      singleBundle.update = dataMerge
-      singleBundle.module = mod
-      singleBundle.identifier = Object.keys(liveData[mod].data)
-    }
-  }
-  return singleBundle
-}
-
-/**
 * take a list of data and make the one for chartint
 * @method mergeDataSets
 *
@@ -328,7 +329,7 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData) {
   // console.log(dataPairs)
   let updateChartOptions = {}
   updateChartOptions = chartOptions
-  updateChartOptions.title = 'two dts'
+  // updateChartOptions.title = 'two dts'
   // need to merge x axis time list to single array
   let paddedData = this.timestampMatcher(dataPairs)
   dataY[0].data = paddedData[0]

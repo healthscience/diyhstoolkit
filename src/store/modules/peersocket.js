@@ -168,7 +168,7 @@ export default {
         this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
         this.state.entityUUIDsummary = backJSON
       } else if (backJSON.type === 'newEntity') {
-        console.log('entity NEW-------------')
+        console.log('entity NEW###########')
         console.log(backJSON)
         // format data for DashBoard
         let mod = []
@@ -179,12 +179,12 @@ export default {
           console.log(this.state.entityUUIDsummary.data)
           mod = this.state.entityUUIDsummary.data[this.state.liveNXP].modules
         }
-        // console.log(mod)
+        console.log('live experiment contract?')
+        console.log(mod)
         // remove existing vis component if in single mode (default)
         // context.commit('setClearGrid')
         // update or first time
-        let displayReady = ToolUtility.displayFilter(mod, backJSON)
-        console.log(displayReady)
+        let displayReady = ToolUtility.displayFilter(mod, backJSON.data)
         // prepare toolbar status object
         // context.commit('setToolbarState', mod)
         for (let mo of mod) {
@@ -260,16 +260,16 @@ export default {
         // set the live compute options in open data toolbar
         // done via liveindex.compute in component
         // set the devices live for this experiment
-        this.state.devicesLive = backJSON.liveDeviceC.devices
+        this.state.devicesLive = backJSON.devices
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('update range first###################')
+        console.log('update range first1-nd###################')
         console.log(backJSON)
         // one data set per char tor many datasets?
         let singleStateDisplay = true
         if (singleStateDisplay === true) {
           // single chart display
           console.log('single chart-- many or single datasets')
-          let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data.liveVisualC)
+          let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data)
           console.log(updateDisplayOne)
           // update the liveData
           Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
@@ -283,7 +283,7 @@ export default {
         console.log(backJSON)
         // need to exactly update exp, module and grid ID of vis/chart data
         // prepare new data object
-        let updateDisplay = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
+        let updateDisplay = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
         // update the display grid
         Vue.set(this.state.moduleGrid, updateDisplay.module, updateDisplay.grid)
         // update tools id reference
@@ -296,7 +296,7 @@ export default {
         console.log('update existing entity RANGE----------')
         console.log(backJSON)
         // single or many chart display?
-        let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
+        let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
         // loop over modues context to extract settings from vis contract
         let contextVisRefContract = {}
         for (let modL of backJSON.context.modules) {
@@ -320,7 +320,7 @@ export default {
           Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
         } else {
           // many individual charts
-          let updateDisplayRange = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data.liveVisualC)
+          let updateDisplayRange = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
           // set the grid, data and toolbar settings
           // update the display grid
           for (let gup of updateDisplayRange.grid) {

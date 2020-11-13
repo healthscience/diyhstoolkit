@@ -29,7 +29,7 @@
                            :is-resizable='resizable'
                            :vertical-compact='true'
                            :use-css-transforms='true'
-              >
+              > {{ localGrid }}
                 <grid-item v-for='item in localGrid' :key='item.id'
                            :static='item.static'
                            :x='item.x'
@@ -115,8 +115,6 @@ export default {
   },
   watch: {
     storeGrid (newValue) {
-      // console.log('store grid')
-      // console.log(newValue)
       this.localGrid = newValue
     }
   },
@@ -180,7 +178,6 @@ export default {
       let optState = {}
       optState.syncOptions = []
       optState.expCNRL = this.moduleCNRL
-      // this.$store.dispatch('actionUpdateChartOptions', optState)
     }
   }
 }
@@ -213,7 +210,7 @@ header {
 }
 
 .grid-section {
-  border: 2px solid orange;
+  border: 0px solid orange;
 }
 
 .vue-grid-layout {

@@ -21,6 +21,7 @@ const store = new Vuex.Store({
     liveNXPbundle: {},
     devicesLive: [],
     nxpModulesLive: [],
+    liveDashList: [],
     joinNXPlive: {},
     lengthMholder: 0,
     lengthMholderj: 0,
@@ -136,6 +137,8 @@ const store = new Vuex.Store({
       console.log('set dashboard err first time on list?')
       console.log(inVerified)
       console.log(state.experimentStatus)
+      // set live dashboard list
+      state.liveDashList.push(inVerified)
       let dStatus = state.experimentStatus[inVerified].active
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
@@ -304,6 +307,10 @@ const store = new Vuex.Store({
       Vue.set(this.state.visModuleHolder, 'category', '')
       Vue.set(this.state.visModuleHolder, 'timeperiod', '')
       Vue.set(this.state.visModuleHolder, 'resolution', '')
+    },
+    SET_DASHBOARD_REMOVE (state, inVerified) {
+      // remove dashboard item
+      state.liveDashList = state.liveDashList.filter(item => item !== inVerified)
     }
   },
   actions: {
@@ -445,7 +452,7 @@ const store = new Vuex.Store({
     },
     async actionVisUpdate (context, update) {
       console.log('display ACTIONupdate--INININININ')
-      console.log(update)
+      // console.log(update)
       // display processing
       // context.commit('setVisProgressUpdate', update)
       // entity container
@@ -551,6 +558,9 @@ const store = new Vuex.Store({
     },
     actionDatasourceCount (context, update) {
       context.commit('SET_DATASOURCECOUNT', update)
+    },
+    actionCloseDashboard (context, update) {
+      context.commit('SET_DASHBOARD_REMOVE', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

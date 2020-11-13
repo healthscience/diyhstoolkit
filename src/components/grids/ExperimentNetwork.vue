@@ -27,13 +27,22 @@
           </tr>
         </tbody>
       </table>
-      <div id="module-list" v-if="NXPstatusData[shellContract]">
-        <progress-message v-if="NXPprogress" :progressMessage="NXPprogress"></progress-message>
-        <div id="module-ready" v-if="NXPstatusData[shellContract].modules">
-          <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
-            <dash-board v-if="isModalDashboardVisible === true" :expCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>
-          </ul>
-        </div>
+      <div id="dashboard-placeholder">
+        <ul class="clear" v-for="dashi of dashLive" :key="dashi.id">
+          <li class="dashboard-place">
+            <header>Dashboard</header>
+            <!-- view the dashboard per network experiment -->
+            <div id="module-list" v-if="NXPstatusData[shellContract]">
+              <progress-message v-if="NXPprogress" :progressMessage="NXPprogress"></progress-message>
+              <div id="module-ready" v-if="NXPstatusData[shellContract].modules">
+                <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
+                  <dash-board v-if="isModalDashboardVisible === true" :expCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>
+                </ul>
+              </div>
+            </div>
+              <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
+          </li>
+        </ul>
       </div>
       <!-- join network experiment modal -->
       <join-experiment v-show="isModalJoinVisible && NXPJoinModuleData.length !== 0" @close="closeModalJoin">
@@ -51,6 +60,7 @@
         </template>
         <template v-slot:packaging>
           <!-- select data source -->
+          <header>Datastore packaging</header>
           <div class="compute-select-datasource" v-if="NXPJoinModuleData.length !== 0">
             <label for="data-select-source">Select data source:</label>
             <select class="data-data-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
@@ -62,14 +72,6 @@
         </template>
         <template v-slot:compute>
           <header>Compute</header>
-          <!-- <li>
-            <label for="compute-select-source">Select compute source:</label>
-            <select class="select-compute-source" @change="computeSelect" v-model="selectJoin.compute" id="">Please select
-              <option v-for="ds in NXPJoinModuleCompute" :key="ds.key" v-bind:value="ds.option.key">
-                {{ ds.option.value.computational.name }}
-              </option>
-            </select>
-          </li> -->
           <li class="compute-form-item">
             Select start date of data:
             <calendar-select></calendar-select>
@@ -134,6 +136,9 @@ export default {
     },
     NXPstatusData: function () {
       return this.$store.state.experimentStatus
+    },
+    dashLive: function () {
+      return this.$store.state.liveDashList
     },
     NXPJoinModuleData: function () {
       let modulesLive = []
@@ -229,6 +234,7 @@ export default {
       this.mData = '98889'
     },
     actionExperiment (expCNRL, NXPcontract) {
+      console.log('clicked view')
       console.log(expCNRL)
       console.log(NXPcontract)
       this.shellContract = expCNRL
@@ -272,6 +278,11 @@ export default {
       peerChoices.question = this.actionKBundle.name
       this.$store.dispatch('actionJoinExperiment', peerChoices)
       this.closeModalJoin()
+    },
+    closeDashboard (dc) {
+      console.log('which dashboard')
+      console.log(dc)
+      this.$store.dispatch('actionCloseDashboard', dc)
     }
   }
 }
@@ -348,4 +359,19 @@ th.active .arrow {
 #preview-width {
   width: 200px;
 }
+
+#dashboard-placeholder {
+  display: block;
+  border: 0px solid black;
+}
+
+.dashboard-place {
+  width: 1400px;
+  border: 2px solid green;
+}
+
+.clear {
+  clear: both;
+}
+
 </style>

@@ -29,7 +29,7 @@
         >
           <div class="network-experiment">
             <slot name="body">
-              N=1 network experiment summary
+              Question
             </slot>
           </div>
           <div class="network-connect">
@@ -37,7 +37,7 @@
               No suggest mobile applications
             </slot>
           </div>
-          <div class="network-compute">
+          <div class="network-packaging">
             <slot name="packaging">
               I'm the default body!
             </slot>
@@ -158,19 +158,15 @@ export default {
   border-radius: 2px;
 }
 
-.network-experiment {
-  margin: 20px;
+.network-experiment, .network-packaging, .network-compute, .network-dashboard {
+  padding:2em;
+  margin: 1em;
   border: 1px solid lightgrey;
+  background-color: #ffefd5;
 }
 
 .network-connect {
   margin: 20px;
   border: 1px solid lightgrey;
 }
-
-.network-dashboard {
-  margin: 20px;
-  border: 1px solid blue;
-}
-
 </style>
