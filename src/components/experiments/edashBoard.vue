@@ -29,7 +29,7 @@
                            :is-resizable='resizable'
                            :vertical-compact='true'
                            :use-css-transforms='true'
-              > {{ localGrid }}
+              >
                 <grid-item v-for='item in localGrid' :key='item.id'
                            :static='item.static'
                            :x='item.x'

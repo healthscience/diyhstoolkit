@@ -149,15 +149,13 @@ ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
 }
 
 /**
-* prepare grid layout for display and set data ids and data for visualisation e.g. charts etc.
-* @method diplayFilter
+* prepare grid layout for display per module type.
+* @method displayModules
 *
 */
-ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
-  console.log('DISPLAYflitttter')
-  // console.log(shellID)
+ToolkitUtility.prototype.displayModules = function (modules, entityData) {
+  console.log('DISPLAYmodulesPrepare---')
   // console.log(modules)
-  // console.log(time)
   // console.log(entityData)
   let testDataBundle = {}
   let gridPerModule = {}
@@ -186,7 +184,7 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
       moduleObject.compute = mod.key
       moduleObject.computerefcont = mod.value.info.compute.key
       let cgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }]
-      gridPerModule[mod.key] = cgrid // mod.grid
+      gridPerModule[mod.key] = cgrid
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-compute', 'text': 'Compute', 'active': true }, 'grid': cgrid, 'message': 'compute-complete' }
     } else if (mod.value.type === 'Errors') {
       // gridPerModule[mod.cnrl] = mod.grid
@@ -196,29 +194,21 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
       // loop over data vis read
       mod.grid = []
       let makeGrid = []
-      // let dataIndex = Object.keys(entityData.liveVisualC.visualData)
       // what to chart, device, datatypes, time  or what combinations?
-      if (entityData.singlemulti.chartPackage) {
-        // single chart multi datasets
-        let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'singlemulti', static: false }
-        makeGrid.push(newGriditem)
-        // gridPerModule = {}
-        gridPerModule[mod.key] = makeGrid
-        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': { 'singlemulti': entityData.singlemulti } }
-      } else {
-        // normal display indivduals charts
-        let devicesList = Object.keys(entityData.liveVislist)
-        for (let dl of devicesList) {
-          for (let dr of entityData.liveVislist[dl]) {
+      for (let dl of entityData.devices) {
+        if (entityData.data.liveVislist[dl.device_mac]) {
+          for (let dr of entityData.data.liveVislist[dl.device_mac]) {
             // need to add to grid for multi charts asked for
             // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
             let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
             makeGrid.push(newGriditem)
           }
+        } else {
+          console.log('no data for that device')
         }
         // gridPerModule = {}
         gridPerModule[mod.key] = makeGrid
-        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': entityData.visualData }
+        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': entityData.data.visualData }
       }
     }
   }
@@ -227,6 +217,37 @@ ToolkitUtility.prototype.displayFilter = function (modules, entityData) {
   displayData.grid = gridPerModule
   displayData.data = testDataBundle
   return displayData
+}
+
+/**
+* extract out module make objects
+* @method matchExpModulesDetail
+*
+*/
+ToolkitUtility.prototype.matchExpModulesDetail = function (expContract, allContract) {
+  let matchContract = {}
+  for (let rcontract of allContract) {
+    if (expContract === rcontract.exp.key) {
+      matchContract = rcontract
+    }
+  }
+  return matchContract
+}
+
+/**
+* extract type of module
+* @method matchModuleType
+*
+*/
+ToolkitUtility.prototype.matchModuleType = function (mType, modules) {
+  console.log(modules)
+  let matchContract = {}
+  for (let mod of modules) {
+    if (mType === mod.value.type) {
+      matchContract = mod
+    }
+  }
+  return matchContract
 }
 
 /**
@@ -240,6 +261,7 @@ ToolkitUtility.prototype.displayUpdateSingle = function (liveData, entityData) {
   // loop over the modules in the NXP and match to compute and update data
   for (let mod of moduleKeys) {
     if (liveData[mod].prime.text === 'Visualise') {
+      // single chart per device by now if two or more Datatypes merge
       let dataMerge = {}
       dataMerge.data = this.mergeDataSets(entityData.visualData)
       singleBundle.update = dataMerge
@@ -257,7 +279,8 @@ ToolkitUtility.prototype.displayUpdateSingle = function (liveData, entityData) {
 */
 ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
   // setup return vis Object
-  console.log('update Visual data start')
+  console.log('update Visual range toolkit')
+  console.log(liveData)
   let moduleKeys = Object.keys(liveData)
   let updateVisData = {}
   // loop over the modules in the NXP and match to compute and update data
@@ -265,7 +288,6 @@ ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
     if (liveData[mod].prime.text === 'Visualise') {
       updateVisData.update = entityData.visualData
       updateVisData.module = mod
-      // }
     }
   }
   // make new grid

@@ -168,7 +168,7 @@ export default {
         this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
         this.state.entityUUIDsummary = backJSON
       } else if (backJSON.type === 'newEntity') {
-        console.log('entity NEW###########')
+        console.log('entity11 NEW###########')
         console.log(backJSON)
         // format data for DashBoard
         let mod = []
@@ -179,20 +179,24 @@ export default {
           console.log(this.state.entityUUIDsummary.data)
           mod = this.state.entityUUIDsummary.data[this.state.liveNXP].modules
         }
-        console.log('live experiment contract?')
-        console.log(mod)
         // remove existing vis component if in single mode (default)
         // context.commit('setClearGrid')
         // update or first time
-        let displayReady = ToolUtility.displayFilter(mod, backJSON.data)
+        let displayReady = ToolUtility.displayModules(mod, backJSON)
+        // set the devices live for this experiment
+        this.state.devicesLive = backJSON.devices
+        // context.commit('setLiveDisplayNXPModules', displayReady)
+        // set the GRID layout and module data
+        this.state.moduleGrid = displayReady.grid
         // prepare toolbar status object
+        // set toolbar display area per module
         // context.commit('setToolbarState', mod)
         for (let mo of mod) {
           let setToolbar = { text: 'show', active: false }
           Vue.set(this.state.toolbarStatus, mo.key, setToolbar)
         }
+        // display progress message while waiting data
         // context.commit('setVisProgressStart', displayReady)
-        // console.log('vis update of exsting progress message')
         let setVisProg = {}
         let moduleKeys = Object.keys(displayReady.grid)
         for (let mod of moduleKeys) {
@@ -212,8 +216,7 @@ export default {
           Vue.set(this.state.toolbarVisStatus, mod, setVistoolbar)
           setVistoolbar = {}
         }
-        // console.log('vis toolbar status')
-        // console.log(this.state.toolbarVisStatus)
+        // open data toolbar display
         // context.commit('setOpendataState', displayReady)
         let setOpendata = {}
         let moduleKeys2 = Object.keys(displayReady.grid)
@@ -224,16 +227,14 @@ export default {
           Vue.set(this.state.opendataTools, mod, setOpendata)
           setOpendata = {}
         }
-        // context.commit('setVisProgressComplete', displayReady) // setVisProgressComplete
+        // active display of progress message
+        // context.commit('setVisProgressComplete', displayReady)
         let setProgress2 = {}
         setProgress2[displayReady.mData] = { text: 'Preparing visualisation', active: false }
         Vue.set(this.state.visProgress, displayReady.moduleCNRL, setProgress2)
         // context.commit('setProgressComplete', this.state.liveNXP)
         let setProgress3 = { text: 'Experiment in progress', active: false }
         Vue.set(this.state.nxpProgress, this.state.liveNXP, setProgress3)
-        // context.commit('setLiveDisplayNXPModules', displayReady)
-        // set the GRID layout and module data
-        this.state.moduleGrid = displayReady.grid
         Vue.set(this.state.NXPexperimentData, this.state.liveNXP, displayReady.data)
         // extract out the time
         for (let mmod of mod) {
@@ -257,29 +258,56 @@ export default {
           }
         }
         this.state.refcontractPackaging.push(packContract)
-        // set the live compute options in open data toolbar
-        // done via liveindex.compute in component
-        // set the devices live for this experiment
-        this.state.devicesLive = backJSON.devices
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('update range first1-nd###################')
+        console.log('updatefirst12##########')
         console.log(backJSON)
+        let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.key, this.state.networkPeerExpModules)
+        let matchModeType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
         // one data set per char tor many datasets?
-        let singleStateDisplay = true
-        if (singleStateDisplay === true) {
-          // single chart display
-          console.log('single chart-- many or single datasets')
-          let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data)
-          console.log(updateDisplayOne)
-          // update the liveData
-          Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
+        // single chart display
+        console.log('one or many devices')
+        if (backJSON.devices.length === 1) {
+          console.log('one device first')
+          // how many datatypes?
+          if (matchModeType.value.info.settings.yaxis.length !== 1) {
+            console.log('one divice and many data types')
+            let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data)
+            console.log(updateDisplayOne)
+            // update the liveData
+            Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
+          } else {
+            console.log('one device single datatype')
+          }
         } else {
-          console.log('display individual datasets/charts')
-          // update the liveData
-          // Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, displayIdentifier[0], backJSON.data.liveVisualC.singlemultidata)
+          // many devices
+          console.log('many devices12')
+          if (matchModeType.value.info.settings.yaxis.length !== 1) {
+            console.log('many devices --many datatypes')
+            let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data)
+            console.log(updateDisplayOne)
+            // update the liveData
+            Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
+          } else {
+            console.log('many devices -- single datatype single')
+            // many individual charts
+            let updateDisplayRange = ToolUtility.displayUpdate(this.state.NXPexperimentData[backJSON.context.key], backJSON.data)
+            console.log('displayupdate')
+            console.log(updateDisplayRange)
+            // set the grid, data and toolbar settings
+            // update the display grid
+            for (let gup of updateDisplayRange.grid) {
+              this.state.moduleGrid[updateDisplayRange.module].push(gup)
+            }
+            // update tools id reference
+            Vue.set(this.state.opendataTools, updateDisplayRange.module, updateDisplayRange.opendata)
+            // update toolbar vis status
+            Vue.set(this.state.toolbarVisStatus, updateDisplayRange.module, updateDisplayRange.vistoolbar)
+            // update vis data
+            Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayRange.module], 'data', updateDisplayRange.update)
+          }
         }
       } else if (backJSON.type === 'updateEntity') {
-        console.log('update for existing entity-----------')
+        console.log('update for existing entity22-----------')
         console.log(backJSON)
         // need to exactly update exp, module and grid ID of vis/chart data
         // prepare new data object
@@ -293,7 +321,7 @@ export default {
         // update vid data
         Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplay.module], 'data', updateDisplay.update)
       } else if (backJSON.type === 'updateEntityRange') {
-        console.log('update existing entity RANGE----------')
+        console.log('update existing entity RANGE22----------')
         console.log(backJSON)
         // single or many chart display?
         let updateDisplayOne = ToolUtility.displayUpdateSingle(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
