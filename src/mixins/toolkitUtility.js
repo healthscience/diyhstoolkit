@@ -225,6 +225,8 @@ ToolkitUtility.prototype.displayModules = function (modules, entityData) {
 *
 */
 ToolkitUtility.prototype.matchExpModulesDetail = function (expContract, allContract) {
+  console.log(expContract)
+  console.log(allContract)
   let matchContract = {}
   for (let rcontract of allContract) {
     if (expContract === rcontract.exp.key) {
@@ -240,6 +242,7 @@ ToolkitUtility.prototype.matchExpModulesDetail = function (expContract, allContr
 *
 */
 ToolkitUtility.prototype.matchModuleType = function (mType, modules) {
+  console.log(mType)
   console.log(modules)
   let matchContract = {}
   for (let mod of modules) {
@@ -255,7 +258,7 @@ ToolkitUtility.prototype.matchModuleType = function (mType, modules) {
 * @method displayUpdateSingle
 *
 */
-ToolkitUtility.prototype.displayUpdateSingle = function (liveData, entityData) {
+ToolkitUtility.prototype.displayUpdateSpaceSingle = function (liveData, entityData) {
   let singleBundle = {}
   let moduleKeys = Object.keys(liveData)
   // loop over the modules in the NXP and match to compute and update data
@@ -277,10 +280,9 @@ ToolkitUtility.prototype.displayUpdateSingle = function (liveData, entityData) {
 * @method diplayFilter
 *
 */
-ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
+ToolkitUtility.prototype.displaySpaceUpdate = function (liveData, entityData) {
   // setup return vis Object
-  console.log('update Visual range toolkit')
-  console.log(liveData)
+  console.log('TKU##spaceupdate')
   let moduleKeys = Object.keys(liveData)
   let updateVisData = {}
   // loop over the modules in the NXP and match to compute and update data
@@ -302,13 +304,85 @@ ToolkitUtility.prototype.displayUpdate = function (liveData, entityData) {
     for (let dr of unique) {
       let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
       updateGrid.push(newGriditem)
-      setOpendata[dr] = { text: 'open data', active: false }
       setVistoolbar[dr] = { text: 'open tools', active: true }
+      setOpendata[dr] = { text: 'open data', active: false }
     }
   }
   updateVisData.grid = updateGrid
   updateVisData.vistoolbar = setVistoolbar
   updateVisData.opendata = setOpendata
+  console.log('data strcture')
+  console.log(updateVisData)
+  return updateVisData
+}
+
+/**
+* prepare grid layout for many device space  many data types in single chart.
+* @method displayManySpaceUpdate
+*
+*/
+ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData) {
+  // setup return vis Object
+  console.log('TKU##many devices many dts single chart')
+  console.log(liveData)
+  console.log(entityData)
+  let moduleKeys = Object.keys(liveData)
+  let updateVisData = {}
+  // loop over the modules in the NXP and match to compute and update data
+  for (let mod of moduleKeys) {
+    if (liveData[mod].prime.text === 'Visualise') {
+      updateVisData.module = mod
+    }
+  }
+  let devicesList = Object.keys(entityData.liveVislist)
+  console.log('device list')
+  console.log(devicesList)
+  // merge data types per unique device
+  // split into device data groupings
+  let deviceMatch = {}
+  // let keyMatch = {}
+  let dataMerged = {}
+  let dataKeys = Object.keys(entityData.visualData)
+  for (let dd of devicesList) {
+    for (let dk of dataKeys) {
+      if (entityData.visualData[dk].context.device === dd) {
+        deviceMatch[dk] = entityData.visualData[dk]
+        // keyMatch
+      } else {
+        console.log('no device match')
+      }
+    }
+    dataMerged[dd] = this.mergeDataSets(deviceMatch)
+    deviceMatch = {}
+  }
+  console.log('meraged ata per device')
+  console.log(dataMerged)
+  // now build data structure for display
+  // structure require  key (uuit of data hash)  .context  .data chartData Chart Options
+  let dataDisplayStructure = {}
+  // for ()
+  // make new grid
+  let updateGrid = []
+  // make updated tools settings
+  let setOpendata = {}
+  let setVistoolbar = {}
+  for (let dl of devicesList) {
+    // nB temp measure
+    let unique = Array.from(new Set(entityData.liveVislist[dl]))
+    console.log(unique)
+    dataDisplayStructure[unique[0]] = {}
+    dataDisplayStructure[unique[0]].data = dataMerged[dl]
+    let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': unique[0], static: false }
+    updateGrid.push(newGriditem)
+    setOpendata[unique[0]] = { text: 'open data', active: false }
+    setVistoolbar[unique[0]] = { text: 'open tools', active: true }
+  }
+  updateVisData.update = dataDisplayStructure
+  updateVisData.grid = updateGrid
+  updateVisData.vistoolbar = setVistoolbar
+  updateVisData.opendata = setOpendata
+  console.log('mamy update vis dt groupsing')
+  console.log(updateVisData)
   return updateVisData
 }
 
