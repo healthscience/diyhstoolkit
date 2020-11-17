@@ -225,8 +225,6 @@ ToolkitUtility.prototype.displayModules = function (modules, entityData) {
 *
 */
 ToolkitUtility.prototype.matchExpModulesDetail = function (expContract, allContract) {
-  console.log(expContract)
-  console.log(allContract)
   let matchContract = {}
   for (let rcontract of allContract) {
     if (expContract === rcontract.exp.key) {
@@ -242,8 +240,6 @@ ToolkitUtility.prototype.matchExpModulesDetail = function (expContract, allContr
 *
 */
 ToolkitUtility.prototype.matchModuleType = function (mType, modules) {
-  console.log(mType)
-  console.log(modules)
   let matchContract = {}
   for (let mod of modules) {
     if (mType === mod.value.type) {
@@ -266,7 +262,7 @@ ToolkitUtility.prototype.displayUpdateSpaceSingle = function (liveData, entityDa
     if (liveData[mod].prime.text === 'Visualise') {
       // single chart per device by now if two or more Datatypes merge
       let dataMerge = {}
-      dataMerge.data = this.mergeDataSets(entityData.visualData)
+      dataMerge.data = this.mergeDataSets(entityData.visualData, false)
       singleBundle.update = dataMerge
       singleBundle.module = mod
       singleBundle.identifier = Object.keys(liveData[mod].data)
@@ -321,23 +317,22 @@ ToolkitUtility.prototype.displaySpaceUpdate = function (liveData, entityData) {
 * @method displayManySpaceUpdate
 *
 */
-ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData) {
+ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData, matchModeType, updateComputeContract) {
   // setup return vis Object
   console.log('TKU##many devices many dts single chart')
-  console.log(liveData)
-  console.log(entityData)
+  console.log(updateComputeContract)
   let moduleKeys = Object.keys(liveData)
   let updateVisData = {}
   // loop over the modules in the NXP and match to compute and update data
   for (let mod of moduleKeys) {
+    console.log(liveData[mod].prime.text)
     if (liveData[mod].prime.text === 'Visualise') {
       updateVisData.module = mod
     }
   }
+  // pair device data to time range groupings
+  console.log(matchModeType)
   let devicesList = Object.keys(entityData.liveVislist)
-  console.log('device list')
-  console.log(devicesList)
-  // merge data types per unique device
   // split into device data groupings
   let deviceMatch = {}
   // let keyMatch = {}
@@ -351,12 +346,17 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
       } else {
         console.log('no device match')
       }
+      /* for () {
+        if (entityData.visualData[dk].context.time === dd) {
+          timeMatch[dk] =
+        } else {
+
+        }
+      } */
     }
-    dataMerged[dd] = this.mergeDataSets(deviceMatch)
+    dataMerged[dd] = this.mergeDataSets(deviceMatch, updateComputeContract)
     deviceMatch = {}
   }
-  console.log('meraged ata per device')
-  console.log(dataMerged)
   // now build data structure for display
   // structure require  key (uuit of data hash)  .context  .data chartData Chart Options
   let dataDisplayStructure = {}
@@ -369,7 +369,6 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
   for (let dl of devicesList) {
     // nB temp measure
     let unique = Array.from(new Set(entityData.liveVislist[dl]))
-    console.log(unique)
     dataDisplayStructure[unique[0]] = {}
     dataDisplayStructure[unique[0]].data = dataMerged[dl]
     let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': unique[0], static: false }
@@ -381,8 +380,6 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
   updateVisData.grid = updateGrid
   updateVisData.vistoolbar = setVistoolbar
   updateVisData.opendata = setOpendata
-  console.log('mamy update vis dt groupsing')
-  console.log(updateVisData)
   return updateVisData
 }
 
@@ -391,7 +388,10 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
 * @method mergeDataSets
 *
 */
-ToolkitUtility.prototype.mergeDataSets = function (liveData) {
+ToolkitUtility.prototype.mergeDataSets = function (liveData, computeModule) {
+  console.log('merage data sets')
+  console.log(liveData)
+  console.log(computeModule)
   let chartOptions = {}
   let singleData = {}
   // how many data sets to merge?
@@ -411,7 +411,7 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData) {
       tempPair.labelset = dataX[0]
       dataPairs.first = tempPair
       count++
-    } else {
+    } else if (count === 1) {
       // need to normalise data for length of longest timestamp ie fill in gaps
       let colorUpdate = this.setColourDataset(liveData[dui].data.chartPackage.datasets[0])
       dataY.push(colorUpdate)
@@ -420,18 +420,76 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData) {
       tempPair.dataset = dataY[1].data
       tempPair.labelset = dataX[1]
       dataPairs.second = tempPair
+      count++
+    } else if (count === 2) {
+      // need to normalise data for length of longest timestamp ie fill in gaps
+      let colorUpdate = this.setColourDataset(liveData[dui].data.chartPackage.datasets[0])
+      dataY.push(colorUpdate)
+      dataX.push(liveData[dui].data.chartPackage.labels)
+      let tempPair = {}
+      tempPair.dataset = dataY[1].data
+      tempPair.labelset = dataX[1]
+      dataPairs.third = tempPair
+      count++
+    } else if (count === 3) {
+      // need to normalise data for length of longest timestamp ie fill in gaps
+      let colorUpdate = this.setColourDataset(liveData[dui].data.chartPackage.datasets[0])
+      dataY.push(colorUpdate)
+      dataX.push(liveData[dui].data.chartPackage.labels)
+      let tempPair = {}
+      tempPair.dataset = dataY[1].data
+      tempPair.labelset = dataX[1]
+      dataPairs.forth = tempPair
+      count++
+    } else if (count === 4) {
+      // need to normalise data for length of longest timestamp ie fill in gaps
+      let colorUpdate = this.setColourDataset(liveData[dui].data.chartPackage.datasets[0])
+      dataY.push(colorUpdate)
+      dataX.push(liveData[dui].data.chartPackage.labels)
+      let tempPair = {}
+      tempPair.dataset = dataY[1].data
+      tempPair.labelset = dataX[1]
+      dataPairs.fifth = tempPair
+      count++
+    } else if (count === 5) {
+      // need to normalise data for length of longest timestamp ie fill in gaps
+      let colorUpdate = this.setColourDataset(liveData[dui].data.chartPackage.datasets[0])
+      dataY.push(colorUpdate)
+      dataX.push(liveData[dui].data.chartPackage.labels)
+      let tempPair = {}
+      tempPair.dataset = dataY[1].data
+      tempPair.labelset = dataX[1]
+      dataPairs.sixth = tempPair
+      count++
+    } else {
+      // need to normalise data for length of longest timestamp ie fill in gaps
+      let colorUpdate = this.setColourDataset(liveData[dui].data.chartPackage.datasets[0])
+      dataY.push(colorUpdate)
+      dataX.push(liveData[dui].data.chartPackage.labels)
+      let tempPair = {}
+      tempPair.dataset = dataY[1].data
+      tempPair.labelset = dataX[1]
+      dataPairs.seventh = tempPair
     }
   }
   // console.log(dataPairs)
   let updateChartOptions = {}
   updateChartOptions = chartOptions
-  // updateChartOptions.title = 'two dts'
   // need to merge x axis time list to single array
   let paddedData = this.timestampMatcher(dataPairs)
   dataY[0].data = paddedData[0]
   dataY[1].data = paddedData[1]
-  let flatten = dataX[0].concat(dataX[1])
-  let unique = flatten.filter((v, i, a) => a.indexOf(v) === i)
+  //  is the time ie xaxis for one or more time periods?
+  let flatten = []
+  let unique = []
+  if (typeof (computeModule.value.info.controls.date) !== 'object') {
+    flatten = dataX[0].concat(dataX[1])
+    unique = flatten.filter((v, i, a) => a.indexOf(v) === i)
+  } else {
+    // many time periods to normalise time
+    console.log('many time peirods to normalise')
+    unique = dataX[0]
+  }
   let updatePackage = {}
   updatePackage.datasets = dataY
   updatePackage.labels = unique
@@ -446,12 +504,10 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData) {
 *
 */
 ToolkitUtility.prototype.timestampMatcher = function (dataPairs) {
+  console.log('timestampMatcher')
+  console.log(dataPairs)
   let updateDatasets = []
   let matchList = []
-  /* const manFilter = (e, datatype, rule) => {
-    let filterMat = null
-    return filterMat
-  } */
   let count = 0
   for (let tsi of dataPairs.second.labelset) {
     // console.log(tsi)
@@ -488,7 +544,7 @@ ToolkitUtility.prototype.setColourDataset = function (dataSet) {
 *
 */
 ToolkitUtility.prototype.colourList = function () {
-  let colourRGB = ['rgb(181, 212, 234)', 'rgb(45, 119, 175 )', 'rgb(90, 45, 175)', 'rgb(41, 20, 80)', 'rgb(46, 143, 22)', 'rgb(21, 81, 7)', 'rgb(153, 18, 186)']
+  let colourRGB = ['rgb(255, 99, 132)', 'rgb(37, 56, 70)', 'rgb(45, 119, 175)', 'rgb(0, 100, 0)', 'rgb(41, 20, 80)', 'rgb(46, 143, 22)', 'rgb(38,15,187)', 'rgb(255, 20, 147)']
   let max = 5
   let min = 0
   let colorNumber = Math.floor(Math.random() * (max - min + 1)) + min

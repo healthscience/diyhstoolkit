@@ -263,8 +263,10 @@ export default {
         console.log(backJSON)
         let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.key, this.state.networkPeerExpModules)
         let matchModeType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
+        let matchModeTypeCompute = ToolUtility.matchModuleType('compute', matchExpRefContract.modules)
+        console.log('compute contract module ifno')
+        console.log(matchModeTypeCompute)
         // one data set per char tor many datasets?
-        // single chart display
         console.log('one or many devices')
         if (backJSON.devices.length === 1) {
           console.log('one device first')
@@ -283,7 +285,9 @@ export default {
           console.log('newrange##many devices12')
           if (matchModeType.value.info.settings.yaxis.length !== 1) {
             console.log('many devices --many datatypes')
-            let updateDisplayRange = ToolUtility.displayManySpaceUpdate(this.state.NXPexperimentData[backJSON.context.key], backJSON.data)
+            let updateDisplayRange = ToolUtility.displayManySpaceUpdate(this.state.NXPexperimentData[backJSON.context.key], backJSON.data, matchModeType, matchModeTypeCompute)
+            console.log('normailse chart data lenghts')
+            console.log(updateDisplayRange)
             // set the grid, data and toolbar settings
             // update the display grid
             let uniqueGrid = []
@@ -349,9 +353,11 @@ export default {
         console.log(backJSON)
         let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.cnrl, this.state.networkPeerExpModules)
         let matchModeType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
+        let matchModeTypeCompute = ToolUtility.matchModuleType('compute', matchExpRefContract.modules)
+        console.log('compute contract module ifno')
+        console.log(matchModeTypeCompute)
         // one data set per char tor many datasets?
         // single chart display
-        console.log('one or many devices')
         if (backJSON.devices.length === 1) {
           console.log('one device first')
           // how many datatypes?
@@ -366,13 +372,31 @@ export default {
           }
         } else {
           // many devices
-          console.log('many devices12')
+          console.log('many devices22')
           if (matchModeType.value.info.settings.yaxis.length !== 1) {
             console.log('many devices --many datatypes')
-            let updateDisplayOne = ToolUtility.displayUpdateSpaceSingle(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
-            console.log(updateDisplayOne)
+            let updateDisplayRange = ToolUtility.displayManySpaceUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data, matchModeType, matchModeTypeCompute)
+            console.log(updateDisplayRange)
+            // set the grid, data and toolbar settings
+            // update the display grid
+            let uniqueGrid = []
+            for (let gup of updateDisplayRange.grid) {
+              let alreadySpace = this.state.moduleGrid[updateDisplayRange.module].find(obj => obj.i === gup.i)
+              if (alreadySpace === undefined) {
+                uniqueGrid.push(gup)
+              }
+            }
+            for (let gup of uniqueGrid) {
+              this.state.moduleGrid[updateDisplayRange.module].push(gup)
+            }
+            // update tools id reference
+            Vue.set(this.state.opendataTools, updateDisplayRange.module, updateDisplayRange.opendata)
+            // update toolbar vis status
+            Vue.set(this.state.toolbarVisStatus, updateDisplayRange.module, updateDisplayRange.vistoolbar)
+            // update vis data
+            Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayRange.module], 'data', updateDisplayRange.update)
             // update the liveData
-            Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
+            // Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
           } else {
             console.log('many devices -- single datatype single')
             // many individual charts
