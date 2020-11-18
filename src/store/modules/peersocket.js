@@ -34,11 +34,8 @@ export default {
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
       const backJSON = JSON.parse(message.data)
-      // console.log('back message')
-      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
-        console.log('save successful')
         // what type of save?
         if (backJSON.type === 'module') {
           this.state.moduleGenesisList.push(backJSON)
@@ -109,8 +106,6 @@ export default {
           }
         }
       } else if (backJSON.type === 'modulesTemp') {
-        // console.log('tempModules LIst back library')
-        // console.log(backJSON.data)
         this.state.nxpModulesList = backJSON.data
         if (this.state.moduleListEnd === true) {
           // pass to Network Library Composer to make New Network Experiment Reference Contract ie. extract genesis module contract keys
@@ -161,22 +156,17 @@ export default {
           Vue.prototype.$socket.send(refCJSON)
         }
       } else if (backJSON.type === 'ecssummary') {
-        console.log('ECS data summary')
-        console.log(backJSON)
         // context.commit('SET_ENTITY_RETURN', entityReturn)
         // Vue.set(this.state.entityUUIDReturn, mo.key, setToolbar)
         this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
         this.state.entityUUIDsummary = backJSON
       } else if (backJSON.type === 'newEntity') {
-        console.log('entity11 NEW###########')
-        console.log(backJSON)
         // format data for DashBoard
         let mod = []
         if (this.state.entityUUIDReturn === undefined) {
           mod = this.state.nxpModulesLive
         } else {
           // only update modules returned
-          console.log(this.state.entityUUIDsummary.data)
           mod = this.state.entityUUIDsummary.data[this.state.liveNXP].modules
         }
         // remove existing vis component if in single mode (default)
@@ -238,10 +228,7 @@ export default {
         Vue.set(this.state.NXPexperimentData, this.state.liveNXP, displayReady.data)
         // extract out the time
         for (let mmod of mod) {
-          // console.log(mmod)
           if (mmod.value.type === 'compute') {
-            // console.log('extract time')
-            // console.log(mmod)
             let newStartTime = 0
             if (this.state.timeStartperiod === 0) {
               newStartTime = mmod.value.info.controls.date
@@ -259,22 +246,14 @@ export default {
         }
         this.state.refcontractPackaging.push(packContract)
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('updatefirst12##########')
-        console.log(backJSON)
         let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.key, this.state.networkPeerExpModules)
         let matchModeType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
         let matchModeTypeCompute = ToolUtility.matchModuleType('compute', matchExpRefContract.modules)
-        console.log('compute contract module ifno')
-        console.log(matchModeTypeCompute)
         // one data set per char tor many datasets?
-        console.log('one or many devices')
         if (backJSON.devices.length === 1) {
-          console.log('one device first')
           // how many datatypes?
           if (matchModeType.value.info.settings.yaxis.length !== 1) {
-            console.log('one divice and many data types')
             let updateDisplayOne = ToolUtility.displaySpaceUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data)
-            console.log(updateDisplayOne)
             // update the liveData
             Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
           } else {
@@ -282,12 +261,8 @@ export default {
           }
         } else {
           // many devices
-          console.log('newrange##many devices12')
           if (matchModeType.value.info.settings.yaxis.length !== 1) {
-            console.log('many devices --many datatypes')
             let updateDisplayRange = ToolUtility.displayManySpaceUpdate(this.state.NXPexperimentData[backJSON.context.key], backJSON.data, matchModeType, matchModeTypeCompute)
-            console.log('normailse chart data lenghts')
-            console.log(updateDisplayRange)
             // set the grid, data and toolbar settings
             // update the display grid
             let uniqueGrid = []
@@ -307,11 +282,9 @@ export default {
             // update vis data
             Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayRange.module], 'data', updateDisplayRange.update)
             /* let updateDisplayOne = ToolUtility.displayUpdateSpaceSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data)
-            console.log(updateDisplayOne)
             // update the liveData
             Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update) */
           } else {
-            console.log('many devices -- single datatype single')
             // many individual charts
             let updateDisplayRange = ToolUtility.displaySpaceUpdate(this.state.NXPexperimentData[backJSON.context.key], backJSON.data)
             // set the grid, data and toolbar settings
@@ -335,8 +308,6 @@ export default {
           }
         }
       } else if (backJSON.type === 'updateEntity') {
-        console.log('update for existing entity22-----------')
-        console.log(backJSON)
         // need to exactly update exp, module and grid ID of vis/chart data
         // prepare new data object
         let updateDisplay = ToolUtility.displaySpaceUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
@@ -349,22 +320,15 @@ export default {
         // update vid data
         Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplay.module], 'data', updateDisplay.update)
       } else if (backJSON.type === 'updateEntityRange') {
-        console.log('update existing entity RANGE22----------')
-        console.log(backJSON)
         let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.cnrl, this.state.networkPeerExpModules)
         let matchModeType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
-        let matchModeTypeCompute = ToolUtility.matchModuleType('compute', matchExpRefContract.modules)
-        console.log('compute contract module ifno')
-        console.log(matchModeTypeCompute)
+        let matchModeTypeCompute = ToolUtility.matchModuleType('compute', backJSON.context.modules)
         // one data set per char tor many datasets?
         // single chart display
         if (backJSON.devices.length === 1) {
-          console.log('one device first')
           // how many datatypes?
           if (matchModeType.value.info.settings.yaxis.length !== 1) {
-            console.log('one divice and many data types')
             let updateDisplayOne = ToolUtility.displaySpaceUpdateSingle(this.state.NXPexperimentData[backJSON.context.key], backJSON.data)
-            console.log(updateDisplayOne)
             // update the liveData
             Vue.set(this.state.NXPexperimentData[backJSON.context.key][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
           } else {
@@ -372,11 +336,8 @@ export default {
           }
         } else {
           // many devices
-          console.log('many devices22')
           if (matchModeType.value.info.settings.yaxis.length !== 1) {
-            console.log('many devices --many datatypes')
             let updateDisplayRange = ToolUtility.displayManySpaceUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data, matchModeType, matchModeTypeCompute)
-            console.log(updateDisplayRange)
             // set the grid, data and toolbar settings
             // update the display grid
             let uniqueGrid = []
@@ -398,7 +359,6 @@ export default {
             // update the liveData
             // Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
           } else {
-            console.log('many devices -- single datatype single')
             // many individual charts
             let updateDisplayRange = ToolUtility.displaySpaceUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
             // set the grid, data and toolbar settings
@@ -426,7 +386,6 @@ export default {
         // loop over modues context to extract settings from vis contract
         let contextVisRefContract = {}
         for (let modL of backJSON.context.modules) {
-          // console.log(modL)
           if (modL.key === updateDisplayOne.module) {
             contextVisRefContract = modL
           }
@@ -461,8 +420,6 @@ export default {
         } */
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
-        console.log('joined Private library contracts')
-        // console.log(backJSON)
         this.state.networkPeerExpModules = backJSON.networkPeerExpModules
         for (let exl of backJSON.networkPeerExpModules) {
           let experBundle = {}
@@ -482,11 +439,8 @@ export default {
         let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.networkPeerExpModules)
         this.state.joinedNXPlist = gridPeer
       } else if (backJSON.type === 'publiclibrary') {
-        console.log('starting network experiment data BACK FAE NetworkLibrary')
         // save copy of ref contract indexes
         this.state.liveRefContIndex = backJSON.referenceContracts
-        console.log('index of contracts')
-        console.log(this.state.liveRefContIndex)
         // prepare NPXs in NETWORK
         this.state.networkExpModules = backJSON.networkExpModules
         // this.state.networkPeerExpModules = backJSON.networkPeerExpModules
@@ -568,14 +522,11 @@ export default {
       this.state.newNXPmakeRefs.push(this.state.refcontractQuestion.moduleinfo.refcont)
     },
     SET_JOIN_NXP_SOURCE (state, inVerified) {
-      console.log('set packing selected to JOIN')
-      console.log(inVerified)
       Vue.set(this.state.joinNXPselected, 'data', inVerified)
       // lookup details for this packaging contract
       let packContract = {}
       for (let pack of this.state.liveRefContIndex.packaging) {
         if (inVerified === pack.key) {
-          console.log('match')
           packContract = pack
         }
       }
@@ -583,9 +534,7 @@ export default {
     },
     SET_DATE_STARTNXP (state, inVerified) {
       // ECS use ms time only, please convert
-      console.log('start time for entity ms please')
       let timeFormat = moment(inVerified).valueOf()
-      console.log(timeFormat)
       Vue.set(this.state.joinNXPselected.compute, 'date', timeFormat)
     },
     SET_JOIN_NXP_COMPUTE_CONTROLS (state, inVerified) {
@@ -608,15 +557,12 @@ export default {
       Vue.set(this.state.opendataTools, inVerified.moduleCNRL, setToolbar)
     },
     SET_MODULE_HOLDER (state, inVerified) {
-      console.log('clear for new NXP')
       this.state.moduleHolder = []
       this.state.refcontractPackaging = []
     }
   },
   actions: {
     sendMessage (context, message) {
-      // console.log('Ref Contract preapre peerLink')
-      // console.log(message)
       let prepareRefContract = {}
       if (message.reftype === 'new-datatype') {
         const localData = this.state.newRefcontractForm
@@ -635,8 +581,6 @@ export default {
       Vue.prototype.$socket.send(message)
     },
     actionMakeVisualiseRefContract (context, message) {
-      console.log('setup Visualise ref contract')
-      console.log(message)
       // Vue.prototype.$socket.send(message)
     },
     actionMakeModuleRefContract (context, update) {
@@ -754,7 +698,6 @@ export default {
       dataCNRLbundle13.concept = ''
       dataCNRLbundle13.grid = []
       moduleContracts.push(dataCNRLbundle13)
-      // console.log(moduleContracts)
       let tempModules = {}
       tempModules.type = 'library'
       tempModules.reftype = 'moduletemp'
@@ -765,7 +708,6 @@ export default {
       Vue.prototype.$socket.send(newTempModules)
     },
     actionSetQuestionRefContract (context, update) {
-      // console.log('look up peer store for refContract')
       context.commit('SET_QUESTION_REFCONTRACT', update)
     },
     actionSetDataRefContract (context, update) {
@@ -774,7 +716,6 @@ export default {
       context.commit('SET_PACKAGING_REFCONTRACT', update)
     },
     actionSetComputeRefContract (context, update) {
-      // console.log('look compute refContracts')
       let refContractLookup = ToolUtility.refcontractLookup(update.refcont, this.state.liveRefContIndex.compute)
       update.option = refContractLookup
       context.commit('SET_COMPUTE_REFCONTRACT', update)
@@ -783,7 +724,6 @@ export default {
       // context.commit('NEW_NXP_SHELL', update.shellID)
       // context.commit('SET_VISTOOLS_TEMP', update)
       // context.commit('SETOPEN_DATABAR_TEMP', update)
-      // console.log('toolbar set')
     },
     actionSetVisualiseRefContract (context, update) {
       // loop up vis contract details
@@ -796,17 +736,12 @@ export default {
       context.commit('SETOPEN_DATABAR_TEMP', update)
     },
     actionMakeKBIDtemplate (context, message) {
-      console.log('make KBID template entry')
-      console.log(message)
       let prepareKBIDtemplate = this.state.livesafeFLOW.kbidComposerLive.kbidTemplateNew(message)
-      console.log(prepareKBIDtemplate)
       const kbidTemplateReady = JSON.stringify(prepareKBIDtemplate)
       console.log(kbidTemplateReady)
       // Vue.prototype.$socket.send(kbidTemplateReady)
     },
     actionMakeKBIDentry (context, message) {
-      console.log('make KBID entry')
-      console.log(message)
       let prepareKBIDentry = this.state.livesafeFLOW.kbidComposerLive.kbidEntry(message)
       const kbidEntryReady = JSON.stringify(prepareKBIDentry)
       Vue.prototype.$socket.send(kbidEntryReady)
@@ -821,11 +756,9 @@ export default {
       context.commit('SET_JOIN_NXP_COMPUTE_AUTO', update)
     },
     actionNewVisDevice (context, update) {
-      console.log('selelcted devices')
       context.commit('SET_NEWNXP_VISDEVICES', update)
     },
     actionNewVisCompute (context, update) {
-      console.log('comute open data')
       context.commit('SET_NEWNXP_VISCOMPUTE', update)
     },
     actionNewVisResults (context, update) {
@@ -863,15 +796,12 @@ export default {
       setNewNXPplusModules.reftype = 'newexperimentmodule'
       setNewNXPplusModules.action = 'newexperimentmodule'
       setNewNXPplusModules.data = this.state.moduleHolder
-      console.log('contribute modules put forward')
-      console.log(setNewNXPplusModules)
       const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
       Vue.prototype.$socket.send(genesisNXPjson)
     },
     actionJoinExperiment (context, update) {
       // map experiment refcont to genesis contract
       // make first module contracts for this peer to record start and other module refs with new computations
-      console.log('JOIN NXP START-----')
       const genesisExpRefCont = this.state.joinNXPlive.experiment
       // send to Library to create new experiment and modules for peer
       let dataChoices = {}
@@ -886,8 +816,6 @@ export default {
       newJoinExperiment.reftype = 'joinexperiment'
       newJoinExperiment.action = 'joinexperiment'
       newJoinExperiment.data = dataChoices
-      console.log('join summary')
-      console.log(newJoinExperiment)
       let ExpmoduleRefContract = JSON.stringify(newJoinExperiment)
       Vue.prototype.$socket.send(ExpmoduleRefContract)
     }

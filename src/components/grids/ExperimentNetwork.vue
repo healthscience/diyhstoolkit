@@ -234,15 +234,11 @@ export default {
       this.mData = '98889'
     },
     actionExperiment (expCNRL, NXPcontract) {
-      console.log('clicked view')
-      console.log(expCNRL)
-      console.log(NXPcontract)
       this.shellContract = expCNRL
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
         this.$store.dispatch('actionDashboardState', expCNRL)
         this.isModalDashboardVisible = true
-        console.log('view dashbaor modal true now')
       } else {
         // preview network experiment
         this.$store.dispatch('actionJOINViewexperiment', expCNRL)
@@ -272,7 +268,6 @@ export default {
       this.newCompute.startperiod = 12345123451
     },
     joinNetworkExperiment () {
-      console.log('save and join network exerpiment')
       const peerChoices = {}
       peerChoices.genesis = this.actionKBundle.id
       peerChoices.question = this.actionKBundle.name
@@ -280,8 +275,6 @@ export default {
       this.closeModalJoin()
     },
     closeDashboard (dc) {
-      console.log('which dashboard')
-      console.log(dc)
       this.$store.dispatch('actionCloseDashboard', dc)
     }
   }

@@ -134,9 +134,6 @@ const store = new Vuex.Store({
       state.NXPexperimentList = gridAnnon
     },
     setDashboardNXP: (state, inVerified) => {
-      console.log('set dashboard err first time on list?')
-      console.log(inVerified)
-      console.log(state.experimentStatus)
       // set live dashboard list
       state.liveDashList.push(inVerified)
       let dStatus = state.experimentStatus[inVerified].active
@@ -178,7 +175,6 @@ const store = new Vuex.Store({
       dataItem.datasets.push(dataFuture)
       Vue.set(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item], 'chartPackage', dataItem)
       Vue.set(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item], 'chartOptions', chartUpdateOptions)
-      console.log(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item])
     },
     SET_ENTITY_RETURN: (state, inVerified) => {
       state.entityUUIDReturn = inVerified
@@ -326,7 +322,6 @@ const store = new Vuex.Store({
       Vue.prototype.$socket.send(safeFlowMessage)
     },
     async annonconnectNSnetwork (context, update) {
-      console.log('annon connect')
       // for cloud
       // let nsNXPlive = await safeAPI.connectNSnetwork()
       // context.commit('setNetworkExperimentList', nsNXPlive)
@@ -336,7 +331,6 @@ const store = new Vuex.Store({
       context.commit('SET_LIVE_DATE', update)
     },
     async actionDashboardState (context, update) {
-      console.log('VIEW DASHBORD -safeflow start')
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
       context.commit('setProgressUpdate', update)
@@ -383,13 +377,10 @@ const store = new Vuex.Store({
       message.reftype = 'ignore'
       message.action = 'networkexperiment'
       message.data = ECSbundle
-      console.log('Dashabou FIRST OOUUUT=#############')
-      console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },
     actionJOINViewexperiment (context, update) {
-      console.log('viewJOIN NXPstart------------')
       // reset state.visModuleHolder
       context.commit('SET_RESET_MODULEHOLDER', null)
       let joinNXP = {}
@@ -426,7 +417,6 @@ const store = new Vuex.Store({
       context.commit('setOpendataBar', update)
     },
     actionDisplayLearn (context, update) {
-      console.log('action learn button pressed##########')
       let mod = []
       if (this.state.entityUUIDReturn === undefined) {
         mod = this.state.nxpModulesLive
@@ -451,8 +441,6 @@ const store = new Vuex.Store({
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionVisUpdate (context, update) {
-      console.log('display ACTIONupdate--INININININ')
-      // console.log(update)
       // display processing
       // context.commit('setVisProgressUpdate', update)
       // entity container
@@ -470,8 +458,6 @@ const store = new Vuex.Store({
       let newStartTime = []
       for (let mmod of nxpModules) {
         if (mmod.value.type === 'compute') {
-          // console.log('compute')
-          // console.log(mmod)
           // update the Compute RefContract
           mmod.value.automation = false
           newStartTime = ToolUtility.prepareTime(this.state.timeStartperiod, update)
@@ -512,23 +498,16 @@ const store = new Vuex.Store({
       message.reftype = 'ignore'
       message.action = 'updatenetworkexperiment'
       message.data = ECSbundle
-      console.log('updateOUT##################')
-      console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },
     actionFuture (context, update) {
-      console.log('future data')
-      console.log(update)
-      // console.log(this.state.NXPexperimentData[update.refs.shellCNRL][update.refs.moduleCNRL].data)
       let chartData = this.state.NXPexperimentData[update.refs.shellCNRL][update.refs.moduleCNRL].data
       // pick out data Chart object and add to dataset
       // what basis for future data for next day?
       if (update.future === 'CALE') {
-        console.log('ask CALE')
         // CALElive.startFuture('24')
       } else if (update.future === 'month') {
-        console.log('month normal')
         let dataKeys = Object.keys(chartData)
         for (let dItem of dataKeys) {
           // console.log('chart item')

@@ -154,9 +154,6 @@ ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
 *
 */
 ToolkitUtility.prototype.displayModules = function (modules, entityData) {
-  console.log('DISPLAYmodulesPrepare---')
-  // console.log(modules)
-  // console.log(entityData)
   let testDataBundle = {}
   let gridPerModule = {}
   let moduleObject = {}
@@ -278,7 +275,6 @@ ToolkitUtility.prototype.displayUpdateSpaceSingle = function (liveData, entityDa
 */
 ToolkitUtility.prototype.displaySpaceUpdate = function (liveData, entityData) {
   // setup return vis Object
-  console.log('TKU##spaceupdate')
   let moduleKeys = Object.keys(liveData)
   let updateVisData = {}
   // loop over the modules in the NXP and match to compute and update data
@@ -307,8 +303,6 @@ ToolkitUtility.prototype.displaySpaceUpdate = function (liveData, entityData) {
   updateVisData.grid = updateGrid
   updateVisData.vistoolbar = setVistoolbar
   updateVisData.opendata = setOpendata
-  console.log('data strcture')
-  console.log(updateVisData)
   return updateVisData
 }
 
@@ -319,19 +313,15 @@ ToolkitUtility.prototype.displaySpaceUpdate = function (liveData, entityData) {
 */
 ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData, matchModeType, updateComputeContract) {
   // setup return vis Object
-  console.log('TKU##many devices many dts single chart')
-  console.log(updateComputeContract)
   let moduleKeys = Object.keys(liveData)
   let updateVisData = {}
   // loop over the modules in the NXP and match to compute and update data
   for (let mod of moduleKeys) {
-    console.log(liveData[mod].prime.text)
     if (liveData[mod].prime.text === 'Visualise') {
       updateVisData.module = mod
     }
   }
   // pair device data to time range groupings
-  console.log(matchModeType)
   let devicesList = Object.keys(entityData.liveVislist)
   // split into device data groupings
   let deviceMatch = {}
@@ -389,9 +379,6 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
 *
 */
 ToolkitUtility.prototype.mergeDataSets = function (liveData, computeModule) {
-  console.log('merage data sets')
-  console.log(liveData)
-  console.log(computeModule)
   let chartOptions = {}
   let singleData = {}
   // how many data sets to merge?
@@ -472,7 +459,6 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData, computeModule) {
       dataPairs.seventh = tempPair
     }
   }
-  // console.log(dataPairs)
   let updateChartOptions = {}
   updateChartOptions = chartOptions
   // need to merge x axis time list to single array
@@ -482,13 +468,13 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData, computeModule) {
   //  is the time ie xaxis for one or more time periods?
   let flatten = []
   let unique = []
-  if (typeof (computeModule.value.info.controls.date) !== 'object') {
+  if (typeof (computeModule.value.info.controls.rangedate) !== 'object') {
     flatten = dataX[0].concat(dataX[1])
     unique = flatten.filter((v, i, a) => a.indexOf(v) === i)
   } else {
     // many time periods to normalise time
-    console.log('many time peirods to normalise')
-    unique = dataX[0]
+    flatten = dataX[0].concat(dataX[2])
+    unique = flatten.filter((v, i, a) => a.indexOf(v) === i)
   }
   let updatePackage = {}
   updatePackage.datasets = dataY
@@ -504,20 +490,15 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData, computeModule) {
 *
 */
 ToolkitUtility.prototype.timestampMatcher = function (dataPairs) {
-  console.log('timestampMatcher')
-  console.log(dataPairs)
   let updateDatasets = []
   let matchList = []
   let count = 0
   for (let tsi of dataPairs.second.labelset) {
-    // console.log(tsi)
     let include = dataPairs.first.labelset.includes(tsi)
     if (include === true) {
-      // console.log(include)
       matchList.push(dataPairs.first.dataset[count])
       count++
     } else {
-      // console.log('not included')
       matchList.push(null)
     }
   }
