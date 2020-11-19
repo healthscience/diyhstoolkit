@@ -420,6 +420,7 @@ export default {
         } */
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
+        this.state.livePeerRefContIndex = backJSON.referenceContracts
         this.state.networkPeerExpModules = backJSON.networkPeerExpModules
         for (let exl of backJSON.networkPeerExpModules) {
           let experBundle = {}

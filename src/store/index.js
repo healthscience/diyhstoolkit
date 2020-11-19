@@ -16,6 +16,7 @@ const store = new Vuex.Store({
     datasourceCount: 0,
     devices: [],
     liveRefContIndex: {},
+    livePeerRefContIndex: {},
     liveNXP: '',
     liveNXPcontract: {},
     liveNXPbundle: {},
@@ -355,7 +356,9 @@ const store = new Vuex.Store({
         } else if (pmod.value.type === 'compute') {
           let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, this.state.liveRefContIndex.compute)
           pmod.value.info.compute = peerDataRC
-          peerOptions.push(pmod)
+          let newestContract = ToolUtility.refcontractLookupCompute(pmod, this.state.livePeerRefContIndex.module)
+          peerOptions.push(newestContract)
+          // peerOptions.push(pmod)
         } else if (pmod.value.type === 'visualise') {
           pmod.value.info.settings.single = true
           let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.visualise, this.state.liveRefContIndex.visualise)

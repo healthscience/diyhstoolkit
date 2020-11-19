@@ -149,6 +149,47 @@ ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
 }
 
 /**
+*  look at all the compute module contract for this prime id and return newest
+* @method refcontractLookupCompute
+*
+*/
+ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContracts) {
+  let contractKey = ''
+  let objectTest = typeof refCont
+  if (objectTest === 'object') {
+    contractKey = refCont.key
+  } else {
+    contractKey = refCont
+  }
+  let matchKey = {}
+  let matchList = []
+  for (const rc of allContracts) {
+    if (contractKey.trim() === rc.value.link) {
+      matchList.push(rc)
+    }
+  }
+  // if no match then start with first compute contract
+  if (matchList.length > 0) {
+    let newestContract = this.orderNewestContract(matchList)
+    matchKey = newestContract
+  } else {
+    matchKey = refCont
+  }
+  return matchKey
+}
+
+/**
+* orderNewestContract
+* @method displayModules
+*
+*/
+ToolkitUtility.prototype.orderNewestContract = function (contractList) {
+  // let latestContract = {}
+  contractList.sort((a, b) => (a.value.info.controls.date < b.value.info.controls.date) ? 1 : -1)
+  return contractList[0]
+}
+
+/**
 * prepare grid layout for display per module type.
 * @method displayModules
 *

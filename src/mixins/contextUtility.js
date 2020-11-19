@@ -84,7 +84,7 @@ contextUtility.prototype.prepareVisSettings = function (module, time, update, to
 */
 contextUtility.prototype.prepareSettingsVisTime = function (module, time, update, toolbar) {
   // vis settings
-  console.log(update)
+  // console.log(update)
   module.value.info.settings.date = time[0]
   // reset single or multiple charts asked for?
   if (update.singlechart !== undefined) {
