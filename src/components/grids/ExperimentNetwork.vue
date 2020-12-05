@@ -30,7 +30,10 @@
       <div id="dashboard-placeholder">
         <ul class="clear" v-for="dashi of dashLive" :key="dashi.id">
           <li class="dashboard-place">
-            <header>Dashboard</header>
+            <header>Dashboard</header>ee {{ ecsMessage }}
+            <div v-if="ecsMessage" id="ecs-message">
+              {{ ecsMessage }}
+            </div>
             <!-- view the dashboard per network experiment -->
             <div id="module-list" v-if="NXPstatusData[shellContract]">
               <progress-message v-if="NXPprogress" :progressMessage="NXPprogress"></progress-message>
@@ -161,6 +164,9 @@ export default {
     },
     NXPprogress: function () {
       return this.$store.state.nxpProgress[this.shellContract]
+    },
+    ecsMessage: function () {
+      return this.$store.state.ecsMessageLive
     },
     filteredExperiments: function () {
       var sortKey = this.sortKey

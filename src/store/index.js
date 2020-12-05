@@ -71,6 +71,7 @@ const store = new Vuex.Store({
         active: false
       }
     },
+    ecsMessageLive: '',
     nxpProgress: {},
     visProgress: {},
     timeStartperiod: 0,
@@ -380,6 +381,7 @@ const store = new Vuex.Store({
       message.reftype = 'ignore'
       message.action = 'networkexperiment'
       message.data = ECSbundle
+      console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },
@@ -420,6 +422,7 @@ const store = new Vuex.Store({
       context.commit('setOpendataBar', update)
     },
     actionDisplayLearn (context, update) {
+      this.state.ecsMessageLive = ''
       let mod = []
       if (this.state.entityUUIDReturn === undefined) {
         mod = this.state.nxpModulesLive
@@ -444,6 +447,7 @@ const store = new Vuex.Store({
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionVisUpdate (context, update) {
+      this.state.ecsMessageLive = ''
       // display processing
       // context.commit('setVisProgressUpdate', update)
       // entity container

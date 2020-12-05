@@ -2,9 +2,6 @@
   <div class="hello">
     <header>Network Status</header>
     <div id="connection-status"></div>
-    <button type="button" class="btn" @click="connectNetwork('connect')">Connect</button>
-    <button type="button" class="btn" @click="connectNetwork('new-connect')">New account</button>
-    <!-- <button type="button" class="btn" @click="connectNetwork('self-connect')">{{ connectBut.text }}</button> -->
     <button type="button" class="btn" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
     <connect-modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
@@ -12,11 +9,14 @@
         CONNECT
       </template>
       <template v-slot:title-form>
-        {{ connectContext.message }}
+        <!-- <button type="button" class="btn" @click="connectNetwork('connect')">Connect</button>
+        <button type="button" class="btn" @click="connectNetwork('new-connect')">New account</button>
+        <button type="button" class="btn" @click="connectNetwork('self-connect')">{{ connectBut.text }}</button> -->
+        {{ connectContext.message }} {{ connectContext.type }}
       </template>
       <template v-slot:input-form>
-        <token-reader v-if="connectContext.type === 'testnetwork'" @closeTreader="closeModal"></token-reader>
-        <div id="self-in" v-if="connectContext.type === 'selfsign'">
+        <token-reader v-if="connectContext.type === 'self-verify'" @closeTreader="closeModal"></token-reader>
+        <div id="self-in" v-if="connectContext.type === 'self-verify'">
           <input v-model="secretPeer" placeholder="public key">
           <input v-model="passwordPeer" placeholder="token">
         </div>
@@ -50,8 +50,8 @@ export default {
     return {
       connectBut: {
         active: false,
-        type: 'self-testnetwork',
-        text: 'Testnetwork sign-in'
+        type: 'self-verify',
+        text: 'Connect'
       },
       isModalVisible: false,
       connectContext:
@@ -86,11 +86,11 @@ export default {
         this.connectContext.type = 'selfsign'
         this.connectContext.message = 'Self sign-in'
         this.buttonName = 'Self Sign-in'
-      } else if (typeConnect.type === 'self-testnetwork') {
-        this.connectBut.text = 'disconnect testnetwork'
-        this.connectBut.type = 'disconnectTestnetwork'
-        this.connectContext.type = 'testnetwork'
-        this.connectContext.message = 'TestNetwork'
+      } else if (typeConnect.type === 'self-verify') {
+        this.connectBut.text = 'dis-connect'
+        this.connectBut.type = 'self-verify'
+        this.connectContext.type = 'self-verify'
+        this.connectContext.message = 'Self verify keys'
         this.buttonName = ''
       } else if (typeConnect.type === 'disconnectTestnetwork') {
         this.isModalVisible = false

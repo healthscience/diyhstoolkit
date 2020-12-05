@@ -162,6 +162,7 @@ export default {
         this.state.entityUUIDsummary = backJSON
       } else if (backJSON.type === 'newEntity') {
         // format data for DashBoard
+        console.log(backJSON)
         let mod = []
         if (this.state.entityUUIDReturn === undefined) {
           mod = this.state.nxpModulesLive
@@ -308,6 +309,8 @@ export default {
           }
         }
       } else if (backJSON.type === 'updateEntity') {
+        console.log('update first')
+        console.log(backJSON)
         // need to exactly update exp, module and grid ID of vis/chart data
         // prepare new data object
         let updateDisplay = ToolUtility.displaySpaceUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
@@ -418,6 +421,10 @@ export default {
           // update vis data
           Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayRange.module], 'data', updateDisplayRange.update)
         } */
+      } else if (backJSON.type === 'displayEmpty') {
+        console.log('no day show empty toolbar')
+        console.log(backJSON)
+        this.state.ecsMessageLive = 'no data available'
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
         this.state.livePeerRefContIndex = backJSON.referenceContracts

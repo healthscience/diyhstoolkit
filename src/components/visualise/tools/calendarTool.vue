@@ -140,7 +140,6 @@ export default {
   },
   methods: {
     calendarSelect () {
-      console.log('caleander st')
       if (this.calendarTools.active !== true) {
         // convert to correct time format and update KBundle and build new visStyle
         let bTime = {}
