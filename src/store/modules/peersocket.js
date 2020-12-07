@@ -588,6 +588,15 @@ export default {
     actionGetRefContract (context, message) {
       Vue.prototype.$socket.send(message)
     },
+    actionLibraryPublickey (context, message) {
+      const pubkeyGet = {}
+      pubkeyGet.type = 'library'
+      pubkeyGet.reftype = 'viewpublickey'
+      Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
+    },
+    actionAddwarmPeer (context, message) {
+      Vue.prototype.$socket.send(message)
+    },
     actionMakeVisualiseRefContract (context, message) {
       // Vue.prototype.$socket.send(message)
     },

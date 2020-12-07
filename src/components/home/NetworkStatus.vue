@@ -9,10 +9,7 @@
         CONNECT
       </template>
       <template v-slot:title-form>
-        <!-- <button type="button" class="btn" @click="connectNetwork('connect')">Connect</button>
-        <button type="button" class="btn" @click="connectNetwork('new-connect')">New account</button>
-        <button type="button" class="btn" @click="connectNetwork('self-connect')">{{ connectBut.text }}</button> -->
-        {{ connectContext.message }} {{ connectContext.type }}
+        {{ connectContext.message }}
       </template>
       <template v-slot:input-form>
         <token-reader v-if="connectContext.type === 'self-verify'" @closeTreader="closeModal"></token-reader>
@@ -23,6 +20,19 @@
       </template>
       <template v-slot:submit-form>
         <button>{{ buttonName }}</button>
+      </template>
+      <template v-slot:peers-warm>
+        <button type="button" class="btn" @click="addWarmpeer()">Add new</button>
+        <div v-if="addWarm === true" id="add-warm-peer">
+          <input v-model="newPeer" placeholder="public key">
+          <button type="button" class="btn" @click="addWarmNetwork()">save</button>
+        </div>
+        <ul v-for='peer in warmPeers' :key='peer.id'>
+          <li>Peer {{ peer }}</li>
+        </ul>
+      </template>
+      <template v-slot:peers-cold>
+        <button>Connect CALE AI</button>
       </template>
     </connect-modal>
   </div>
@@ -41,6 +51,9 @@ export default {
   computed: {
     authState: function () {
       return this.$store.state.authorised
+    },
+    warmPeers: function () {
+      return [1, 2]
     }
   },
   props: {
@@ -62,7 +75,9 @@ export default {
       },
       buttonName: 'Connect',
       secretPeer: '',
-      passwordPeer: ''
+      passwordPeer: '',
+      addWarm: false,
+      newPeer: ''
     }
   },
   methods: {
@@ -72,22 +87,13 @@ export default {
         this.connectContext.type = 'connect'
         this.connectContext.message = 'Anno. connect to network'
         this.buttonName = 'Annon. connect'
-        // this.$store.dispatch('annonconnectNSnetwork')
         const refContract = {}
         refContract.reftype = 'datatype'
         refContract.action = 'GET'
         const refCJSON = JSON.stringify(refContract)
         this.$store.dispatch('actionGetRefContract', refCJSON)
-      } else if (typeConnect === 'new-connect') {
-        this.connectContext.type = 'firsttime'
-        this.connectContext.message = 'first time new connection setup'
-        this.buttonName = 'Submit'
-      } else if (typeConnect === 'self-connect') {
-        this.connectContext.type = 'selfsign'
-        this.connectContext.message = 'Self sign-in'
-        this.buttonName = 'Self Sign-in'
       } else if (typeConnect.type === 'self-verify') {
-        this.connectBut.text = 'dis-connect'
+        this.connectBut.text = 'edit-connections'
         this.connectBut.type = 'self-verify'
         this.connectContext.type = 'self-verify'
         this.connectContext.message = 'Self verify keys'
@@ -100,6 +106,17 @@ export default {
         this.connectContext.message = 'TestNetwork'
         this.buttonName = ''
       }
+    },
+    addWarmpeer () {
+      this.addWarm = !this.addWarm
+    },
+    addWarmNetwork () {
+      const peerContract = {}
+      peerContract.reftype = 'peer'
+      peerContract.action = 'PUT'
+      peerContract.data = this.newPeer
+      const peerCJSON = JSON.stringify(peerContract)
+      this.$store.dispatch('actionAddwarmPeer', peerCJSON)
     },
     closeModal () {
       this.isModalVisible = false
@@ -124,4 +141,5 @@ li {
 a {
   color: #42b983;
 }
+
 </style>

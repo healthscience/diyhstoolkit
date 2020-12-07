@@ -14,23 +14,39 @@
             Network Connection
           </slot>
         </header>
-        <form>
-          <div id="form-title">
-            <slot name="title-form">
-              <!-- no default title for form -->
+        <div id="connect-peerlink">
+          <form>
+            <div id="form-title">
+              <slot name="title-form">
+                <!-- no default title for form -->
+              </slot>
+            </div>
+            <div id="form-input">
+              <slot name="input-form">
+                <!-- No default input -->
+              </slot>
+            </div>
+            <div id="form-submit">
+              <slot name="submit-form">
+                <!-- no default button -->
+              </slot>
+            </div>
+          </form>
+        </div>
+        <div id="peers-warm-cold">
+          <header>Warm Peers</header>
+          <div id="warm-peers">
+            <slot name="peers-warm">
+              Peers or Groups Connected
             </slot>
           </div>
-          <div id="form-input">
-            <slot name="input-form">
-              <!-- No default input -->
+          <div id="cold-peers">
+            <header>Cold Peers</header>
+            <slot name="peers-cold">
+              Live connections
             </slot>
           </div>
-          <div id="form-submit">
-            <slot name="submit-form">
-              <!-- no default button -->
-            </slot>
-          </div>
-        </form>
+        </div>
         <footer class="modal-footer">
           <slot name="footer">
             <button
@@ -87,7 +103,7 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 60%;
   }
 
   .modal-header,
@@ -128,4 +144,20 @@ export default {
     border: 1px solid #4AAE9B;
     border-radius: 2px;
   }
+
+#connect-peerlink {
+  border: 1px solid blue;
+  min-height: 200px;
+}
+
+#peers-warm-cold {
+  border: 1px solid green;
+  min-height: 200px;
+}
+
+#warm-peers, #cold-peers {
+  display: block;
+  min-height: 20px;
+}
+
 </style>

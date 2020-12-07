@@ -2,10 +2,12 @@
   <div class="home">
     <div class="diy-settings">
       <div class="diy-info" id="diy-summary">
-        <header>{{ $t('welcome') }} to the DIY HealthScience Toolkit</header>
-        <p>1. join a N=1 network experiment</p>
-        <p>2. build scientific evidence</p>
-        <p>3. personalise dashboards</p>
+        <header>{{ $t('welcome') }} to the DIY data science toolkit</header>
+        <ul v-if="connected === false">
+          <p>1. Interacive life dashboards</p>
+          <p>2. Build scientific evidence</p>
+          <p>3. Connect with peers & communities</p>
+        </ul>
       </div>
       <div class="diy-info" id="diy-introduction">
         <NetworkStatus msg="not connected"></NetworkStatus>
@@ -15,9 +17,9 @@
       <div id="peer-views">
         <ul>
           <li>
+            <button id="lifestyleworld" @click.prevent="setView($event)">Life dashboards</button>
             <button id="nxp-view" @click.prevent="setView($event)">Network experiments</button>
             <button id="timeline" @click.prevent="setView($event)">Timeline</button>
-            <button id="lifestyleworld" @click.prevent="setView($event)">Lifestyle-world</button>
           </li>
         </ul>
       </div>
@@ -49,7 +51,8 @@ export default {
     return {
       viewNXP: true,
       viewTimeline: false,
-      viewLifestyleworld: false
+      viewLifestyleworld: false,
+      connected: false
     }
   },
   methods: {
