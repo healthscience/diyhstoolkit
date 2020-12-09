@@ -46,6 +46,18 @@
               Live connections
             </slot>
           </div>
+          <div id="key-management">
+            <header>Key Management</header>
+            <slot name="peer-keys">
+              Live connections
+            </slot>
+          </div>
+          <div id="replicate-library">
+            <header>Network Library</header>
+            <slot name="replicate-library">
+              Network Library
+            </slot>
+          </div>
         </div>
         <footer class="modal-footer">
           <slot name="footer">
@@ -156,6 +168,12 @@ export default {
 }
 
 #warm-peers, #cold-peers {
+  display: block;
+  min-height: 20px;
+}
+
+#key-management {
+  margin-top: 20px;
   display: block;
   min-height: 20px;
 }

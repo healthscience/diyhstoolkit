@@ -34,6 +34,7 @@ export default {
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
       const backJSON = JSON.parse(message.data)
+      console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -105,6 +106,10 @@ export default {
             // need to set toolbar settings TODO
           }
         }
+      } else if (backJSON.type === 'publickey') {
+        console.log('publick keys')
+        this.state.publickeys.push(backJSON.pubkey)
+        console.log(this.state.publickeys)
       } else if (backJSON.type === 'modulesTemp') {
         this.state.nxpModulesList = backJSON.data
         if (this.state.moduleListEnd === true) {
@@ -585,6 +590,13 @@ export default {
       const referenceContractReady = JSON.stringify(prepareRefContract)
       Vue.prototype.$socket.send(referenceContractReady)
     },
+    actionKeymanagement (context, message) {
+      this.state.publickeys = []
+      const pubkeyGet = {}
+      pubkeyGet.type = 'library'
+      pubkeyGet.reftype = 'keymanagement'
+      Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
+    },
     actionGetRefContract (context, message) {
       Vue.prototype.$socket.send(message)
     },
@@ -593,6 +605,14 @@ export default {
       pubkeyGet.type = 'library'
       pubkeyGet.reftype = 'viewpublickey'
       Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
+    },
+    actionPeersynclibrary (context, message) {
+      const peerSync = {}
+      peerSync.type = 'library'
+      peerSync.reftype = 'replicatekey'
+      peerSync.publickey = message
+      const peerSyncJSON = JSON.stringify(peerSync)
+      Vue.prototype.$socket.send(peerSyncJSON)
     },
     actionAddwarmPeer (context, message) {
       Vue.prototype.$socket.send(message)

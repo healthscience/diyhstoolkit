@@ -4,7 +4,7 @@
       <div class="diy-info" id="diy-summary">
         <header>{{ $t('welcome') }} to the DIY data science toolkit</header>
         <ul v-if="connected === false">
-          <p>1. Interacive life dashboards</p>
+          <p>1. Interacive lifeboards</p>
           <p>2. Build scientific evidence</p>
           <p>3. Connect with peers & communities</p>
         </ul>

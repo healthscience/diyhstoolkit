@@ -34,6 +34,17 @@
       <template v-slot:peers-cold>
         <button>Connect CALE AI</button>
       </template>
+      <template v-slot:peer-keys>
+        Key management:
+        <ul v-for='pk in publicKeysList' :key='pk.id'>
+          <li>{{ pk }}</li>
+        </ul>
+      </template>
+      <template v-slot:replicate-library>
+        Replicate library:
+        <input v-model="peerSynckey" placeholder="public key">
+        <button type="button" class="btn" @click="peerSyncLibrary()">Sync Library</button>
+      </template>
     </connect-modal>
   </div>
 </template>
@@ -51,6 +62,12 @@ export default {
   computed: {
     authState: function () {
       return this.$store.state.authorised
+    },
+    publicKeysList: function () {
+      return this.$store.state.publickeys
+    },
+    publicKeysIndex: function () {
+      return this.$store.state.publickeysIndex
     },
     warmPeers: function () {
       return [1, 2]
@@ -77,12 +94,15 @@ export default {
       secretPeer: '',
       passwordPeer: '',
       addWarm: false,
-      newPeer: ''
+      newPeer: '',
+      keyIndex: []
     }
   },
   methods: {
     connectNetwork (typeConnect) {
       this.isModalVisible = true
+      console.log('connect')
+      console.log(typeConnect)
       if (typeConnect === 'connect') {
         this.connectContext.type = 'connect'
         this.connectContext.message = 'Anno. connect to network'
@@ -98,6 +118,8 @@ export default {
         this.connectContext.type = 'self-verify'
         this.connectContext.message = 'Self verify keys'
         this.buttonName = ''
+        // ask peerlink for public keys
+        this.$store.dispatch('actionKeymanagement')
       } else if (typeConnect.type === 'disconnectTestnetwork') {
         this.isModalVisible = false
         this.connectBut.text = 'Sign-in to Testnetwork'
@@ -117,6 +139,10 @@ export default {
       peerContract.data = this.newPeer
       const peerCJSON = JSON.stringify(peerContract)
       this.$store.dispatch('actionAddwarmPeer', peerCJSON)
+    },
+    peerSyncLibrary (pubkey) {
+      // pass on public key to peerlink and sync datastore for this peer
+      this.$store.dispatch('actionPeersyncLibrary', pubkey)
     },
     closeModal () {
       this.isModalVisible = false

@@ -13,6 +13,7 @@ const store = new Vuex.Store({
   modules,
   state: {
     authorised: false,
+    publickeys: [],
     datasourceCount: 0,
     devices: [],
     liveRefContIndex: {},
