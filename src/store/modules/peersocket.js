@@ -108,6 +108,8 @@ export default {
         }
       } else if (backJSON.type === 'publickey') {
         this.state.publickeys.push(backJSON.pubkey)
+      } else if (backJSON.type === 'open-library') {
+        console.log('library swarm is open for datastore peerlink')
       } else if (backJSON.type === 'new-peer') {
         this.state.warmNetwork.push(backJSON.data.value)
       } else if (backJSON.type === 'warm-peers') {
@@ -564,6 +566,13 @@ export default {
       pubkeyGet.type = 'library'
       pubkeyGet.reftype = 'keymanagement'
       Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
+    },
+    actionOpenLibrary (context, data) {
+      let openLibrary = {}
+      openLibrary.type = 'library'
+      openLibrary.reftype = 'openlibrary'
+      openLibrary.data = data
+      Vue.prototype.$socket.send(JSON.stringify(openLibrary))
     },
     actionWarmPeers (context, message) {
       let getWarmPeers = {}

@@ -47,7 +47,7 @@
       <template v-slot:peer-keys>
         Key management:
         <ul v-for='pk in publicKeysList' :key='pk.id'>
-          <li>{{ pk }}</li>
+          <li>{{ pk }} <button type="button" class="btn" @click="openReplication(pk)">Closed sync</button></li>
         </ul>
       </template>
       <template v-slot:replicate-library>
@@ -163,6 +163,11 @@ export default {
       this.newPeer = ''
       this.peerDStore = ''
       this.addWarm = false
+    },
+    openReplication (info) {
+      console.log('open close replication for data store')
+      console.log(info)
+      this.$store.dispatch('actionOpenLibrary', info)
     },
     peerSyncLibrary (pubkey) {
       // pass on public key to peerlink and sync datastore for this peer
