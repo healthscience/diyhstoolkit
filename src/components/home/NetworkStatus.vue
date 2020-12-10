@@ -24,11 +24,21 @@
       <template v-slot:peers-warm>
         <button type="button" class="btn" @click="addWarmpeer()">Add new</button>
         <div v-if="addWarm === true" id="add-warm-peer">
+          <input v-model="newPeername" placeholder="name">
           <input v-model="newPeer" placeholder="public key">
+          <ul v-if="replicateList.length > 0">
+            <label for="datastore-select"></label>
+            <select class="select-yaxis-id" id="datastore-select-rep" v-model="peerDStore">
+              <option value="none" selected="">please select</option>
+              <option v-for="ds in replicateList" :key="ds.id" v-bind:value="ds">
+              {{ ds }}
+              </option>
+            </select>
+          </ul>
           <button type="button" class="btn" @click="addWarmNetwork()">save</button>
         </div>
         <ul v-for='peer in warmPeers' :key='peer.id'>
-          <li>Peer {{ peer }}</li>
+          <li>Peer {{ peer }} <button type="button" class="btn" @click="peerSyncLibrary(peer.publickey)">Replicate</button></li>
         </ul>
       </template>
       <template v-slot:peers-cold>
@@ -70,7 +80,7 @@ export default {
       return this.$store.state.publickeysIndex
     },
     warmPeers: function () {
-      return [1, 2]
+      return this.$store.state.warmNetwork
     }
   },
   props: {
@@ -95,7 +105,9 @@ export default {
       passwordPeer: '',
       addWarm: false,
       newPeer: '',
-      keyIndex: []
+      newPeername: '',
+      peerDStore: '',
+      replicateList: ['peerlibrary', 'librarynetwork', 'resultspeer', 'kblpeer']
     }
   },
   methods: {
@@ -120,6 +132,8 @@ export default {
         this.buttonName = ''
         // ask peerlink for public keys
         this.$store.dispatch('actionKeymanagement')
+        // list of active peers
+        this.$store.dispatch('actionWarmPeers')
       } else if (typeConnect.type === 'disconnectTestnetwork') {
         this.isModalVisible = false
         this.connectBut.text = 'Sign-in to Testnetwork'
@@ -133,12 +147,22 @@ export default {
       this.addWarm = !this.addWarm
     },
     addWarmNetwork () {
+      let peerHolder = {}
+      peerHolder.name = this.newPeername
+      peerHolder.publickey = this.newPeer
+      peerHolder.datastore = this.peerDStore
       const peerContract = {}
-      peerContract.reftype = 'peer'
+      peerContract.type = 'library'
+      peerContract.reftype = 'peer-add'
       peerContract.action = 'PUT'
-      peerContract.data = this.newPeer
+      peerContract.data = peerHolder
       const peerCJSON = JSON.stringify(peerContract)
+      console.log(peerCJSON)
       this.$store.dispatch('actionAddwarmPeer', peerCJSON)
+      this.newPeername = ''
+      this.newPeer = ''
+      this.peerDStore = ''
+      this.addWarm = false
     },
     peerSyncLibrary (pubkey) {
       // pass on public key to peerlink and sync datastore for this peer

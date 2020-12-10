@@ -107,9 +107,14 @@ export default {
           }
         }
       } else if (backJSON.type === 'publickey') {
-        console.log('publick keys')
         this.state.publickeys.push(backJSON.pubkey)
-        console.log(this.state.publickeys)
+      } else if (backJSON.type === 'new-peer') {
+        this.state.warmNetwork.push(backJSON.data.value)
+      } else if (backJSON.type === 'warm-peers') {
+        this.state.warmNetwork = []
+        for (let wp of backJSON.data) {
+          this.state.warmNetwork.push(wp.value)
+        }
       } else if (backJSON.type === 'modulesTemp') {
         this.state.nxpModulesList = backJSON.data
         if (this.state.moduleListEnd === true) {
@@ -389,43 +394,6 @@ export default {
             Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayRange.module], 'data', updateDisplayRange.update)
           }
         }
-        // single or many chart display?
-        /* let updateDisplayOne = ToolUtility.displayUpdateSpaceSingle(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
-        // loop over modues context to extract settings from vis contract
-        let contextVisRefContract = {}
-        for (let modL of backJSON.context.modules) {
-          if (modL.key === updateDisplayOne.module) {
-            contextVisRefContract = modL
-          }
-        } */
-        // one data set per char tor many datasets?
-        /* let singleStateDisplay = true
-        if (contextVisRefContract.value.info.settings.single === true && contextVisRefContract.value.info.settings.multidata === true) {
-          singleStateDisplay = true
-        } else if (contextVisRefContract.value.info.settings.single === false && contextVisRefContract.value.info.settings.mutidata === true) {
-          singleStateDisplay = false
-        } else {
-          // mix of many dataset per chart but also many chart TODO
-          singleStateDisplay = false
-        }
-        if (singleStateDisplay === true) {
-          // single chart display
-          Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayOne.module].data, updateDisplayOne.identifier[0], updateDisplayOne.update)
-        } else {
-          // many individual charts
-          let updateDisplayRange = ToolUtility.displaySpaceUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
-          // set the grid, data and toolbar settings
-          // update the display grid
-          for (let gup of updateDisplayRange.grid) {
-            this.state.moduleGrid[updateDisplayRange.module].push(gup)
-          }
-          // update tools id reference
-          Vue.set(this.state.opendataTools, updateDisplayRange.module, updateDisplayRange.opendata)
-          // update toolbar vis status
-          Vue.set(this.state.toolbarVisStatus, updateDisplayRange.module, updateDisplayRange.vistoolbar)
-          // update vis data
-          Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplayRange.module], 'data', updateDisplayRange.update)
-        } */
       } else if (backJSON.type === 'displayEmpty') {
         console.log('no day show empty toolbar')
         console.log(backJSON)
@@ -596,6 +564,12 @@ export default {
       pubkeyGet.type = 'library'
       pubkeyGet.reftype = 'keymanagement'
       Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
+    },
+    actionWarmPeers (context, message) {
+      let getWarmPeers = {}
+      getWarmPeers.type = 'library'
+      getWarmPeers.reftype = 'warm-peers'
+      Vue.prototype.$socket.send(JSON.stringify(getWarmPeers))
     },
     actionGetRefContract (context, message) {
       Vue.prototype.$socket.send(message)

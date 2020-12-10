@@ -14,6 +14,7 @@ const store = new Vuex.Store({
   state: {
     authorised: false,
     publickeys: [],
+    warmNetwork: [],
     datasourceCount: 0,
     devices: [],
     liveRefContIndex: {},
