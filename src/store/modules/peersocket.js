@@ -34,7 +34,7 @@ export default {
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
       const backJSON = JSON.parse(message.data)
-      console.log(backJSON)
+      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -110,6 +110,7 @@ export default {
         this.state.publickeys.push(backJSON.pubkey)
       } else if (backJSON.type === 'open-library') {
         console.log('library swarm is open for datastore peerlink')
+        this.state.swarmStatus = true
       } else if (backJSON.type === 'new-peer') {
         this.state.warmNetwork.push(backJSON.data.value)
       } else if (backJSON.type === 'warm-peers') {

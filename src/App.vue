@@ -7,15 +7,18 @@
       <router-link class="menu-space" to="/toolkit">{{ $t('toolkit') }}</router-link> | -->
       <router-link to="/about">{{ $t('about') }}</router-link>
       <div class="toolkit-settings">
-        <img alt="Vue logo" src="./assets/logo.png">
+        <img class="small-logo" alt="Vue logo" src="./assets/logo.png">
       </div>
       <div class="toolkit-settings" id="select-language">
         <button v-for="entry in languages" :key="entry.title" @click="changeLocale(entry.language)">
           <a href="#" id="language-learn">{{ entry.title }}</a>
         </button>
       </div>
-      <div class="toolkit-settings" id="help-info">
-        <header class="toolbar-top">CALE</header>
+      <div class="toolkit-settings">
+        <div class="connect-info">
+          <NetworkStatus msg="not connected"></NetworkStatus>
+        </div>
+        <header class="toolbar-top"> CALE</header>
         <button type="button" class="btn" @click="caleAIStatus">
           {{ statusCALE.text }}
         </button>
@@ -48,11 +51,13 @@
 </template>
 
 <script>
+import NetworkStatus from '@/components/home/NetworkStatus.vue'
 import HelpModal from '@/components/help/HelpModal.vue'
 
 export default {
   name: 'vue-home',
   components: {
+    NetworkStatus,
     HelpModal
   },
   data () {
@@ -131,5 +136,13 @@ img {
 .help-section {
   margin: 4em;
   text-align: left;
+}
+
+.small-logo {
+  width: 50px;
+}
+
+.connect-info {
+  float: left;
 }
 </style>

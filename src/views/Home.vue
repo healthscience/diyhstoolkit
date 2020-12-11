@@ -1,25 +1,22 @@
 <template>
   <div class="home">
     <div class="diy-settings">
-      <div class="diy-info" id="diy-summary">
+      <div v-if="connected === false" id="diy-summary">
         <header>{{ $t('welcome') }} to the DIY data science toolkit</header>
-        <ul v-if="connected === false">
-          <p>1. Interacive lifeboards</p>
-          <p>2. Build scientific evidence</p>
-          <p>3. Connect with peers & communities</p>
+        <ul>
+          <li>1. Interacive lifeboards</li>
+          <li>2. Build scientific evidence</li>
+          <li>3. Connect with peers & communities</li>
         </ul>
-      </div>
-      <div class="diy-info" id="diy-introduction">
-        <NetworkStatus msg="not connected"></NetworkStatus>
       </div>
     </div>
     <div class="network-experiments">
       <div id="peer-views">
         <ul>
           <li>
-            <button id="lifestyleworld" @click.prevent="setView($event)">Life dashboards</button>
-            <button id="nxp-view" @click.prevent="setView($event)">Network experiments</button>
-            <button id="timeline" @click.prevent="setView($event)">Timeline</button>
+            <button class="peer-medium" id="lifestyleworld" @click.prevent="setView($event)">Lifeboards</button>
+            <button class="peer-medium" id="nxp-view" @click.prevent="setView($event)">Network experiments</button>
+            <button class="peer-medium" id="timeline" @click.prevent="setView($event)">Timeline</button>
           </li>
         </ul>
       </div>
@@ -32,7 +29,6 @@
 
 <script>
 // @ is an alias to /src
-import NetworkStatus from '@/components/home/NetworkStatus.vue'
 // import StartNetworkExperiment from '@/components/home/StartNetworkExperiment.vue'
 import LiveNetwork from '@/components/home/LiveNetwork.vue'
 import LiveTimeline from '@/components/home/LiveTimeline.vue'
@@ -41,7 +37,6 @@ import LiveLifestyle from '@/components/home/LiveLifestyle.vue'
 export default {
   name: 'home',
   components: {
-    NetworkStatus,
     // StartNetworkExperiment,
     LiveNetwork,
     LiveTimeline,
@@ -51,8 +46,12 @@ export default {
     return {
       viewNXP: true,
       viewTimeline: false,
-      viewLifestyleworld: false,
-      connected: false
+      viewLifestyleworld: false
+    }
+  },
+  computed: {
+    connected: function () {
+      return this.$store.state.connectStatus
     }
   },
   methods: {
@@ -85,13 +84,12 @@ export default {
 }
 
 .diy-settings {
-  border: 1px solid grey;
+  border: 1px solid lighgrey;
+  margin: 5px;
 }
 
-.diy-info {
-  border: 1px solid grey;
-  width: 45%;
-  float: left;
+#diy-summary {
+  border: 1px solid black;
 }
 
 #diy-summary header {
@@ -113,6 +111,10 @@ export default {
   border: 1px solid grey;
 }
 
+.network-experiments {
+  border: 1px solid orange;
+}
+
 /* Clear floats after the columns */
 .network-experiments:after {
   content: "";
@@ -120,4 +122,8 @@ export default {
   clear: both;
 }
 
+.peer-medium {
+  font-size: 1.2em;
+  margin-right: 1em
+}
 </style>

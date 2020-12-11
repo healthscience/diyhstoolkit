@@ -1,8 +1,10 @@
 <template>
   <div class="hello">
-    <header>Network Status</header>
-    <div id="connection-status"></div>
-    <button type="button" class="btn" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
+    <div class="network-state">
+      <div id="connection-status"></div>
+      <button type="button" class="btn" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
+    </div>
+    <div class="rest"></div>
     <connect-modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
       <!-- The code below goes into the header slot -->
@@ -45,7 +47,7 @@
         <button>Connect CALE AI</button>
       </template>
       <template v-slot:peer-keys>
-        Key management:
+        <div v-if="swarmState === true" id="open-connect">Public Library OPEN for replication</div>
         <ul v-for='pk in publicKeysList' :key='pk.id'>
           <li>{{ pk }} <button type="button" class="btn" @click="openReplication(pk)">Closed sync</button></li>
         </ul>
@@ -81,6 +83,9 @@ export default {
     },
     warmPeers: function () {
       return this.$store.state.warmNetwork
+    },
+    swarmState: function () {
+      return this.$store.state.swarmStatus
     }
   },
   props: {
@@ -112,6 +117,8 @@ export default {
   },
   methods: {
     connectNetwork (typeConnect) {
+      // remove the welcome message
+      this.$store.dispatch('actionLiveConnect')
       this.isModalVisible = true
       console.log('connect')
       console.log(typeConnect)
@@ -197,4 +204,11 @@ a {
   color: #42b983;
 }
 
+.network-state {
+  display: inline-block;
+}
+
+.reset {
+  clear: both;
+}
 </style>

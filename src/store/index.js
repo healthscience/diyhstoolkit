@@ -13,8 +13,10 @@ const store = new Vuex.Store({
   modules,
   state: {
     authorised: false,
+    connectStatus: false,
     publickeys: [],
     warmNetwork: [],
+    swarmStatus: false,
     datasourceCount: 0,
     devices: [],
     liveRefContIndex: {},
@@ -116,6 +118,9 @@ const store = new Vuex.Store({
   mutations: {
     setAuthorisation: (state, inVerified) => {
       state.authorised = true
+    },
+    SET_CONNECTION_STATUS: (state, inVerified) => {
+      state.connectStatus = true
     },
     setLiveNXP: (state, inVerified) => {
       state.liveNXP = inVerified
@@ -324,6 +329,9 @@ const store = new Vuex.Store({
       message.settings = update.settings
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
+    },
+    actionLiveConnect (context, update) {
+      context.commit('SET_CONNECTION_STATUS', update)
     },
     async annonconnectNSnetwork (context, update) {
       // for cloud
