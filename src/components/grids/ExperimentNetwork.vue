@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="entry in filteredExperiments" :key="entry.id">
+          <tr class="alternate-bk" v-for="entry in filteredExperiments" :key="entry.id">
             <td v-for="key in columns" :key="key.id">
               <div v-if="key !== 'action'">
               {{entry[key]}}
@@ -318,7 +318,7 @@ th {
 }
 
 td {
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
 }
 
 th, td {
@@ -332,6 +332,10 @@ th.active {
 
 th.active .arrow {
   opacity: 1;
+}
+
+.alternate-bk:nth-child(even) {
+  background-color: #ffefd5;
 }
 
 .arrow {
