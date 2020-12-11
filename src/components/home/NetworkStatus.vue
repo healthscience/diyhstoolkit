@@ -208,6 +208,9 @@ a {
   display: inline-block;
 }
 
+.btn {
+  font-size: 1.2em;
+}
 .reset {
   clear: both;
 }

@@ -89,7 +89,7 @@ export default {
 }
 
 #diy-summary {
-  border: 1px solid black;
+  border: 0px solid black;
 }
 
 #diy-summary header {
@@ -112,7 +112,7 @@ export default {
 }
 
 .network-experiments {
-  border: 1px solid orange;
+  border: 0px solid orange;
 }
 
 /* Clear floats after the columns */
