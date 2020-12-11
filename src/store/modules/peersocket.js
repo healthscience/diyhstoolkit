@@ -590,7 +590,7 @@ export default {
       pubkeyGet.reftype = 'viewpublickey'
       Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
     },
-    actionPeersynclibrary (context, message) {
+    actionPeersyncLibrary (context, message) {
       const peerSync = {}
       peerSync.type = 'library'
       peerSync.reftype = 'replicatekey'
