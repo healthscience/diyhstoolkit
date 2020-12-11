@@ -112,7 +112,8 @@ export default {
       newPeer: '',
       newPeername: '',
       peerDStore: '',
-      replicateList: ['peerlibrary', 'librarynetwork', 'resultspeer', 'kblpeer']
+      replicateList: ['peerlibrary', 'librarynetwork', 'resultspeer', 'kblpeer'],
+      peerSynckey: ''
     }
   },
   methods: {
