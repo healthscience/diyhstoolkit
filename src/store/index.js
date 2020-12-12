@@ -34,6 +34,7 @@ const store = new Vuex.Store({
     {
       compute: {}
     },
+    visCount: {},
     visModuleHolder:
     {
       devices: null,

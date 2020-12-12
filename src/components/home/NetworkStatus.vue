@@ -121,8 +121,6 @@ export default {
       // remove the welcome message
       this.$store.dispatch('actionLiveConnect')
       this.isModalVisible = true
-      console.log('connect')
-      console.log(typeConnect)
       if (typeConnect === 'connect') {
         this.connectContext.type = 'connect'
         this.connectContext.message = 'Anno. connect to network'

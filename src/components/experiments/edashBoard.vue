@@ -4,7 +4,8 @@
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
-          {{ moduleContent.prime.text }}
+          {{ moduleContent.prime.text }}--aa-- {{ visPrepareStatus }}
+          <progress-vismessage v-if="visPrepareStatus.active === true" :progressMessage="visPrepareStatus" ></progress-vismessage>
         </template>
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
@@ -61,7 +62,8 @@ import nxpDapp from '@/components/visualise/nxpDapp.vue'
 import nxpPlain from '@/components/visualise/plainBoard.vue'
 import nxpCompute from '@/components/visualise/nxpCompute.vue'
 import nxpVisualise from '@/components/visualise/nxpVisualise.vue'
-import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
+// import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
+import ProgressVismessage from '@/components/visualise/tools/inProgress.vue'
 // import learnReport from '@/components/reports/LearnReport'
 // import learnAction from '@/components/reports/LearnAction'
 // const moment = require('moment')
@@ -69,11 +71,11 @@ import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
 export default {
   name: 'visual-dashview',
   components: {
-    // progressMessage,
     // learnReport,
     // learnAction
     ModuleBoard,
-    ProgressMessage,
+    ProgressVismessage,
+    // ProgressMessage,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
     nxpDevice,
@@ -95,6 +97,17 @@ export default {
     },
     toolbarStatusLive: function () {
       return this.$store.state.toolbarStatus[this.moduleCNRL]
+    },
+    visPrepareStatus: function () {
+      // let visProgressState = {}
+      // visProgressState = { text: 'Preparing visualisation', active: false }
+      /* if (this.$store.state.visProgress[this.moduleCNRL][this.mData] !== undefined) {
+        visProgressState = this.$store.state.visProgress[this.moduleCNRL][this.mData]
+      } else {
+        visProgressState = { text: 'Preparing visualisation', active: false }
+      } */
+      // return visProgressState
+      return this.$store.state.visProgress[this.moduleCNRL]
     },
     moduleContent: function () {
       // console.log('module content data')

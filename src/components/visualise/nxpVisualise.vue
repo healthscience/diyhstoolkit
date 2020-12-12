@@ -1,7 +1,7 @@
 <template>
   <div id="visualise-nxp">
     <div id="prime-visualise">
-      <progress-vismessage v-if="entityPrepareStatus.active === true"></progress-vismessage>
+      <progress-vismessage v-if="visPrepareStatus.active === true" :progressMessage="visPrepareStatus" ></progress-vismessage>
       <component v-bind:is="moduleVisType" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></component>
     </div>
   </div>
@@ -31,14 +31,8 @@ export default {
     moduleVisType: function () {
       return 'chart-builder' // modvisType[this.dashCNRL].vistype
     },
-    entityPrepareStatus: function () {
-      let visProgressState = {}
-      if (this.$store.state.visProgress[this.moduleCNRL][this.mData] !== undefined) {
-        visProgressState = this.$store.state.visProgress[this.moduleCNRL][this.mData]
-      } else {
-        visProgressState = { text: 'Preparing visualisation', active: false }
-      }
-      return visProgressState
+    visPrepareStatus: function () {
+      return this.$store.state.visProgress[this.moduleCNRL]
     }
   },
   data: () => ({

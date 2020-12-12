@@ -170,12 +170,11 @@ export default {
         }
       } else if (backJSON.type === 'ecssummary') {
         // context.commit('SET_ENTITY_RETURN', entityReturn)
-        // Vue.set(this.state.entityUUIDReturn, mo.key, setToolbar)
         this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
         this.state.entityUUIDsummary = backJSON
       } else if (backJSON.type === 'newEntity') {
         // format data for DashBoard
-        console.log(backJSON)
+        // console.log(backJSON)
         let mod = []
         if (this.state.entityUUIDReturn === undefined) {
           mod = this.state.nxpModulesLive
@@ -183,6 +182,13 @@ export default {
           // only update modules returned
           mod = this.state.entityUUIDsummary.data[this.state.liveNXP].modules
         }
+        // how many display coming back?
+        let visCount = backJSON.devices.length - 1
+        // set per vis module ref key
+        Vue.set(this.state.visCount, backJSON.context.key, visCount)
+        let setVisProgress
+        setVisProgress = { text: 'Preparing visualisation', active: true }
+        Vue.set(this.state.visProgress, backJSON.context.key, setVisProgress)
         // remove existing vis component if in single mode (default)
         // context.commit('setClearGrid')
         // update or first time
@@ -201,7 +207,7 @@ export default {
         }
         // display progress message while waiting data
         // context.commit('setVisProgressStart', displayReady)
-        let setVisProg = {}
+        /* let setVisProg = {}
         let moduleKeys = Object.keys(displayReady.grid)
         for (let mod of moduleKeys) {
           for (let dti of displayReady.grid[mod]) {
@@ -209,7 +215,7 @@ export default {
           }
           Vue.set(this.state.visProgress, mod, setVisProg)
           setVisProg = {}
-        }
+        } */
         // context.commit('setVisToolbarState', displayReady)
         let setVistoolbar = {}
         let moduleKeys1 = Object.keys(displayReady.grid)
@@ -233,9 +239,12 @@ export default {
         }
         // active display of progress message
         // context.commit('setVisProgressComplete', displayReady)
-        let setProgress2 = {}
+        /* let setProgress2 = {}
+        console.log('progress setting per chart')
+        console.log(displayReady.mData)
         setProgress2[displayReady.mData] = { text: 'Preparing visualisation', active: false }
-        Vue.set(this.state.visProgress, displayReady.moduleCNRL, setProgress2)
+        console.log(setProgress2)
+        Vue.set(this.state.visProgress, displayReady.moduleCNRL, setProgress2) */
         // context.commit('setProgressComplete', this.state.liveNXP)
         let setProgress3 = { text: 'Experiment in progress', active: false }
         Vue.set(this.state.nxpProgress, this.state.liveNXP, setProgress3)
@@ -263,6 +272,16 @@ export default {
         let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.key, this.state.networkPeerExpModules)
         let matchModeType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
         let matchModeTypeCompute = ToolUtility.matchModuleType('compute', matchExpRefContract.modules)
+        // keep tabs on how many vis data back
+        let currVisCount = this.state.visCount[matchModeType.key] - 1
+        Vue.set(this.state.visCount, matchModeType.key, currVisCount)
+        if (this.state.visCount[matchModeType.key] === 0) {
+          let setVisProgress
+          setVisProgress = { text: 'Preparing visualisation', active: false }
+          Vue.set(this.state.visProgress, matchModeType.key, setVisProgress)
+        } else {
+          console.log('vis stil counting')
+        }
         // one data set per char tor many datasets?
         if (backJSON.devices.length === 1) {
           // how many datatypes?
@@ -336,9 +355,33 @@ export default {
         // update vid data
         Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplay.module], 'data', updateDisplay.update)
       } else if (backJSON.type === 'updateEntityRange') {
+        console.log('update entity range')
+        console.log(backJSON)
         let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.cnrl, this.state.networkPeerExpModules)
         let matchModeType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
         let matchModeTypeCompute = ToolUtility.matchModuleType('compute', backJSON.context.modules)
+        if (this.state.visCount[matchModeType.key] !== 0 ) {
+          let currVisCount = this.state.visCount[matchModeType.key] - 1
+          Vue.set(this.state.visCount, matchModeType.key, currVisCount)
+          if (this.state.visCount[matchModeType.key] === 0) {
+            let setVisProgress
+            setVisProgress = { text: 'Preparing visualisation', active: false }
+            Vue.set(this.state.visProgress, matchModeType.key, setVisProgress)
+          } else {
+            console.log('vis stil counting')
+          }
+        } else {
+          // how many display coming back?
+          let visCount = (backJSON.devices.length * 2) - 1
+          // set per vis module ref key
+          Vue.set(this.state.visCount, matchModeType.key, visCount)
+          console.log('vis toun update')
+          console.log(this.state.visCount)
+          let setVisProgress
+          setVisProgress = { text: 'Preparing visualisation', active: true }
+          Vue.set(this.state.visProgress, matchModeType.key, setVisProgress)
+          console.log(this.state.visProgress)
+        }
         // one data set per char tor many datasets?
         // single chart display
         if (backJSON.devices.length === 1) {
