@@ -34,14 +34,14 @@
           </ul>
         </div>
         <div id="context-results" class="live-kelement">
-          <header>Results:</header>
+          <header>Datatype-Results:</header>
           <ul>
             <li>
               <label for="results-select"></label>
               <select class="select-results-id" id="results-mapping-build" @change="resultsSelect" v-model="visualsettings.results">
                 <option value="none" selected="">please select</option>
-                <option v-for="rDT in resultsDTs" :key="rDT.refcont" v-bind:value="rDT.key">
-                {{ rDT.text }}
+                <option v-for="rDT in datatypeResults" :key="rDT.refcontract" v-bind:value="rDT">
+                {{ rDT.column }}
                 </option>
               </select>
             </li>
@@ -242,7 +242,8 @@ export default {
         time: false,
         visulisation: false,
         resolution: false
-      }
+      },
+      datatypeResults: []
     }
   },
   created () {
@@ -279,10 +280,32 @@ export default {
       this.$store.dispatch('actionNewVisDevice', this.visualsettings.device)
     },
     computeSelect () {
+      // prepare the results datatype
+      this.datatypeResults = []
+      for (let scomp of this.refContractComputeLive) {
+        if (scomp.key === this.visualsettings.compute) {
+          // extract compute dtprefix and add to all datatype active in toolbar
+          // need to build new datatypes for results
+          for (let updateRDTS of this.refContractPackage) {
+            // console.log(updateRDTS)
+            let buildDTR = {}
+            buildDTR.column = scomp.value.computational.name + updateRDTS.column
+            let sourceComputeDT = {}
+            sourceComputeDT.source = scomp.key
+            sourceComputeDT.compute = updateRDTS.refcontract
+            buildDTR.refcontract = sourceComputeDT // scomp.key + '-' + updateRDTS.refcontract
+            this.datatypeResults.push(buildDTR)
+          }
+        }
+      }
       this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
     },
     resultsSelect () {
+      // transfer this result type to chart y axis
+      console.log('resuls data type')
+      console.log(this.visualsettings.results)
       this.$store.dispatch('actionNewVisResults', this.visualsettings.results)
+      this.refContractPackage.push(this.visualsettings.results)
     },
     learnUpdate () {
       console.log('learn update from open data')

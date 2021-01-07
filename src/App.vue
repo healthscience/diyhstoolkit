@@ -22,10 +22,10 @@
         <button type="button" class="btn" @click="caleAIStatus">
           {{ statusCALE.text }}
         </button>
-        <button type="button" class="btn" @click="showModal">
+        <button type="button" class="btn" @click="showHelpModal">
           {{ $t('help') }}
         </button>
-        <help-modal v-show="isModalVisible" @close="closeModal">
+        <help-modal v-show="helpState.active" @close="showHelpModal">
           <template v-slot:header>
           <!-- The code below goes into the header slot -->
             {{ $t('help') }} for -- {{ helpContext }}
@@ -43,6 +43,13 @@
               Where is the data store?  Data is secured on the SAFEnetwork.
             </div>
           </template>
+          <template v-slot:feedback>
+            {{ helpState }}  {{ activeNetworkExperiment.shellID }} ooo
+            <div v-if="helpState.type === 'future'" id="feedback-action">
+              Date asked for: {{ helpState.data }}
+              <calendar-tool :shellID="helpState.refcontract" :moduleCNRL="'future'" :moduleType="'future'" :mData="'future'"></calendar-tool>
+            </div>
+          </template>
         </help-modal>
       </div>
     </div>
@@ -53,12 +60,30 @@
 <script>
 import NetworkStatus from '@/components/home/NetworkStatus.vue'
 import HelpModal from '@/components/help/HelpModal.vue'
+import CalendarTool from '@/components/visualise/tools/calendarTool'
 
 export default {
   name: 'vue-home',
   components: {
     NetworkStatus,
-    HelpModal
+    HelpModal,
+    CalendarTool
+  },
+  computed: {
+    helpState: function () {
+      return this.$store.state.helpModal
+    },
+    activeNetworkExperiment: function () {
+      if (Object.keys(this.$store.state.entityUUIDsummary).length > 0) {
+        if (this.$store.state.entityUUIDsummary.data[this.helpState.refcontract] !== undefined) {
+          return this.$store.state.entityUUIDsummary.data[this.helpState.refcontract]
+        } else {
+          return {}
+        }
+      } else {
+        return {}
+      }
+    }
   },
   data () {
     return {
@@ -76,12 +101,10 @@ export default {
     }
   },
   methods: {
-    showModal () {
-      this.isModalVisible = true
-      this.helpContext = this.$router.currentRoute.name
-    },
-    closeModal () {
-      this.isModalVisible = false
+    showHelpModal () {
+      // this.isModalVisible = true
+      // this.helpContext = this.$router.currentRoute.name
+      this.$store.dispatch('actionShowhelp')
     },
     changeLocale (locale) {
       this.$i18n.locale = locale

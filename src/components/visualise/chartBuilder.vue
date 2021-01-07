@@ -1,5 +1,5 @@
 <template>
-  <div id="k-toolkit">id---{{ mData }}
+  <div id="k-toolkit">
     <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>
     <div id="diy-tools" v-if="visToolbarStatusLive.active">
       <div id="chart-type">
@@ -75,9 +75,9 @@ export default {
       }
     },
     liveData: function () {
-      // console.log('chart builder')
-      // console.log(this.$store.state.NXPexperimentData[this.shellID])
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
+        return {}
+      } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData].data) {
         return {}
       } else {
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData].data

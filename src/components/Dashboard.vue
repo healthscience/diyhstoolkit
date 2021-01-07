@@ -136,7 +136,7 @@ export default {
 }
 
 /*.vue-resizable-handle {
-    z-index: 5000;
+    z-index: 5;
     position: absolute;
     width: 20px;
     height: 20px;

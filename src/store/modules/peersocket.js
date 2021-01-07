@@ -205,18 +205,6 @@ export default {
           let setToolbar = { text: 'show', active: false }
           Vue.set(this.state.toolbarStatus, mo.key, setToolbar)
         }
-        // display progress message while waiting data
-        // context.commit('setVisProgressStart', displayReady)
-        /* let setVisProg = {}
-        let moduleKeys = Object.keys(displayReady.grid)
-        for (let mod of moduleKeys) {
-          for (let dti of displayReady.grid[mod]) {
-            setVisProg[dti.i] = { text: 'Preparing visualisation', active: false }
-          }
-          Vue.set(this.state.visProgress, mod, setVisProg)
-          setVisProg = {}
-        } */
-        // context.commit('setVisToolbarState', displayReady)
         let setVistoolbar = {}
         let moduleKeys1 = Object.keys(displayReady.grid)
         for (let mod of moduleKeys1) {
@@ -237,14 +225,6 @@ export default {
           Vue.set(this.state.opendataTools, mod, setOpendata)
           setOpendata = {}
         }
-        // active display of progress message
-        // context.commit('setVisProgressComplete', displayReady)
-        /* let setProgress2 = {}
-        console.log('progress setting per chart')
-        console.log(displayReady.mData)
-        setProgress2[displayReady.mData] = { text: 'Preparing visualisation', active: false }
-        console.log(setProgress2)
-        Vue.set(this.state.visProgress, displayReady.moduleCNRL, setProgress2) */
         // context.commit('setProgressComplete', this.state.liveNXP)
         let setProgress3 = { text: 'Experiment in progress', active: false }
         Vue.set(this.state.nxpProgress, this.state.liveNXP, setProgress3)
@@ -342,7 +322,7 @@ export default {
         }
       } else if (backJSON.type === 'updateEntity') {
         console.log('update first')
-        console.log(backJSON)
+        // console.log(backJSON)
         // need to exactly update exp, module and grid ID of vis/chart data
         // prepare new data object
         let updateDisplay = ToolUtility.displaySpaceUpdate(this.state.NXPexperimentData[backJSON.context.cnrl], backJSON.data)
@@ -356,11 +336,11 @@ export default {
         Vue.set(this.state.NXPexperimentData[backJSON.context.cnrl][updateDisplay.module], 'data', updateDisplay.update)
       } else if (backJSON.type === 'updateEntityRange') {
         console.log('update entity range')
-        console.log(backJSON)
+        // console.log(backJSON)
         let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.cnrl, this.state.networkPeerExpModules)
         let matchModeType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
         let matchModeTypeCompute = ToolUtility.matchModuleType('compute', backJSON.context.modules)
-        if (this.state.visCount[matchModeType.key] !== 0 ) {
+        if (this.state.visCount[matchModeType.key] !== 0) {
           let currVisCount = this.state.visCount[matchModeType.key] - 1
           Vue.set(this.state.visCount, matchModeType.key, currVisCount)
           if (this.state.visCount[matchModeType.key] === 0) {
@@ -523,7 +503,7 @@ export default {
       Vue.set(this.state.visModuleHolder, 'compute', inVerified)
     },
     SET_NEWNXP_VISRESULTS (state, inVerified) {
-      Vue.set(this.state.visModuleHolder, 'visualise', inVerified)
+      Vue.set(this.state.visModuleHolder, 'results', inVerified)
     },
     SET_NEWNXP_VISXAXIS (state, inVerified) {
       Vue.set(this.state.visModuleHolder, 'xaxis', inVerified)

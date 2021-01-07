@@ -14,6 +14,13 @@ const store = new Vuex.Store({
   state: {
     authorised: false,
     connectStatus: false,
+    helpModal:
+    {
+      type: 'help',
+      active: false,
+      feedback: '',
+      refcontract: ''
+    },
     publickeys: [],
     warmNetwork: [],
     swarmStatus: false,
@@ -128,6 +135,18 @@ const store = new Vuex.Store({
     },
     SET_DATASOURCECOUNT: (state, inVerified) => {
       state.datasourceCount = inVerified
+    },
+    SET_FEEDBACK_MESSAGE: (state, inVerified) => {
+      Vue.set(state.helpModal, 'type', inVerified.type)
+      Vue.set(state.helpModal, 'active', inVerified.active)
+      Vue.set(state.helpModal, 'feedback', inVerified.feedback)
+      Vue.set(state.helpModal, 'refcontract', inVerified.refcontract)
+      Vue.set(state.helpModal, 'data', inVerified.data)
+    },
+    SET_HELP_STATUS: (state, inVerified) => {
+      let activeHelp = !state.helpModal.active
+      // Vue.set(state.helpModal, 'type', inVerified)
+      Vue.set(state.helpModal, 'active', activeHelp)
     },
     setOutflowWatch: (state, inVerified) => {
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
@@ -340,61 +359,11 @@ const store = new Vuex.Store({
       // context.commit('setNetworkExperimentList', nsNXPlive)
       // context.commit('setProgressStart', nsNXPlive)
     },
+    actionShowhelp (context, update) {
+      context.commit('SET_HELP_STATUS', update)
+    },
     singleDateUpdate (context, update) {
       context.commit('SET_LIVE_DATE', update)
-    },
-    async actionDashboardState (context, update) {
-      context.commit('setLiveNXP', update)
-      context.commit('setDashboardNXP', update)
-      context.commit('setProgressUpdate', update)
-      // context.commit('setUpdatesOUT', update)
-      // pass the safeFLOW-ECS input bundle
-      let matchExp = {}
-      for (let nxp of this.state.networkPeerExpModules) {
-        if (nxp.exp.key === update) {
-          matchExp = nxp
-        }
-      }
-      // prepare ECS inputs- lookup peer selected module options
-      let peerOptions = []
-      for (let pmod of matchExp.modules) {
-        // for each type of module look up ref contract
-        if (pmod.value.type === 'question') {
-          peerOptions.push(pmod)
-        } else if (pmod.value.type === 'data') {
-          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.data, this.state.liveRefContIndex.packaging)
-          pmod.value.info.data = peerDataRC
-          peerOptions.push(pmod)
-        } else if (pmod.value.type === 'compute') {
-          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, this.state.liveRefContIndex.compute)
-          pmod.value.info.compute = peerDataRC
-          let newestContract = ToolUtility.refcontractLookupCompute(pmod, this.state.livePeerRefContIndex.module)
-          peerOptions.push(newestContract)
-          // peerOptions.push(pmod)
-        } else if (pmod.value.type === 'visualise') {
-          pmod.value.info.settings.single = true
-          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.visualise, this.state.liveRefContIndex.visualise)
-          if (pmod.value.info.settings.yaxis.length > 1) {
-            pmod.value.info.settings.multidata = true
-          } else {
-            pmod.value.info.settings.multidata = false
-          }
-          pmod.value.info.visualise = peerDataRC
-          peerOptions.push(pmod)
-        }
-      }
-      let ECSbundle = {}
-      ECSbundle.exp = matchExp.exp
-      ECSbundle.modules = peerOptions
-      // send message to PeerLink for safeFLOW
-      let message = {}
-      message.type = 'safeflow'
-      message.reftype = 'ignore'
-      message.action = 'networkexperiment'
-      message.data = ECSbundle
-      console.log(message)
-      const safeFlowMessage = JSON.stringify(message)
-      Vue.prototype.$socket.send(safeFlowMessage)
     },
     actionJOINViewexperiment (context, update) {
       // reset state.visModuleHolder
@@ -457,21 +426,106 @@ const store = new Vuex.Store({
       const safeFlowMessage = JSON.stringify(message) */
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
+    async actionDashboardState (context, update) {
+      let futureTimeCheck = false
+      context.commit('setLiveNXP', update)
+      context.commit('setDashboardNXP', update)
+      context.commit('setProgressUpdate', update)
+      // pass the safeFLOW-ECS input bundle
+      let matchExp = {}
+      for (let nxp of this.state.networkPeerExpModules) {
+        if (nxp.exp.key === update) {
+          matchExp = nxp
+        }
+      }
+      // prepare ECS inputs- lookup peer selected module options
+      let peerOptions = []
+      for (let pmod of matchExp.modules) {
+        // for each type of module look up ref contract
+        if (pmod.value.type === 'question') {
+          peerOptions.push(pmod)
+        } else if (pmod.value.type === 'data') {
+          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.data, this.state.liveRefContIndex.packaging)
+          pmod.value.info.data = peerDataRC
+          peerOptions.push(pmod)
+        } else if (pmod.value.type === 'compute') {
+          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, this.state.liveRefContIndex.compute)
+          pmod.value.info.compute = peerDataRC
+          let newestContract = ToolUtility.refcontractLookupCompute(pmod, this.state.livePeerRefContIndex.module)
+          // check if data is not in the future
+          let timeModule = newestContract.value.info.controls.date
+          futureTimeCheck = ToolUtility.timeCheck(timeModule)
+          if (futureTimeCheck === true) {
+            // flag to peer to ask if they want future or if yes what data to use ie CALE/ other
+            let feedbackMessage = {}
+            feedbackMessage.type = 'future'
+            feedbackMessage.active = true
+            feedbackMessage.feedback = 'The time period is in the future. Need data picker or select CALE etc'
+            feedbackMessage.refcontract = update
+            feedbackMessage.data = moment.utc(timeModule).format('dddd, MMMM Do YYYY')
+            context.commit('SET_FEEDBACK_MESSAGE', feedbackMessage)
+          } else {
+            peerOptions.push(newestContract)
+          }
+        } else if (pmod.value.type === 'visualise') {
+          pmod.value.info.settings.single = true
+          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.visualise, this.state.liveRefContIndex.visualise)
+          if (pmod.value.info.settings.yaxis.length > 1) {
+            pmod.value.info.settings.multidata = true
+          } else {
+            pmod.value.info.settings.multidata = false
+          }
+          pmod.value.info.visualise = peerDataRC
+          peerOptions.push(pmod)
+        }
+      }
+      if (futureTimeCheck === false) {
+        let ECSbundle = {}
+        ECSbundle.exp = matchExp.exp
+        ECSbundle.modules = peerOptions
+        // send message to PeerLink for safeFLOW
+        let message = {}
+        message.type = 'safeflow'
+        message.reftype = 'ignore'
+        message.action = 'networkexperiment'
+        message.data = ECSbundle
+        const safeFlowMessage = JSON.stringify(message)
+        Vue.prototype.$socket.send(safeFlowMessage)
+      } else {
+      }
+    },
     async actionVisUpdate (context, update) {
       this.state.ecsMessageLive = ''
-      // display processing
-      // context.commit('setVisProgressUpdate', update)
+      let firstTimeCheck = false
       // entity container
       let entityUUID = this.state.entityUUIDReturn
       // prepare info. to update library ref contracts
       let updateContract = {}
       // the visulisation and compute module contract need updating
+      // is this a future time input?
+      if (update.mData === 'future') {
+        context.commit('SET_HELP_STATUS', update)
+        context.commit('setTimeAsk', update.startperiod)
+      }
       // is the context set from opendata tools or time nav tools?
       let contextState = 'timeupdate'
       if (update.opendata === 'updated') {
         contextState = 'toolbarupdate'
       }
-      let nxpModules = this.state.entityUUIDsummary.data[update.nxpCNRL].modules
+      // if no summary then first time use, extract modules from source
+      let nxpRefcontract = {}
+      let nxpModules = []
+      if (Object.keys(this.state.entityUUIDsummary).length === 0) {
+        firstTimeCheck = true
+        for (let nxp of this.state.networkPeerExpModules) {
+          if (nxp.exp.key === update.nxpCNRL) {
+            nxpRefcontract = nxp
+            nxpModules = nxp.modules
+          }
+        }
+      } else {
+        nxpModules = this.state.entityUUIDsummary.data[update.nxpCNRL].modules
+      }
       let updateModules = []
       let newStartTime = []
       for (let mmod of nxpModules) {
@@ -492,30 +546,53 @@ const store = new Vuex.Store({
           // both range and single set?
           let updateSettings = {}
           if (contextState === 'timeupdate') {
+            let futureTimeCheck = ToolUtility.timeCheck(newStartTime)
+            if (futureTimeCheck === true) {
+              context.commit('SET_HELP_STATUS', update)
+            }
             updateSettings = ContextOut.prepareSettingsVisTime(mmod, newStartTime, update, null)
           } else if (contextState === 'toolbarupdate') {
             updateSettings = ContextOut.prepareVisSettings(mmod, newStartTime, update, this.state.visModuleHolder)
           }
           updateModules.push(updateSettings)
+        } else if (mmod.value.type === 'data') {
+          if (firstTimeCheck === true) {
+            updateModules.push(mmod)
+          }
+        } else if (mmod.value.type === 'question') {
+          if (firstTimeCheck === true) {
+            updateModules.push(mmod)
+          }
         }
+      }
+      // is update or edit of first time?
+      if (firstTimeCheck === false) {
+        updateContract.input = 'refUpdate'
+      } else {
+        updateContract.input = ''
       }
       // keep state of live modules
       updateContract.cnrl = update.nxpCNRL
       updateContract.modules = updateModules
       updateContract.entityUUID = entityUUID
-      updateContract.modules = updateModules
-      updateContract.input = 'refUpdate'
       context.commit('setUpdatesOUT', updateContract)
       // update existing ecs bundle send to peerLink
       let ECSbundle = {}
-      ECSbundle.exp = update.nxpCNRL
-      ECSbundle.update = updateContract
       // send message to PeerLink for safeFLOW
       let message = {}
+      if (firstTimeCheck === false) {
+        message.action = 'updatenetworkexperiment'
+        ECSbundle.exp = update.nxpCNRL
+        ECSbundle.update = updateContract
+        message.data = ECSbundle
+      } else {
+        message.action = 'networkexperiment'
+        ECSbundle.exp = nxpRefcontract.exp
+        ECSbundle.modules = updateContract.modules
+        message.data = ECSbundle
+      }
       message.type = 'safeflow'
       message.reftype = 'ignore'
-      message.action = 'updatenetworkexperiment'
-      message.data = ECSbundle
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },

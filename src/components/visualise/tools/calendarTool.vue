@@ -195,6 +195,8 @@ export default {
     },
     setTimeData (seg) {
       // back and forward and time
+      console.log('seg')
+      console.log(seg)
       let contextK = {}
       contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL

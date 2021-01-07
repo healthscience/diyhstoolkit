@@ -4,7 +4,7 @@
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
-          {{ moduleContent.prime.text }}--aa-- {{ visPrepareStatus }}
+          {{ moduleContent.prime.text }}
           <progress-vismessage v-if="visPrepareStatus.active === true" :progressMessage="visPrepareStatus" ></progress-vismessage>
         </template>
         <template v-slot:body>

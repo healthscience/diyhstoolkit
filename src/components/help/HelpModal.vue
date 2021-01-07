@@ -24,6 +24,14 @@
           </slot>
         </header>
         <section
+          class="modal-feedback"
+          id="feedback-message"
+        >
+          <slot name="feedback">
+            No feedback.
+          </slot>
+        </section>
+        <section
           class="modal-body"
           id="modalDescription"
         >
@@ -82,6 +90,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 7;
   }
 
   .modal {
@@ -91,6 +100,8 @@ export default {
     display: flex;
     flex-direction: column;
     width: 80%;
+    position: absolute;
+    z-index: 7;
   }
 
   .modal-header,

@@ -11,6 +11,7 @@
 */
 const util = require('util')
 const events = require('events')
+const moment = require('moment')
 
 var ToolkitUtility = function () {
   events.EventEmitter.call(this)
@@ -232,6 +233,8 @@ ToolkitUtility.prototype.displayModules = function (modules, entityData) {
       // loop over data vis read
       mod.grid = []
       let makeGrid = []
+      // mock ids for no data but want to display toolbar
+      // let nodataID = 0
       // what to chart, device, datatypes, time  or what combinations?
       for (let dl of entityData.devices) {
         if (entityData.data.liveVislist[dl.device_mac]) {
@@ -243,6 +246,14 @@ ToolkitUtility.prototype.displayModules = function (modules, entityData) {
           }
         } else {
           console.log('no data for that device')
+          if (entityData.data.liveVislist[dl.device_mac]) {
+            /* for (let dr of entityData.data.liveVislist[dl.device_mac]) {
+              // need to add to grid for multi charts asked for
+              // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
+              let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
+              makeGrid.push(newGriditem)
+            } */
+          }
         }
         // gridPerModule = {}
         gridPerModule[mod.key] = makeGrid
@@ -371,21 +382,20 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
   let dataKeys = Object.keys(entityData.visualData)
   for (let dd of devicesList) {
     for (let dk of dataKeys) {
-      if (entityData.visualData[dk].context.device === dd) {
-        deviceMatch[dk] = entityData.visualData[dk]
-        // keyMatch
-      } else {
-        console.log('no device match')
-      }
-      /* for () {
-        if (entityData.visualData[dk].context.time === dd) {
-          timeMatch[dk] =
+      if (Object.keys(entityData.visualData[dk]).length !== 0) {
+        if (entityData.visualData[dk].context.device === dd) {
+          deviceMatch[dk] = entityData.visualData[dk]
+          // keyMatch
         } else {
-
+          console.log('no device match')
         }
-      } */
+      }
     }
-    dataMerged[dd] = this.mergeDataSets(deviceMatch, updateComputeContract)
+    if (Object.keys(deviceMatch).length !== 0) {
+      dataMerged[dd] = this.mergeDataSets(deviceMatch, updateComputeContract)
+    } else {
+      dataMerged[dd] = []
+    }
     deviceMatch = {}
   }
   // now build data structure for display
@@ -412,6 +422,23 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
   updateVisData.vistoolbar = setVistoolbar
   updateVisData.opendata = setOpendata
   return updateVisData
+}
+
+/**
+*
+* @method refcontractLookupCompute
+*
+*/
+ToolkitUtility.prototype.timeCheck = function (moduleDate) {
+  let future = false
+  if (moduleDate.isArray === true) {
+    moduleDate = moduleDate[0]
+  }
+  if (moduleDate > moment().valueOf()) {
+    future = true
+  } else {
+  }
+  return future
 }
 
 /**
