@@ -16,7 +16,7 @@
   },
   "main": "background.js",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bs58": "^4.0.1",
     "cale-ai": "^0.0.4",
     "chart.js": "^2.9.3",
