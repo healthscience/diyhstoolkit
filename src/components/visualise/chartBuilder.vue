@@ -1,7 +1,7 @@
 <template>
   <div id="k-toolkit">
-    <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>
-    <div id="diy-tools" v-if="visToolbarStatusLive.active">
+    <!-- <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button> -->
+    <div id="diy-tools"> <!-- v-if="visToolbarStatusLive"> -->
       <div id="chart-type">
         <ul>
           <li>
@@ -20,29 +20,29 @@
             <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
           </li>
           <li>
-            <a href="#" id="opendata" @click.prevent="openData()">{{ openDataLive.text }}</a>
+            <!-- <a href="#" id="opendata" @click.prevent="openData()">{{ openDataLive.text }}</a> -->
           </li>
         </ul>
       </div>
-      <div v-if="openDataLive.active === true" id="open-knowledge">
+      <!-- <div v-if="openDataLive.active === true" id="open-knowledge">
         <opendata-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></opendata-tool>
-      </div>
+      </div> -->
     </div>
-    <hsvisual :datacollection="liveData.chartPackage" :options="liveData.chartOptions" ></hsvisual>
+    <hsvisual v-if="liveData.data" :datacollection="liveData.data.chartPackage" :options="liveData.data.chartOptions" ></hsvisual>
   </div>
 </template>
 
 <script>
 import CalendarTool from '@/components/visualise/tools/calendarTool'
-import OpendataTool from '@/components/visualise/tools/knowledgeLive'
+// import OpendataTool from '@/components/visualise/tools/knowledgeLive'
 import hsvisual from '@/components/visualise/hsvisual'
 
 export default {
   name: 'module-chartbuilder',
   components: {
     hsvisual,
-    CalendarTool,
-    OpendataTool
+    CalendarTool
+    // OpendataTool
   },
   created () {
   },
@@ -56,10 +56,6 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      // console.log('visToolbarstatuslive')
-      // console.log(this.$store.state.toolbarVisStatus)
-      // console.log(this.moduleCNRL)
-      // console.log(this.mData)
       let objectKeys = Object.keys(this.$store.state.toolbarVisStatus)
       if (objectKeys.length === 0) {
         return 'notset'
@@ -77,10 +73,10 @@ export default {
     liveData: function () {
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
         return {}
-      } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData].data) {
+      } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]) {
         return {}
       } else {
-        return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData].data
+        return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
       }
     }
   },
@@ -115,8 +111,6 @@ export default {
 <style>
 #k-toolkit {
   border: 0px solid red;
-  height: 100%;
-  overflow: visible;
 }
 
 ul {

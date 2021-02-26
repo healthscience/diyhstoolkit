@@ -96,7 +96,7 @@ export default {
   border: 1px solid grey;
 }
 
-#compute-nxp header{
+#compute-nxp header {
   font-weight: bold;
 }
 

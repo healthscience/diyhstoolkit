@@ -274,7 +274,7 @@ const store = new Vuex.Store({
         Vue.set(state.opendataTools, inVerified.module, setToolbar)
       }
     },
-    setProgressUpdate: (state, inVerified) => {
+    setNXPprogressUpdate: (state, inVerified) => {
       let setProgress = { text: 'Experiment in progress', active: true }
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
@@ -427,10 +427,12 @@ const store = new Vuex.Store({
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionDashboardState (context, update) {
+      // console.log('set DASH FRIST')
+      // console.log(update)
       let futureTimeCheck = false
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
-      context.commit('setProgressUpdate', update)
+      context.commit('setNXPprogressUpdate', update)
       // pass the safeFLOW-ECS input bundle
       let matchExp = {}
       for (let nxp of this.state.networkPeerExpModules) {
@@ -449,6 +451,7 @@ const store = new Vuex.Store({
           pmod.value.info.data = peerDataRC
           peerOptions.push(pmod)
         } else if (pmod.value.type === 'compute') {
+          // get the latest refcontract all automatic as first time setup of entity
           let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, this.state.liveRefContIndex.compute)
           pmod.value.info.compute = peerDataRC
           let newestContract = ToolUtility.refcontractLookupCompute(pmod, this.state.livePeerRefContIndex.module)
@@ -489,6 +492,7 @@ const store = new Vuex.Store({
         message.reftype = 'ignore'
         message.action = 'networkexperiment'
         message.data = ECSbundle
+        console.log(message)
         const safeFlowMessage = JSON.stringify(message)
         Vue.prototype.$socket.send(safeFlowMessage)
       } else {
@@ -530,6 +534,7 @@ const store = new Vuex.Store({
       let newStartTime = []
       for (let mmod of nxpModules) {
         if (mmod.value.type === 'compute') {
+          // get the latest refcontract and update per Peer select ie. time, change of compute contract???
           // update the Compute RefContract
           mmod.value.automation = false
           newStartTime = ToolUtility.prepareTime(this.state.timeStartperiod, update)

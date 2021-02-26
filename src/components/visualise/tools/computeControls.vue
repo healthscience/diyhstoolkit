@@ -3,7 +3,7 @@
     <div id="compute-controls-setup">
       <header>Control panel</header>
     </div>
-    <div id="controls">
+    <div id="controls-holder">
       <header>controls</header>
       <div class="compute-control-item">
         <header>Status:</header>
@@ -49,10 +49,12 @@ export default {
 </script>
 
 <style>
-#compute-controlpanel{
+#compute-controlpanel {
+
+}
+
+#controls-holder {
   height: 100%;
-  overflow: auto;
-  background-color: #eae6ed;
 }
 
 #compute-control-panel {

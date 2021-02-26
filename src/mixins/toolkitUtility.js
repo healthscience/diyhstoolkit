@@ -181,7 +181,7 @@ ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContra
 
 /**
 * orderNewestContract
-* @method displayModules
+* @method orderNewestContract
 *
 */
 ToolkitUtility.prototype.orderNewestContract = function (contractList) {
@@ -196,6 +196,9 @@ ToolkitUtility.prototype.orderNewestContract = function (contractList) {
 *
 */
 ToolkitUtility.prototype.displayModules = function (modules, entityData) {
+  console.log('display modulesSTART')
+  console.log(modules)
+  console.log(entityData)
   let testDataBundle = {}
   let gridPerModule = {}
   let moduleObject = {}
@@ -233,32 +236,11 @@ ToolkitUtility.prototype.displayModules = function (modules, entityData) {
       // loop over data vis read
       mod.grid = []
       let makeGrid = []
-      // mock ids for no data but want to display toolbar
-      // let nodataID = 0
-      // what to chart, device, datatypes, time  or what combinations?
-      for (let dl of entityData.devices) {
-        if (entityData.data.liveVislist[dl.device_mac]) {
-          for (let dr of entityData.data.liveVislist[dl.device_mac]) {
-            // need to add to grid for multi charts asked for
-            // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
-            let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
-            makeGrid.push(newGriditem)
-          }
-        } else {
-          console.log('no data for that device')
-          if (entityData.data.liveVislist[dl.device_mac]) {
-            /* for (let dr of entityData.data.liveVislist[dl.device_mac]) {
-              // need to add to grid for multi charts asked for
-              // structre for new grid item  { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'cnrl-8856388711', static: false }
-              let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
-              makeGrid.push(newGriditem)
-            } */
-          }
-        }
-        // gridPerModule = {}
-        gridPerModule[mod.key] = makeGrid
-        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': entityData.data.visualData }
-      }
+      let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': entityData.dataPrint.hash, static: false }
+      makeGrid.push(newGriditem)
+      // gridPerModule = {}
+      gridPerModule[mod.key] = makeGrid
+      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': entityData.data }
     }
   }
   let displayData = {}
@@ -300,23 +282,17 @@ ToolkitUtility.prototype.matchModuleType = function (mType, modules) {
 
 /**
 * prepare multi datasets one chart
-* @method displayUpdateSingle
+* @method displayUpdateSpaceSingle
 *
 */
-ToolkitUtility.prototype.displayUpdateSpaceSingle = function (liveData, entityData) {
+ToolkitUtility.prototype.displayUpdateSpaceSingle = function (entityData, liveData) {
+  console.log('single space prepare STAERT')
+  console.log(entityData)
+  console.log(liveData)
   let singleBundle = {}
-  let moduleKeys = Object.keys(liveData)
-  // loop over the modules in the NXP and match to compute and update data
-  for (let mod of moduleKeys) {
-    if (liveData[mod].prime.text === 'Visualise') {
-      // single chart per device by now if two or more Datatypes merge
-      let dataMerge = {}
-      dataMerge.data = this.mergeDataSets(entityData.visualData, false)
-      singleBundle.update = dataMerge
-      singleBundle.module = mod
-      singleBundle.identifier = Object.keys(liveData[mod].data)
-    }
-  }
+  singleBundle.update = 1
+  singleBundle.module = 1 // mod
+  singleBundle.identifier = 1
   return singleBundle
 }
 
@@ -364,6 +340,10 @@ ToolkitUtility.prototype.displaySpaceUpdate = function (liveData, entityData) {
 *
 */
 ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData, matchModeType, updateComputeContract) {
+  console.log(liveData)
+  console.log(entityData)
+  console.log(matchModeType)
+  console.log(updateComputeContract)
   // setup return vis Object
   let moduleKeys = Object.keys(liveData)
   let updateVisData = {}
@@ -426,7 +406,7 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
 
 /**
 *
-* @method refcontractLookupCompute
+* @method timeCheck
 *
 */
 ToolkitUtility.prototype.timeCheck = function (moduleDate) {
@@ -457,6 +437,8 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData, computeModule) {
   let dataX = []
   let count = 0
   for (let dui of listDataLength) {
+    console.log('count data lopppppppppppppppp')
+    console.log(dui)
     if (count === 0) {
       chartOptions = liveData[dui].data.chartOptions
       dataY.push(liveData[dui].data.chartPackage.datasets[0])
@@ -558,6 +540,7 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData, computeModule) {
 *
 */
 ToolkitUtility.prototype.timestampMatcher = function (dataPairs) {
+  console.log(dataPairs)
   let updateDatasets = []
   let matchList = []
   let count = 0

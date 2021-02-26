@@ -1,27 +1,28 @@
 <template>
-  <div id="dashboard-holder" v-if="moduleContent.prime.active === true">
+  <div id="dashboard-holder" v-if="moduleContent"> mc --
     <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
-          {{ moduleContent.prime.text }}
-          <progress-vismessage v-if="visPrepareStatus.active === true" :progressMessage="visPrepareStatus" ></progress-vismessage>
+          mm --
+          <!-- <progress-vismessage v-if="nxpPrepareStatus" :progressMessage="nxpPrepareStatus" ></progress-vismessage> -->
+          {{ moduleContent.prime }}
         </template>
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
           <div id="module-toolbar">
             <header>Toolbar--
-              <button type="button" class="btn" @click="toolbarUpdate">{{ toolbarStatusLive.text }}</button>
+              <!-- <button type="button" class="btn" @click="toolbarUpdate">{{ toolbarStatusLive.text }}</button> -->
             </header>
             <!-- <button @click='decreaseWidth'>Decrease Width</button>
-            <button @click='increaseWidth'>Increase Width</button> -->
-            <div id="layouttools" v-if="toolbarStatusLive.active">
+            <button @click='increaseWidth'>Increase Width</button> v-if="toolbarStatusLive.active" -->
+            <div id="layouttools" >
               <button @click='addItem'>Add an item</button>
               <input type='checkbox' v-model='draggable'/> Draggable
               <input type='checkbox' v-model='resizable'/> Resizable
             </div>
             <br/>
-            <div class="grid-section">
+            <div class="grid-section" v-if="localGrid.length > 0">
               <grid-layout v-if="localGrid"
                            :layout='localGrid'
                            :col-num='12'
@@ -38,8 +39,7 @@
                            :w='item.w'
                            :h='item.h'
                            :i='item.i'
-                        >
-                    <!-- <span class='text'>box{{itemTitle(item)}}</span> -->
+                        >item -- {{ item.i }}
                     <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
                 </grid-item>
               </grid-layout>
@@ -62,11 +62,9 @@ import nxpDapp from '@/components/visualise/nxpDapp.vue'
 import nxpPlain from '@/components/visualise/plainBoard.vue'
 import nxpCompute from '@/components/visualise/nxpCompute.vue'
 import nxpVisualise from '@/components/visualise/nxpVisualise.vue'
-// import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
-import ProgressVismessage from '@/components/visualise/tools/inProgress.vue'
+// import ProgressVismessage from '@/components/visualise/tools/inProgress.vue'
 // import learnReport from '@/components/reports/LearnReport'
 // import learnAction from '@/components/reports/LearnAction'
-// const moment = require('moment')
 
 export default {
   name: 'visual-dashview',
@@ -74,8 +72,7 @@ export default {
     // learnReport,
     // learnAction
     ModuleBoard,
-    ProgressVismessage,
-    // ProgressMessage,
+    // ProgressVismessage,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
     nxpDevice,
@@ -91,28 +88,22 @@ export default {
     moduleCNRL: String
   },
   computed: {
-    dashState: function () {
-      let dashStateNXP = this.$store.state.experimentStatus
-      return dashStateNXP[this.expCNRL]
-    },
     toolbarStatusLive: function () {
-      return this.$store.state.toolbarStatus[this.moduleCNRL]
-    },
-    visPrepareStatus: function () {
-      // let visProgressState = {}
-      // visProgressState = { text: 'Preparing visualisation', active: false }
-      /* if (this.$store.state.visProgress[this.moduleCNRL][this.mData] !== undefined) {
-        visProgressState = this.$store.state.visProgress[this.moduleCNRL][this.mData]
+      if (!this.$store.state.toolbarStatus) {
+        return { active: false, text: '' }
       } else {
-        visProgressState = { text: 'Preparing visualisation', active: false }
-      } */
-      // return visProgressState
-      return this.$store.state.visProgress[this.moduleCNRL]
+        return this.$store.state.toolbarStatus[this.moduleCNRL]
+      }
+    },
+    nxpPrepareStatus: function () {
+      if (!this.$store.state.nxpProgress) {
+        return { active: false, text: '' }
+      } else {
+        return this.$store.state.nxpProgress[this.moduleCNRL]
+      }
     },
     moduleContent: function () {
-      // console.log('module content data')
-      // console.log(this.expCNRL)
-      // console.log(this.moduleCNRL)
+      // console.log('module content')
       // console.log(this.$store.state.NXPexperimentData[this.expCNRL])
       let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
       if (contentModule === undefined) {
@@ -200,10 +191,11 @@ export default {
 #dashboard-holder {
   border: 0px solid red;
 }
-#dashboard-view {
-  border: 1px solid white;
-  margin: 2em;
-  width: 98%;
+
+#dash-modules {
+  border: 5px solid grey;
+  margin: 1em;
+  list-style: none;
 }
 
 header {
@@ -211,24 +203,14 @@ header {
   font-weight: bold;
 }
 
-.summary-item {
-  display: inline-block;
-  margin-left: 20px;
-  font-weight: bold;
-  font-size: 1.4em;
-}
-
-#progess {
-  margin-left: 2em;
-}
-
 .grid-section {
-  border: 0px solid orange;
+  border: 1px solid orange;
+  height: inherit;
 }
 
 .vue-grid-layout {
-    border: 0px solid black;
-    background: #eee;
+    border: 0px solid red;
+    height: inherit;
 }
 
 .columns {
@@ -255,7 +237,7 @@ header {
 
 .vue-grid-item:not(.vue-grid-placeholder) {
     background: #ccc;
-    border: 0px solid red;
+    border: 4px solid blue;
 }
 
 .vue-grid-item.resizing {
@@ -280,8 +262,7 @@ header {
 }
 
 .vue-grid-item .no-drag {
-    height: 100%;
-    width: 100%;
+
 }
 
 .vue-grid-item .minMax {
@@ -305,11 +286,5 @@ header {
     background-origin: content-box;
     box-sizing: border-box;
     cursor: pointer;
-}
-
-#dash-modules ul {
-  border: 1px solid grey;
-  margin: 1em;
-  list-style: none;
 }
 </style>

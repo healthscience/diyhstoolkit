@@ -1,9 +1,8 @@
 <template>
-  <div id="compute-nxp">
-    <header>compute pppp</header>
-    <div id="diy-tools" v-if="toolbarStatusLive.active">
-      <compute-controls>cc</compute-controls>
-    </div>
+  <div id="compute-nxp-vis">
+    <header>Compute</header>
+    <!-- v-if="toolbarStatusLive.active"> -->
+    <compute-controls></compute-controls>
   </div>
 </template>
 
@@ -25,7 +24,13 @@ export default {
       return this.$store.state.toolbarStatus[this.moduleCNRL]
     },
     liveData: function () {
-      return this.$store.state.NXPexperimentData[this.shellID].modules[this.moduleCNRL]
+      if (!this.$store.state.NXPexperimentData[this.shellID]) {
+        return {}
+      } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data) {
+        return {}
+      } else {
+        return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data
+      }
     }
   },
   data: () => ({
@@ -42,9 +47,8 @@ export default {
 </script>
 
 <style>
-#compute-nxp {
+#compute-nxp-vis {
+  display: block;
   height: 100%;
-  overflow: auto;
-  border: 3px solid blue;
 }
 </style>

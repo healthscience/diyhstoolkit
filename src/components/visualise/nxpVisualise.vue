@@ -1,14 +1,14 @@
 <template>
   <div id="visualise-nxp">
     <div id="prime-visualise">
-      <progress-vismessage v-if="visPrepareStatus.active === true" :progressMessage="visPrepareStatus" ></progress-vismessage>
+      <!-- <progress-vismessage v-if="visPrepareStatus.active === true" :progressMessage="visPrepareStatus" ></progress-vismessage> -->
       <component v-bind:is="moduleVisType" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></component>
     </div>
   </div>
 </template>
 
 <script>
-import ProgressVismessage from '@/components/visualise/tools/inProgress.vue'
+// import ProgressVismessage from '@/components/visualise/tools/inProgress.vue'
 import chartBuilder from '@/components/visualise/chartBuilder'
 // import tableBuild from '@/components/visualise/table/tableBuilder'
 // import simulationView from '@/components/visualise/simulation/simulation-life'
@@ -16,7 +16,7 @@ import chartBuilder from '@/components/visualise/chartBuilder'
 export default {
   name: 'nxp-question',
   components: {
-    ProgressVismessage,
+    // ProgressVismessage,
     chartBuilder
     // tableBuild,
     // simulationView
@@ -133,9 +133,7 @@ export default {
 
 <style>
 #visualise-nxp {
-  border: 2px solid blue;
-  height: 100%;
-  overflow: auto;
+  border: 0px solid blue;
 }
 
 #visualise-nxp header{
@@ -143,11 +141,5 @@ export default {
 }
 
 #prime-visualise {
-  height: 100%;
-  overflow: hidden;
-}
-
-.visualisation-type {
-  display: inline-block;
 }
 </style>

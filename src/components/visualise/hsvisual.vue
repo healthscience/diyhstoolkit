@@ -46,7 +46,5 @@ export default {
 <style>
 #visual-view {
   border: 0px solid green;
-  height: 100%;
-  overflow: hidden;
 }
 </style>

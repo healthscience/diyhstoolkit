@@ -1,6 +1,6 @@
 <template>
-  <div id="plain-nxp">PainBoard
-    {{ liveData[1].content }}
+  <div id="plain-nxp">
+    <b> Question: {{ liveData[1].content }} </b>
   </div>
 </template>
 
@@ -16,7 +16,13 @@ export default {
   },
   computed: {
     liveData: function () {
-      return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data
+      if (!this.$store.state.NXPexperimentData[this.shellID]) {
+        return {}
+      } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data) {
+        return {}
+      } else {
+        return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data
+      }
     }
   },
   data: () => ({

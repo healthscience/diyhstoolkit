@@ -30,13 +30,14 @@
       <div id="dashboard-placeholder">
         <ul class="clear" v-for="dashi of dashLive" :key="dashi.id">
           <li class="dashboard-place">
-            <header>Dashboard</header>ee {{ ecsMessage }}
+            <header>Dashboard</header>feedback: {{ ecsMessage }}
             <div v-if="ecsMessage" id="ecs-message">
               {{ ecsMessage }}
             </div>
             <!-- view the dashboard per network experiment -->
+            pp {{ NXPprogress }}
             <div id="module-list" v-if="NXPstatusData[shellContract]">
-              <progress-message v-if="NXPprogress" :progressMessage="NXPprogress"></progress-message>
+              <progress-message :progressMessage="NXPprogress"></progress-message>
               <div id="module-ready" v-if="NXPstatusData[shellContract].modules">
                 <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
                   <dash-board v-if="isModalDashboardVisible === true" :expCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>
@@ -107,7 +108,7 @@
 
 <script>
 import DashBoard from '@/components/experiments/edashBoard.vue'
-import ProgressMessage from '@/components/visualise/tools/inProgress.vue'
+import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
 import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
 import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
 import ChartBuilder from '@/components/visualise/chartBuilder'

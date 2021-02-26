@@ -47,7 +47,7 @@ contextUtility.prototype.prepareSettings = function (module, time, update, toolb
 
 /**
 * update setting out
-* @method prepareSettings
+* @method prepareSettingsTime
 *
 */
 contextUtility.prototype.prepareSettingsTime = function (module, time, update, toolbar) {

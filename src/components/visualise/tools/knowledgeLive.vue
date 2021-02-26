@@ -135,6 +135,8 @@
 </template>
 
 <script>
+import hashObject from 'object-hash'
+
 export default {
   name: 'knowledge-live',
   components: {
@@ -291,9 +293,11 @@ export default {
             let buildDTR = {}
             buildDTR.column = scomp.value.computational.name + updateRDTS.column
             let sourceComputeDT = {}
-            sourceComputeDT.source = scomp.key
-            sourceComputeDT.compute = updateRDTS.refcontract
-            buildDTR.refcontract = sourceComputeDT // scomp.key + '-' + updateRDTS.refcontract
+            sourceComputeDT.computedt = scomp.key
+            sourceComputeDT.computerefcontract = updateRDTS.refcontract
+            // make hash of combined
+            let combineDThash = hashObject(sourceComputeDT)
+            buildDTR.refcontract = combineDThash // scomp.key + '-' + updateRDTS.refcontract
             this.datatypeResults.push(buildDTR)
           }
         }
