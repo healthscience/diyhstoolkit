@@ -205,7 +205,7 @@ export default {
           for (let dev of deviceList) {
             console.log('device update data dspay')
             console.log(dev)
-            if (dev === '6202722') {
+            if (dev === '6202722' || dev === 'DA:51:39:7B:C1:87') {
               Vue.set(this.state.moduleGrid, displayDataUpdate.module, displayDataUpdate.update.grid)
               Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data[dev], 'data', displayDataUpdate.update.data[dev].data)
             }
