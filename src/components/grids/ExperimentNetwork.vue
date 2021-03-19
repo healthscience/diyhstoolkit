@@ -224,9 +224,9 @@ export default {
       },
       type: 'chart.js',
       shellID: null,
-      moduleCNRL: 'cnrl-001234543458',
+      moduleCNRL: 'start-1122335588',
       moduleType: 'vis',
-      mData: '98889',
+      mData: '1122335588',
       visualRefCont: ''
     }
   },
@@ -237,8 +237,8 @@ export default {
     },
     refContractLookup () {
       // create new temp shellID
-      this.shellID = '1234567'
-      this.mData = '98889'
+      this.shellID = '7654321'
+      this.mData = '8855332211'
     },
     actionExperiment (expCNRL, NXPcontract) {
       this.shellContract = expCNRL

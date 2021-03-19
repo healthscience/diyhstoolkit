@@ -1,6 +1,6 @@
 <template>
-  <div id="k-toolkit">
-    <!-- <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button> -->
+  <div id="k-toolkit"> toobar vis == {{ visToolbarStatusLive }}
+    <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>
     <div id="diy-tools"> <!-- v-if="visToolbarStatusLive"> -->
       <div id="chart-type">
         <ul>
@@ -19,30 +19,30 @@
           <li>
             <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
           </li>
-          <li>
-            <!-- <a href="#" id="opendata" @click.prevent="openData()">{{ openDataLive.text }}</a> -->
+          <li> opendata == {{ openDataLive }}
+            <a href="#" id="opendata" @click.prevent="openData()">{{ openDataLive.text }}</a>
           </li>
         </ul>
       </div>
-      <!-- <div v-if="openDataLive.active === true" id="open-knowledge">
-        <opendata-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></opendata-tool>
-      </div> -->
-    </div>
-    <hsvisual v-if="liveData.data" :datacollection="liveData.data.chartPackage" :options="liveData.data.chartOptions" ></hsvisual>
+      <div v-if="openDataLive" id="open-knowledge">
+        <opendata-tool v-if="openDataLive.active === true" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" :toolInfo="visToolbarStatusLive"></opendata-tool>
+      </div>
+    </div> <!-- live data -- {{ liveData }} -->
+    <hsvisual v-if="liveData.data" :datacollection="liveData.data.chartPackage" :options="liveData.data.chartOptions"></hsvisual>
   </div>
 </template>
 
 <script>
 import CalendarTool from '@/components/visualise/tools/calendarTool'
-// import OpendataTool from '@/components/visualise/tools/knowledgeLive'
+import OpendataTool from '@/components/visualise/tools/knowledgeLive'
 import hsvisual from '@/components/visualise/hsvisual'
 
 export default {
   name: 'module-chartbuilder',
   components: {
     hsvisual,
-    CalendarTool
-    // OpendataTool
+    CalendarTool,
+    OpendataTool
   },
   created () {
   },
@@ -56,26 +56,61 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
+      console.log('vis toolbar status chart builder')
+      console.log(this.$store.state.toolbarVisStatus)
       let objectKeys = Object.keys(this.$store.state.toolbarVisStatus)
-      if (objectKeys.length === 0) {
-        return 'notset'
+      if (objectKeys.length > 0) {
+        console.log('yes toolbar set')
+        if (this.$store.state.toolbarVisStatus['cnrl-001234543458'][1].active === true) {
+          console.log('temp toolbar')
+          return { text: 'open tools', active: true, learn: true }
+        } else if (this.$store.state.toolbarVisStatus['temp-001234543458'][98889].active === true) {
+          console.log('temp preview')
+          return { text: 'open tools', active: true, learn: true }
+        } else {
+          console.log('nomraml view')
+          return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
+        }
       } else {
-        return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
+        console.log('no vis toolbar to display')
+        return {}
       }
     },
     openDataLive: function () {
-      if (this.$store.state.opendataTools === undefined) {
-        return {}
+      console.log('open data')
+      console.log(this.$store.state.opendataTools)
+      console.log(this.moduleCNRL)
+      console.log(this.mData)
+      // default settings?
+      let defaultCheck = Object.keys(this.$store.state.opendataTools)
+      if (!this.$store.state.opendataTools[this.moduleCNRL]) {
+        console.log('mod not set')
+        if (defaultCheck[0] === 'default') {
+          return this.$store.state.opendataTools.default
+        } else {
+          return false
+        }
       } else {
+        console.log('modules data set toobar')
+        console.log(this.$store.state.opendataTools[this.moduleCNRL])
         return this.$store.state.opendataTools[this.moduleCNRL][this.mData]
       }
     },
     liveData: function () {
+      console.log('live data for chart')
+      console.log(this.shellID)
+      console.log(this.moduleCNRL)
+      console.log(this.mData)
+      console.log(this.$store.state.NXPexperimentData[this.shellID])
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
+        console.log('no live data for this experiment')
         return {}
       } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]) {
+        console.log('no live data for this device placer')
         return {}
       } else {
+        console.log('chart vue')
+        console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData])
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
       }
     }

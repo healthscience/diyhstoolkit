@@ -72,7 +72,8 @@ const store = new Vuex.Store({
     {
       'default': {
         text: 'show',
-        active: false
+        active: false,
+        learn: false
       }
     },
     toolbarVisStatus: {},
@@ -80,7 +81,8 @@ const store = new Vuex.Store({
     {
       'default': {
         text: 'show',
-        active: false
+        active: false,
+        learn: false
       }
     },
     ecsMessageLive: '',
@@ -181,11 +183,6 @@ const store = new Vuex.Store({
       for (let uit of inVerified.changes.label) {
         dataItem.labels.push(uit)
       }
-      // update data i.e. y axis
-      /* for (let dit of inVerified.changes.data) {
-        dit = null
-        dataItem.datasets[0].data.push(dit)
-      } */
       let preparFuturedata = []
       // future
       for (let fit of dataItem.datasets[0].data) {
@@ -237,7 +234,7 @@ const store = new Vuex.Store({
       let moduleKeys = Object.keys(inVerified.grid)
       for (let mod of moduleKeys) {
         for (let dti of inVerified.grid[mod]) {
-          setVistoolbar[dti.i] = { text: 'open tools', active: false }
+          setVistoolbar[dti.i] = { text: 'open tools', active: false, learn: true }
         }
         Vue.set(state.toolbarVisStatus, mod, setVistoolbar)
         setVistoolbar = {}
@@ -246,10 +243,10 @@ const store = new Vuex.Store({
     setVistoolsUpdate: (state, inVerified) => {
       let setVisTools = state.toolbarVisStatus[inVerified.module]
       if (inVerified.state === false) {
-        setVisTools[inVerified.dtid] = { text: 'hide tools', active: true }
+        setVisTools[inVerified.dtid] = { text: 'hide tools', active: true, learn: true }
         Vue.set(state.toolbarVisStatus, inVerified.module, setVisTools)
       } else {
-        setVisTools[inVerified.dtid] = { text: 'open tools', active: false }
+        setVisTools[inVerified.dtid] = { text: 'open tools', active: false, learn: true }
         Vue.set(state.toolbarVisStatus, inVerified.module, setVisTools)
       }
     },
@@ -275,6 +272,8 @@ const store = new Vuex.Store({
       }
     },
     setNXPprogressUpdate: (state, inVerified) => {
+      console.log('set progress message')
+      console.log(inVerified)
       let setProgress = { text: 'Experiment in progress', active: true }
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
@@ -374,8 +373,13 @@ const store = new Vuex.Store({
           joinNXP = ep
         }
       }
+      // need to check date is set and other settings
+      // if time not set set prompt peer to select or deafult today date TODO
       // set preview experiment live
       Vue.set(this.state.joinNXPlive, 'experiment', joinNXP)
+      // set the chart open data as true
+      let openDatatoolbar = { text: 'open data', active: true, learn: false }
+      Vue.set(this.state.opendataTools, 'default', openDatatoolbar)
       // break out the module via sending message to network library utility
       let displayLibUtil = {}
       displayLibUtil.type = 'library'
@@ -427,8 +431,8 @@ const store = new Vuex.Store({
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionDashboardState (context, update) {
-      // console.log('set DASH FRIST')
-      // console.log(update)
+      console.log('clicked VIEW NXP------------')
+      console.log(update)
       let futureTimeCheck = false
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
@@ -455,6 +459,8 @@ const store = new Vuex.Store({
           let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, this.state.liveRefContIndex.compute)
           pmod.value.info.compute = peerDataRC
           let newestContract = ToolUtility.refcontractLookupCompute(pmod, this.state.livePeerRefContIndex.module)
+          console.log('newest contract')
+          console.log(newestContract)
           // check if data is not in the future
           let timeModule = newestContract.value.info.controls.date
           futureTimeCheck = ToolUtility.timeCheck(timeModule)

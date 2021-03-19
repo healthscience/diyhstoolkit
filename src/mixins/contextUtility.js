@@ -46,6 +46,18 @@ contextUtility.prototype.prepareSettings = function (module, time, update, toolb
 }
 
 /**
+* check compute settings join
+* @method validateComputeSettings
+*
+*/
+contextUtility.prototype.validateComputeSettings = function (peerChoices) {
+  // compute controls
+  console.log('valiadate compute options')
+  console.log(peerChoices)
+  return true
+}
+
+/**
 * update setting out
 * @method prepareSettingsTime
 *
@@ -75,6 +87,17 @@ contextUtility.prototype.prepareVisSettings = function (module, time, update, to
   module.value.info.settings.xaxis = toolbar.xaxis
   module.value.info.settings.yaxis = toolbar.yaxis
   return module
+}
+
+/**
+* check vis join settings
+* @method validateVisSettings
+*
+*/
+contextUtility.prototype.validateVisSettings = function (peerChoices) {
+  console.log('valiate vis sttings')
+  console.log(peerChoices)
+  return true
 }
 
 /**

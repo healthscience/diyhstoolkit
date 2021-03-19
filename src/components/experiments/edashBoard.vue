@@ -1,12 +1,12 @@
 <template>
-  <div id="dashboard-holder" v-if="moduleContent"> mc --
+  <div id="dashboard-holder" v-if="moduleContent"> mc -- {{ moduleContent.prime }}
     <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
           mm --
           <!-- <progress-vismessage v-if="nxpPrepareStatus" :progressMessage="nxpPrepareStatus" ></progress-vismessage> -->
-          {{ moduleContent.prime }}
+          {{ moduleContent.prime.text }}
         </template>
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
@@ -103,12 +103,19 @@ export default {
       }
     },
     moduleContent: function () {
-      // console.log('module content')
-      // console.log(this.$store.state.NXPexperimentData[this.expCNRL])
+      console.log('module content')
+      console.log(this.expCNRL)
+      console.log(this.moduleCNRL)
+      console.log(this.$store.state.NXPexperimentData[this.expCNRL])
       let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
       if (contentModule === undefined) {
         return false
+      } else if (!contentModule[this.moduleCNRL].prime) {
+        console.log('no prime content')
+        return false
       } else {
+        console.log('module contentYES')
+        console.log(contentModule[this.moduleCNRL])
         return contentModule[this.moduleCNRL]
       }
     },

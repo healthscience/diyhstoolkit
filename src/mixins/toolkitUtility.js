@@ -155,6 +155,9 @@ ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
 *
 */
 ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContracts) {
+  console.log('all contracts')
+  console.log(refCont)
+  console.log(allContracts)
   let contractKey = ''
   let objectTest = typeof refCont
   if (objectTest === 'object') {
@@ -162,6 +165,8 @@ ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContra
   } else {
     contractKey = refCont
   }
+  console.log('contract key')
+  console.log(contractKey)
   let matchKey = {}
   let matchList = []
   for (const rc of allContracts) {
@@ -169,6 +174,8 @@ ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContra
       matchList.push(rc)
     }
   }
+  console.log('match list')
+  console.log(matchList)
   // if no match then start with first compute contract
   if (matchList.length > 0) {
     let newestContract = this.orderNewestContract(matchList)
@@ -410,13 +417,17 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
 *
 */
 ToolkitUtility.prototype.timeCheck = function (moduleDate) {
+  console.log('time check')
+  console.log(moduleDate)
   let future = false
-  if (moduleDate.isArray === true) {
-    moduleDate = moduleDate[0]
-  }
-  if (moduleDate > moment().valueOf()) {
-    future = true
-  } else {
+  if (moduleDate !== undefined) {
+    if (moduleDate.isArray === true) {
+      moduleDate = moduleDate[0]
+    }
+    if (moduleDate > moment().valueOf()) {
+      future = true
+    } else {
+    }
   }
   return future
 }

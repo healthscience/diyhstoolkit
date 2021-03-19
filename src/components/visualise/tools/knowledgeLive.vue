@@ -23,9 +23,9 @@
               <label for="compute-select"></label>
               <select class="select-compute-id" id="compute-mapping-build" @change="computeSelect" v-model="visualsettings.compute">
                 <option value="none" selected="">please select</option>
-                <option v-for="comp in refContractCompute" :key="comp.option.key" v-bind:value="comp.option.key">
+                <!-- <option v-for="comp in refContractCompute" :key="comp.option.key" v-bind:value="comp.option.key">
                 {{ comp.option.value.computational.name }}
-                </option>
+                </option> -->
                 <option v-for="compL in refContractComputeLive" :key="compL.key" v-bind:value="compL.key">
                 {{ compL.value.computational.name }}
                 </option>
@@ -125,8 +125,8 @@
             </li>
           <div v-if="feedback.resolution" class="feedback">---</div>
       </div>
-      <div id="context-learn" class="live-kelement">
-        <li>
+      <div id="context-learn" class="live-kelement"> toolinfo -- {{ toolInfo }}
+        <li v-if="toolInfo === true">
           <button id="learn-update" @click.prevent="learnUpdate($event)">Learn</button>
         </li>
       </div>
@@ -145,7 +145,8 @@ export default {
     shellID: String,
     moduleCNRL: String,
     moduleType: String,
-    mData: String
+    mData: String,
+    toolInfo: Object
   },
   computed: {
     dataSource: function () {
