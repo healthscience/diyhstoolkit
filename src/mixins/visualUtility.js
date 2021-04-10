@@ -28,7 +28,7 @@ util.inherits(VisualUtility, events.EventEmitter)
 * @method displayModules
 *
 */
-VisualUtility.prototype.displayModules = function (modules, entityData) {
+VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
   console.log('display modulesSTART')
   console.log(modules)
   console.log(entityData)
@@ -62,7 +62,7 @@ VisualUtility.prototype.displayModules = function (modules, entityData) {
       console.log('compute module grid data preparte')
       console.log(mod)
       moduleObject.compute = mod.key
-      // moduleObject.computerefcont = mod.value.info.compute.key
+      moduleObject.computerefcont = mod.value.info.compute.key
       let cgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }]
       gridPerModule[mod.key] = cgrid
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-compute', 'text': 'Compute', 'active': true }, 'grid': cgrid, 'data': [{ data: 'none' }], 'message': 'compute-complete' }

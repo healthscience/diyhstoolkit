@@ -444,6 +444,8 @@ const store = new Vuex.Store({
           matchExp = nxp
         }
       }
+      console.log('match NXP contract selected#############')
+      console.log(matchExp)
       // prepare ECS inputs- lookup peer selected module options
       let peerOptions = []
       for (let pmod of matchExp.modules) {
@@ -498,6 +500,7 @@ const store = new Vuex.Store({
         message.reftype = 'ignore'
         message.action = 'networkexperiment'
         message.data = ECSbundle
+        console.log('OUTmesssage++++++++++++++++')
         console.log(message)
         const safeFlowMessage = JSON.stringify(message)
         Vue.prototype.$socket.send(safeFlowMessage)

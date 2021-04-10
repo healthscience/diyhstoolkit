@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard-holder" v-if="moduleContent"> mc -- {{ moduleContent.prime }}
+  <div id="dashboard-holder" > mc -- {{ moduleContent }}
     <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
@@ -106,12 +106,17 @@ export default {
       console.log('module content')
       console.log(this.expCNRL)
       console.log(this.moduleCNRL)
-      console.log(this.$store.state.NXPexperimentData[this.expCNRL])
+      console.log(this.$store.state.NXPexperimentData)
       let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
+      console.log(contentModule)
       if (contentModule === undefined) {
+        console.log('no content mdoule data')
         return false
-      } else if (!contentModule[this.moduleCNRL].prime) {
-        console.log('no prime content')
+      // } else if (contentModule[this.moduleCNRL].hasOwnProperty('prime') === false) {
+      // console.log('no prime content')
+      // return false
+      } else if (contentModule[this.moduleCNRL].data.length === 0) {
+        console.log('no prime content000000')
         return false
       } else {
         console.log('module contentYES')

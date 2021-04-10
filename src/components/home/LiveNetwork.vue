@@ -39,17 +39,18 @@
       :filter-key="searchQuery">
     </experiment-network>
     AVAILABLE ON NETWORK
-    <experiment-network
+    <experimentnetwork-join
       class="experiment-info" v-if="networkNXPListlive.data"
       :experiments="networkNXPListlive.data"
       :columns="networkNXPListlive.columns"
       :filter-key="searchQuery">
-    </experiment-network>
+    </experimentnetwork-join>
   </div>
 </template>
 
 <script>
 import ExperimentNetwork from '@/components/grids/ExperimentNetwork.vue'
+import ExperimentnetworkJoin from '@/components/grids/ExperimentNetworkJoin.vue'
 import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
 import ModuleBuilder from '@/components/grids/moduleBuilder.vue'
 
@@ -57,6 +58,7 @@ export default {
   name: 'LiveNetwork',
   components: {
     ExperimentNetwork,
+    ExperimentnetworkJoin,
     NewNetworkexperiment,
     ModuleBuilder
   },

@@ -179,10 +179,14 @@ ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContra
   // if no match then start with first compute contract
   if (matchList.length > 0) {
     let newestContract = this.orderNewestContract(matchList)
+    console.log('compute order latest')
+    console.log(newestContract)
     matchKey = newestContract
   } else {
     matchKey = refCont
   }
+  console.log('match key compute')
+  console.log(matchKey)
   return matchKey
 }
 
@@ -203,9 +207,9 @@ ToolkitUtility.prototype.orderNewestContract = function (contractList) {
 *
 */
 ToolkitUtility.prototype.displayModules = function (modules, entityData) {
-  console.log('display modulesSTART')
-  console.log(modules)
-  console.log(entityData)
+  // console.log('display modulesSTART')
+  // console.log(modules)
+  // console.log(entityData)
   let testDataBundle = {}
   let gridPerModule = {}
   let moduleObject = {}
@@ -258,6 +262,31 @@ ToolkitUtility.prototype.displayModules = function (modules, entityData) {
 }
 
 /**
+* update contract with UUID in local memory
+* @method updateContractList
+*
+*/
+ToolkitUtility.prototype.updateContractList = function (nxpref, expContract, allContract) {
+  let updateList = []
+  for (let rcontract of allContract) {
+    if (nxpref === rcontract.exp.key) {
+      console.log('matchthed')
+      // set local state exp expaneded
+      let newFormed = {}
+      newFormed.key = nxpref
+      newFormed.value = expContract.modules
+      let addExpMod = {}
+      addExpMod.exp = newFormed
+      addExpMod.modules = expContract.modules
+      updateList.push(addExpMod)
+    } else {
+      updateList.push(rcontract)
+    }
+  }
+  return updateList
+}
+
+/**
 * extract out module make objects
 * @method matchExpModulesDetail
 *
@@ -293,9 +322,6 @@ ToolkitUtility.prototype.matchModuleType = function (mType, modules) {
 *
 */
 ToolkitUtility.prototype.displayUpdateSpaceSingle = function (entityData, liveData) {
-  console.log('single space prepare STAERT')
-  console.log(entityData)
-  console.log(liveData)
   let singleBundle = {}
   singleBundle.update = 1
   singleBundle.module = 1 // mod

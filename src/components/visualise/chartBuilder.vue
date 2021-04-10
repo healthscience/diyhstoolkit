@@ -56,31 +56,36 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      console.log('vis toolbar status chart builder')
+      console.log('vis toolbar status chart builder==')
       console.log(this.$store.state.toolbarVisStatus)
-      let objectKeys = Object.keys(this.$store.state.toolbarVisStatus)
-      if (objectKeys.length > 0) {
+      console.log(this.moduleCNRL)
+      console.log(this.mData)
+      // let objectKeys = Object.keys(this.$store.state.toolbarVisStatus)
+      if (this.moduleCNRL === 'start-1122335588' || this.moduleCNRL === '') {
         console.log('yes toolbar set')
-        if (this.$store.state.toolbarVisStatus['cnrl-001234543458'][1].active === true) {
+        if (this.$store.state.toolbarVisStatus['cnrl-001234543458']) {
+          // this.$store.state.toolbarVisStatus['cnrl-001234543458'][1].active === true
           console.log('temp toolbar')
           return { text: 'open tools', active: true, learn: true }
-        } else if (this.$store.state.toolbarVisStatus['temp-001234543458'][98889].active === true) {
+        } else if (this.$store.state.toolbarVisStatus['temp-001234543458']) {
           console.log('temp preview')
+          // this.$store.state.toolbarVisStatus['temp-001234543458'][98889].active === true
           return { text: 'open tools', active: true, learn: true }
         } else {
-          console.log('nomraml view')
-          return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
+          console.log('nothing')
+          return {} // this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
         }
       } else {
-        console.log('no vis toolbar to display')
-        return {}
+        // console.log('no vis toolbar to display')
+        console.log('nomraml view')
+        return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
       }
     },
     openDataLive: function () {
-      console.log('open data')
-      console.log(this.$store.state.opendataTools)
-      console.log(this.moduleCNRL)
-      console.log(this.mData)
+      // console.log('open data')
+      // console.log(this.$store.state.opendataTools)
+      // console.log(this.moduleCNRL)
+      // console.log(this.mData)
       // default settings?
       let defaultCheck = Object.keys(this.$store.state.opendataTools)
       if (!this.$store.state.opendataTools[this.moduleCNRL]) {

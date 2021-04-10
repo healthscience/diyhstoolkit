@@ -25,9 +25,9 @@ export default {
   },
   computed: {
     refContractVisualise: function () {
-      console.log('vis live???')
-      console.log(this.$store.state.refcontractVisualise.length)
-      console.log(this.$store.state.refcontractVisualise)
+      // console.log('vis live???')
+      // console.log(this.$store.state.refcontractVisualise.length)
+      // console.log(this.$store.state.refcontractVisualise)
       let liveVis = []
       if (this.$store.state.refcontractVisualise.length !== 0) {
         liveVis = this.$store.state.refcontractVisualise
@@ -58,8 +58,8 @@ export default {
   },
   methods: {
     refContractLookup () {
-      console.log('lookup ref contract for api data info')
-      console.log(this.visualRefCont)
+      // console.log('lookup ref contract for api data info')
+      // console.log(this.visualRefCont)
       // create new temp shellID
       /* this.shellID = '1234567'
       this.mData = '98889'

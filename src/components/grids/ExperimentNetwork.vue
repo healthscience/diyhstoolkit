@@ -35,12 +35,12 @@
               {{ ecsMessage }}
             </div>
             <!-- view the dashboard per network experiment -->
-            pp {{ NXPprogress }}
-            <div id="module-list" v-if="NXPstatusData[shellContract]">
+            pm {{ NXPprogress }} == npd -- {{ NXPstatusData }}
+            <div id="module-list" v-if="NXPstatusData !== false">nxp-- {{ NXPstatusData }}
               <progress-message :progressMessage="NXPprogress"></progress-message>
-              <div id="module-ready" v-if="NXPstatusData[shellContract].modules">
-                <ul v-for="modI in NXPstatusData[shellContract].modules" :key="modI.id">
-                  <dash-board v-if="isModalDashboardVisible === true" :expCNRL="shellContract" :moduleCNRL="modI.key"></dash-board>
+              <div id="module-ready" v-if="NXPstatusData[shellContract]">
+                <ul v-for="modI in NXPstatusData[shellContract]" :key="modI">
+                  <dash-board v-if="isModalDashboardVisible === true" :expCNRL="shellContract" :moduleCNRL="modI"></dash-board>
                 </ul>
               </div>
             </div>
@@ -48,60 +48,6 @@
           </li>
         </ul>
       </div>
-      <!-- join network experiment modal -->
-      <join-experiment v-show="isModalJoinVisible && NXPJoinModuleData.length !== 0" @close="closeModalJoin">
-        <template v-slot:header>
-        <!-- The code below goes into the header slot -->
-          N=1 Network Experiment {{ actionKBundle.name }}
-        </template>
-        <template v-slot:body>
-        <!-- The code below goes into the header slot -->
-          <header>Experiment Question:</header>
-          {{ actionKBundle.name }}
-        </template>
-        <template v-slot:connect>
-          <!-- mobile apps suggested-->
-        </template>
-        <template v-slot:packaging>
-          <!-- select data source -->
-          <header>Datastore packaging</header>
-          <div class="compute-select-datasource" v-if="NXPJoinModuleData.length !== 0">
-            <label for="data-select-source">Select data source:</label>
-            <select class="data-data-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
-              <option v-for="ds in NXPJoinModuleData" :key="ds.key" v-bind:value="ds.option.key">
-                {{ ds.option.value.concept.name }}
-              </option>
-            </select>
-          </div>
-        </template>
-        <template v-slot:compute>
-          <header>Compute</header>
-          <li class="compute-form-item">
-            Select start date of data:
-            <calendar-select></calendar-select>
-            <label for="compute-add-source">Controls</label>
-            <select class="select-compute-source" @change="controlsSave" v-model="newCompute.controls" id="">Please select
-              <option value=true>YES</option>
-              <option value=false>NO</option>
-            </select>
-            <label for="compute-add-source">Automation</label>
-            <select class="select-compute-automation" @change="automationSave" v-model="newCompute.automation" id="">Please select
-              <option value=true>YES</option>
-              <option value=false>NO</option>
-            </select>
-          </li>
-          <!-- preview visualisation -->
-        </template>
-        <template v-slot:dashboard-visualisation>
-          <header>Visualisation</header>
-          <li>
-            <chart-builder v-if="NXPJoinModuleVisualise" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" ></chart-builder>
-          </li>
-        </template>
-        <template v-slot:submit-join>
-          <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
-        </template>
-      </join-experiment>
     </div>
   </div>
 </template>
@@ -109,18 +55,18 @@
 <script>
 import DashBoard from '@/components/experiments/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
-import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
-import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
-import ChartBuilder from '@/components/visualise/chartBuilder'
+// import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
+// import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
+// import ChartBuilder from '@/components/visualise/chartBuilder'
 
 export default {
   name: 'ExperimentNetwork',
   components: {
     DashBoard,
-    ProgressMessage,
-    JoinExperiment,
-    CalendarSelect,
-    ChartBuilder
+    ProgressMessage
+    // JoinExperiment,
+    // CalendarSelect,
+    // ChartBuilder
   },
   created () {
   },
@@ -139,7 +85,25 @@ export default {
       return this.$store.state.joinNXPselected
     },
     NXPstatusData: function () {
-      return this.$store.state.experimentStatus
+      console.log('nxp modules info')
+      console.log(this.shellContract)
+      let nxpContractRC = this.shellContract.trim()
+      console.log(nxpContractRC)
+      let modData = this.$store.state.NXPexperimentData
+      let modHolder = {}
+      if (this.shellContract.length !== 0 && modData[nxpContractRC] !== undefined) {
+        console.log(modData)
+        console.log(modData[nxpContractRC])
+        let extractMod = modData[nxpContractRC]
+        let modList = Object.keys(extractMod)
+        console.log(modList)
+        modHolder[nxpContractRC] = []
+        modHolder[nxpContractRC] = modList
+        console.log(modHolder)
+        return modHolder
+      } else {
+        return false
+      }
     },
     dashLive: function () {
       return this.$store.state.liveDashList
@@ -224,9 +188,9 @@ export default {
       },
       type: 'chart.js',
       shellID: null,
-      moduleCNRL: 'start-1122335588',
-      moduleType: 'vis',
-      mData: '1122335588',
+      moduleCNRL: '',
+      moduleType: '',
+      mData: '',
       visualRefCont: ''
     }
   },
