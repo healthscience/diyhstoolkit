@@ -1,12 +1,14 @@
 <template>
-  <div id="dashboard-holder" > mc -- {{ moduleContent }}
+  <div id="dashboard-holder" > <!-- mc  {{ moduleContent }} -->
     <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
           mm --
           <!-- <progress-vismessage v-if="nxpPrepareStatus" :progressMessage="nxpPrepareStatus" ></progress-vismessage> -->
-          {{ moduleContent.prime.text }}
+          <div id="nxp-content" v-if="moduleContent.prime">
+            {{ moduleContent.prime.text }}
+          </div>
         </template>
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
@@ -103,24 +105,24 @@ export default {
       }
     },
     moduleContent: function () {
-      console.log('module content')
-      console.log(this.expCNRL)
-      console.log(this.moduleCNRL)
-      console.log(this.$store.state.NXPexperimentData)
+      // console.log('module content')
+      // console.log(this.expCNRL)
+      // console.log(this.moduleCNRL)
+      // console.log(this.$store.state.NXPexperimentData)
       let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
-      console.log(contentModule)
+      // console.log(contentModule)
       if (contentModule === undefined) {
-        console.log('no content mdoule data')
+        // console.log('no content mdoule data')
         return false
       // } else if (contentModule[this.moduleCNRL].hasOwnProperty('prime') === false) {
       // console.log('no prime content')
       // return false
       } else if (contentModule[this.moduleCNRL].data.length === 0) {
-        console.log('no prime content000000')
+        // console.log('no prime content000000')
         return false
       } else {
-        console.log('module contentYES')
-        console.log(contentModule[this.moduleCNRL])
+        // console.log('module contentYES')
+        // console.log(contentModule[this.moduleCNRL])
         return contentModule[this.moduleCNRL]
       }
     },

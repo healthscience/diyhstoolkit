@@ -155,9 +155,9 @@ ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
 *
 */
 ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContracts) {
-  console.log('all contracts')
-  console.log(refCont)
-  console.log(allContracts)
+  // console.log('all contracts')
+  // console.log(refCont)
+  // console.log(allContracts)
   let contractKey = ''
   let objectTest = typeof refCont
   if (objectTest === 'object') {
@@ -165,8 +165,8 @@ ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContra
   } else {
     contractKey = refCont
   }
-  console.log('contract key')
-  console.log(contractKey)
+  // console.log('contract key')
+  // console.log(contractKey)
   let matchKey = {}
   let matchList = []
   for (const rc of allContracts) {
@@ -174,19 +174,19 @@ ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContra
       matchList.push(rc)
     }
   }
-  console.log('match list')
-  console.log(matchList)
+  // console.log('match list')
+  // console.log(matchList)
   // if no match then start with first compute contract
   if (matchList.length > 0) {
     let newestContract = this.orderNewestContract(matchList)
-    console.log('compute order latest')
-    console.log(newestContract)
+    // console.log('compute order latest')
+    // console.log(newestContract)
     matchKey = newestContract
   } else {
     matchKey = refCont
   }
-  console.log('match key compute')
-  console.log(matchKey)
+  // console.log('match key compute')
+  // console.log(matchKey)
   return matchKey
 }
 
@@ -270,7 +270,6 @@ ToolkitUtility.prototype.updateContractList = function (nxpref, expContract, all
   let updateList = []
   for (let rcontract of allContract) {
     if (nxpref === rcontract.exp.key) {
-      console.log('matchthed')
       // set local state exp expaneded
       let newFormed = {}
       newFormed.key = nxpref
@@ -292,6 +291,9 @@ ToolkitUtility.prototype.updateContractList = function (nxpref, expContract, all
 *
 */
 ToolkitUtility.prototype.matchExpModulesDetail = function (expContract, allContract) {
+  // console.log('what nxp to mathc tooooo')
+  // console.log(expContract)
+  // console.log(allContract)
   let matchContract = {}
   for (let rcontract of allContract) {
     if (expContract === rcontract.exp.key) {
@@ -307,6 +309,9 @@ ToolkitUtility.prototype.matchExpModulesDetail = function (expContract, allContr
 *
 */
 ToolkitUtility.prototype.matchModuleType = function (mType, modules) {
+  // console.log('match module')
+  // console.log(mType)
+  // console.log(modules)
   let matchContract = {}
   for (let mod of modules) {
     if (mType === mod.value.type) {
@@ -443,8 +448,8 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
 *
 */
 ToolkitUtility.prototype.timeCheck = function (moduleDate) {
-  console.log('time check')
-  console.log(moduleDate)
+  // console.log('time check')
+  // console.log(moduleDate)
   let future = false
   if (moduleDate !== undefined) {
     if (moduleDate.isArray === true) {
@@ -474,8 +479,6 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData, computeModule) {
   let dataX = []
   let count = 0
   for (let dui of listDataLength) {
-    console.log('count data lopppppppppppppppp')
-    console.log(dui)
     if (count === 0) {
       chartOptions = liveData[dui].data.chartOptions
       dataY.push(liveData[dui].data.chartPackage.datasets[0])
@@ -577,7 +580,6 @@ ToolkitUtility.prototype.mergeDataSets = function (liveData, computeModule) {
 *
 */
 ToolkitUtility.prototype.timestampMatcher = function (dataPairs) {
-  console.log(dataPairs)
   let updateDatasets = []
   let matchList = []
   let count = 0
@@ -634,15 +636,19 @@ ToolkitUtility.prototype.prepareTime = function (timeIN, update) {
   } else {
     // time state available
     if (update.startperiod !== 0 && update.rangechange.length === 0) {
+      console.log('logic1')
       newStartTime.push(update.startperiod)
     } else if (update.rangechange.length > 0) {
+      console.log('logic2')
       newStartTime = update.rangechange
     } else if (update.startperiod === 0 && update.startperiodchange) {
+      console.log('logic3')
       let timeCon = new Date(timeIN)
       let convertTime = timeCon.getTime()
       let updateT = parseInt(convertTime) + update.startperiodchange
       newStartTime.push(updateT)
     } else {
+      console.log('logic4')
       let updateSum = parseInt(timeIN) + update.startperiodchange
       newStartTime.push(updateSum)
     }

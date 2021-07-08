@@ -29,9 +29,6 @@ util.inherits(VisualUtility, events.EventEmitter)
 *
 */
 VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
-  console.log('display modulesSTART')
-  console.log(modules)
-  console.log(entityData)
   let testDataBundle = {}
   let gridPerModule = {}
   let moduleObject = {}
@@ -59,8 +56,8 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
       gridPerModule[mod.key] = dgrid // mod.grid
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': dgrid, 'data': entityData.devices, 'message': 'compute-complete' }
     } else if (mod.value.type === 'compute') {
-      console.log('compute module grid data preparte')
-      console.log(mod)
+      // console.log('compute module grid data preparte')
+      // console.log(mod)
       moduleObject.compute = mod.key
       moduleObject.computerefcont = mod.value.info.compute.key
       let cgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }]
@@ -155,10 +152,7 @@ VisualUtility.prototype.orderModules = function (modulesGrid, peerContext) {
 *
 */
 VisualUtility.prototype.addVisData = function (visModule, liveGrid, existingData, newData) {
-  /* console.log('add to existing data for display')
-  console.log(visModule)
-  console.log(existingData)
-  console.log(newData) */
+  console.log('add to existing data for display')
   let gridUpdate = []
   let visPackageback = {}
   let addedVisData = {}
@@ -166,22 +160,25 @@ VisualUtility.prototype.addVisData = function (visModule, liveGrid, existingData
   let checkDevice = newData.data.context.triplet.device
   let existingGrid = liveGrid
   let placerAlready = []
-  // console.log('eixsgin griddddddddddddddd')
-  // console.log(existingGrid)
   for (let gid of existingGrid) {
     placerAlready.push(gid.i)
   }
+  console.log('grid already')
+  console.log(placerAlready)
   let placerSet = placerAlready.includes(checkDevice)
   if (placerSet === false) {
     let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': checkDevice, static: false }
     gridUpdate.push(newGriditem)
   }
+  console.log('update grid')
+  console.log(gridUpdate)
   // merge the existing and updates
-  let newGrid = [...existingGrid, ...gridUpdate]
-  gridUpdate = []
-  let updateVisData = this.mergeDataSets(existingData, newData.data)
+  // let newGrid = [...existingGrid, ...gridUpdate]
+  // gridUpdate = []
+  // add prime info context data placer
+  let updateVisData = {} // this.mergeDataSets(existingData, newData.data)
   // update grid and chart data
-  visPackageback.grid = newGrid
+  visPackageback.grid = gridUpdate
   visPackageback.data = updateVisData
   // vis
   addedVisData.module = visModule.key
@@ -246,14 +243,14 @@ VisualUtility.prototype.mergeDataSets = function (liveData, newData) {
   /* console.log('merge chart data START-------------------')
   console.log(liveData)  */
   // console.log(newData)
-  let chartOptions = {}
-  let mergedData = {}
+  // let chartOptions = {}
+  // let mergedData = {}
   let deviceData = {}
   // let newDeviceadd = {}
   // data primary holder is device then context data dataPrint, need to match device to incoming data ie what device?
   // need to combined data sets and update colors and y-axis scaling side etc.
   // ie. split out data and labels and update colors
-  let assessInfo = {}
+  // let assessInfo = {}
   // has this vis placer ie device had its options set?
   if (liveData.data[newData.context.triplet.device] === undefined) {
     console.log('new device placer---------------------------')
@@ -264,23 +261,23 @@ VisualUtility.prototype.mergeDataSets = function (liveData, newData) {
     console.log('existing device placer---------------------------')
     // console.log(newData.context.triplet.device)
     // console.log(liveData)
-    chartOptions = liveData.data[newData.context.triplet.device].data.chartOptions
+    // chartOptions = liveData.data[newData.context.triplet.device].data.chartOptions
     // need to order datasets per length of x axis, ie one two three datatype series per x axis?
-    assessInfo = this.assessChartData(liveData.data[newData.context.triplet.device].data, newData.data)
+    // assessInfo = this.assessChartData(liveData.data[newData.context.triplet.device].data, newData.data)
     // console.log('assessedINFO')
     // console.log(assessInfo)
     // what is combined or merged x axis data list look like?
-    let mergedLabel = this.mergeLabelData(assessInfo, liveData.data[newData.context.triplet.device].data, newData.data)
+    // let mergedLabel = this.mergeLabelData(assessInfo, liveData.data[newData.context.triplet.device].data, newData.data)
     // console.log(mergedLabel[0].length)
     // normalised spacing of both y yaxis data series
-    let normalisedData = this.timestampMatcher(mergedLabel, liveData.data[newData.context.triplet.device].data, newData.data)
+    // let normalisedData = this.timestampMatcher(mergedLabel, liveData.data[newData.context.triplet.device].data, newData.data)
     // console.log('normalised data -----------------------------')
     // console.log(normalisedData)
     // update color setting for chart
-    let updateChartColors = this.chartColorUpdate(normalisedData)
+    // let updateChartColors = this.chartColorUpdate(normalisedData)
     // console.log('update color settings etc')
     // console.log(updateChartColors)
-    let updatePackage = {}
+    /* let updatePackage = {}
     updatePackage.datasets = {}
     updatePackage.labels = {}
     // build new dataset chart structure
@@ -291,6 +288,7 @@ VisualUtility.prototype.mergeDataSets = function (liveData, newData) {
     mergedData.chartPackage = updatePackage
     deviceData[newData.context.triplet.device] = {}
     deviceData[newData.context.triplet.device].data = mergedData
+    */
   }
   return deviceData
 }

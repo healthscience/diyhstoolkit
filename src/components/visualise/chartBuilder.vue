@@ -1,6 +1,6 @@
 <template>
   <div id="k-toolkit"> toobar vis == {{ visToolbarStatusLive }}
-    <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate">{{ visToolbarStatusLive.text }}</button>
+    <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate"></button> <!-- visToolbarStatusLive.text  -->
     <div id="diy-tools"> <!-- v-if="visToolbarStatusLive"> -->
       <div id="chart-type">
         <ul>
@@ -20,7 +20,7 @@
             <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
           </li>
           <li> opendata == {{ openDataLive }}
-            <a href="#" id="opendata" @click.prevent="openData()">{{ openDataLive.text }}</a>
+            <a href="#" id="opendata" @click.prevent="openData()">Open</a> <!-- state.nxpProgress -->
           </li>
         </ul>
       </div>
@@ -56,28 +56,28 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      console.log('vis toolbar status chart builder==')
-      console.log(this.$store.state.toolbarVisStatus)
-      console.log(this.moduleCNRL)
-      console.log(this.mData)
+      // console.log('vis toolbar status chart builder==')
+      // console.log(this.$store.state.toolbarVisStatus)
+      // console.log(this.moduleCNRL)
+      // console.log(this.mData)
       // let objectKeys = Object.keys(this.$store.state.toolbarVisStatus)
       if (this.moduleCNRL === 'start-1122335588' || this.moduleCNRL === '') {
-        console.log('yes toolbar set')
+        // console.log('yes toolbar set')
         if (this.$store.state.toolbarVisStatus['cnrl-001234543458']) {
           // this.$store.state.toolbarVisStatus['cnrl-001234543458'][1].active === true
-          console.log('temp toolbar')
+          // console.log('temp toolbar')
           return { text: 'open tools', active: true, learn: true }
         } else if (this.$store.state.toolbarVisStatus['temp-001234543458']) {
-          console.log('temp preview')
+          // console.log('temp preview')
           // this.$store.state.toolbarVisStatus['temp-001234543458'][98889].active === true
           return { text: 'open tools', active: true, learn: true }
         } else {
-          console.log('nothing')
+          // console.log('nothing')
           return {} // this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
         }
       } else {
         // console.log('no vis toolbar to display')
-        console.log('nomraml view')
+        // console.log('nomraml view')
         return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
       }
     },
@@ -89,33 +89,33 @@ export default {
       // default settings?
       let defaultCheck = Object.keys(this.$store.state.opendataTools)
       if (!this.$store.state.opendataTools[this.moduleCNRL]) {
-        console.log('mod not set')
+        // console.log('mod not set')
         if (defaultCheck[0] === 'default') {
           return this.$store.state.opendataTools.default
         } else {
           return false
         }
       } else {
-        console.log('modules data set toobar')
-        console.log(this.$store.state.opendataTools[this.moduleCNRL])
+        // console.log('modules data set toobar')
+        // console.log(this.$store.state.opendataTools[this.moduleCNRL])
         return this.$store.state.opendataTools[this.moduleCNRL][this.mData]
       }
     },
     liveData: function () {
       console.log('live data for chart')
-      console.log(this.shellID)
-      console.log(this.moduleCNRL)
-      console.log(this.mData)
-      console.log(this.$store.state.NXPexperimentData[this.shellID])
+      // console.log(this.shellID)
+      // console.log(this.moduleCNRL)
+      // console.log(this.mData)
+      // console.log(this.$store.state.NXPexperimentData[this.shellID])
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
-        console.log('no live data for this experiment')
+        // console.log('no live data for this experiment')
         return {}
       } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]) {
-        console.log('no live data for this device placer')
+        // console.log('no live data for this device placer')
         return {}
       } else {
-        console.log('chart vue')
-        console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData])
+        // console.log('chart vue')
+        // console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData])
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
       }
     }

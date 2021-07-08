@@ -272,8 +272,8 @@ const store = new Vuex.Store({
       }
     },
     setNXPprogressUpdate: (state, inVerified) => {
-      console.log('set progress message')
-      console.log(inVerified)
+      // console.log('set progress message')
+      // console.log(inVerified)
       let setProgress = { text: 'Experiment in progress', active: true }
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
@@ -431,8 +431,8 @@ const store = new Vuex.Store({
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionDashboardState (context, update) {
-      console.log('clicked VIEW NXP------------')
-      console.log(update)
+      // console.log('clicked VIEW NXP------------')
+      // console.log(update)
       let futureTimeCheck = false
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
@@ -444,8 +444,8 @@ const store = new Vuex.Store({
           matchExp = nxp
         }
       }
-      console.log('match NXP contract selected#############')
-      console.log(matchExp)
+      // console.log('match NXP contract selected#############')
+      // console.log(matchExp)
       // prepare ECS inputs- lookup peer selected module options
       let peerOptions = []
       for (let pmod of matchExp.modules) {
@@ -461,8 +461,8 @@ const store = new Vuex.Store({
           let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, this.state.liveRefContIndex.compute)
           pmod.value.info.compute = peerDataRC
           let newestContract = ToolUtility.refcontractLookupCompute(pmod, this.state.livePeerRefContIndex.module)
-          console.log('newest contract')
-          console.log(newestContract)
+          // console.log('newest contract')
+          // console.log(newestContract)
           // check if data is not in the future
           let timeModule = newestContract.value.info.controls.date
           futureTimeCheck = ToolUtility.timeCheck(timeModule)
@@ -476,6 +476,10 @@ const store = new Vuex.Store({
             feedbackMessage.data = moment.utc(timeModule).format('dddd, MMMM Do YYYY')
             context.commit('SET_FEEDBACK_MESSAGE', feedbackMessage)
           } else {
+            // set default time for toolkit
+            context.commit('setTimeAsk', timeModule)
+            // console.log('default time set')
+            // console.log(this.state.timeStartperiod)
             peerOptions.push(newestContract)
           }
         } else if (pmod.value.type === 'visualise') {
@@ -508,6 +512,8 @@ const store = new Vuex.Store({
       }
     },
     async actionVisUpdate (context, update) {
+      console.log('vistoolbar UPdateAction')
+      console.log(update)
       this.state.ecsMessageLive = ''
       let firstTimeCheck = false
       // entity container
@@ -547,6 +553,8 @@ const store = new Vuex.Store({
           // update the Compute RefContract
           mmod.value.automation = false
           newStartTime = ToolUtility.prepareTime(this.state.timeStartperiod, update)
+          console.log('new start time')
+          console.log(newStartTime)
           context.commit('setTimeAsk', newStartTime[0])
           // what type of context update?
           let updateSettings = {}
@@ -586,7 +594,7 @@ const store = new Vuex.Store({
         updateContract.input = ''
       }
       // keep state of live modules
-      updateContract.cnrl = update.nxpCNRL
+      updateContract.key = update.nxpCNRL
       updateContract.modules = updateModules
       updateContract.entityUUID = entityUUID
       context.commit('setUpdatesOUT', updateContract)
@@ -607,6 +615,8 @@ const store = new Vuex.Store({
       }
       message.type = 'safeflow'
       message.reftype = 'ignore'
+      console.log('updateNXPMessageOUT')
+      console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },

@@ -1,5 +1,5 @@
 <template>
-  <div id="inprogress-view" v-if="progressMessage"> --progres message {{ progressMessage }}
+  <div id="inprogress-view" v-if="progressMessage"> <!-- progres message {{ progressMessage }} -->
     <section v-if="progressMessage.active === true" id="safeflow-status">
       --- {{ progressMessage.text }} --
     </section>
