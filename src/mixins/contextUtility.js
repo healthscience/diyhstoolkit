@@ -72,6 +72,20 @@ contextUtility.prototype.prepareSettingsTime = function (module, time, update, t
 }
 
 /**
+* update devices selected
+* @method prepareSettingsDevices
+*
+*/
+contextUtility.prototype.prepareSettingsDevices = function (module, device) {
+  // selected device
+  console.log('set devices')
+  console.log(module)
+  module.value.info.controls.device = []
+  module.value.info.controls.device.push(device)
+  return module
+}
+
+/**
 * update setting out
 * @method prepareVisSettings
 *
@@ -84,6 +98,7 @@ contextUtility.prototype.prepareVisSettings = function (module, time, update, to
   module.value.info.settings.compute = toolbar.compute
   module.value.info.settings.devices = toolbar.devices
   // module.value.info.settings.resolution = this.state.visModuleHolder.resolution
+  module.value.info.settings.timeformat = update.timeformat
   module.value.info.settings.xaxis = toolbar.xaxis
   module.value.info.settings.yaxis = toolbar.yaxis
   return module
@@ -112,6 +127,7 @@ contextUtility.prototype.prepareSettingsVisTime = function (module, time, update
   // reset single or multiple charts asked for?
   if (update.singlechart !== undefined) {
     module.value.info.settings.single = update.singlechart
+    module.value.info.settings.timeformat = update.timeformat
   }
   return module
 }

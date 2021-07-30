@@ -102,20 +102,11 @@ export default {
       }
     },
     liveData: function () {
-      console.log('live data for chart')
-      // console.log(this.shellID)
-      // console.log(this.moduleCNRL)
-      // console.log(this.mData)
-      // console.log(this.$store.state.NXPexperimentData[this.shellID])
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
-        // console.log('no live data for this experiment')
         return {}
       } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]) {
-        // console.log('no live data for this device placer')
         return {}
       } else {
-        // console.log('chart vue')
-        // console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData])
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
       }
     }

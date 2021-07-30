@@ -3,53 +3,77 @@
     <ul>
       <li>
         <div id="calendar-selector">
-          <date-picker v-model="value" @change="calendarSelect($event)" :lang="lang"></date-picker>
+          <date-picker v-model="value" @change="calendarSelect($event)" :lang="lang" :range="rangeActive === true" ></date-picker>
           <div id="time-calendar-tools">
-            <button id="multi-days" @click.prevent="setMultidays($event)">{{ calendarTools.name }}</button> {{ calendarTools.active }}
-          </div>
-          <div id="calendar-list-view" >
-             <ul>
+            <ul>
               <li>
-                <ul>
-                  <li v-for="datesl in calendarList" :key='datesl' class="time-m-list">
-                    {{ datesl }}
-                  </li>
-                </ul>
+                <button id="range-days" @click.prevent="setRangedays($event)">
+                {{ calendarRangeTools.name }}</button> {{ calendarRangeTools.active }}
               </li>
               <li>
-                <button id="multi-day-chart" @click.prevent="chartMultiday($event)">Many-charts</button>
-              </li>
-              <li>
-                <button id="single-day-chart" @click.prevent="singleChartday($event)">Single-chart</button>
+                <button id="multi-days" @click.prevent="setMultidays($event)">
+                {{ calendarTools.name }}</button> {{ calendarTools.active }}
               </li>
               <li>
                 <button id="multi-day-clear" @click.prevent="clearMultidays($event)">Clear</button>
               </li>
             </ul>
           </div>
+          <div id="calendar-list-view" >
+            <ul>
+              <li class="time-m-list" v-for="datesl in calendarList" :key='datesl.id' >
+                {{ datesl }}
+              </li>
+            </ul>
+          </div>
         </div>
-      </li>
-      <li>
-        <div id="select-time">
+        <div id="calendar-tools">
           <ul>
-            <li v-for="tv in navTime" :key='tv.id' class="context-time">
-              <button class="button is-primary" @click.prevent="setTimeData(tv)">{{ tv.text.word }}</button>
+            <li>
+              <ul class="chart-update">
+                <li>
+                  <select v-model="selectedTimeFormat" @change.prevent="setTimeFormat()">
+                    <option v-for="tfoption in timeformatoptions" v-bind:value="tfoption.value" :key='tfoption.id' :selected="tfoption.value == selectedChartnumber">
+                    {{ tfoption.text }}
+                    </option>
+                  </select>
+                </li>
+                <li>
+                  <select v-model="selectedChartnumber" @change.prevent="setChartNumber()">
+                    <option v-for="cnoption in numbechartoptions" v-bind:value="cnoption.value" :key='cnoption.id' :selected="cnoption.id === selectedChartnumber">
+                    {{ cnoption.text }}
+                    </option>
+                  </select>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <button id="update-chart" @click.prevent="singleChartday($event)">Chart</button>
             </li>
           </ul>
+        <li>
+          <div id="select-time">
+            <ul>
+              <li v-for="tv in navTime" :key='tv.id' class="context-time">
+                <button class="button is-primary" @click.prevent="setTimeData(tv)">{{ tv.text.word }}</button>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="context-future">
+          <!-- <button class="button is-primary" @click.prevent="setFuture('future')">{{ future.text }}</button> -->
+          <select v-model="selectedFuture" @change.prevent="setFuture()">
+            <option disabled value="">How to make future</option>
+            <option v-for="foption in futureoptions" :key='foption.value'>
+                {{ foption.text }}
+              </option>
+          </select>
+          <!-- <span>Selected: {{ selectedFuture }}</span> -->
+        </li>
+        <li class="context-network">
+          <button class="button is-primary" @click.prevent="setNetwork('networkview')">{{ network.text }}</button>
+        </li>
         </div>
-      </li>
-      <li class="context-future">
-        <!-- <button class="button is-primary" @click.prevent="setFuture('future')">{{ future.text }}</button> -->
-        <select v-model="selectedFuture" @change.prevent="setFuture()">
-          <option disabled value="">How to make future</option>
-          <option v-for="foption in futureoptions" v-bind:value="foption.value" :key='foption.value'>
-              {{ foption.text }}
-            </option>
-        </select>
-        <!-- <span>Selected: {{ selectedFuture }}</span> -->
-      </li>
-      <li class="context-network">
-        <button class="button is-primary" @click.prevent="setNetwork('networkview')">{{ network.text }}</button>
       </li>
     </ul>
   </div>
@@ -58,7 +82,11 @@
 <script>
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
-const moment = require('moment')
+// import { extendMoment } from 'moment-range'
+// const moment = require('moment')
+import Moment from 'moment'
+import { extendMoment } from 'moment-range'
+const moment = extendMoment(Moment)
 
 export default {
   name: 'calendar-tool',
@@ -78,6 +106,12 @@ export default {
       text: 'off'
     },
     navTime: [{ 'text': { 'word': '-day', 'number': -86400000 } }, { 'text': { 'word': '+day', 'number': 86400000 } }],
+    calendarRangeTools:
+    {
+      name: 'Range',
+      id: 'range-days',
+      active: false
+    },
     calendarTools:
     {
       name: 'Mulit Days',
@@ -95,11 +129,21 @@ export default {
       text: 'network',
       active: true
     },
+    timeformatoptions: [
+      { text: 'Time series', value: 'timeseries', id: 0 },
+      { text: 'Overlay', value: 'overlay', id: 1 }
+    ],
+    numbechartoptions: [
+      { text: 'Single', value: 'singlechart', id: 0 },
+      { text: 'Multiple', value: 'multiplechart', id: 1 }
+    ],
     futureoptions: [
       { text: 'Repeat day', value: 'month' },
       { text: 'Self decide', value: 'self' },
       { text: 'Ask CALE', value: 'CALE' }
     ],
+    selectedTimeFormat: 'timeseries',
+    selectedChartnumber: 'singlechart',
     selectedFuture: '',
     calendarList: [],
     calendarListMS: [],
@@ -108,6 +152,7 @@ export default {
     time3: '',
     // custom lang
     value: '',
+    rangeActive: false,
     lang: {
       days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -140,19 +185,33 @@ export default {
   },
   methods: {
     calendarSelect () {
-      if (this.calendarTools.active !== true) {
+      if (this.calendarTools.active !== true && this.calendarRangeTools.active !== true) {
         // convert to correct time format and update KBundle and build new visStyle
         let bTime = {}
         bTime.selectDate = this.value
         bTime.text = 'selectd'
         this.$store.dispatch('singleDateUpdate', moment(this.value).valueOf())
+      } else if (this.calendarRangeTools.active === true) {
+        // reset the timeholder
+        this.calendarListMS = []
+        let rangeSelected = moment.range(this.value[0], this.value[1])
+        let segText = 'days'
+        let sourceRangeTimes = Array.from(rangeSelected.by(segText))
+        // loop over range and build date range format
+        for (let dr of sourceRangeTimes) {
+          this.calendarListMS.push(moment(dr).valueOf())
+        }
       } else if (this.calendarTools.active === true) {
         this.calendarList.push(this.value)
         this.calendarListMS.push(moment(this.value).valueOf())
       }
     },
+    setRangedays (md) {
+      this.rangeActive = !this.rangeActive
+      this.calendarRangeTools.active = !this.calendarRangeTools.active
+    },
     setMultidays (md) {
-      this.calendarTools.active = true
+      this.calendarTools.active = !this.calendarTools.active
     },
     clearMultidays (md) {
       this.calendarList = []
@@ -190,13 +249,13 @@ export default {
       contextK.startperiod = moment(this.value).valueOf()
       contextK.startperiodchange = 0
       contextK.rangechange = this.calendarListMS
-      contextK.singlechart = true
+      // contextK.singlechart = true
+      contextK.singlechart = this.selectedChartnumber
+      contextK.timeformat = this.selectedTimeFormat
       this.$store.dispatch('actionVisUpdate', contextK)
     },
     setTimeData (seg) {
       // back and forward and time
-      console.log('seg')
-      console.log(seg)
       let contextK = {}
       contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
@@ -207,8 +266,15 @@ export default {
       contextK.rangechange = []
       this.$store.dispatch('actionVisUpdate', contextK)
     },
+    setTimeFormat () {
+      console.log('time format')
+      console.log(this.selectedTimeFormat)
+    },
+    setChartNumber () {
+      console.log('number chart')
+      console.log(this.selectedChartnumber)
+    },
     setFuture () {
-      console.log('make future?')
       let buildContext = {}
       buildContext.future = this.selectedFuture
       let refContracts = {}
@@ -217,7 +283,6 @@ export default {
       refContracts.moduleType = this.moduleType
       refContracts.mData = this.mData
       buildContext.refs = refContracts
-      console.log(buildContext)
       this.$store.dispatch('actionFuture', buildContext)
     },
     setNetwork (nv) {
@@ -230,6 +295,7 @@ export default {
 
 <style>
 #calendar-selector {
+  display: inline-block;
   height: auto;
   border: 1px solid red;
 }
@@ -245,8 +311,17 @@ export default {
   font-size: 1.4em;
 }
 
+#calendar-tools {
+  display: inline-block;
+  border: 1px solid green;
+}
+
 #time-calendar-tools {
   display: inline-block;
+}
+
+#select-time {
+  border: 1px solid orange;
 }
 
 .time-m-list {
@@ -254,4 +329,11 @@ export default {
   border: 1px solid purple;
 }
 
+#update-chart {
+  font-size: 1.4em;
+}
+
+.chart-update {
+  margin: 1.2em;
+}
 </style>

@@ -437,15 +437,13 @@ const store = new Vuex.Store({
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
       context.commit('setNXPprogressUpdate', update)
-      // pass the safeFLOW-ECS input bundle
+      // build the safeFLOW-ECS input bundle
       let matchExp = {}
       for (let nxp of this.state.networkPeerExpModules) {
         if (nxp.exp.key === update) {
           matchExp = nxp
         }
       }
-      // console.log('match NXP contract selected#############')
-      // console.log(matchExp)
       // prepare ECS inputs- lookup peer selected module options
       let peerOptions = []
       for (let pmod of matchExp.modules) {
@@ -457,12 +455,12 @@ const store = new Vuex.Store({
           pmod.value.info.data = peerDataRC
           peerOptions.push(pmod)
         } else if (pmod.value.type === 'compute') {
-          // get the latest refcontract all automatic as first time setup of entity
+          // get the latest refcontract nB. link compute ie one to many, sort many list and this used in presentation
           let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, this.state.liveRefContIndex.compute)
           pmod.value.info.compute = peerDataRC
           let newestContract = ToolUtility.refcontractLookupCompute(pmod, this.state.livePeerRefContIndex.module)
-          // console.log('newest contract')
-          // console.log(newestContract)
+          // set key to master ref contract key
+          newestContract.key = pmod.key
           // check if data is not in the future
           let timeModule = newestContract.value.info.controls.date
           futureTimeCheck = ToolUtility.timeCheck(timeModule)
@@ -478,8 +476,6 @@ const store = new Vuex.Store({
           } else {
             // set default time for toolkit
             context.commit('setTimeAsk', timeModule)
-            // console.log('default time set')
-            // console.log(this.state.timeStartperiod)
             peerOptions.push(newestContract)
           }
         } else if (pmod.value.type === 'visualise') {
@@ -504,11 +500,12 @@ const store = new Vuex.Store({
         message.reftype = 'ignore'
         message.action = 'networkexperiment'
         message.data = ECSbundle
-        console.log('OUTmesssage++++++++++++++++')
+        console.log('OUTmesssage+++++++++OUT+++++++')
         console.log(message)
         const safeFlowMessage = JSON.stringify(message)
         Vue.prototype.$socket.send(safeFlowMessage)
       } else {
+        console.log('first is a future time')
       }
     },
     async actionVisUpdate (context, update) {
@@ -517,7 +514,7 @@ const store = new Vuex.Store({
       this.state.ecsMessageLive = ''
       let firstTimeCheck = false
       // entity container
-      let entityUUID = this.state.entityUUIDReturn
+      let entityUUID = this.state.entityUUIDReturn // update.nxpCNRL
       // prepare info. to update library ref contracts
       let updateContract = {}
       // the visulisation and compute module contract need updating
@@ -553,8 +550,6 @@ const store = new Vuex.Store({
           // update the Compute RefContract
           mmod.value.automation = false
           newStartTime = ToolUtility.prepareTime(this.state.timeStartperiod, update)
-          console.log('new start time')
-          console.log(newStartTime)
           context.commit('setTimeAsk', newStartTime[0])
           // what type of context update?
           let updateSettings = {}
@@ -563,6 +558,8 @@ const store = new Vuex.Store({
           } else if (contextState === 'toolbarupdate') {
             updateSettings = ContextOut.prepareSettings(mmod, newStartTime, update, this.state.visModuleHolder)
           }
+          // what device has seen selected
+          updateSettings = ContextOut.prepareSettingsDevices(updateSettings, update.mData)
           updateModules.push(updateSettings)
         } else if (mmod.value.type === 'visualise') {
           // both range and single set?
@@ -578,9 +575,7 @@ const store = new Vuex.Store({
           }
           updateModules.push(updateSettings)
         } else if (mmod.value.type === 'data') {
-          if (firstTimeCheck === true) {
-            updateModules.push(mmod)
-          }
+          updateModules.push(mmod)
         } else if (mmod.value.type === 'question') {
           if (firstTimeCheck === true) {
             updateModules.push(mmod)
@@ -615,7 +610,7 @@ const store = new Vuex.Store({
       }
       message.type = 'safeflow'
       message.reftype = 'ignore'
-      console.log('updateNXPMessageOUT')
+      console.log('NXPMessage+++++UPDATE++++OUT')
       console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)

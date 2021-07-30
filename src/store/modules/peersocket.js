@@ -178,7 +178,8 @@ export default {
         console.log(backJSON)
         // update the NXP contract list held in toolkit
         let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[this.state.liveNXP], this.state.networkPeerExpModules)
-        this.state.networkPeerExpModules = updateListContracts
+        // this.state.networkPeerExpModules = updateListContracts
+        Vue.set(this.state.networkPeerExpModules, updateListContracts)
         // context.commit('SET_ENTITY_RETURN', entityReturn)
         this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
         this.state.entityUUIDsummary = backJSON
@@ -188,23 +189,24 @@ export default {
         }
         // set the data placer for per module
         Vue.set(this.state.NXPexperimentData, this.state.liveNXP, {})
-        for (let modd of backJSON.data[this.state.liveNXP].modules) {
+        // being placer of modules
+        let extractModuleOrder = VisualUtility.orderModules(backJSON.data[this.state.liveNXP].modules, 'private')
+        for (let modd of extractModuleOrder) { // backJSON.data[this.state.liveNXP].modules) {
           Vue.set(this.state.NXPexperimentData[this.state.liveNXP], modd.key, {}) // now set the data elements
           Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'data', [])
           Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('new entityrnage +++++++++++++++++++++')
-        console.log(backJSON)
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
-        if (backJSON.data === 'none') {
-          console.log('none data returned')
+        if (backJSON.data === 'none123') {
           // switch off progress message and inform toolkit
           let setnxpProgress = { text: 'Experiment in progress', active: false }
           Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
           this.state.ecsMessageLive = 'no data available'
+          // need to make toolbar appear so date can be selected
         } else {
           console.log('NEW data safeFLOW++++++')
+          console.log(backJSON)
           // switch off nxp Progress message
           let setnxpProgress = { text: 'Experiment in progress', active: true }
           Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -214,11 +216,12 @@ export default {
           let gridBefore = Object.keys(this.state.moduleGrid[backJSON.context.moduleorder.visualise.key])
           if (gridBefore.length > 0) {
             console.log('yes grid+++++++')
+            console.log(backJSON)
             // move network experment prorgress message
             let setnxpProgressOff = { text: 'Experiment in progress', active: false }
             Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgressOff)
             let matchVisModuleType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
-            // need to add vis module placer
+            // need to add data to vis module placer
             let displayDataUpdate = VisualUtility.addVisData(matchVisModuleType, this.state.moduleGrid[backJSON.context.moduleorder.visualise.key], this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], backJSON)
             // update setting grid
             if (displayDataUpdate.update.grid.length > 0) {
@@ -234,9 +237,7 @@ export default {
                   let setOPenDataToolbar = {}
                   setOPenDataToolbar[modG.i] = { text: 'open data', active: false }
                   Vue.set(this.state.opendataTools, displayDataUpdate.module, setOPenDataToolbar)
-                  console.log('yes data to update')
-                  console.log(modG.i)
-                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, modG.i,  backJSON.data)
+                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, modG.i, backJSON.data)
                   let contextPlacer = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': modG, 'data': backJSON.data.data }
                   Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module], 'prime', contextPlacer.prime)
                 }
@@ -244,10 +245,12 @@ export default {
               console.log('========FINISHED===========')
             } else {
               console.log('NO grid update but new data time change')
-              console.log(backJSON.data.context.triplet.device)
               // check for data update?  are the times the same?
               let lastTime = this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device].context.triplet
               if (backJSON.data.context.triplet.timeout !== lastTime) {
+                // set data for experiment module
+                console.log('set data for experiment, right order')
+                console.log(backJSON.data)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, backJSON.data.context.triplet.device, backJSON.data)
               }
               console.log('====== update TIME complete ======')
@@ -255,6 +258,7 @@ export default {
             console.log('updated COMPLETE--------------------')
           } else {
             console.log('no grid++++++++++')
+            console.log(backJSON)
             // set experiment progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
             Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -265,8 +269,7 @@ export default {
             displayModulesReady = VisualUtility.displayPrepareModules(matchExpRefContract.modules, backJSON)
             // set the module GRID items
             for (let modG of backJSON.context.input.value.modules) {
-              // this.state.moduleGrid[modG].push(displayModulesReady.grid[modG])
-              this.state.moduleGrid[modG] = displayModulesReady.grid[modG]
+              Vue.set(this.state.moduleGrid, modG, displayModulesReady.grid[modG])
             }
             // update vis toolsbars and data
             let moduleList = Object.keys(displayModulesReady.data)
@@ -286,8 +289,13 @@ export default {
                 }
               }
               // set the data for visualisation
-              Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
-              Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
+              if (backJSON.data !== 'none') {
+                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
+                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
+              } else {
+                console.log('no data available')
+                this.state.ecsMessageLive = 'no data available'
+              }
             }
           }
         }

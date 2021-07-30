@@ -41,7 +41,7 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true }, 'grid': qgrid, 'data': [{ 'form': 'html' }, { 'content': 'Movement Summary' }], 'message': 'compute-complete' }
     } else if (mod.value.type === 'device') {
       moduleObject.device = mod.key
-      let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }]
+      let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '2', static: false }]
       gridPerModule[mod.key] = dgrid // mod.grid
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': dgrid, 'data': entityData.devices, 'message': 'compute-complete' }
     } else if (mod.value.type === 'dapp') {
@@ -52,12 +52,10 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
     } else if (mod.value.type === 'data') {
       // moduleObject.data = mod.key
       // moduleObject.packaging = mod.value.info.data.key
-      let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }]
+      let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '2', static: false }]
       gridPerModule[mod.key] = dgrid // mod.grid
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': dgrid, 'data': entityData.devices, 'message': 'compute-complete' }
     } else if (mod.value.type === 'compute') {
-      // console.log('compute module grid data preparte')
-      // console.log(mod)
       moduleObject.compute = mod.key
       moduleObject.computerefcont = mod.value.info.compute.key
       let cgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }]
@@ -70,12 +68,23 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
       // prepared a chart placer per device
       mod.grid = []
       let makeGrid = []
-      let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': entityData.data.context.triplet.device, static: false }
+      let newGriditem = {}
+      if (entityData.data !== 'none') {
+        newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': entityData.data.context.triplet.device, static: false }
+      } else {
+        newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'none', static: false }
+      }
       makeGrid.push(newGriditem)
       let visDataHold = {}
-      visDataHold[entityData.data.context.triplet.device] = entityData.data
-      gridPerModule[mod.key] = makeGrid
-      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': visDataHold }
+      if (entityData.data !== 'none') {
+        visDataHold[entityData.data.context.triplet.device] = entityData.data
+        gridPerModule[mod.key] = makeGrid
+        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': visDataHold }
+      } else {
+        visDataHold['none'] = {}
+        gridPerModule[mod.key] = makeGrid
+        testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': visDataHold }
+      }
     }
   }
   let displayData = {}
@@ -152,7 +161,6 @@ VisualUtility.prototype.orderModules = function (modulesGrid, peerContext) {
 *
 */
 VisualUtility.prototype.addVisData = function (visModule, liveGrid, existingData, newData) {
-  console.log('add to existing data for display')
   let gridUpdate = []
   let visPackageback = {}
   let addedVisData = {}
@@ -163,18 +171,11 @@ VisualUtility.prototype.addVisData = function (visModule, liveGrid, existingData
   for (let gid of existingGrid) {
     placerAlready.push(gid.i)
   }
-  console.log('grid already')
-  console.log(placerAlready)
   let placerSet = placerAlready.includes(checkDevice)
   if (placerSet === false) {
     let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': checkDevice, static: false }
     gridUpdate.push(newGriditem)
   }
-  console.log('update grid')
-  console.log(gridUpdate)
-  // merge the existing and updates
-  // let newGrid = [...existingGrid, ...gridUpdate]
-  // gridUpdate = []
   // add prime info context data placer
   let updateVisData = {} // this.mergeDataSets(existingData, newData.data)
   // update grid and chart data

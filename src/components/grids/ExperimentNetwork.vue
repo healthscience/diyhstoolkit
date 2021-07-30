@@ -36,7 +36,7 @@
             </div>
             <!-- view the dashboard per network experiment -->
             <!-- pm {{ NXPprogress }} == npd  {{ NXPstatusData }} -->
-            <div id="module-list" v-if="NXPstatusData !== false"><!-- nxp {{ NXPstatusData }} -->
+            <div id="module-list" v-if="NXPstatusData !== false"> {{ NXPstatusData }}
               <progress-message :progressMessage="NXPprogress"></progress-message>
               <div id="module-ready" v-if="NXPstatusData[shellContract]">
                 <ul v-for="modI in NXPstatusData[shellContract]" :key="modI">
@@ -85,21 +85,14 @@ export default {
       return this.$store.state.joinNXPselected
     },
     NXPstatusData: function () {
-      // console.log('nxp modules info')
-      // console.log(this.shellContract)
       let nxpContractRC = this.shellContract.trim()
-      // console.log(nxpContractRC)
       let modData = this.$store.state.NXPexperimentData
       let modHolder = {}
       if (this.shellContract.length !== 0 && modData[nxpContractRC] !== undefined) {
-        // console.log(modData)
-        // console.log(modData[nxpContractRC])
         let extractMod = modData[nxpContractRC]
         let modList = Object.keys(extractMod)
-        // console.log(modList)
         modHolder[nxpContractRC] = []
         modHolder[nxpContractRC] = modList
-        // console.log(modHolder)
         return modHolder
       } else {
         return false

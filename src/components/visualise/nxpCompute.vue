@@ -1,5 +1,5 @@
 <template>
-  <div id="compute-nxp-vis">
+  <div id="compute-nxp">
     <header>Compute</header>
     <!-- v-if="toolbarStatusLive.active"> -->
     <compute-controls></compute-controls>
@@ -20,7 +20,7 @@ export default {
     mData: String
   },
   computed: {
-    toolbarStatusLive: function () {
+    /* toolbarStatusLive: function () {
       return this.$store.state.toolbarStatus[this.moduleCNRL]
     },
     liveData: function () {
@@ -31,7 +31,7 @@ export default {
       } else {
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data
       }
-    }
+    } */
   },
   data: () => ({
   }),
@@ -47,8 +47,6 @@ export default {
 </script>
 
 <style>
-#compute-nxp-vis {
-  display: block;
-  height: 100%;
+#compute-nxp {
 }
 </style>

@@ -155,9 +155,6 @@ ToolkitUtility.prototype.refcontractLookup = function (refCont, allContracts) {
 *
 */
 ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContracts) {
-  // console.log('all contracts')
-  // console.log(refCont)
-  // console.log(allContracts)
   let contractKey = ''
   let objectTest = typeof refCont
   if (objectTest === 'object') {
@@ -165,8 +162,7 @@ ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContra
   } else {
     contractKey = refCont
   }
-  // console.log('contract key')
-  // console.log(contractKey)
+
   let matchKey = {}
   let matchList = []
   for (const rc of allContracts) {
@@ -174,19 +170,13 @@ ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContra
       matchList.push(rc)
     }
   }
-  // console.log('match list')
-  // console.log(matchList)
   // if no match then start with first compute contract
   if (matchList.length > 0) {
     let newestContract = this.orderNewestContract(matchList)
-    // console.log('compute order latest')
-    // console.log(newestContract)
     matchKey = newestContract
   } else {
     matchKey = refCont
   }
-  // console.log('match key compute')
-  // console.log(matchKey)
   return matchKey
 }
 
@@ -196,9 +186,25 @@ ToolkitUtility.prototype.refcontractLookupCompute = function (refCont, allContra
 *
 */
 ToolkitUtility.prototype.orderNewestContract = function (contractList) {
-  // let latestContract = {}
   contractList.sort((a, b) => (a.value.info.controls.date < b.value.info.controls.date) ? 1 : -1)
-  return contractList[0]
+  // check to see if date is in the future?  if yes, make todays date i.e. 00 00 00
+  let contractNewest = contractList[0]
+  let startToday = moment().startOf('day').valueOf()
+  if (contractList[0].value.info.controls.date > startToday) {
+    // in future set last contract or today if none then today
+    if (contractList[1].value.info.controls.date < startToday) {
+      contractNewest.value.info.controls.date = contractList[1].value.info.controls.date
+      contractNewest.value.info.controls.rangedate = []
+      contractNewest.value.info.controls.rangedate.push(contractList[1].value.info.controls.date)
+    } else {
+      contractNewest.value.info.controls.date = startToday
+      contractNewest.value.info.controls.rangedate = []
+      contractNewest.value.info.controls.rangedate.push(startToday)
+    }
+  } else {
+    // no need to change contract
+  }
+  return contractNewest
 }
 
 /**
@@ -207,9 +213,6 @@ ToolkitUtility.prototype.orderNewestContract = function (contractList) {
 *
 */
 ToolkitUtility.prototype.displayModules = function (modules, entityData) {
-  // console.log('display modulesSTART')
-  // console.log(modules)
-  // console.log(entityData)
   let testDataBundle = {}
   let gridPerModule = {}
   let moduleObject = {}
@@ -291,9 +294,6 @@ ToolkitUtility.prototype.updateContractList = function (nxpref, expContract, all
 *
 */
 ToolkitUtility.prototype.matchExpModulesDetail = function (expContract, allContract) {
-  // console.log('what nxp to mathc tooooo')
-  // console.log(expContract)
-  // console.log(allContract)
   let matchContract = {}
   for (let rcontract of allContract) {
     if (expContract === rcontract.exp.key) {
@@ -309,9 +309,6 @@ ToolkitUtility.prototype.matchExpModulesDetail = function (expContract, allContr
 *
 */
 ToolkitUtility.prototype.matchModuleType = function (mType, modules) {
-  // console.log('match module')
-  // console.log(mType)
-  // console.log(modules)
   let matchContract = {}
   for (let mod of modules) {
     if (mType === mod.value.type) {
@@ -378,10 +375,6 @@ ToolkitUtility.prototype.displaySpaceUpdate = function (liveData, entityData) {
 *
 */
 ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData, matchModeType, updateComputeContract) {
-  console.log(liveData)
-  console.log(entityData)
-  console.log(matchModeType)
-  console.log(updateComputeContract)
   // setup return vis Object
   let moduleKeys = Object.keys(liveData)
   let updateVisData = {}
@@ -448,8 +441,6 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
 *
 */
 ToolkitUtility.prototype.timeCheck = function (moduleDate) {
-  // console.log('time check')
-  // console.log(moduleDate)
   let future = false
   if (moduleDate !== undefined) {
     if (moduleDate.isArray === true) {

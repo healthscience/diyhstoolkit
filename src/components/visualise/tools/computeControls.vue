@@ -4,7 +4,6 @@
       <header>Control panel</header>
     </div>
     <div id="controls-holder">
-      <header>controls</header>
       <div class="compute-control-item">
         <header>Status:</header>
           <div id="update-status">

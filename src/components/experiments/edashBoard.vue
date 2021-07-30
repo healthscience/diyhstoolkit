@@ -1,10 +1,10 @@
 <template>
-  <div id="dashboard-holder" > <!-- mc  {{ moduleContent }} -->
+  <div id="dashboard-holder" > mc  {{ moduleContent.prime }}
     <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
-          mm --
+          mm -- {{ moduleCNRL }}
           <!-- <progress-vismessage v-if="nxpPrepareStatus" :progressMessage="nxpPrepareStatus" ></progress-vismessage> -->
           <div id="nxp-content" v-if="moduleContent.prime">
             {{ moduleContent.prime.text }}
@@ -23,7 +23,7 @@
               <input type='checkbox' v-model='draggable'/> Draggable
               <input type='checkbox' v-model='resizable'/> Resizable
             </div>
-            <br/>
+            <br/> localgrid == {{ localGrid }}
             <div class="grid-section" v-if="localGrid.length > 0">
               <grid-layout v-if="localGrid"
                            :layout='localGrid'
@@ -41,7 +41,7 @@
                            :w='item.w'
                            :h='item.h'
                            :i='item.i'
-                        >item -- {{ item.i }}
+                        >item -- {{ item.i }} cc -- {{ moduleContent.prime.vistype }}
                     <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
                 </grid-item>
               </grid-layout>
@@ -105,24 +105,12 @@ export default {
       }
     },
     moduleContent: function () {
-      // console.log('module content')
-      // console.log(this.expCNRL)
-      // console.log(this.moduleCNRL)
-      // console.log(this.$store.state.NXPexperimentData)
       let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
-      // console.log(contentModule)
       if (contentModule === undefined) {
-        // console.log('no content mdoule data')
         return false
-      // } else if (contentModule[this.moduleCNRL].hasOwnProperty('prime') === false) {
-      // console.log('no prime content')
-      // return false
       } else if (contentModule[this.moduleCNRL].data.length === 0) {
-        // console.log('no prime content000000')
         return false
       } else {
-        // console.log('module contentYES')
-        // console.log(contentModule[this.moduleCNRL])
         return contentModule[this.moduleCNRL]
       }
     },
