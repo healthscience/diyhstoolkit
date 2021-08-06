@@ -1,10 +1,10 @@
 <template>
-  <div id="dashboard-holder" > mc  {{ moduleContent.prime }}
+  <div id="dashboard-holder" > <!-- mc  {{ moduleContent.prime }} -->
     <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
-          mm -- {{ moduleCNRL }}
+          <!-- mm -- {{ moduleCNRL }} -->
           <!-- <progress-vismessage v-if="nxpPrepareStatus" :progressMessage="nxpPrepareStatus" ></progress-vismessage> -->
           <div id="nxp-content" v-if="moduleContent.prime">
             {{ moduleContent.prime.text }}
@@ -13,17 +13,17 @@
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
           <div id="module-toolbar">
-            <header>Toolbar--
+            <header>
               <!-- <button type="button" class="btn" @click="toolbarUpdate">{{ toolbarStatusLive.text }}</button> -->
             </header>
             <!-- <button @click='decreaseWidth'>Decrease Width</button>
             <button @click='increaseWidth'>Increase Width</button> v-if="toolbarStatusLive.active" -->
             <div id="layouttools" >
-              <button @click='addItem'>Add an item</button>
+              <!-- <button @click='addItem'>Add an item</button> -->
               <input type='checkbox' v-model='draggable'/> Draggable
               <input type='checkbox' v-model='resizable'/> Resizable
             </div>
-            <br/> localgrid == {{ localGrid }}
+            <br/>
             <div class="grid-section" v-if="localGrid.length > 0">
               <grid-layout v-if="localGrid"
                            :layout='localGrid'
@@ -41,8 +41,8 @@
                            :w='item.w'
                            :h='item.h'
                            :i='item.i'
-                        >item -- {{ item.i }} cc -- {{ moduleContent.prime.vistype }}
-                    <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i"></component>
+                        ><!-- item -- {{ item.i }} cc -- {{ moduleContent.prime.vistype }} -->
+                    <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i" class="module-placer"></component>
                 </grid-item>
               </grid-layout>
             </div>
@@ -191,12 +191,10 @@ export default {
 
 <style>
 #dashboard-holder {
-  border: 0px solid red;
 }
 
 #dash-modules {
-  border: 5px solid grey;
-  margin: 1em;
+  border: 1px solid grey;
   list-style: none;
 }
 
@@ -206,8 +204,14 @@ header {
 }
 
 .grid-section {
-  border: 1px solid orange;
-  height: inherit;
+  border: 0px solid orange;
+}
+
+.module-placer {
+  border: 0px solid blue;
+}
+#nxp-content {
+  font-size: 1.4em;
 }
 
 .vue-grid-layout {
@@ -238,8 +242,9 @@ header {
 }*/
 
 .vue-grid-item:not(.vue-grid-placeholder) {
-    background: #ccc;
-    border: 4px solid blue;
+    background: white;
+    border: 0px solid blue;
+    min-width: 1400px;
 }
 
 .vue-grid-item.resizing {

@@ -1,5 +1,5 @@
 <template>
-  <div class="experiment-info" id="live-network-experiment">
+  <div id="live-network-experiment">
     <div class="live-network-header">
       <ul>
         <li class="network-toolbar">
@@ -97,10 +97,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+#live-network-experiment {
+  width: inherit;
+  border: 0px solid red;
+}
+
 .experiment-info {
   border: 0px solid grey;
-  width: 98%;
-  margin: auto;
   text-align: center;
 }
 

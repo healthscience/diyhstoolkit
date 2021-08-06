@@ -2,7 +2,7 @@
   <div id="time-context">
     <ul>
       <li>
-        <div id="calendar-selector">
+        <div id="calendar-selector-list">
           <date-picker v-model="value" @change="calendarSelect($event)" :lang="lang"></date-picker>
         </div>
       </li>
@@ -110,15 +110,9 @@ export default {
 </script>
 
 <style>
-#calendar-selector {
+#calendar-selector-list {
   height: auto;
-  border: 1px solid red;
-}
-
-#time-context {
-  min-margin: 40px;
-  text-align: center;
-  border: 1px solid pink;
+  border: 0px solid red;
 }
 
 #view-time {

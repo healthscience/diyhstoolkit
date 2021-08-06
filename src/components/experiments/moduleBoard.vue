@@ -5,7 +5,7 @@
       id="modalTitle"
     >
       <slot name="header">
-        This is the default tile!
+        Display being prepared
 
         <button
           type="button"
@@ -70,7 +70,6 @@ export default {
 
 <style>
 #module-board {
-  border: 0px solid grey;
   background-color: #E9EDF0;
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div id="compute-nxp">
+  <div id="compute-nxp-buid">
     <header>COMPUTE used to produce results:</header>
     <div id="prime-compute">
       <form id="compute_form" name="compute_form" method="post" action="#">
@@ -38,7 +38,7 @@
 <script>
 
 export default {
-  name: 'nxp-compute',
+  name: 'nxp-compute-build',
   components: {
   },
   computed: {
@@ -91,12 +91,12 @@ export default {
 </script>
 
 <style>
-#compute-nxp {
+#compute-nxp-build {
   margin: 1em;
   border: 1px solid grey;
 }
 
-#compute-nxp header {
+#compute-nxp-build header {
   font-weight: bold;
 }
 

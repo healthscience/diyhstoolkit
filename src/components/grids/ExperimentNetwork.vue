@@ -55,7 +55,6 @@
 <script>
 import DashBoard from '@/components/experiments/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
-// import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
 // import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
 // import ChartBuilder from '@/components/visualise/chartBuilder'
 
@@ -64,7 +63,6 @@ export default {
   components: {
     DashBoard,
     ProgressMessage
-    // JoinExperiment,
     // CalendarSelect,
     // ChartBuilder
   },
@@ -249,14 +247,12 @@ export default {
 
 #live-network-grid {
   border: 0px solid blue;
-  margin: auto;
   text-align: center;
 }
 
-body {
-  font-family: Helvetica Neue, Arial, sans-serif;
-  font-size: 14px;
-  color: #444;
+#grid-template {
+  border: 0px solid blue;
+  text-align: center;
 }
 
 table {
@@ -317,18 +313,14 @@ th.active .arrow {
   border-top: 4px solid #fff;
 }
 
-#preview-width {
-  width: 200px;
-}
-
 #dashboard-placeholder {
   display: block;
   border: 0px solid black;
 }
 
 .dashboard-place {
-  width: 1400px;
-  border: 2px solid green;
+  width: 98%;
+  border: 1px solid green;
 }
 
 #ecs-message {

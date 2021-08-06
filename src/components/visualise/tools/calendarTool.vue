@@ -267,12 +267,8 @@ export default {
       this.$store.dispatch('actionVisUpdate', contextK)
     },
     setTimeFormat () {
-      console.log('time format')
-      console.log(this.selectedTimeFormat)
     },
     setChartNumber () {
-      console.log('number chart')
-      console.log(this.selectedChartnumber)
     },
     setFuture () {
       let buildContext = {}
@@ -297,13 +293,13 @@ export default {
 #calendar-selector {
   display: inline-block;
   height: auto;
-  border: 1px solid red;
+  border: 0px solid red;
 }
 
 #time-context {
   min-margin: 40px;
   text-align: center;
-  border: 1px solid pink;
+  border: 0px solid pink;
 }
 
 #view-time {
@@ -313,7 +309,8 @@ export default {
 
 #calendar-tools {
   display: inline-block;
-  border: 1px solid green;
+  padding: 0.4em;
+  border: 2px solid white;
 }
 
 #time-calendar-tools {
@@ -321,7 +318,7 @@ export default {
 }
 
 #select-time {
-  border: 1px solid orange;
+  border: 0px solid orange;
 }
 
 .time-m-list {

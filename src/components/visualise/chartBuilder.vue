@@ -5,7 +5,7 @@
       <div id="chart-type">
         <ul>
           <li>
-            <div class="style-tools">
+            <div class="chart-style-tools">
               <li>
                 <button @click.prevent="chartSelect()">Bar</button>
               </li>
@@ -56,36 +56,21 @@ export default {
   },
   computed: {
     visToolbarStatusLive: function () {
-      // console.log('vis toolbar status chart builder==')
-      // console.log(this.$store.state.toolbarVisStatus)
-      // console.log(this.moduleCNRL)
-      // console.log(this.mData)
-      // let objectKeys = Object.keys(this.$store.state.toolbarVisStatus)
       if (this.moduleCNRL === 'start-1122335588' || this.moduleCNRL === '') {
         // console.log('yes toolbar set')
         if (this.$store.state.toolbarVisStatus['cnrl-001234543458']) {
-          // this.$store.state.toolbarVisStatus['cnrl-001234543458'][1].active === true
-          // console.log('temp toolbar')
           return { text: 'open tools', active: true, learn: true }
         } else if (this.$store.state.toolbarVisStatus['temp-001234543458']) {
-          // console.log('temp preview')
-          // this.$store.state.toolbarVisStatus['temp-001234543458'][98889].active === true
           return { text: 'open tools', active: true, learn: true }
         } else {
-          // console.log('nothing')
           return {} // this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
         }
       } else {
         // console.log('no vis toolbar to display')
-        // console.log('nomraml view')
         return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
       }
     },
     openDataLive: function () {
-      // console.log('open data')
-      // console.log(this.$store.state.opendataTools)
-      // console.log(this.moduleCNRL)
-      // console.log(this.mData)
       // default settings?
       let defaultCheck = Object.keys(this.$store.state.opendataTools)
       if (!this.$store.state.opendataTools[this.moduleCNRL]) {
@@ -142,6 +127,15 @@ export default {
 <style>
 #k-toolkit {
   border: 0px solid red;
+}
+
+#diy-tools {
+  border: 1px solid #E9EDF0;
+  background-color: #f0ece9; /*#E9EDF0;*/
+}
+
+.chart-style-tools {
+  border-right: 3px solid white;
 }
 
 ul {

@@ -53,7 +53,6 @@ export default {
 }
 
 #controls-holder {
-  height: 100%;
 }
 
 #compute-control-panel {

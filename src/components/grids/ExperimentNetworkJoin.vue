@@ -1,7 +1,7 @@
 <template>
-  <div id="live-network-grid">
+  <div id="live-network-grid-join">
     <!-- peer network experiment added -->
-    <div id="grid-template">live dashboard --
+    <div id="grid-template-join">live dashboard --
       <table>
         <thead>
           <tr>
@@ -291,7 +291,7 @@ export default {
 
 <style>
 
-#live-network-grid {
+#live-network-grid-join {
   border: 0px solid blue;
   margin: auto;
   text-align: center;
@@ -359,20 +359,6 @@ th.active .arrow {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid #fff;
-}
-
-#preview-width {
-  width: 200px;
-}
-
-#dashboard-placeholder {
-  display: block;
-  border: 0px solid black;
-}
-
-.dashboard-place {
-  width: 1400px;
-  border: 2px solid green;
 }
 
 .clear {

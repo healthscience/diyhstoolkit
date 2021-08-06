@@ -1,7 +1,7 @@
 <template>
-  <div id="visualise-nxp">
+  <div id="visualise-nxp-build">
     <header>VISUALISE DASHBOARD BUILDER:</header>
-    <div id="prime-visualise">
+    <div id="prime-visualise-build">
       <header>Type of visualisation:</header>
       <li class="visualise-medium-item">
         Network Library Reference Contract:<input v-model="visualRefCont" placeholder="Reference Contract">

@@ -510,7 +510,7 @@ const store = new Vuex.Store({
     },
     async actionVisUpdate (context, update) {
       console.log('vistoolbar UPdateAction')
-      console.log(update)
+      // console.log(update)
       this.state.ecsMessageLive = ''
       let firstTimeCheck = false
       // entity container
