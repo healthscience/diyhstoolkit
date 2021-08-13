@@ -29,7 +29,6 @@ util.inherits(contextUtility, events.EventEmitter)
 */
 contextUtility.prototype.prepareSettings = function (module, time, update, toolbar) {
   // compute controls
-  console.log('toolbar update')
   module.value.info.controls.date = time[0]
   module.value.info.controls.rangedate = time
   // context toolbar
@@ -52,8 +51,6 @@ contextUtility.prototype.prepareSettings = function (module, time, update, toolb
 */
 contextUtility.prototype.validateComputeSettings = function (peerChoices) {
   // compute controls
-  console.log('valiadate compute options')
-  console.log(peerChoices)
   return true
 }
 
@@ -78,8 +75,6 @@ contextUtility.prototype.prepareSettingsTime = function (module, time, update, t
 */
 contextUtility.prototype.prepareSettingsDevices = function (module, device) {
   // selected device
-  console.log('set devices')
-  console.log(module)
   module.value.info.controls.device = []
   module.value.info.controls.device.push(device)
   return module
@@ -110,8 +105,6 @@ contextUtility.prototype.prepareVisSettings = function (module, time, update, to
 *
 */
 contextUtility.prototype.validateVisSettings = function (peerChoices) {
-  console.log('valiate vis sttings')
-  console.log(peerChoices)
   return true
 }
 
@@ -122,7 +115,6 @@ contextUtility.prototype.validateVisSettings = function (peerChoices) {
 */
 contextUtility.prototype.prepareSettingsVisTime = function (module, time, update, toolbar) {
   // vis settings
-  // console.log(update)
   module.value.info.settings.date = time[0]
   // reset single or multiple charts asked for?
   if (update.singlechart !== undefined) {

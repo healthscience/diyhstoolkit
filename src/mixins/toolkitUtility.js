@@ -441,12 +441,13 @@ ToolkitUtility.prototype.displayManySpaceUpdate = function (liveData, entityData
 *
 */
 ToolkitUtility.prototype.timeCheck = function (moduleDate) {
+  let dateCheck = 0
   let future = false
   if (moduleDate !== undefined) {
-    if (moduleDate.isArray === true) {
-      moduleDate = moduleDate[0]
+    if (typeof moduleDate === 'object') {
+      dateCheck = moduleDate[0]
     }
-    if (moduleDate > moment().valueOf()) {
+    if (dateCheck > moment().valueOf()) {
       future = true
     } else {
     }
@@ -627,19 +628,15 @@ ToolkitUtility.prototype.prepareTime = function (timeIN, update) {
   } else {
     // time state available
     if (update.startperiod !== 0 && update.rangechange.length === 0) {
-      console.log('logic1')
       newStartTime.push(update.startperiod)
     } else if (update.rangechange.length > 0) {
-      console.log('logic2')
       newStartTime = update.rangechange
     } else if (update.startperiod === 0 && update.startperiodchange) {
-      console.log('logic3')
       let timeCon = new Date(timeIN)
       let convertTime = timeCon.getTime()
       let updateT = parseInt(convertTime) + update.startperiodchange
       newStartTime.push(updateT)
     } else {
-      console.log('logic4')
       let updateSum = parseInt(timeIN) + update.startperiodchange
       newStartTime.push(updateSum)
     }

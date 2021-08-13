@@ -205,10 +205,17 @@ export default {
         this.calendarList.push(this.value)
         this.calendarListMS.push(moment(this.value).valueOf())
       }
+      // set time range in store so other toolbars have access
+      this.$store.dispatch('actionSetTimerange', this.calendarListMS)
     },
     setRangedays (md) {
       this.rangeActive = !this.rangeActive
       this.calendarRangeTools.active = !this.calendarRangeTools.active
+      if (this.calendarRangeTools.active === false) {
+        // set store value to empty
+        this.calendarListMS = []
+        this.$store.dispatch('actionClearTimerange')
+      }
     },
     setMultidays (md) {
       this.calendarTools.active = !this.calendarTools.active
@@ -267,6 +274,8 @@ export default {
       this.$store.dispatch('actionVisUpdate', contextK)
     },
     setTimeFormat () {
+      // set in store so open data can pick up setting
+      this.$store.dispatch('actionSetTimeFormat', this.selectedTimeFormat)
     },
     setChartNumber () {
     },

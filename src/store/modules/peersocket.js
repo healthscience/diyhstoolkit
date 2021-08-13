@@ -113,7 +113,6 @@ export default {
       } else if (backJSON.type === 'publickey') {
         this.state.publickeys.push(backJSON.pubkey)
       } else if (backJSON.type === 'open-library') {
-        console.log('library swarm is open for datastore peerlink')
         this.state.swarmStatus = true
       } else if (backJSON.type === 'new-peer') {
         this.state.warmNetwork.push(backJSON.data.value)
@@ -135,26 +134,9 @@ export default {
           Vue.prototype.$socket.send(referenceContractReady)
         }
       } else if (backJSON.type === 'extractexperimentmodules') {
-        console.log('extracted modules set joinNXP')
         Vue.set(this.state.joinNXPlive, 'data', backJSON.data)
         Vue.set(this.state.joinNXPlive, 'compute', backJSON.compute)
         Vue.set(this.state.joinNXPlive, 'visualise', backJSON.visualise)
-        // set dataModule
-        // set vis tools
-        /* let tempNew = {}
-        tempNew.shellID = 'join1234567'
-        tempNew.moduleCNRL = 'temp-001234543458'
-        tempNew.mData = '98889'
-        Vue.set(this.state.newNXshell, 'tempshell', tempNew.shellID) */
-        // let setVisTools = {}
-        // setVisTools[tempNew.mData] = { text: 'open tools', active: true }
-        // Vue.set(this.state.toolbarVisStatus, tempNew.moduleCNRL, setVisTools)
-        // let setToolbar = {}
-        // setToolbar[tempNew.mData] = { text: 'open data', active: true }
-        // Vue.set(this.state.opendataTools, tempNew.moduleCNRL, setToolbar)
-        /* this.$store.dispatch('actionSetDataRefContract', dataMod)
-        this.$store.dispatch('actionSetTempToolbarVis', tempNew)
-        this.$store.dispatch('actionSetVisualiseRefContract', visMod) */
       } else if (backJSON.safeflow === true) {
         // safeFLOW inflow
         if (backJSON.type === 'auth') {
@@ -197,6 +179,8 @@ export default {
           Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
+        console.log('NEW----NEW----NEW')
+        console.log(backJSON)
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none123') {
           // switch off progress message and inform toolkit
@@ -206,17 +190,19 @@ export default {
           // need to make toolbar appear so date can be selected
         } else {
           console.log('NEW data safeFLOW++++++')
-          console.log(backJSON)
           // switch off nxp Progress message
           let setnxpProgress = { text: 'Experiment in progress', active: true }
           Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
+          // set devices for this NXP
+          if (this.state.devicesLive.length === 0) {
+            this.state.devicesLive = backJSON.devices
+          }
           let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.input.key, this.state.networkPeerExpModules)
           // has data for the visual module already been setup?
           let displayModulesReady = {}
           let gridBefore = Object.keys(this.state.moduleGrid[backJSON.context.moduleorder.visualise.key])
           if (gridBefore.length > 0) {
             console.log('yes grid+++++++')
-            console.log(backJSON)
             // move network experment prorgress message
             let setnxpProgressOff = { text: 'Experiment in progress', active: false }
             Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgressOff)
@@ -231,12 +217,12 @@ export default {
                 if (backJSON.data.context.triplet.device === modG.i) {
                   // set toolbars
                   let setVisTools = {}
-                  setVisTools[modG.i] = { text: 'open tools', active: true }
-                  Vue.set(this.state.toolbarVisStatus, displayDataUpdate.module, setVisTools)
+                  setVisTools = { text: 'open tools', active: true }
+                  Vue.set(this.state.toolbarVisStatus[displayDataUpdate.module], modG.i, setVisTools)
                   // set the open data toolbar
                   let setOPenDataToolbar = {}
-                  setOPenDataToolbar[modG.i] = { text: 'open data', active: false }
-                  Vue.set(this.state.opendataTools, displayDataUpdate.module, setOPenDataToolbar)
+                  setOPenDataToolbar = { text: 'open data', active: false }
+                  Vue.set(this.state.opendataTools[displayDataUpdate.module], modG.i, setOPenDataToolbar)
                   Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, modG.i, backJSON.data)
                   let contextPlacer = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': modG, 'data': backJSON.data.data }
                   Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module], 'prime', contextPlacer.prime)
@@ -249,8 +235,6 @@ export default {
               let lastTime = this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device].context.triplet
               if (backJSON.data.context.triplet.timeout !== lastTime) {
                 // set data for experiment module
-                console.log('set data for experiment, right order')
-                console.log(backJSON.data)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, backJSON.data.context.triplet.device, backJSON.data)
               }
               console.log('====== update TIME complete ======')
@@ -258,7 +242,6 @@ export default {
             console.log('updated COMPLETE--------------------')
           } else {
             console.log('no grid++++++++++')
-            console.log(backJSON)
             // set experiment progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
             Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -275,17 +258,20 @@ export default {
             let moduleList = Object.keys(displayModulesReady.data)
             for (let modID of moduleList) {
               // set the vis/calendar toolbar open
+              Vue.set(this.state.toolbarVisStatus, modID, {})
               if (displayModulesReady.data[modID].prime.text === 'Visualise') {
                 // set the toolbars per vis module per device
                 let listDevices = Object.keys(displayModulesReady.data[modID].data)
                 for (let deviceP of listDevices) {
                   let setVisTools = {}
-                  setVisTools[deviceP] = { text: 'open tools', active: true }
-                  Vue.set(this.state.toolbarVisStatus, modID, setVisTools)
+                  setVisTools = { text: 'open tools', active: true }
+                  Vue.set(this.state.toolbarVisStatus[modID], deviceP, setVisTools)
                   // set the open data toolbar
                   let setOPenDataToolbar = {}
-                  setOPenDataToolbar[deviceP] = { text: 'open data', active: false }
-                  Vue.set(this.state.opendataTools, modID, setOPenDataToolbar)
+                  // setOPenDataToolbar[deviceP] = { text: 'open data', active: false }
+                  setOPenDataToolbar = { text: 'open data', active: false }
+                  Vue.set(this.state.opendataTools, modID, {})
+                  Vue.set(this.state.opendataTools[modID], deviceP, setOPenDataToolbar)
                 }
               }
               // set the data for visualisation
@@ -326,7 +312,6 @@ export default {
         this.state.liveRefContIndex = backJSON.referenceContracts
         // prepare NPXs in NETWORK
         this.state.networkExpModules = backJSON.networkExpModules
-        // this.state.networkPeerExpModules = backJSON.networkPeerExpModules
         let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)
         this.state.NXPexperimentList = gridAnnon
         // set the dashboard toolbar status settings
@@ -451,6 +436,9 @@ export default {
     SET_MODULE_HOLDER (state, inVerified) {
       this.state.moduleHolder = []
       this.state.refcontractPackaging = []
+    },
+    SET_TIMEFORMAT_STYLE (state, inVerified) {
+      this.state.setTimeFormat = inVerified
     }
   },
   actions: {
@@ -709,11 +697,12 @@ export default {
       context.commit('SET_NEWNXP_VISRESOLUTION', update)
     },
     actionCalendarDate (context, update) {
-      console.log('start date')
-      console.log(update)
       if (update.text === 'data-start') {
         context.commit('SET_DATE_STARTNXP', update.selectDate)
       }
+    },
+    actionSetTimeFormat (context, update) {
+      context.commit('SET_TIMEFORMAT_STYLE', update)
     },
     actionNewNXPrefcontract (context, update) {
       // add the question module

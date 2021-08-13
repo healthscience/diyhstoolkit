@@ -1,7 +1,7 @@
 <template>
-  <div id="k-toolkit"> toobar vis == {{ visToolbarStatusLive }}
-    <button v-if="visToolbarStatusLive" type="button" class="btn" @click="visToolbarUpdate"></button> <!-- visToolbarStatusLive.text  -->
-    <div id="diy-tools"> <!-- v-if="visToolbarStatusLive"> -->
+  <div id="k-toolkit"> Device: {{ mData }}
+    <!-- <button v-if="visToolbarStatusLive.active === true" type="button" class="btn" @click="visToolbarUpdate">Tools</button> -->
+    <div id="diy-tools">
       <div id="chart-type">
         <ul>
           <li>
@@ -19,15 +19,15 @@
           <li>
             <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
           </li>
-          <li> opendata == {{ openDataLive }}
-            <a href="#" id="opendata" @click.prevent="openData()">Open</a> <!-- state.nxpProgress -->
+          <li v-if="openDataLive[mData] !== undefined">
+            <a href="#" id="opendata" @click.prevent="openData()">{{ openDataLive[mData].text }}</a>
           </li>
         </ul>
       </div>
-      <div v-if="openDataLive" id="open-knowledge">
-        <opendata-tool v-if="openDataLive.active === true" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" :toolInfo="visToolbarStatusLive"></opendata-tool>
+      <div v-if="openDataLive[mData] !== undefined" id="open-knowledge">
+        <opendata-tool v-if="openDataLive[mData].active === true" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" :toolInfo="visToolbarStatusLive"></opendata-tool>
       </div>
-    </div> <!-- live data -- {{ liveData }} -->
+    </div>
     <hsvisual v-if="liveData.data" :datacollection="liveData.data.chartPackage" :options="liveData.data.chartOptions"></hsvisual>
   </div>
 </template>
@@ -57,33 +57,27 @@ export default {
   computed: {
     visToolbarStatusLive: function () {
       if (this.moduleCNRL === 'start-1122335588' || this.moduleCNRL === '') {
-        // console.log('yes toolbar set')
         if (this.$store.state.toolbarVisStatus['cnrl-001234543458']) {
           return { text: 'open tools', active: true, learn: true }
         } else if (this.$store.state.toolbarVisStatus['temp-001234543458']) {
           return { text: 'open tools', active: true, learn: true }
         } else {
-          return {} // this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
+          return {}
         }
       } else {
-        // console.log('no vis toolbar to display')
         return this.$store.state.toolbarVisStatus[this.moduleCNRL][this.mData]
       }
     },
     openDataLive: function () {
-      // default settings?
       let defaultCheck = Object.keys(this.$store.state.opendataTools)
       if (!this.$store.state.opendataTools[this.moduleCNRL]) {
-        // console.log('mod not set')
         if (defaultCheck[0] === 'default') {
           return this.$store.state.opendataTools.default
         } else {
           return false
         }
       } else {
-        // console.log('modules data set toobar')
-        // console.log(this.$store.state.opendataTools[this.moduleCNRL])
-        return this.$store.state.opendataTools[this.moduleCNRL][this.mData]
+        return this.$store.state.opendataTools[this.moduleCNRL] // [this.mData]
       }
     },
     liveData: function () {
@@ -113,9 +107,9 @@ export default {
       updateVisTools.dtid = this.mData
       this.$store.dispatch('actionVistoolsUpdate', updateVisTools)
     },
-    openData (od) {
+    openData () {
       let updateOpendata = {}
-      updateOpendata.state = this.openDataLive.active
+      updateOpendata.state = this.openDataLive[this.mData].active
       updateOpendata.module = this.moduleCNRL
       updateOpendata.dtid = this.mData
       this.$store.dispatch('actionVisOpenData', updateOpendata)

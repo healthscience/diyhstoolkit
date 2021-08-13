@@ -54,6 +54,8 @@ const store = new Vuex.Store({
       yaxis: [],
       resolution: null
     },
+    setTimeFormat: 'timeseries',
+    setTimerange: [],
     dashboardNXP: {},
     ECSupdateOUT: {},
     referenceContract: {},
@@ -308,6 +310,12 @@ const store = new Vuex.Store({
     setTimeAsk: (state, inVerified) => {
       state.timeStartperiod = inVerified
     },
+    SET_TIME_RANGE: (state, inVerified) => {
+      state.setTimerange = inVerified
+    },
+    SET_CLEAR_TIMERANGE: (state, inVerified) => {
+      state.setTimerange = []
+    },
     setUpdatesOUT: (state, inVerified) => {
       state.ECSupdateOUT = inVerified
     },
@@ -404,6 +412,12 @@ const store = new Vuex.Store({
     },
     actionVisOpenData (context, update) {
       context.commit('setOpendataBar', update)
+    },
+    actionSetTimerange (context, update) {
+      context.commit('SET_TIME_RANGE', update)
+    },
+    actionClearTimerange (context, update) {
+      context.commit('SET_CLEAR_TIMERANGE', update)
     },
     actionDisplayLearn (context, update) {
       this.state.ecsMessageLive = ''
@@ -509,7 +523,7 @@ const store = new Vuex.Store({
       }
     },
     async actionVisUpdate (context, update) {
-      console.log('vistoolbar UPdateAction')
+      console.log('vistoolbar++++++UPdateAction')
       // console.log(update)
       this.state.ecsMessageLive = ''
       let firstTimeCheck = false
@@ -526,7 +540,7 @@ const store = new Vuex.Store({
       // is the context set from opendata tools or time nav tools?
       let contextState = 'timeupdate'
       if (update.opendata === 'updated') {
-        contextState = 'toolbarupdate'
+        contextState = 'opendataUpdate'
       }
       // if no summary then first time use, extract modules from source
       let nxpRefcontract = {}
@@ -555,7 +569,7 @@ const store = new Vuex.Store({
           let updateSettings = {}
           if (contextState === 'timeupdate') {
             updateSettings = ContextOut.prepareSettingsTime(mmod, newStartTime, update, null)
-          } else if (contextState === 'toolbarupdate') {
+          } else if (contextState === 'opendataUpdate') {
             updateSettings = ContextOut.prepareSettings(mmod, newStartTime, update, this.state.visModuleHolder)
           }
           // what device has seen selected
@@ -570,7 +584,7 @@ const store = new Vuex.Store({
               context.commit('SET_HELP_STATUS', update)
             }
             updateSettings = ContextOut.prepareSettingsVisTime(mmod, newStartTime, update, null)
-          } else if (contextState === 'toolbarupdate') {
+          } else if (contextState === 'opendataUpdate') {
             updateSettings = ContextOut.prepareVisSettings(mmod, newStartTime, update, this.state.visModuleHolder)
           }
           updateModules.push(updateSettings)

@@ -10,7 +10,7 @@
               <select class="select-device-id" id="device-mapping-build" @change="deviceSelect" v-model="visualsettings.device">
                 <option value="none" selected="">please select</option>
                 <option v-for="dev in devices" :key="dev.device_mac" v-bind:value="dev.device_mac">
-                  {{ dev.device_name }}
+                  {{ dev.device_name + ' ' + dev.device_mac }}
                 </option>
               </select>
             </li>
@@ -53,11 +53,11 @@
           <li class="live-dtitem">
             <header>X-axis</header>
             <ul>
-              <li v-if="refContractPackage.length > 0">
+              <li v-if="refContractPackage.xaxisSet.length > 0">
                 <label for="xaxis-select"></label>
                 <select class="select-xaxis-id" id="xaxis-mapping-build" @change="xaxisSelect" v-model="visualsettings.xaxis">
                   <option value="none" selected="">please select</option>
-                  <option v-for="colpair in refContractPackage" :key="colpair.refcontract" v-bind:value="colpair.refcontract">
+                  <option v-for="colpair in refContractPackage.xaxisSet" :key="colpair.refcontract" v-bind:value="colpair.key">
                   {{ colpair.column }}
                   </option>
                 </select>
@@ -66,11 +66,11 @@
           </li>
           <li class="live-item">
             <header>Y-axis</header>
-            <ul v-if="refContractPackage.length > 0">
+            <ul v-if="refContractPackage.yaxisSet.length > 0">
               <label for="yaxis-select"></label>
               <select multiple="true" class="select-yaxis-id" id="yaxis-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
                 <option value="none" selected="">please select</option>
-                <option v-for="colpairy in refContractPackage" :key="colpairy.refcontract" v-bind:value="colpairy.refcontract">
+                <option v-for="colpairy in refContractPackage.yaxisSet" :key="colpairy.refcontract" v-bind:value="colpairy.refcontract">
                 {{ colpairy.column }}
                 </option>
               </select>
@@ -125,8 +125,8 @@
             </li>
           <div v-if="feedback.resolution" class="feedback">---</div>
       </div>
-      <div id="context-learn" class="live-kelement"> toolinfo -- {{ toolInfo }}
-        <li v-if="toolInfo === true">
+      <div v-if="toolInfo" id="context-learn" class="live-kelement"> toolinfo -- {{ toolInfo }}
+        <li v-if="toolInfo.active === true">
           <button id="learn-update" @click.prevent="learnUpdate($event)">Learn</button>
         </li>
       </div>
@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import hashObject from 'object-hash'
+// import hashObject from 'object-hash'
 
 export default {
   name: 'knowledge-live',
@@ -149,9 +149,6 @@ export default {
     toolInfo: Object
   },
   computed: {
-    dataSource: function () {
-      return this.$store.state.datasourceCount
-    },
     refContractCompute: function () {
       let computeLive = this.$store.state.joinNXPlive.compute
       return computeLive
@@ -164,11 +161,48 @@ export default {
       return []
     },
     refContractPackage: function () {
-      if (this.$store.state.refcontractPackaging.length === 0) {
-        return []
-      } else {
-        return this.$store.state.refcontractPackaging[this.dataSource].value.concept.tablestructure
+      // match ids to visualise contract
+      let modulesMatch = this.$store.state.experimentStatus[this.shellID].modules
+      let visContract = {}
+      let dataContract = {}
+      for (let modC of modulesMatch) {
+        if (modC.key === this.moduleCNRL) {
+          visContract = modC
+        }
+        if (modC.value.type === 'data') {
+          dataContract = modC.value.info.data
+        }
       }
+      let datatypeMatcher = {}
+      datatypeMatcher.xaxisSet = []
+      datatypeMatcher.xaxisSet.push(visContract.value.info.settings.xaxis)
+      datatypeMatcher.yaxisSet = dataContract.value.concept.tablestructure
+      // now match datatype references to their contract
+      let xDatatypeContracts = []
+      // let yDatatypeContracts = []
+      for (let dtKey of datatypeMatcher.xaxisSet) {
+        let dtMatch = this.$store.state.liveRefContIndex.datatype.find(elem => elem.key === dtKey) //
+        let dtPair = {}
+        if (typeof dtMatch === 'object') {
+          dtPair.key = dtKey
+          dtPair.column = dtMatch.value.concept.name
+          xDatatypeContracts.push(dtPair)
+        }
+      }
+      // match dt key to contract for yaxis
+      /* for (let dtKey of datatypeMatcher.yaxisSet) {
+        let dtMatch = this.$store.state.liveRefContIndex.datatype.find(elem => elem.key === dtKey) //
+        let dtPair = {}
+        if (typeof dtMatch === 'object') {
+          dtPair.key = dtKey
+          dtPair.name = dtMatch.value.concept.name
+          yDatatypeContracts.push(dtPair)
+        }
+      } */
+      let datatypeHolder = {}
+      datatypeHolder.xaxisSet = xDatatypeContracts
+      datatypeHolder.yaxisSet = datatypeMatcher.yaxisSet
+      return datatypeHolder
     },
     category: function () {
       if (this.$store.state.refcontractPackaging.length === 0) {
@@ -214,6 +248,9 @@ export default {
       timeList.push(timeItem3)
       return timeList
     },
+    timeRange: function () {
+      return this.$store.state.setTimerange
+    },
     resolution: function () {
       // mock units refContract
       let resList = []
@@ -226,6 +263,9 @@ export default {
     },
     devices: function () {
       return this.$store.state.devicesLive
+    },
+    selectedTimeFormat: function () {
+      return this.$store.state.setTimeFormat
     }
   },
   data () {
@@ -233,6 +273,8 @@ export default {
       selectChange: {
         'xaxis': false
       },
+      xaxisSet: '',
+      yaxisSet: '',
       visualsettings: {
         xaxis: null,
         yaxis: []
@@ -289,7 +331,7 @@ export default {
         if (scomp.key === this.visualsettings.compute) {
           // extract compute dtprefix and add to all datatype active in toolbar
           // need to build new datatypes for results
-          for (let updateRDTS of this.refContractPackage) {
+          /* for (let updateRDTS of this.refContractPackage) {
             // console.log(updateRDTS)
             let buildDTR = {}
             buildDTR.column = scomp.value.computational.name + updateRDTS.column
@@ -300,20 +342,17 @@ export default {
             let combineDThash = hashObject(sourceComputeDT)
             buildDTR.refcontract = combineDThash // scomp.key + '-' + updateRDTS.refcontract
             this.datatypeResults.push(buildDTR)
-          }
+          } */
         }
       }
       this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
     },
     resultsSelect () {
       // transfer this result type to chart y axis
-      console.log('resuls data type')
-      console.log(this.visualsettings.results)
       this.$store.dispatch('actionNewVisResults', this.visualsettings.results)
       this.refContractPackage.push(this.visualsettings.results)
     },
     learnUpdate () {
-      console.log('learn update from open data')
       let contextK = {}
       contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
@@ -322,7 +361,8 @@ export default {
       contextK.opendata = 'updated'
       contextK.startperiodchange = ''
       contextK.startperiod = this.calendarDate
-      contextK.rangechange = []
+      contextK.rangechange = this.timeRange
+      contextK.timeformat = this.selectedTimeFormat
       this.$store.dispatch('actionVisUpdate', contextK)
     }
   }
@@ -331,6 +371,7 @@ export default {
 
 <style>
 #live-view {
+  display: block;
   height: 100%;
   overflow: visible;
   border: 4px solid lightgrey;
@@ -360,6 +401,10 @@ export default {
   /* border-bottom: 2px dotted #6F6B63; */
   margin: 4px;
   font-weight: normal;
+}
+
+#context-devices {
+  min-width: 300px;
 }
 
 .live-item {

@@ -241,11 +241,6 @@ VisualUtility.prototype.timeCheck = function (moduleDate) {
 *
 */
 VisualUtility.prototype.mergeDataSets = function (liveData, newData) {
-  /* console.log('merge chart data START-------------------')
-  console.log(liveData)  */
-  // console.log(newData)
-  // let chartOptions = {}
-  // let mergedData = {}
   let deviceData = {}
   // let newDeviceadd = {}
   // data primary holder is device then context data dataPrint, need to match device to incoming data ie what device?
@@ -254,42 +249,10 @@ VisualUtility.prototype.mergeDataSets = function (liveData, newData) {
   // let assessInfo = {}
   // has this vis placer ie device had its options set?
   if (liveData.data[newData.context.triplet.device] === undefined) {
-    console.log('new device placer---------------------------')
     let newPlacerData = this.addNewPlacerData(newData.context.triplet.device, liveData, newData)
     deviceData = {}
     deviceData = newPlacerData.data
   } else {
-    console.log('existing device placer---------------------------')
-    // console.log(newData.context.triplet.device)
-    // console.log(liveData)
-    // chartOptions = liveData.data[newData.context.triplet.device].data.chartOptions
-    // need to order datasets per length of x axis, ie one two three datatype series per x axis?
-    // assessInfo = this.assessChartData(liveData.data[newData.context.triplet.device].data, newData.data)
-    // console.log('assessedINFO')
-    // console.log(assessInfo)
-    // what is combined or merged x axis data list look like?
-    // let mergedLabel = this.mergeLabelData(assessInfo, liveData.data[newData.context.triplet.device].data, newData.data)
-    // console.log(mergedLabel[0].length)
-    // normalised spacing of both y yaxis data series
-    // let normalisedData = this.timestampMatcher(mergedLabel, liveData.data[newData.context.triplet.device].data, newData.data)
-    // console.log('normalised data -----------------------------')
-    // console.log(normalisedData)
-    // update color setting for chart
-    // let updateChartColors = this.chartColorUpdate(normalisedData)
-    // console.log('update color settings etc')
-    // console.log(updateChartColors)
-    /* let updatePackage = {}
-    updatePackage.datasets = {}
-    updatePackage.labels = {}
-    // build new dataset chart structure
-    updatePackage.datasets = updateChartColors
-    updatePackage.labels = mergedLabel[0]
-    // final chart packaging structure
-    mergedData.chartOptions = chartOptions
-    mergedData.chartPackage = updatePackage
-    deviceData[newData.context.triplet.device] = {}
-    deviceData[newData.context.triplet.device].data = mergedData
-    */
   }
   return deviceData
 }
@@ -300,15 +263,10 @@ VisualUtility.prototype.mergeDataSets = function (liveData, newData) {
 *
 */
 VisualUtility.prototype.addNewPlacerData = function (device, liveData, newData) {
-  /* console.log('new placer data structure')
-  console.log(liveData)
-  console.log(newData) */
   let extractData = {}
   extractData.data = newData.data
   let newPlacerData = liveData
   newPlacerData.data[device] = extractData
-  // console.log('new placer datat +++++++++++++++++++++++++++')
-  // console.log(newPlacerData)
   return newPlacerData
 }
 
@@ -318,15 +276,8 @@ VisualUtility.prototype.addNewPlacerData = function (device, liveData, newData) 
 *
 */
 VisualUtility.prototype.assessChartData = function (liveData, newData) {
-  /* console.log('assessssssss')
-  console.log(liveData)
-  console.log(newData) */
   // assess the length of label i.e x axis length
   let assessedDataInfo = {}
-  /* console.log('asssess lengthe for chart Data')
-  console.log(liveData)
-  console.log('new data in sf-ecs')
-  console.log(newData) */
   let existingLabel = liveData.chartPackage.labels.length
   // new data back from SF-ECS
   let newLabel = newData.chartPackage.labels.length
@@ -351,10 +302,6 @@ VisualUtility.prototype.assessChartData = function (liveData, newData) {
 */
 VisualUtility.prototype.mergeLabelData = function (longLabel, liveData, newData) {
   //  is the time ie xaxis for one or more time periods?
-  /* console.log('make labels all same length')
-  console.log(longLabel)
-  console.log(liveData)
-  console.log(newData) */
   // based on whether new data set is long or shorter re do existing as neccessary
   let uniqueXaxis = []
   // for (let visDat of liveData.chartPackage.datase) {
@@ -370,10 +317,6 @@ VisualUtility.prototype.mergeLabelData = function (longLabel, liveData, newData)
 *
 */
 VisualUtility.prototype.timestampMatcher = function (mergedLabel, liveData, newData) {
-  /* console.log('padd out data y axis')
-  console.log(mergedLabel[0].length)
-  console.log(liveData)
-  console.log(newData) */
   let paddedData = []
   // padd out each exising dataset y
   // check if dataset of right length if not padd the dataset
@@ -394,7 +337,6 @@ VisualUtility.prototype.timestampMatcher = function (mergedLabel, liveData, newD
     count = 0
     newVisObject.data = matchList
     matchList = []
-    // console.log(matchList)
     paddedData.push(newVisObject)
   }
   // repeat for the new dataset
@@ -411,11 +353,8 @@ VisualUtility.prototype.timestampMatcher = function (mergedLabel, liveData, newD
       newMatchList.push(null)
     }
   }
-  // console.log(newMatchList)
   newVisObject.data = newMatchList
   paddedData.push(newVisObject)
-  // console.log('updated padded datasets')
-  // console.log(paddedData)
   return paddedData
 }
 
@@ -425,13 +364,9 @@ VisualUtility.prototype.timestampMatcher = function (mergedLabel, liveData, newD
 *
 */
 VisualUtility.prototype.chartColorUpdate = function (datasetsList) {
-  // console.log('update color settings')
-  // console.log(datasetsList)
   let colorUpdated = []
   // for each data set required charting prepare new unique colors
   for (let daty of datasetsList) {
-    // console.log('dataset colors updates')
-    // console.log(daty)
     let dataUpdate = {}
     let newColour = this.colourList()
     dataUpdate.type = daty.type
@@ -451,8 +386,6 @@ VisualUtility.prototype.chartColorUpdate = function (datasetsList) {
 *
 */
 VisualUtility.prototype.setColourDataset = function (dataSet) {
-  // console.log('coloar set INININININI')
-  // console.log(dataSet)
   let colourUpdated = dataSet
   let newColour = this.colourList()
   colourUpdated.borderColor = newColour
@@ -509,9 +442,6 @@ VisualUtility.prototype.prepareTime = function (timeIN, update) {
 *
 */
 VisualUtility.prototype.displayUpdateSpaceSingle = function (entityData, liveData) {
-  // console.log('single space prepare STAERT')
-  // console.log(entityData)
-  // console.log(liveData)
   let singleBundle = {}
   singleBundle.update = 1
   singleBundle.module = 1 // mod
@@ -563,68 +493,6 @@ VisualUtility.prototype.displaySpaceUpdate = function (liveData, entityData) {
 *
 */
 VisualUtility.prototype.displayManySpaceUpdate = function (liveData, entityData, matchModeType, updateComputeContract) {
-  /* console.log(liveData)
-  console.log(entityData)
-  console.log(matchModeType)
-  console.log(updateComputeContract) */
-  // setup return vis Object
-  /* let moduleKeys = Object.keys(liveData)
-  let updateVisData = {}
-  // loop over the modules in the NXP and match to compute and update data
-  for (let mod of moduleKeys) {
-    if (liveData[mod].prime.text === 'Visualise') {
-      updateVisData.module = mod
-    }
-  }
-  // pair device data to time range groupings
-  let devicesList = Object.keys(entityData.liveVislist)
-  // split into device data groupings
-  let deviceMatch = {}
-  // let keyMatch = {}
-  let dataMerged = {}
-  let dataKeys = Object.keys(entityData.visualData)
-  for (let dd of devicesList) {
-    for (let dk of dataKeys) {
-      if (Object.keys(entityData.visualData[dk]).length !== 0) {
-        if (entityData.visualData[dk].context.device === dd) {
-          deviceMatch[dk] = entityData.visualData[dk]
-          // keyMatch
-        } else {
-          console.log('no device match')
-        }
-      }
-    }
-    if (Object.keys(deviceMatch).length !== 0) {
-      dataMerged[dd] = this.mergeDataSets(deviceMatch, updateComputeContract)
-    } else {
-      dataMerged[dd] = []
-    }
-    deviceMatch = {}
-  }
-  // now build data structure for display
-  // structure require  key (uuit of data hash)  .context  .data chartData Chart Options
-  let dataDisplayStructure = {}
-  // for ()
-  // make new grid
-  let updateGrid = []
-  // make updated tools settings
-  let setOpendata = {}
-  let setVistoolbar = {}
-  for (let dl of devicesList) {
-    // nB temp measure
-    let unique = Array.from(new Set(entityData.liveVislist[dl]))
-    dataDisplayStructure[unique[0]] = {}
-    dataDisplayStructure[unique[0]].data = dataMerged[dl]
-    let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': unique[0], static: false }
-    updateGrid.push(newGriditem)
-    setOpendata[unique[0]] = { text: 'open data', active: false }
-    setVistoolbar[unique[0]] = { text: 'open tools', active: true }
-  }
-  updateVisData.update = dataDisplayStructure
-  updateVisData.grid = updateGrid
-  updateVisData.vistoolbar = setVistoolbar
-  updateVisData.opendata = setOpendata
-  return updateVisData */
 }
 
 export default VisualUtility
