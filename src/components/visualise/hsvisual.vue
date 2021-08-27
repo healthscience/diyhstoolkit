@@ -47,4 +47,9 @@ export default {
 #visual-view {
   border: 0px solid green;
 }
+
+.chartholder {
+  height: inherit;
+  border: 0px solid black;
+}
 </style>

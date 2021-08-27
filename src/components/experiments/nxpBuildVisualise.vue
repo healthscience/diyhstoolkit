@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import chartBuilder from '@/components/visualise/chartBuilder'
+import chartBuilder from '@/components/experiments/setChartBuilder'
 
 export default {
   name: 'nxp-visualdashboard',
@@ -25,9 +25,6 @@ export default {
   },
   computed: {
     refContractVisualise: function () {
-      // console.log('vis live???')
-      // console.log(this.$store.state.refcontractVisualise.length)
-      // console.log(this.$store.state.refcontractVisualise)
       let liveVis = []
       if (this.$store.state.refcontractVisualise.length !== 0) {
         liveVis = this.$store.state.refcontractVisualise
@@ -58,17 +55,6 @@ export default {
   },
   methods: {
     refContractLookup () {
-      // console.log('lookup ref contract for api data info')
-      // console.log(this.visualRefCont)
-      // create new temp shellID
-      /* this.shellID = '1234567'
-      this.mData = '98889'
-      let tempNew = {}
-      tempNew.shellID = this.shellID
-      tempNew.moduleCNRL = 'cnrl-001234543458'
-      tempNew.mData = this.mData
-      // setup toolbar info.
-      this.$store.dispatch('actionSetTempToolbarVis', tempNew) */
       let visMod = {}
       visMod.moduleinfo = this.modData
       visMod.refcont = this.visualRefCont
@@ -76,6 +62,7 @@ export default {
       visMod.mData = this.mData
       visMod.moduleCNRL = this.moduleCNRL
       this.$store.dispatch('actionSetVisualiseRefContract', visMod)
+      this.visualRefCont = ''
     }
   }
 }

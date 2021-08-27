@@ -72,12 +72,13 @@ export default {
       let defaultCheck = Object.keys(this.$store.state.opendataTools)
       if (!this.$store.state.opendataTools[this.moduleCNRL]) {
         if (defaultCheck[0] === 'default') {
-          return this.$store.state.opendataTools.default
+          return this.$store.state.opendataTools['default']
         } else {
+          console.log('false')
           return false
         }
       } else {
-        return this.$store.state.opendataTools[this.moduleCNRL] // [this.mData]
+        return this.$store.state.opendataTools[this.moduleCNRL]
       }
     },
     liveData: function () {
@@ -124,7 +125,7 @@ export default {
 }
 
 #diy-tools {
-  border: 1px solid #E9EDF0;
+  border: 0px solid #E9EDF0;
   background-color: #f0ece9; /*#E9EDF0;*/
 }
 

@@ -7,6 +7,9 @@ import draggable from 'chartjs-plugin-draggable'
 const { reactiveProp } = mixins
 
 export default ({
+  name: 'reactive-chart',
+  components: {
+  },
   extends: Bar,
   mixins: [reactiveProp],
   props: {
@@ -16,14 +19,12 @@ export default ({
     }
   },
   watch: {
-    optionsa: function () {
-      console.log('watching for update chart data')
-      this.renderChart(this.chartData, this.options)
-    },
     options: {
       deep: true,
+      // immediate: true,
       handler: function (val, oldVal) {
-        console.log('watcheru')
+        console.log('watcher options changed')
+        console.log(this.options.annotation)
         this.renderChart(this.chartData, this.options)
       }
     }
@@ -31,6 +32,9 @@ export default ({
   mounted () {
     // this.chartData is created in the mixin
     this.renderChart(this.chartData, this.options)
+    console.log('option live?')
+    console.log(this.options)
+    console.log(this.options.annotation.annotations[0].value)
   }
 })
 </script>

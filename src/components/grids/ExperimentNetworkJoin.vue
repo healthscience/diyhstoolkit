@@ -55,6 +55,9 @@
         </template>
         <template v-slot:compute>
           <header>Compute</header>
+          <div id="compute-selected" v-if="NXPJoinModuleCompute !== undefined">
+            Computaton selected: {{ NXPJoinModuleCompute[0].option.value.computational.name }}
+          </div>
           <li class="compute-form-item">
             Select start date of data:
             <calendar-select></calendar-select>
@@ -87,16 +90,14 @@
 
 <script>
 // import DashBoard from '@/components/experiments/edashBoard.vue'
-// import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
 import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
 import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
-import ChartBuilder from '@/components/visualise/chartBuilder'
+import ChartBuilder from '@/components/experiments/setChartBuilder'
 
 export default {
   name: 'ExperimentNetwork',
   components: {
     // DashBoard,
-    // ProgressMessage,
     JoinExperiment,
     CalendarSelect,
     ChartBuilder
@@ -118,21 +119,14 @@ export default {
       return this.$store.state.joinNXPselected
     },
     NXPstatusData: function () {
-      // console.log('nxp modules info')
-      // console.log(this.shellContract)
       let nxpContractRC = this.shellContract.trim()
-      // console.log(nxpContractRC)
       let modData = this.$store.state.NXPexperimentData
       let modHolder = {}
       if (this.shellContract.length !== 0 && modData[nxpContractRC] !== undefined) {
-        // console.log(modData)
-        // console.log(modData[nxpContractRC])
         let extractMod = modData[nxpContractRC]
         let modList = Object.keys(extractMod)
-        // console.log(modList)
         modHolder[nxpContractRC] = []
         modHolder[nxpContractRC] = modList
-        // console.log(modHolder)
         return modHolder
       } else {
         return false
@@ -157,6 +151,7 @@ export default {
       if (this.$store.state.joinNXPlive.visualise === undefined) {
         return {}
       } else {
+        console.log(this.$store.state.joinNXPlive)
         return this.$store.state.joinNXPlive.visualise
       }
     },
@@ -221,9 +216,9 @@ export default {
       },
       type: 'chart.js',
       shellID: null,
-      moduleCNRL: '',
-      moduleType: '',
-      mData: '',
+      moduleCNRL: 'cnrl-001234543458',
+      moduleType: 'chart.js',
+      mData: '1',
       visualRefCont: ''
     }
   },
@@ -231,11 +226,6 @@ export default {
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
-    },
-    refContractLookup () {
-      // create new temp shellID
-      this.shellID = '7654321'
-      this.mData = '8855332211'
     },
     actionExperiment (expCNRL, NXPcontract) {
       this.shellContract = expCNRL
@@ -245,8 +235,13 @@ export default {
         this.isModalDashboardVisible = true
       } else {
         // preview network experiment
-        this.$store.dispatch('actionJOINViewexperiment', expCNRL)
-        this.refContractLookup()
+        let joinContext = {}
+        joinContext.type = 'chart.js'
+        joinContext.shellID = expCNRL
+        joinContext.moduleType = 'vis'
+        joinContext.moduleCNRL = 'cnrl-001234543458'
+        joinContext.mData = '1'
+        this.$store.dispatch('actionJOINViewexperiment', joinContext)
         this.isModalJoinVisible = true
       }
     },
@@ -259,9 +254,6 @@ export default {
     sourceSelect () {
       this.$store.dispatch('sourceDataExperiment', this.selectJoin.source)
     },
-    computeSelect () {
-      this.$store.dispatch('sourceComputeExperiment', this.selectJoin.compute)
-    },
     automationSave () {
       this.$store.dispatch('buildRefComputeAutomation', this.newCompute.automation)
     },
@@ -273,9 +265,9 @@ export default {
     },
     joinNetworkExperiment () {
       this.shellID = null
-      this.moduleCNRL = 'start-1122335588'
+      this.moduleCNRL = 'cnrl-001234543458'
       this.moduleType = 'vis'
-      this.mData = '1122335588'
+      this.mData = '1'
       const peerChoices = {}
       peerChoices.genesis = this.actionKBundle.id
       peerChoices.question = this.actionKBundle.name

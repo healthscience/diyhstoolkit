@@ -29,7 +29,7 @@
       <div id="view-controls-compute">
       </div>
       <div class="compute-code">
-        <a href="#" id="addComputeContract" >add</a>
+        <!-- <a href="#" id="addComputeContract" >add</a> -->
       </div>
     </div>
   </div>
@@ -43,8 +43,6 @@ export default {
   },
   computed: {
     refContractCompute: function () {
-      console.log('compute live???')
-      console.log(this.$store.state.refcontractCompute.length)
       let liveCompute = []
       if (this.$store.state.refcontractCompute.length !== 0) {
         liveCompute = this.$store.state.refcontractCompute
@@ -79,6 +77,7 @@ export default {
       computeMod.moduleinfo = this.modData
       computeMod.refcont = this.computeRefCont
       this.$store.dispatch('actionSetComputeRefContract', computeMod)
+      this.computeRefCont = ''
     },
     addComputeContract () {
       // update vuex of data source latest

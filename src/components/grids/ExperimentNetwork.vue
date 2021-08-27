@@ -35,8 +35,7 @@
               {{ ecsMessage }}
             </div>
             <!-- view the dashboard per network experiment -->
-            <!-- pm {{ NXPprogress }} == npd  {{ NXPstatusData }} -->
-            <div id="module-list" v-if="NXPstatusData !== false"> {{ NXPstatusData }}
+            <div id="module-list" v-if="NXPstatusData !== false">
               <progress-message :progressMessage="NXPprogress"></progress-message>
               <div id="module-ready" v-if="NXPstatusData[shellContract]">
                 <ul v-for="modI in NXPstatusData[shellContract]" :key="modI">
@@ -44,7 +43,19 @@
                 </ul>
               </div>
             </div>
-              <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
+              <ul>
+                <li>
+                  <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
+                <li>
+                <li>
+                  <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
+                </li>
+              </ul>
+          </li>
+          <li>
+            <div id="remove-message" v-if="messageRemove === true">
+              Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Y</a>  N
+            </div>
           </li>
         </ul>
       </div>
@@ -182,7 +193,9 @@ export default {
       moduleCNRL: '',
       moduleType: '',
       mData: '',
-      visualRefCont: ''
+      visualRefCont: '',
+      messageRemove: false,
+      removeNXPid: ''
     }
   },
   methods: {
@@ -229,15 +242,17 @@ export default {
     datastartLookup () {
       this.newCompute.startperiod = 12345123451
     },
-    joinNetworkExperiment () {
-      const peerChoices = {}
-      peerChoices.genesis = this.actionKBundle.id
-      peerChoices.question = this.actionKBundle.name
-      this.$store.dispatch('actionJoinExperiment', peerChoices)
-      this.closeModalJoin()
-    },
     closeDashboard (dc) {
       this.$store.dispatch('actionCloseDashboard', dc)
+    },
+    removeDashboard (dc) {
+      this.messageRemove = !this.messageRemove
+      this.removeNXPid = dc
+      // this.$store.dispatch('actionRemoveDashboard', dc)
+    },
+    removeConfirmDashboard (dc) {
+      this.$store.dispatch('actionRemoveDashboard', this.removeNXPid)
+      this.messageRemove = !this.messageRemove
     }
   }
 }

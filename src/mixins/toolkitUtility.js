@@ -319,6 +319,21 @@ ToolkitUtility.prototype.matchModuleType = function (mType, modules) {
 }
 
 /**
+* extract type of module by ID
+* @method matchModuleType
+*
+*/
+ToolkitUtility.prototype.matchModuleRefcontractID = function (modID, modules) {
+  let matchContract = {}
+  for (let mod of modules) {
+    if (modID === mod.key) {
+      matchContract = mod
+    }
+  }
+  return matchContract
+}
+
+/**
 * prepare multi datasets one chart
 * @method displayUpdateSpaceSingle
 *

@@ -1,5 +1,5 @@
 <template>
-  <div id="live-view">
+  <div id="live-view-opendata">
     <div id="knowledge-selector">
       <div id="live-context-datatypes">
         <div id="context-devices" class="live-kelement">
@@ -23,9 +23,6 @@
               <label for="compute-select"></label>
               <select class="select-compute-id" id="compute-mapping-build" @change="computeSelect" v-model="visualsettings.compute">
                 <option value="none" selected="">please select</option>
-                <!-- <option v-for="comp in refContractCompute" :key="comp.option.key" v-bind:value="comp.option.key">
-                {{ comp.option.value.computational.name }}
-                </option> -->
                 <option v-for="compL in refContractComputeLive" :key="compL.key" v-bind:value="compL.key">
                 {{ compL.value.computational.name }}
                 </option>
@@ -33,7 +30,7 @@
             </li>
           </ul>
         </div>
-        <div id="context-results" class="live-kelement">
+        <!-- <div id="context-results" class="live-kelement">
           <header>Datatype-Results:</header>
           <ul>
             <li>
@@ -46,7 +43,7 @@
               </select>
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
       <div id="live-context-datatypes">
         <ul>
@@ -125,7 +122,7 @@
             </li>
           <div v-if="feedback.resolution" class="feedback">---</div>
       </div>
-      <div v-if="toolInfo" id="context-learn" class="live-kelement"> toolinfo -- {{ toolInfo }}
+      <div v-if="toolInfo" id="context-learn" class="live-kelement">
         <li v-if="toolInfo.active === true">
           <button id="learn-update" @click.prevent="learnUpdate($event)">Learn</button>
         </li>
@@ -149,10 +146,6 @@ export default {
     toolInfo: Object
   },
   computed: {
-    refContractCompute: function () {
-      let computeLive = this.$store.state.joinNXPlive.compute
-      return computeLive
-    },
     refContractComputeLive: function () {
       let computeLive = this.$store.state.liveRefContIndex.compute
       return computeLive
@@ -189,16 +182,6 @@ export default {
           xDatatypeContracts.push(dtPair)
         }
       }
-      // match dt key to contract for yaxis
-      /* for (let dtKey of datatypeMatcher.yaxisSet) {
-        let dtMatch = this.$store.state.liveRefContIndex.datatype.find(elem => elem.key === dtKey) //
-        let dtPair = {}
-        if (typeof dtMatch === 'object') {
-          dtPair.key = dtKey
-          dtPair.name = dtMatch.value.concept.name
-          yDatatypeContracts.push(dtPair)
-        }
-      } */
       let datatypeHolder = {}
       datatypeHolder.xaxisSet = xDatatypeContracts
       datatypeHolder.yaxisSet = datatypeMatcher.yaxisSet
@@ -262,7 +245,7 @@ export default {
       return this.$store.state.refContractPackaging
     },
     devices: function () {
-      return this.$store.state.devicesLive
+      return this.$store.state.devicesLive[this.shellID]
     },
     selectedTimeFormat: function () {
       return this.$store.state.setTimeFormat
@@ -288,7 +271,8 @@ export default {
         visulisation: false,
         resolution: false
       },
-      datatypeResults: []
+      datatypeResults: [],
+      observataionDts: []
     }
   },
   created () {
@@ -326,26 +310,30 @@ export default {
     },
     computeSelect () {
       // prepare the results datatype
-      this.datatypeResults = []
-      for (let scomp of this.refContractComputeLive) {
-        if (scomp.key === this.visualsettings.compute) {
-          // extract compute dtprefix and add to all datatype active in toolbar
-          // need to build new datatypes for results
-          /* for (let updateRDTS of this.refContractPackage) {
-            // console.log(updateRDTS)
-            let buildDTR = {}
-            buildDTR.column = scomp.value.computational.name + updateRDTS.column
-            let sourceComputeDT = {}
-            sourceComputeDT.computedt = scomp.key
-            sourceComputeDT.computerefcontract = updateRDTS.refcontract
-            // make hash of combined
-            let combineDThash = hashObject(sourceComputeDT)
-            buildDTR.refcontract = combineDThash // scomp.key + '-' + updateRDTS.refcontract
-            this.datatypeResults.push(buildDTR)
-          } */
+      // match to computeContract
+      let computeContractMatch = {}
+      for (let compC of this.refContractComputeLive) {
+        if (compC.key === this.visualsettings.compute) {
+          computeContractMatch = compC
         }
       }
-      this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
+      let newDatatypes = []
+      if (computeContractMatch.key !== '9fa74bc282591f401470c6e3523197997e96702c') {
+        this.observataionDts = this.refContractPackage.yaxisSet
+        for (let dt of this.refContractPackage.yaxisSet) {
+          let combinComputeDT = dt
+          // lookup datatype contract
+          let dtCombine = {}
+          dtCombine.refcontract = combinComputeDT.refcontract + '-' + computeContractMatch.value.computational.dtprefix
+          dtCombine.column = combinComputeDT.column + '-' + computeContractMatch.value.computational.name
+          newDatatypes.push(dtCombine)
+        }
+        this.refContractPackage.yaxisSet = newDatatypes
+      } else {
+        // restore observation datatypes
+        this.refContractPackage.yaxisSet = this.observataionDts
+      }
+      // this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
     },
     resultsSelect () {
       // transfer this result type to chart y axis
@@ -370,10 +358,7 @@ export default {
 </script>
 
 <style>
-#live-view {
-  display: block;
-  height: 100%;
-  overflow: visible;
+#live-view-opendata {
   border: 4px solid lightgrey;
   margin-left: 1em;
 }

@@ -31,7 +31,7 @@ const store = new Vuex.Store({
     liveNXP: '',
     liveNXPcontract: {},
     liveNXPbundle: {},
-    devicesLive: [],
+    devicesLive: {},
     nxpModulesLive: [],
     liveDashList: [],
     joinNXPlive: {},
@@ -296,13 +296,13 @@ const store = new Vuex.Store({
     },
     setVisProgressUpdate: (state, inVerified) => {
       let setProgress = {}
-      setProgress[inVerified.mData] = { text: 'Preparing visualisation', active: true }
-      Vue.set(state.visProgress, inVerified.moduleCNRL, setProgress)
+      setProgress = { text: 'Updating visualisation', active: true }
+      Vue.set(state.visProgress[inVerified.module], inVerified.device, setProgress)
     },
     setVisProgressComplete: (state, inVerified) => {
       let setProgress = {}
-      setProgress[inVerified.mData] = { text: 'Preparing visualisation', active: false }
-      Vue.set(state.visProgress, inVerified.moduleCNRL, setProgress)
+      setProgress = { text: 'Updating visualisation', active: false }
+      Vue.set(state.visProgress[inVerified.module], inVerified.device, setProgress)
     },
     setModulesLive: (state, inVerified) => {
       state.nxpModulesLive = inVerified
@@ -327,6 +327,17 @@ const store = new Vuex.Store({
       console.log(tempModcontract)
       // Vue.set(state.newNXshell, '', tempModcontract)
     },
+    SET_JOINPACKAGING_REFCONTRACT (state, inVerified) {
+      // feedback on option for UI
+      console.log('set JOIN data refcontract')
+      console.log(inVerified)
+      this.state.refcontractPackaging.push(inVerified)
+    },
+    SET_JOINCOMPUTE_REFCONTRACT (state, inVerified) {
+      console.log('compute cotnract join clice to set')
+      console.log(inVerified)
+      this.state.refcontractCompute.push(inVerified)
+    },
     SET_LIVE_DATE (state, inVerified) {
       state.liveDate = inVerified
     },
@@ -340,9 +351,15 @@ const store = new Vuex.Store({
       Vue.set(this.state.visModuleHolder, 'timeperiod', '')
       Vue.set(this.state.visModuleHolder, 'resolution', '')
     },
-    SET_DASHBOARD_REMOVE (state, inVerified) {
+    SET_DASHBOARD_CLOSE (state, inVerified) {
       // remove dashboard item
       state.liveDashList = state.liveDashList.filter(item => item !== inVerified)
+    },
+    SET_DASHBOARD_REMOVE (state, inVerified) {
+      // remove NXP from peer list
+      console.log('remove NXP')
+      console.log(inVerified)
+      // state.liveDashList = state.liveDashList.filter(item => item !== inVerified)
     }
   },
   actions: {
@@ -373,21 +390,46 @@ const store = new Vuex.Store({
       context.commit('SET_LIVE_DATE', update)
     },
     actionJOINViewexperiment (context, update) {
+      console.log('action JOIN selected')
+      console.log(update)
       // reset state.visModuleHolder
       context.commit('SET_RESET_MODULEHOLDER', null)
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
-        if (ep.exp.key === update) {
+        if (ep.exp.key === update.shellID) {
           joinNXP = ep
         }
       }
+      // set the data ref contract for this genesis NXP
+      // pick out the data contract
+      let dataContract = {}
+      let computeContract = {}
+      for (let mod of joinNXP.modules) {
+        console.log(mod.value.info)
+        console.log(mod.value.info.option)
+        if (mod.value.info.option !== undefined && mod.value.info.option.value.refcontract === 'packaging') {
+          dataContract = mod.value.info.option
+        } else if (mod.value.info.option !== undefined && mod.value.info.option.value.refcontract === 'compute') {
+          computeContract = mod.value.info.option
+        }
+      }
+      console.log(dataContract)
+      console.log(computeContract)
+      context.commit('SET_JOINPACKAGING_REFCONTRACT', dataContract)
+      context.commit('SET_JOINCOMPUTE_REFCONTRACT', computeContract)
       // need to check date is set and other settings
       // if time not set set prompt peer to select or deafult today date TODO
       // set preview experiment live
       Vue.set(this.state.joinNXPlive, 'experiment', joinNXP)
+      // set open visual toolbar true
+      let setVisTools = { text: 'open tools', active: true }
+      Vue.set(this.state.toolbarVisStatus, update.moduleCNRL, {})
+      Vue.set(this.state.toolbarVisStatus[update.moduleCNRL], update.mData, setVisTools)
       // set the chart open data as true
-      let openDatatoolbar = { text: 'open data', active: true, learn: false }
-      Vue.set(this.state.opendataTools, 'default', openDatatoolbar)
+      let setOPenDataToolbar = { text: 'open data', active: true, learn: false }
+      // Vue.set(this.state.opendataTools, 'default', openDatatoolbar)
+      Vue.set(this.state.opendataTools, update.moduleCNRL, {})
+      Vue.set(this.state.opendataTools[update.moduleCNRL], update.mData, setOPenDataToolbar)
       // break out the module via sending message to network library utility
       let displayLibUtil = {}
       displayLibUtil.type = 'library'
@@ -514,7 +556,7 @@ const store = new Vuex.Store({
         message.reftype = 'ignore'
         message.action = 'networkexperiment'
         message.data = ECSbundle
-        console.log('OUTmesssage+++++++++OUT+++++++')
+        console.log('OUTmesssage+++++++++OUT+FIRST++++++')
         console.log(message)
         const safeFlowMessage = JSON.stringify(message)
         Vue.prototype.$socket.send(safeFlowMessage)
@@ -526,6 +568,8 @@ const store = new Vuex.Store({
       console.log('vistoolbar++++++UPdateAction')
       // console.log(update)
       this.state.ecsMessageLive = ''
+      // need to start update message to keep peer informed
+      let progressContext = {}
       let firstTimeCheck = false
       // entity container
       let entityUUID = this.state.entityUUIDReturn // update.nxpCNRL
@@ -575,7 +619,11 @@ const store = new Vuex.Store({
           // what device has seen selected
           updateSettings = ContextOut.prepareSettingsDevices(updateSettings, update.mData)
           updateModules.push(updateSettings)
+          // update the devices asked for
+          progressContext.device = update.mData
         } else if (mmod.value.type === 'visualise') {
+          // set the module ref for progress update
+          progressContext.module = mmod.key
           // both range and single set?
           let updateSettings = {}
           if (contextState === 'timeupdate') {
@@ -628,6 +676,10 @@ const store = new Vuex.Store({
       console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
+      // need to start update message to keep peer informed
+      // progressContext.module = 'a'
+      // progressContext.device = 'b'
+      context.commit('setVisProgressUpdate', progressContext)
     },
     actionFuture (context, update) {
       let chartData = this.state.NXPexperimentData[update.refs.shellCNRL][update.refs.moduleCNRL].data
@@ -667,6 +719,9 @@ const store = new Vuex.Store({
       context.commit('SET_DATASOURCECOUNT', update)
     },
     actionCloseDashboard (context, update) {
+      context.commit('SET_DASHBOARD_CLOSE', update)
+    },
+    actionRemoveDashboard (context, update) {
       context.commit('SET_DASHBOARD_REMOVE', update)
     }
   },

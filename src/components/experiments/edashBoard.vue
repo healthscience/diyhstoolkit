@@ -1,10 +1,9 @@
 <template>
-  <div id="dashboard-holder" > <!-- mc  {{ moduleContent.prime }} -->
+  <div id="dashboard-holder" >
     <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
-          <!-- mm -- {{ moduleCNRL }} -->
           <!-- <progress-vismessage v-if="nxpPrepareStatus" :progressMessage="nxpPrepareStatus" ></progress-vismessage> -->
           <div id="nxp-content" v-if="moduleContent.prime">
             {{ moduleContent.prime.text }}
@@ -20,8 +19,8 @@
             <button @click='increaseWidth'>Increase Width</button> v-if="toolbarStatusLive.active" -->
             <div id="layouttools" >
               <!-- <button @click='addItem'>Add an item</button> -->
-              <input type='checkbox' v-model='draggable'/> Draggable
-              <input type='checkbox' v-model='resizable'/> Resizable
+              <input class="layout-controls" type='checkbox' v-model='draggable'/> Draggable
+              <input class="layout-controls" type='checkbox' v-model='resizable'/> Resizable
             </div>
             <br/>
             <div class="grid-section" v-if="localGrid.length > 0">
@@ -31,6 +30,7 @@
                            :row-height='30'
                            :is-draggable='draggable'
                            :is-resizable='resizable'
+                           :responsive="responsive"
                            :vertical-compact='true'
                            :use-css-transforms='true'
               >
@@ -41,7 +41,7 @@
                            :w='item.w'
                            :h='item.h'
                            :i='item.i'
-                        ><!-- item -- {{ item.i }} cc -- {{ moduleContent.prime.vistype }} -->
+                        >
                     <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i" class="module-placer"></component>
                 </grid-item>
               </grid-layout>
@@ -130,6 +130,7 @@ export default {
       localGrid: _.cloneDeep(this.$store.state.moduleGrid),
       draggable: false,
       resizable: false,
+      responsive: true,
       index: 0
     }
   },
@@ -198,9 +199,12 @@ export default {
   list-style: none;
 }
 
-header {
-  margin-bottom: 12px;
-  font-weight: bold;
+#module-toolbar {
+  border: 0px solid green;
+}
+
+.layout-controls {
+  display: inline;
 }
 
 .grid-section {
@@ -215,8 +219,7 @@ header {
 }
 
 .vue-grid-layout {
-    border: 0px solid red;
-    height: inherit;
+  border: 0px solid red;
 }
 
 .columns {
@@ -263,9 +266,9 @@ header {
     bottom: 0;
     left: 0;
     right: 0;
-    margin: auto;
+    /* margin: auto;
     height: 100%;
-    width: 100%;
+    width: 100%; */
 }
 
 .vue-grid-item .no-drag {

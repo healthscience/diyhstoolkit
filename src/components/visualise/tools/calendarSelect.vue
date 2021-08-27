@@ -92,18 +92,6 @@ export default {
       bTime.selectDate = this.value
       bTime.text = 'data-start'
       this.$store.dispatch('actionCalendarDate', bTime)
-    },
-    setTimeData (seg) {
-      // back and forward and time
-      let contextK = {}
-      contextK.shellCNRL = this.shellID
-      contextK.moduleCNRL = this.moduleCNRL
-      contextK.moduleType = this.moduleType
-      contextK.mData = this.mData
-      contextK.startperiodchange = seg.text.number
-      contextK.startperiod = 0
-      contextK.rangechange = []
-      this.$store.dispatch('actionVisUpdate', contextK)
     }
   }
 }

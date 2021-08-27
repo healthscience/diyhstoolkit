@@ -38,7 +38,7 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
       moduleObject.question = mod.key
       let qgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: true }]
       gridPerModule[mod.key] = qgrid // mod.grid
-      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true }, 'grid': qgrid, 'data': [{ 'form': 'html' }, { 'content': 'Movement Summary' }], 'message': 'compute-complete' }
+      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true }, 'grid': qgrid, 'data': [{ 'form': 'html' }, { 'content': mod.value.info.question.text }], 'message': 'compute-complete' }
     } else if (mod.value.type === 'device') {
       moduleObject.device = mod.key
       let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '2', static: false }]
