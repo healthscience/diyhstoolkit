@@ -8,7 +8,7 @@
             <li>
               <label for="devices-select"></label>
               <select class="select-device-id" id="device-mapping-build" @change="deviceSelect" v-model="visualsettings.device">
-                <option value="none" selected="">please select</option>
+                <option value="none" >please select</option>
                 <option v-for="dev in devices" :key="dev.device_mac" v-bind:value="dev.device_mac">
                   {{ dev.device_name + ' ' + dev.device_mac }}
                 </option>
@@ -22,28 +22,14 @@
             <li>
               <label for="compute-select"></label>
               <select class="select-compute-id" id="compute-mapping-build" @change="computeSelect" v-model="visualsettings.compute">
-                <option value="none" selected="">please select</option>
-                <option v-for="compL in refContractComputeLive" :key="compL.key" v-bind:value="compL.key">
-                {{ compL.value.computational.name }}
+                <option value="none" >please select</option>
+                <option v-for="compL in refContractsComputeLive" :key="compL.key" v-bind:value="compL.key">
+                  {{ compL.value.computational.name }}
                 </option>
               </select>
             </li>
           </ul>
         </div>
-        <!-- <div id="context-results" class="live-kelement">
-          <header>Datatype-Results:</header>
-          <ul>
-            <li>
-              <label for="results-select"></label>
-              <select class="select-results-id" id="results-mapping-build" @change="resultsSelect" v-model="visualsettings.results">
-                <option value="none" selected="">please select</option>
-                <option v-for="rDT in datatypeResults" :key="rDT.refcontract" v-bind:value="rDT">
-                {{ rDT.column }}
-                </option>
-              </select>
-            </li>
-          </ul>
-        </div> -->
       </div>
       <div id="live-context-datatypes">
         <ul>
@@ -51,9 +37,9 @@
             <header>X-axis</header>
             <ul>
               <li v-if="refContractPackage.xaxisSet.length > 0">
-                <label for="xaxis-select"></label>
+              <label for="xaxis-select"></label>
                 <select class="select-xaxis-id" id="xaxis-mapping-build" @change="xaxisSelect" v-model="visualsettings.xaxis">
-                  <option value="none" selected="">please select</option>
+                  <!-- <option value="none" selected="">please select</option> -->
                   <option v-for="colpair in refContractPackage.xaxisSet" :key="colpair.refcontract" v-bind:value="colpair.key">
                   {{ colpair.column }}
                   </option>
@@ -66,7 +52,7 @@
             <ul v-if="refContractPackage.yaxisSet.length > 0">
               <label for="yaxis-select"></label>
               <select multiple="true" class="select-yaxis-id" id="yaxis-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
-                <option value="none" selected="">please select</option>
+                <!-- <option value="none" selected="">please select</option> -->
                 <option v-for="colpairy in refContractPackage.yaxisSet" :key="colpairy.refcontract" v-bind:value="colpairy.refcontract">
                 {{ colpairy.column }}
                 </option>
@@ -132,8 +118,6 @@
 </template>
 
 <script>
-// import hashObject from 'object-hash'
-
 export default {
   name: 'knowledge-live',
   components: {
@@ -146,12 +130,8 @@ export default {
     toolInfo: Object
   },
   computed: {
-    refContractComputeLive: function () {
-      let computeLive = this.$store.state.liveRefContIndex.compute
-      return computeLive
-    },
-    resultsDTs: function () {
-      return []
+    devices: function () {
+      return this.$store.state.devicesLive[this.shellID]
     },
     refContractPackage: function () {
       // match ids to visualise contract
@@ -169,6 +149,8 @@ export default {
       let datatypeMatcher = {}
       datatypeMatcher.xaxisSet = []
       datatypeMatcher.xaxisSet.push(visContract.value.info.settings.xaxis)
+      // set timestamp  as default xaxis
+      this.setDefaultXaxis(datatypeMatcher.xaxisSet[0])
       datatypeMatcher.yaxisSet = dataContract.value.concept.tablestructure
       // now match datatype references to their contract
       let xDatatypeContracts = []
@@ -186,6 +168,37 @@ export default {
       datatypeHolder.xaxisSet = xDatatypeContracts
       datatypeHolder.yaxisSet = datatypeMatcher.yaxisSet
       return datatypeHolder
+    },
+    activeComputeContract: function () {
+      let modulesMatch = this.$store.state.experimentStatus[this.shellID].modules
+      let computeContract = {}
+      for (let modC of modulesMatch) {
+        if (modC.value.type === 'compute') {
+          computeContract = modC
+        }
+      }
+      // if default set is no observation then yaxis will need updated
+      if (computeContract.value.info.compute.key !== '9fa74bc282591f401470c6e3523197997e96702c') {
+        // this.observataionDts = this.refContractPackage.yaxisSet
+        let newDatatypes = []
+        for (let dt of this.refContractPackage.yaxisSet) {
+          let combinComputeDT = dt
+          // lookup datatype contract
+          let dtCombine = {}
+          dtCombine.refcontract = combinComputeDT.refcontract + '-' + computeContract.value.info.compute.value.computational.dtprefix
+          dtCombine.column = combinComputeDT.column + '-' + computeContract.value.info.compute.value.computational.name
+          newDatatypes.push(dtCombine)
+        }
+        // set y axis options
+        this.setYaxisOptions(newDatatypes)
+      }
+      // set the current time range
+      this.setTimerangeStart(computeContract.value.info.controls.rangedate)
+      return computeContract.value.info.compute
+    },
+    refContractsComputeLive: function () {
+      let computesLive = this.$store.state.liveRefContIndex.compute
+      return computesLive
     },
     category: function () {
       if (this.$store.state.refcontractPackaging.length === 0) {
@@ -241,12 +254,6 @@ export default {
       resList.push(resItem)
       return resList
     },
-    results: function () {
-      return this.$store.state.refContractPackaging
-    },
-    devices: function () {
-      return this.$store.state.devicesLive[this.shellID]
-    },
     selectedTimeFormat: function () {
       return this.$store.state.setTimeFormat
     }
@@ -256,11 +263,15 @@ export default {
       selectChange: {
         'xaxis': false
       },
-      xaxisSet: '',
-      yaxisSet: '',
       visualsettings: {
+        device: null,
+        compute: null,
         xaxis: null,
-        yaxis: []
+        yaxis: [],
+        category: 'none',
+        time: 'cnrl-t1',
+        resolution: 'cnrl-t11'
+
       },
       feedback:
       {
@@ -271,13 +282,14 @@ export default {
         visulisation: false,
         resolution: false
       },
-      datatypeResults: [],
       observataionDts: []
     }
   },
   created () {
   },
   mounted () {
+    this.setDefaultDevice()
+    this.setComputeContract()
   },
   methods: {
     clearKnowledgeBox () {
@@ -285,6 +297,55 @@ export default {
     },
     onlyUnique (value, index, self) {
       return self.indexOf(value) === index
+    },
+    setDefaultDevice () {
+      this.visualsettings.device = this.mData
+    },
+    setDefaultXaxis (xdefault) {
+      this.visualsettings.xaxis = xdefault
+    },
+    setComputeContract () {
+      this.visualsettings.compute = this.activeComputeContract.key
+    },
+    computeSelect () {
+      // match to computeContract
+      let computeContractMatch = {}
+      for (let compC of this.refContractsComputeLive) {
+        if (compC.key === this.visualsettings.compute) {
+          computeContractMatch = compC
+        }
+      }
+      if (computeContractMatch.key !== '9fa74bc282591f401470c6e3523197997e96702c') {
+        this.observataionDts = this.refContractPackage.yaxisSet
+        this.setYaxis(computeContractMatch)
+      } else {
+        // restore observation datatypes
+        if (this.observataionDts.length !== 0) {
+          this.refContractPackage.yaxisSet = this.observataionDts
+        }
+      }
+      this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
+    },
+    setTimerangeStart (timerange) {
+      this.$store.dispatch('actionSetTimerange', timerange)
+    },
+    setYaxisOptions (startYdts) {
+      this.refContractPackage.yaxisSet = startYdts
+    },
+    setYaxis (computeContractMatch) {
+      // form the y axis options
+      let newDatatypes = []
+      for (let dt of this.refContractPackage.yaxisSet) {
+        let combinComputeDT = dt
+        // lookup datatype contract
+        let dtCombine = {}
+        dtCombine.refcontract = combinComputeDT.refcontract + '-' + computeContractMatch.value.computational.dtprefix
+        dtCombine.column = combinComputeDT.column + '-' + computeContractMatch.value.computational.name
+        newDatatypes.push(dtCombine)
+      }
+      this.refContractPackage.yaxisSet = newDatatypes
+      // what is default y axis(s) listed in computeContract?
+      // this.visualsettings.yaxis = computeContract.value.info.settings.yaxis // ['81de8e9a2c70d3867f2f16a531b8824480b641fc', '2b70f05722868c1111d84da267f683aa95a7cb85']
     },
     xaxisSelect () {
       // set default x-axis chart setting
@@ -306,39 +367,8 @@ export default {
       this.$store.dispatch('actionNewVisResolution', this.visualsettings.resolution)
     },
     deviceSelect () {
+      this.mData = this.visualsettings.device
       this.$store.dispatch('actionNewVisDevice', this.visualsettings.device)
-    },
-    computeSelect () {
-      // prepare the results datatype
-      // match to computeContract
-      let computeContractMatch = {}
-      for (let compC of this.refContractComputeLive) {
-        if (compC.key === this.visualsettings.compute) {
-          computeContractMatch = compC
-        }
-      }
-      let newDatatypes = []
-      if (computeContractMatch.key !== '9fa74bc282591f401470c6e3523197997e96702c') {
-        this.observataionDts = this.refContractPackage.yaxisSet
-        for (let dt of this.refContractPackage.yaxisSet) {
-          let combinComputeDT = dt
-          // lookup datatype contract
-          let dtCombine = {}
-          dtCombine.refcontract = combinComputeDT.refcontract + '-' + computeContractMatch.value.computational.dtprefix
-          dtCombine.column = combinComputeDT.column + '-' + computeContractMatch.value.computational.name
-          newDatatypes.push(dtCombine)
-        }
-        this.refContractPackage.yaxisSet = newDatatypes
-      } else {
-        // restore observation datatypes
-        this.refContractPackage.yaxisSet = this.observataionDts
-      }
-      // this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
-    },
-    resultsSelect () {
-      // transfer this result type to chart y axis
-      this.$store.dispatch('actionNewVisResults', this.visualsettings.results)
-      this.refContractPackage.push(this.visualsettings.results)
     },
     learnUpdate () {
       let contextK = {}
@@ -351,7 +381,11 @@ export default {
       contextK.startperiod = this.calendarDate
       contextK.rangechange = this.timeRange
       contextK.timeformat = this.selectedTimeFormat
-      this.$store.dispatch('actionVisUpdate', contextK)
+      if (contextK.rangechange.length === 0) {
+        console.log('time range not set')
+      } else {
+        this.$store.dispatch('actionVisUpdate', contextK)
+      }
     }
   }
 }

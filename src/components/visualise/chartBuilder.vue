@@ -1,6 +1,5 @@
 <template>
   <div id="k-toolkit"> Device: {{ mData }}
-    <!-- <button v-if="visToolbarStatusLive.active === true" type="button" class="btn" @click="visToolbarUpdate">Tools</button> -->
     <div id="diy-tools">
       <div id="chart-type">
         <ul>
@@ -20,7 +19,7 @@
             <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
           </li>
           <li v-if="openDataLive[mData] !== undefined">
-            <a href="#" id="opendata" @click.prevent="openData()">{{ openDataLive[mData].text }}</a>
+            <a href="#" id="opendata" @click.prevent="openDataToolbar()">{{ openDataLive[mData].text }}</a>
           </li>
         </ul>
       </div>
@@ -108,7 +107,7 @@ export default {
       updateVisTools.dtid = this.mData
       this.$store.dispatch('actionVistoolsUpdate', updateVisTools)
     },
-    openData () {
+    openDataToolbar () {
       let updateOpendata = {}
       updateOpendata.state = this.openDataLive[this.mData].active
       updateOpendata.module = this.moduleCNRL

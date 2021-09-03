@@ -465,6 +465,7 @@ export default {
     },
     SET_TIMEFORMAT_STYLE (state, inVerified) {
       this.state.setTimeFormat = inVerified
+      Vue.set(this.state.visModuleHolder, 'setTimeFormat', inVerified)
     }
   },
   actions: {

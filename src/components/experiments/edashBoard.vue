@@ -4,7 +4,6 @@
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
-          <!-- <progress-vismessage v-if="nxpPrepareStatus" :progressMessage="nxpPrepareStatus" ></progress-vismessage> -->
           <div id="nxp-content" v-if="moduleContent.prime">
             {{ moduleContent.prime.text }}
           </div>
@@ -12,9 +11,6 @@
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
           <div id="module-toolbar">
-            <header>
-              <!-- <button type="button" class="btn" @click="toolbarUpdate">{{ toolbarStatusLive.text }}</button> -->
-            </header>
             <!-- <button @click='decreaseWidth'>Decrease Width</button>
             <button @click='increaseWidth'>Increase Width</button> v-if="toolbarStatusLive.active" -->
             <div id="layouttools" >

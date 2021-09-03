@@ -3,7 +3,7 @@
     <ul>
       <li>
         <div id="calendar-selector">
-          <date-picker v-model="value" @change="calendarSelect($event)" :lang="lang" :range="rangeActive === true" ></date-picker>
+          <date-picker v-model="calendarvalue" @change="calendarSelect($event)" :lang="lang" :range="rangeActive === true" ></date-picker>
           <div id="time-calendar-tools">
             <ul>
               <li>
@@ -99,6 +99,17 @@ export default {
     moduleType: String,
     mData: String
   },
+  computed: {
+    timeRange: function () {
+      console.log('timerange deafult')
+      console.log(this.$store.state.setTimerange)
+      return this.$store.state.setTimerange
+    }
+  },
+  created () {
+  },
+  mounted () {
+  },
   data: () => ({
     toolbar:
     {
@@ -151,7 +162,7 @@ export default {
     time2: '',
     time3: '',
     // custom lang
-    value: '',
+    calendarvalue: '',
     rangeActive: false,
     lang: {
       days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -177,24 +188,26 @@ export default {
       end: '23:30'
     }
   }),
-  created () {
-  },
-  mounted () {
-  },
-  computed: {
-  },
   methods: {
     calendarSelect () {
+      console.log('calenar value chosen')
+      console.log(this.calendarvalue)
       if (this.calendarTools.active !== true && this.calendarRangeTools.active !== true) {
+        console.log('timeLogic1')
         // convert to correct time format and update KBundle and build new visStyle
         let bTime = {}
-        bTime.selectDate = this.value
+        bTime.selectDate = this.calendarvalue
         bTime.text = 'selectd'
-        this.$store.dispatch('singleDateUpdate', moment(this.value).valueOf())
+        let numberTimeformat = moment(this.calendarvalue).valueOf()
+        this.$store.dispatch('singleDateUpdate', numberTimeformat)
+        this.calendarListMS = []
+        this.calendarListMS.push(numberTimeformat)
+        this.$store.dispatch('actionSetTimerange', this.calendarListMS)
       } else if (this.calendarRangeTools.active === true) {
         // reset the timeholder
+        console.log('timeLogic2')
         this.calendarListMS = []
-        let rangeSelected = moment.range(this.value[0], this.value[1])
+        let rangeSelected = moment.range(this.calendarvalue[0], this.calendarvalue[1])
         let segText = 'days'
         let sourceRangeTimes = Array.from(rangeSelected.by(segText))
         // loop over range and build date range format
@@ -202,8 +215,9 @@ export default {
           this.calendarListMS.push(moment(dr).valueOf())
         }
       } else if (this.calendarTools.active === true) {
-        this.calendarList.push(this.value)
-        this.calendarListMS.push(moment(this.value).valueOf())
+        console.log('timeLogic3')
+        this.calendarList.push(this.calendarvalue)
+        this.calendarListMS.push(moment(this.calendarvalue).valueOf())
       }
       // set time range in store so other toolbars have access
       this.$store.dispatch('actionSetTimerange', this.calendarListMS)
@@ -217,6 +231,11 @@ export default {
         this.$store.dispatch('actionClearTimerange')
       }
     },
+    setTimerangeStart (timerange) {
+      console.log('start range time')
+      console.log(timerange)
+      this.$store.dispatch('actionSetTimerange', timerange)
+    },
     setMultidays (md) {
       this.calendarTools.active = !this.calendarTools.active
     },
@@ -226,26 +245,6 @@ export default {
       this.makeTimeBundles = []
       this.calendarTools.active = false
     },
-    chartMultiday (cm) {
-      // prepare list of KnowledgeBundles to visualise
-      // if single day selected use calendar list
-      let timeRange = []
-      if (this.calendarListMS.length === 0) {
-        timeRange.push(moment(this.value).valueOf())
-      } else {
-        timeRange = this.calendarListMS
-      }
-      let contextK = {}
-      contextK.nxpCNRL = this.shellID
-      contextK.moduleCNRL = this.moduleCNRL
-      contextK.moduleType = this.moduleType
-      contextK.mData = this.mData
-      contextK.startperiod = 0
-      contextK.startperiodchange = 0
-      contextK.rangechange = timeRange
-      contextK.singlechart = false
-      this.$store.dispatch('actionVisUpdate', contextK)
-    },
     singleChartday (cm) {
       // prepare update for safeFLOW
       let contextK = {}
@@ -253,13 +252,18 @@ export default {
       contextK.moduleCNRL = this.moduleCNRL
       contextK.moduleType = this.moduleType
       contextK.mData = this.mData
-      contextK.startperiod = moment(this.value).valueOf()
+      contextK.startperiod = moment(this.calendarvalue).valueOf()
       contextK.startperiodchange = 0
-      contextK.rangechange = this.calendarListMS
+      contextK.rangechange = this.timeRange
       // contextK.singlechart = true
       contextK.singlechart = this.selectedChartnumber
       contextK.timeformat = this.selectedTimeFormat
-      this.$store.dispatch('actionVisUpdate', contextK)
+      // check that time is selected
+      if (contextK.rangechange.length === 0) {
+        console.log('no time present, prompt peer2')
+      } else {
+        this.$store.dispatch('actionVisUpdate', contextK)
+      }
     },
     setTimeData (seg) {
       // back and forward and time
@@ -270,8 +274,17 @@ export default {
       contextK.mData = this.mData
       contextK.startperiodchange = seg.text.number
       contextK.startperiod = 0
-      contextK.rangechange = []
-      this.$store.dispatch('actionVisUpdate', contextK)
+      contextK.rangechange = [] // this.timeRange
+      // check that time is selected
+      if (contextK.startperiod !== 0) {
+        console.log('no time present, prompt peer1')
+        console.log(this.timeRange)
+        console.log(contextK)
+      } else {
+        console.log('plus or minus one day')
+        console.log(contextK)
+        this.$store.dispatch('actionVisUpdate', contextK)
+      }
     },
     setTimeFormat () {
       // set in store so open data can pick up setting

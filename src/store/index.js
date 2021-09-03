@@ -52,7 +52,8 @@ const store = new Vuex.Store({
       timeperiod: null,
       xaxis: null,
       yaxis: [],
-      resolution: null
+      resolution: null,
+      setTimeFormat: null
     },
     setTimeFormat: 'timeseries',
     setTimerange: [],
@@ -323,19 +324,14 @@ const store = new Vuex.Store({
       state.moduleGrid = []
     },
     newNXPshellUpdate: (state, inVerified) => {
-      let tempModcontract = inVerified
-      console.log(tempModcontract)
+      // let tempModcontract = inVerified
       // Vue.set(state.newNXshell, '', tempModcontract)
     },
     SET_JOINPACKAGING_REFCONTRACT (state, inVerified) {
       // feedback on option for UI
-      console.log('set JOIN data refcontract')
-      console.log(inVerified)
       this.state.refcontractPackaging.push(inVerified)
     },
     SET_JOINCOMPUTE_REFCONTRACT (state, inVerified) {
-      console.log('compute cotnract join clice to set')
-      console.log(inVerified)
       this.state.refcontractCompute.push(inVerified)
     },
     SET_LIVE_DATE (state, inVerified) {
@@ -350,6 +346,7 @@ const store = new Vuex.Store({
       Vue.set(this.state.visModuleHolder, 'category', '')
       Vue.set(this.state.visModuleHolder, 'timeperiod', '')
       Vue.set(this.state.visModuleHolder, 'resolution', '')
+      Vue.set(this.state.visModuleHolder, 'setTimeFormat', '')
     },
     SET_DASHBOARD_CLOSE (state, inVerified) {
       // remove dashboard item
@@ -405,16 +402,12 @@ const store = new Vuex.Store({
       let dataContract = {}
       let computeContract = {}
       for (let mod of joinNXP.modules) {
-        console.log(mod.value.info)
-        console.log(mod.value.info.option)
         if (mod.value.info.option !== undefined && mod.value.info.option.value.refcontract === 'packaging') {
           dataContract = mod.value.info.option
         } else if (mod.value.info.option !== undefined && mod.value.info.option.value.refcontract === 'compute') {
           computeContract = mod.value.info.option
         }
       }
-      console.log(dataContract)
-      console.log(computeContract)
       context.commit('SET_JOINPACKAGING_REFCONTRACT', dataContract)
       context.commit('SET_JOINCOMPUTE_REFCONTRACT', computeContract)
       // need to check date is set and other settings
@@ -493,6 +486,8 @@ const store = new Vuex.Store({
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
       context.commit('setNXPprogressUpdate', update)
+      // clear the time range for new NXP view
+      context.commit('SET_CLEAR_TIMERANGE', null)
       // build the safeFLOW-ECS input bundle
       let matchExp = {}
       for (let nxp of this.state.networkPeerExpModules) {
@@ -532,6 +527,9 @@ const store = new Vuex.Store({
           } else {
             // set default time for toolkit
             context.commit('setTimeAsk', timeModule)
+            let setTimerange = []
+            setTimerange.push(timeModule)
+            context.commit('SET_TIME_RANGE', setTimerange)
             peerOptions.push(newestContract)
           }
         } else if (pmod.value.type === 'visualise') {
@@ -566,8 +564,10 @@ const store = new Vuex.Store({
     },
     async actionVisUpdate (context, update) {
       console.log('vistoolbar++++++UPdateAction')
-      // console.log(update)
+      console.log(update)
       this.state.ecsMessageLive = ''
+      // perform checks for missing input data to form ECS-out bundle
+
       // need to start update message to keep peer informed
       let progressContext = {}
       let firstTimeCheck = false
@@ -677,8 +677,6 @@ const store = new Vuex.Store({
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
-      // progressContext.module = 'a'
-      // progressContext.device = 'b'
       context.commit('setVisProgressUpdate', progressContext)
     },
     actionFuture (context, update) {

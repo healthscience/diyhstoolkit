@@ -151,7 +151,6 @@ export default {
       if (this.$store.state.joinNXPlive.visualise === undefined) {
         return {}
       } else {
-        console.log(this.$store.state.joinNXPlive)
         return this.$store.state.joinNXPlive.visualise
       }
     },
