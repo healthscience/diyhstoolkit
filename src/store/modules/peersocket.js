@@ -27,6 +27,7 @@ export default {
     },
     SOCKET_ONERROR (state, event) {
       console.error(state, event)
+      // inform Peer connection to network lost
     },
     // mutations for reconnect methods
     SOCKET_RECONNECT (state, count) {
@@ -37,6 +38,8 @@ export default {
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
+      // console.log('message')
+      // console.log(message)
       let backJSON = {}
       backJSON = JSON.parse(message.data)
       if (backJSON.stored === true) {
@@ -140,6 +143,9 @@ export default {
       } else if (backJSON.safeflow === true) {
         // safeFLOW inflow
         if (backJSON.type === 'auth') {
+          console.log('saeFLOW auth')
+          // set remove welcome message
+          this.state.peerauthStatus = true
           // get starting experiments
           const refContractp = {}
           refContractp.type = 'library'
@@ -673,11 +679,6 @@ export default {
       context.commit('NEW_NXP_SHELL_TEMP', update.shellID)
       context.commit('SET_VISTOOLS_TEMP', update)
       context.commit('SETOPEN_DATABAR_TEMP', update)
-    },
-    actionMakeKBIDtemplate (context, message) {
-      let prepareKBIDtemplate = this.state.livesafeFLOW.kbidComposerLive.kbidTemplateNew(message)
-      const kbidTemplateReady = JSON.stringify(prepareKBIDtemplate)
-      // Vue.prototype.$socket.send(kbidTemplateReady)
     },
     actionMakeKBIDentry (context, message) {
       let prepareKBIDentry = this.state.livesafeFLOW.kbidComposerLive.kbidEntry(message)

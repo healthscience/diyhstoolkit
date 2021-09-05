@@ -1,14 +1,10 @@
 <template>
   <div class="hello">
-    <div class="network-state">
-      <div id="connection-status"></div>
-      <button type="button" class="btn" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
-    </div>
     <div class="rest"></div>
-    <connect-modal v-show="isModalVisible" @close="closeModal">
+    <connect-modal v-show="connectToolstatus" @close="closeModal">
       <template v-slot:header>
       <!-- The code below goes into the header slot -->
-        CONNECT
+        CONNECT <a href="#" id="disconnect-network" @click="disconnectNetwork">Disconnect</a>
       </template>
       <template v-slot:title-form>
         {{ connectContext.message }}
@@ -72,6 +68,12 @@ export default {
     TokenReader
   },
   computed: {
+    connectToolstatus: function () {
+      return this.$store.state.connectStatus
+    },
+    connectContext: function () {
+      return this.$store.state.connectContext
+    },
     authState: function () {
       return this.$store.state.authorised
     },
@@ -93,19 +95,14 @@ export default {
   },
   data () {
     return {
-      connectBut: {
-        active: false,
-        type: 'self-verify',
-        text: 'Connect'
-      },
       isModalVisible: false,
-      connectContext:
+      buttonName: 'verify token',
+      /* connectContext:
       {
         type: '',
         message: '',
         footer: ''
-      },
-      buttonName: 'Connect',
+      }, */
       secretPeer: '',
       passwordPeer: '',
       addWarm: false,
@@ -117,37 +114,8 @@ export default {
     }
   },
   methods: {
-    connectNetwork (typeConnect) {
-      // remove the welcome message
-      this.$store.dispatch('actionLiveConnect')
-      this.isModalVisible = true
-      if (typeConnect === 'connect') {
-        this.connectContext.type = 'connect'
-        this.connectContext.message = 'Anno. connect to network'
-        this.buttonName = 'Annon. connect'
-        const refContract = {}
-        refContract.reftype = 'datatype'
-        refContract.action = 'GET'
-        const refCJSON = JSON.stringify(refContract)
-        this.$store.dispatch('actionGetRefContract', refCJSON)
-      } else if (typeConnect.type === 'self-verify') {
-        this.connectBut.text = 'edit-connections'
-        this.connectBut.type = 'self-verify'
-        this.connectContext.type = 'self-verify'
-        this.connectContext.message = 'Self verify keys'
-        this.buttonName = ''
-        // ask peerlink for public keys
-        this.$store.dispatch('actionKeymanagement')
-        // list of active peers
-        this.$store.dispatch('actionWarmPeers')
-      } else if (typeConnect.type === 'disconnectTestnetwork') {
-        this.isModalVisible = false
-        this.connectBut.text = 'Sign-in to Testnetwork'
-        this.connectBut.type = 'self-testnetwork'
-        this.connectContext.type = 'testnetwork'
-        this.connectContext.message = 'TestNetwork'
-        this.buttonName = ''
-      }
+    disconnectNetwork () {
+      this.$store.dispatch('actionDisconnect')
     },
     addWarmpeer () {
       this.addWarm = !this.addWarm
@@ -180,7 +148,7 @@ export default {
       this.$store.dispatch('actionPeersyncLibrary', pubkey)
     },
     closeModal () {
-      this.isModalVisible = false
+      this.$store.dispatch('actionLiveConnect')
     }
   }
 }

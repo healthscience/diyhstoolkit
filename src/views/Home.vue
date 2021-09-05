@@ -1,17 +1,18 @@
 <template>
   <div class="home">
-    <div class="diy-settings">
-      <div v-if="connected === false" id="diy-summary">
-        <header>{{ $t('welcome') }} to the DIY data science toolkit</header>
+    <div class="diy-settings">pp {{ peerauth }}
+      <div v-if="peerauth === false" id="diy-summary">
+        <header>BentoBox - Decentralised Data Science</header>
         <ul>
-          <li>1. Interacive lifeboards</li>
-          <li>2. Build scientific evidence</li>
-          <li>3. Connect with peers & communities</li>
+          <li>1. Interacive lifeboard visualisations</li>
+          <li>2. Join network experiments</li>
+          <li>3. Share knowledge with peers & communities</li>
+          <li>4. Personal AI - CALE</li>
         </ul>
       </div>
     </div>
     <div class="network-experiments">
-      <div id="peer-views">
+      <div id="peer-views" v-if="peerviews === true">
         <ul>
           <li>
             <button class="peer-medium" id="lifestyleworld" @click.prevent="setView($event)">Lifeboards</button>
@@ -46,12 +47,18 @@ export default {
     return {
       viewNXP: true,
       viewTimeline: false,
-      viewLifestyleworld: false
+      viewLifestyleworld: false,
+      peerviews: false
     }
   },
   computed: {
     connected: function () {
+      console.log(this.$store.state.connectStatus)
       return this.$store.state.connectStatus
+    },
+    peerauth: function () {
+      console.log(this.$store.state.peerauthStatus)
+      return this.$store.state.peerauthStatus
     }
   },
   methods: {
@@ -85,7 +92,7 @@ export default {
 
 .diy-settings {
   border: 1px solid lighgrey;
-  margin: 5px;
+  margin: 2px;
 }
 
 #diy-summary {

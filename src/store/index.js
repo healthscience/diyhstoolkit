@@ -14,6 +14,8 @@ const store = new Vuex.Store({
   state: {
     authorised: false,
     connectStatus: false,
+    peerauthStatus: false,
+    connectContext: {},
     helpModal:
     {
       type: 'help',
@@ -133,7 +135,10 @@ const store = new Vuex.Store({
       state.authorised = true
     },
     SET_CONNECTION_STATUS: (state, inVerified) => {
-      state.connectStatus = true
+      state.connectStatus = !state.connectStatus
+    },
+    SET_CONNECT_CONTEXT: (state, inVerifed) => {
+      state.connectContext = inVerifed
     },
     setLiveNXP: (state, inVerified) => {
       state.liveNXP = inVerified
@@ -332,6 +337,7 @@ const store = new Vuex.Store({
       this.state.refcontractPackaging.push(inVerified)
     },
     SET_JOINCOMPUTE_REFCONTRACT (state, inVerified) {
+      this.state.refcontractCompute = []
       this.state.refcontractCompute.push(inVerified)
     },
     SET_LIVE_DATE (state, inVerified) {
@@ -357,6 +363,19 @@ const store = new Vuex.Store({
       console.log('remove NXP')
       console.log(inVerified)
       // state.liveDashList = state.liveDashList.filter(item => item !== inVerified)
+    },
+    SET_DISCONNECT_NETWORK (state, inVerified) {
+      let safeFlowMessage = {}
+      let message = {}
+      message.type = 'safeflow'
+      message.reftype = 'ignore'
+      message.action = 'disconnect'
+      safeFlowMessage = JSON.stringify(message)
+      // clear peer data
+      this.state.joinedNXPlist = []
+      // close modal
+      state.connectStatus = !state.connectStatus
+      Vue.prototype.$socket.send(safeFlowMessage)
     }
   },
   actions: {
@@ -371,8 +390,14 @@ const store = new Vuex.Store({
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },
+    actionDisconnect (context, update) {
+      context.commit('SET_DISCONNECT_NETWORK', update)
+    },
     actionLiveConnect (context, update) {
       context.commit('SET_CONNECTION_STATUS', update)
+    },
+    actionSelfVerify (context, update) {
+      context.commit('SET_CONNECT_CONTEXT', update)
     },
     async annonconnectNSnetwork (context, update) {
       // for cloud
