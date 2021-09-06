@@ -241,6 +241,7 @@ img {
 
 .connect-network {
   margin-left: 3em;
+  margin-right: 3em;
   font-size: 1.2em;
 }
 

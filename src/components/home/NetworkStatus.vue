@@ -60,6 +60,7 @@
 <script>
 import ConnectModal from '@/components/connect/ConnectModal.vue'
 import TokenReader from '@/components/connect/token-reader.vue'
+const remote = require('electron').remote
 
 export default {
   name: 'Network-Connect',
@@ -95,6 +96,7 @@ export default {
   },
   data () {
     return {
+      w: remote.getCurrentWindow(),
       isModalVisible: false,
       buttonName: 'verify token',
       /* connectContext:
@@ -115,7 +117,10 @@ export default {
   },
   methods: {
     disconnectNetwork () {
+      // close peerLINK
       this.$store.dispatch('actionDisconnect')
+      // close electron / webapp
+      this.w.close()
     },
     addWarmpeer () {
       this.addWarm = !this.addWarm

@@ -3,9 +3,6 @@
     <div class="live-network-header">
       <ul>
         <li class="network-toolbar">
-          Live network experiments
-        </li>
-        <li class="network-toolbar">
           <form id="search">
             Search <input name="query" v-model="searchQuery">
           </form>

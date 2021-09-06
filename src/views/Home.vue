@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="diy-settings">pp {{ peerauth }}
+    <div class="diy-settings">
       <div v-if="peerauth === false" id="diy-summary">
         <header>BentoBox - Decentralised Data Science</header>
         <ul>
@@ -21,9 +21,9 @@
           </li>
         </ul>
       </div>
-      <live-timeline v-if="viewTimeline === true"></live-timeline>
       <live-lifestyle v-if="viewLifestyleworld === true"></live-lifestyle>
       <live-network v-if="viewNXP === true"></live-network>
+      <live-timeline v-if="viewTimeline === true"></live-timeline>
     </div>
   </div>
 </template>
@@ -48,7 +48,7 @@ export default {
       viewNXP: true,
       viewTimeline: false,
       viewLifestyleworld: false,
-      peerviews: false
+      peerviews: true
     }
   },
   computed: {
