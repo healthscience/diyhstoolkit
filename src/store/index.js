@@ -44,6 +44,7 @@ const store = new Vuex.Store({
       compute: {}
     },
     visCount: {},
+    opendataUpdate: false,
     visModuleHolder:
     {
       devices: null,
@@ -318,6 +319,8 @@ const store = new Vuex.Store({
     },
     SET_TIME_RANGE: (state, inVerified) => {
       state.setTimerange = inVerified
+      // console.log('set time range')
+      // console.log(state.setTimerange)
     },
     SET_CLEAR_TIMERANGE: (state, inVerified) => {
       state.setTimerange = []
@@ -608,7 +611,7 @@ const store = new Vuex.Store({
       }
       // is the context set from opendata tools or time nav tools?
       let contextState = 'timeupdate'
-      if (update.opendata === 'updated') {
+      if (this.state.opendataUpdate === true) {
         contextState = 'opendataUpdate'
       }
       // if no summary then first time use, extract modules from source

@@ -44,144 +44,144 @@
 </template>
 
 <script>
-  import Reactive from '@/components/visualise/charts/Reactive'
-  import Reactivestats from '@/components/visualise/charts/Reactivestats'
-  import ToolbarTools from '@/components/toolbar/statisticstools'
-  import tableBuild from '@/components/visualise/table/tableBuilder'
-  import simulationView from '@/components/visualise/simulation/simulation-life'
-  // const moment = require('moment')
+import Reactive from '@/components/visualise/charts/Reactive'
+import Reactivestats from '@/components/visualise/charts/Reactivestats'
+import ToolbarTools from '@/components/toolbar/statisticstools'
+import tableBuild from '@/components/visualise/table/tableBuilder'
+import simulationView from '@/components/visualise/simulation/simulation-life'
+// const moment = require('moment')
 
-  export default {
-    name: 'expvisual-future-liveview',
-    components: {
-      Reactive,
-      Reactivestats,
-      ToolbarTools,
-      tableBuild,
-      simulationView
+export default {
+  name: 'expvisual-future-liveview',
+  components: {
+    Reactive,
+    Reactivestats,
+    ToolbarTools,
+    tableBuild,
+    simulationView
+  },
+  props: {
+    entityCNRL: ,
+    datacollection: {
+      type: Object
     },
-    props: {
-      entityCNRL: '',
-      datacollection: {
-        type: Object
-      },
-      options: {
-        type: Object
-      },
-      displayTime: ''
+    options: {
+      type: Object
     },
-    data () {
-      return {
-        vis1:
+    displayTime: 
+  },
+  data () {
+    return {
+      vis1:
         {
           name: 'chart',
           id: 'vis-sc-1',
           active: true
         },
-        vis2:
+      vis2:
         {
           name: 'table',
           id: 'vis-sc-2',
           active: false
         },
-        vis3:
+      vis3:
         {
           name: 'simulation',
           id: 'vis-sc-3',
           active: false
         },
-        toolbar:
+      toolbar:
         {
           active: false,
           text: 'off'
         },
-        toolbarData: {},
-        visChartview: true,
-        visTableview: false,
-        visSimview: false,
-        timeVis: []
-      }
+      toolbarData: {},
+      visChartview: true,
+      visTableview: false,
+      visSimview: false,
+      timeVis: []
+    }
+  },
+  computed: {
+  },
+  created () {
+    // this.timeNavSegments()
+  },
+  mounted () {
+  },
+  methods: {
+    timeNavSegments () {
+      // this.timeVis = this.liveSafeFlow.cnrlTimeIndex('datatime-index')
     },
-    computed: {
-    },
-    created () {
-      // this.timeNavSegments()
-    },
-    mounted () {
-    },
-    methods: {
-      timeNavSegments () {
-        // this.timeVis = this.liveSafeFlow.cnrlTimeIndex('datatime-index')
-      },
-      selectVis (visIN) {
-        if (visIN.id === 'vis-sc-1') {
-          if (visIN.active === true) {
-            this.visChartview = false
-            this.vis1.active = false
-          } else {
-            this.vis1.active = true
-            this.visChartview = true
-          }
-        } else if (visIN.id === 'vis-sc-2') {
-          if (visIN.active === true) {
-            this.visTableview = false
-            this.vis2.active = false
-          } else {
-            this.vis2.active = true
-            this.visTableview = true
-          }
-        } else if (visIN.id === 'vis-sc-3') {
-          if (visIN.active === true) {
-            this.visSimview = false
-            this.vis3.active = false
-          } else {
-            this.vis3.active = true
-            this.visSimview = true
-          }
-        }
-        // filter what visualisation is active and setToken
-        this.filterVisualisation()
-      },
-      filterVisualisation () {
-        let visLive = []
-        if (this.vis1.active === true) {
-          visLive.push(this.vis1.id)
-        }
-        if (this.vis2.active === true) {
-          visLive.push(this.vis2.id)
-        }
-        if (this.vis3.active === true) {
-          visLive.push(this.vis3.id)
-        }
-      },
-      toolsSwitch (ts) {
-        ts.active = !ts.active
-        if (ts.active === true) {
-          this.toolbar.text = 'on'
-          // need to add annotation to chart OPTIONS
-          this.$emit('toolsStatus', true)
+    selectVis (visIN) {
+      if (visIN.id === 'vis-sc-1') {
+        if (visIN.active === true) {
+          this.visChartview = false
+          this.vis1.active = false
         } else {
-          this.toolbar.text = 'off'
-          // remove the annotation from the chart OPTIONS
-          this.$emit('toolsStatus', false)
+          this.vis1.active = true
+          this.visChartview = true
         }
-      },
-      recoveryStatus () {
-        this.toolbar.text = 'off'
-      },
-      closeAvgSummary () {
-        this.averageSeen = false
-      },
-      setTimeData (seg) {
-        // back and forward and time
-        this.$emit('updateLearn', seg)
-      },
-      addToExperiment (exB) {
-      },
-      experADD (expA) {
+      } else if (visIN.id === 'vis-sc-2') {
+        if (visIN.active === true) {
+          this.visTableview = false
+          this.vis2.active = false
+        } else {
+          this.vis2.active = true
+          this.visTableview = true
+        }
+      } else if (visIN.id === 'vis-sc-3') {
+        if (visIN.active === true) {
+          this.visSimview = false
+          this.vis3.active = false
+        } else {
+          this.vis3.active = true
+          this.visSimview = true
+        }
       }
+      // filter what visualisation is active and setToken
+      this.filterVisualisation()
+    },
+    filterVisualisation () {
+      let visLive = []
+      if (this.vis1.active === true) {
+        visLive.push(this.vis1.id)
+      }
+      if (this.vis2.active === true) {
+        visLive.push(this.vis2.id)
+      }
+      if (this.vis3.active === true) {
+        visLive.push(this.vis3.id)
+      }
+    },
+    toolsSwitch (ts) {
+      ts.active = !ts.active
+      if (ts.active === true) {
+        this.toolbar.text = 'on'
+        // need to add annotation to chart OPTIONS
+        this.$emit('toolsStatus', true)
+      } else {
+        this.toolbar.text = 'off'
+        // remove the annotation from the chart OPTIONS
+        this.$emit('toolsStatus', false)
+      }
+    },
+    recoveryStatus () {
+      this.toolbar.text = 'off'
+    },
+    closeAvgSummary () {
+      this.averageSeen = false
+    },
+    setTimeData (seg) {
+      // back and forward and time
+      this.$emit('updateLearn', seg)
+    },
+    addToExperiment (exB) {
+    },
+    experADD (expA) {
     }
   }
+}
 </script>
 
 <style>

@@ -32,141 +32,141 @@
 </template>
 
 <script>
-  // import SAFEflow from '../../safeflow/safeFlow.js'
-  // import LineChart from '@/components/charts/LineChart'
-  // import BarChart from '@/components/charts/BarChart'
-  // import BubbleChart from '@/components/charts/BubbleChart'
-  import Reactive from '@/components/visualise/charts/Reactive'
-  import Reactivestats from '@/components/visualise/charts/Reactivestats'
-  import ToolbarTools from '@/components/toolbar/statisticstools'
-  import DatePicker from 'vue2-datepicker'
-  // const moment = require('moment')
+// import SAFEflow from '../../safeflow/safeFlow.js'
+// import LineChart from '@/components/charts/LineChart'
+// import BarChart from '@/components/charts/BarChart'
+// import BubbleChart from '@/components/charts/BubbleChart'
+import Reactive from '@/components/visualise/charts/Reactive'
+import Reactivestats from '@/components/visualise/charts/Reactivestats'
+import ToolbarTools from '@/components/toolbar/statisticstools'
+import DatePicker from 'vue2-datepicker'
+// const moment = require('moment')
 
-  export default {
-    name: 'visual-future-liveview',
-    components: {
-      Reactive,
-      Reactivestats,
-      ToolbarTools,
-      DatePicker
+export default {
+  name: 'visual-future-liveview',
+  components: {
+    Reactive,
+    Reactivestats,
+    ToolbarTools,
+    DatePicker
+  },
+  props: {
+    datacollection: {
+      type: Object
     },
-    props: {
-      datacollection: {
-        type: Object
-      },
-      options: {
-        type: Object
-      },
-      navTime: {
-        type: Array
-      },
-      displayTime: '',
-      saveExpKid:
+    options: {
+      type: Object
+    },
+    navTime: {
+      type: Array
+    },
+    displayTime: ,
+    saveExpKid:
       {
         active: false,
         text: ''
       }
-    },
-    data () {
-      return {
-        toolbar:
+  },
+  data () {
+    return {
+      toolbar:
         {
           active: false,
           text: 'off'
         },
-        toolbarData: {},
-        recoveryData: {},
-        datastatistics: null,
-        liveChartoptions: null,
-        visChartview: true,
-        liveTime: '',
-        timeVis: [],
-        selectedExperiment: '',
-        confirmAddE: '---',
-        value: '',
-        lang: {
-          days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-          months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          pickers: ['next 7 days', 'next 30 days', 'previous 7 days', 'previous 30 days'],
-          placeholder: {
-            date: 'Select Date',
-            dateRange: 'Select Date Range'
-          }
+      toolbarData: {},
+      recoveryData: {},
+      datastatistics: null,
+      liveChartoptions: null,
+      visChartview: true,
+      liveTime: '',
+      timeVis: [],
+      selectedExperiment: '',
+      confirmAddE: '---',
+      value: '',
+      lang: {
+        days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        pickers: ['next 7 days', 'next 30 days', 'previous 7 days', 'previous 30 days'],
+        placeholder: {
+          date: 'Select Date',
+          dateRange: 'Select Date Range'
         }
-      }
-    },
-    computed: {
-    },
-    created () {
-    },
-    mounted () {
-    },
-    methods: {
-      selectVis (visIN) {
-        if (visIN.id === 'vis-sc-1') {
-          if (visIN.active === true) {
-            this.visChartview = false
-            this.vis1.active = false
-          } else {
-            this.vis1.active = true
-            this.visChartview = true
-          }
-        } else if (visIN.id === 'vis-sc-2') {
-          if (visIN.active === true) {
-            this.visTableview = false
-            this.vis2.active = false
-          } else {
-            this.vis2.active = true
-            this.visTableview = true
-          }
-        } else if (visIN.id === 'vis-sc-3') {
-          if (visIN.active === true) {
-            this.visSimview = false
-            this.vis3.active = false
-          } else {
-            this.vis3.active = true
-            this.visSimview = true
-          }
-        }
-        // filter what visualisation is active and setToken
-        this.filterVisualisation()
-      },
-      filterVisualisation () {
-        let visLive = []
-        if (this.vis1.active === true) {
-          visLive.push(this.vis1.id)
-        }
-        if (this.vis2.active === true) {
-          visLive.push(this.vis2.id)
-        }
-        if (this.vis3.active === true) {
-          visLive.push(this.vis3.id)
-        }
-      },
-      toolsSwitch (ts) {
-        ts.active = !ts.active
-        if (ts.active === true) {
-          this.toolbar.text = 'on'
-          // need to add annotation to chart OPTIONS
-          // this.$emit('toolsStatus', true)
-        } else {
-          this.toolbar.text = 'off'
-          // remove the annotation from the chart OPTIONS
-          // this.$emit('toolsStatus', false)
-        }
-      },
-      recoveryStatus () {
-        this.toolbar.text = 'off'
-      },
-      closeAvgSummary () {
-        this.averageSeen = false
-      },
-      setTimeData (seg) {
-        // back and forward and time
-        this.$emit('updateLearn', seg)
       }
     }
+  },
+  computed: {
+  },
+  created () {
+  },
+  mounted () {
+  },
+  methods: {
+    selectVis (visIN) {
+      if (visIN.id === 'vis-sc-1') {
+        if (visIN.active === true) {
+          this.visChartview = false
+          this.vis1.active = false
+        } else {
+          this.vis1.active = true
+          this.visChartview = true
+        }
+      } else if (visIN.id === 'vis-sc-2') {
+        if (visIN.active === true) {
+          this.visTableview = false
+          this.vis2.active = false
+        } else {
+          this.vis2.active = true
+          this.visTableview = true
+        }
+      } else if (visIN.id === 'vis-sc-3') {
+        if (visIN.active === true) {
+          this.visSimview = false
+          this.vis3.active = false
+        } else {
+          this.vis3.active = true
+          this.visSimview = true
+        }
+      }
+      // filter what visualisation is active and setToken
+      this.filterVisualisation()
+    },
+    filterVisualisation () {
+      let visLive = []
+      if (this.vis1.active === true) {
+        visLive.push(this.vis1.id)
+      }
+      if (this.vis2.active === true) {
+        visLive.push(this.vis2.id)
+      }
+      if (this.vis3.active === true) {
+        visLive.push(this.vis3.id)
+      }
+    },
+    toolsSwitch (ts) {
+      ts.active = !ts.active
+      if (ts.active === true) {
+        this.toolbar.text = 'on'
+        // need to add annotation to chart OPTIONS
+        // this.$emit('toolsStatus', true)
+      } else {
+        this.toolbar.text = 'off'
+        // remove the annotation from the chart OPTIONS
+        // this.$emit('toolsStatus', false)
+      }
+    },
+    recoveryStatus () {
+      this.toolbar.text = 'off'
+    },
+    closeAvgSummary () {
+      this.averageSeen = false
+    },
+    setTimeData (seg) {
+      // back and forward and time
+      this.$emit('updateLearn', seg)
+    }
   }
+}
 </script>
 
 <style>

@@ -1,7 +1,7 @@
 <template>
   <div id="live-network-grid">
     <!-- peer network experiment added -->
-    <div id="grid-template">live dashboard --
+    <div id="grid-template">-- live --
       <table>
         <thead>
           <tr>
@@ -66,16 +66,12 @@
 <script>
 import DashBoard from '@/components/experiments/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
-// import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
-// import ChartBuilder from '@/components/visualise/chartBuilder'
 
 export default {
   name: 'ExperimentNetwork',
   components: {
     DashBoard,
     ProgressMessage
-    // CalendarSelect,
-    // ChartBuilder
   },
   created () {
   },

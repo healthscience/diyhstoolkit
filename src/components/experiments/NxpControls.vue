@@ -2,7 +2,7 @@
   <div id="nxp-toolbar">Controls over NXPs
     <div id="nxp-master-toolbar"> dd {{ liveexerimentList }}
       <select class="button-expadd" href="" id="add-exp-button" v-model="nxpSelect"  @change="selectNXP()">
-        <option class="science-nxp" v-for="expi in liveexerimentList" v-bind:value="expi.prime.cnrl">
+        <option class="science-nxp" v-for="expi in liveexerimentList" v-bind:key="expi.id" v-bind:value="expi.prime.cnrl">
          {{ expi.prime.text }}
         </option>
       </select>

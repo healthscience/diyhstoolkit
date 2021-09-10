@@ -3,11 +3,13 @@
     <div id="peer-being">
       <div id="peer-welcome">
         <ul>
-          <!-- <li class="toolbar-top">ll
-            <img class="small-logo" alt="logo" src="./assets/logo.png">
-          </li> -->
           <li class="toolbar-top">
-            {{ $t('welcome') }} Peers
+            {{ $t('welcome') }} Peer
+          </li>
+          <li class="toolkit-settings" id="select-language">
+            <button v-for="entry in languages" :key="entry.title" @click="changeLocale(entry.language)">
+              {{ entry.title }}
+            </button>
           </li>
         </ul>
       </div>
@@ -16,11 +18,6 @@
         <router-link class="nav-item" to="/about">{{ $t('about') }}</router-link>
       </div>
       <div id="peer-settings">
-        <div class="toolkit-settings" id="select-language">
-          <button v-for="entry in languages" :key="entry.title" @click="changeLocale(entry.language)">
-            {{ entry.title }}
-          </button>
-        </div>
         <div class="toolkit-settings">
           CALE:
           <button class="toolbar-top" type="button" @click="caleAIStatus">
@@ -32,8 +29,8 @@
             {{ $t('help') }}
           </button>
         </div>
-        <div class="toolkit-settings">
-          <button type="button" class="connect-network" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
+        <div class="toolkit-settings">cc {{ connectBut.active }}
+          <button type="button" v-bind:class="{ networklive: connectBut.active === true}" class="connect-network" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
         </div>
       </div>
     </div>
@@ -54,11 +51,68 @@
           What is CALE?  An AI that helps manage the toolkit.
         </div>
         <div class="help-section">
-          Where is the data store?  Data is secured on the SAFEnetwork.
+          <ul>
+            <li>
+              <article>
+                <p>INSTRUCTIONS</p>
+                <p>
+                  1. Interacive lifeboard visualisations
+                </p>
+                <p>
+                  Interactive charts come with a toolbar to select different time periods, present in time series or overlay mode.  Select what data to present.
+                </p>
+              </article>
+            </li>
+            <li>
+              <article>
+                <p>
+                  2. Join network experiments
+                </p>
+                <p>
+                  a) First connect to the network using the Connect Button top right
+                </p>
+                <p>
+                  b) A list of network experiments from the network will be listed or search for key words or click New Network Exeriment button to contribute
+                </p>
+                <p>
+                  c) Click Preview / Join Button to learn more about the experiment and select from options to join.  Click on Join the Network Experiment Button
+                </p>
+                <p>
+                  d) The Network Experiment will now be listed in Peer list.  Click on View Button to display visualisation and access toolbars
+                </p>
+              </article>
+            </li>
+            <li>
+              <article>
+                <p>
+                  3. Share knowledge with peers & communities
+                </p>
+                <p>
+                  Form Peer to Peer networks by sharing public keys. Click on Edit-Connection Button
+                </p>
+                <p>
+                  Click on the Add Peer Button and enter public key and select type of peer to peer connect e.g. connect network libraries or network experiments.
+                </p>
+                </article>
+            </li>
+            <li>
+              <article>
+                <p>
+                  4. Personal AI - CALE (not active)
+                </p>
+                <p>
+                  The first goal of CALE AI is to produce future times series data based on learning from historical data. This uses an evolutionary algorithm to tune variables in an autregressional model.
+                </p>
+                <p>
+                  The toolkit is open source to encourage others to add AI and other capabilites to aid none-code tools
+                </p>
+              </article>
+            </li>
+          </ul>
         </div>
       </template>
       <template v-slot:feedback>
-        {{ helpState }}  {{ activeNetworkExperiment.shellID }} ooo
+        <!-- {{ helpState }} -->
         <div v-if="helpState.type === 'future'" id="feedback-action">
           Date asked for: {{ helpState.data }}
           <calendar-tool :shellID="helpState.refcontract" :moduleCNRL="'future'" :moduleType="'future'" :mData="'future'"></calendar-tool>
@@ -142,6 +196,7 @@ export default {
         const refCJSON = JSON.stringify(refContract)
         this.$store.dispatch('actionGetRefContract', refCJSON)
       } else if (typeConnect.type === 'self-verify') {
+        this.connectBut.active = true
         this.connectBut.text = 'edit-connections'
         this.connectBut.type = 'self-verify'
         this.connectContext.type = 'self-verify'
@@ -155,11 +210,10 @@ export default {
       }
     },
     caleAIStatus () {
+      this.statusCALE.active = !this.statusCALE.active
       if (this.statusCALE.active === false) {
-        this.statusCALE.active = true
         this.statusCALE.text = 'off'
       } else {
-        this.statusCALE.active = false
         this.statusCALE.text = 'ON'
       }
     }
@@ -191,6 +245,7 @@ export default {
   display: inline;
   border: 0px solid blue;
   margin-left: 1.2em;
+  padding: .6em;
 }
 
 #nav {
@@ -209,14 +264,6 @@ export default {
 
 .help-section {
   margin: 4em;
-}
-
-img {
-  width: 120px;
-}
-
-.small-logo {
-  display: inline;
 }
 
 #peer-pages {
@@ -243,6 +290,17 @@ img {
   margin-left: 3em;
   margin-right: 3em;
   font-size: 1.2em;
+}
+
+.networklive {
+  margin-left: 3em;
+  margin-right: 3em;
+  font-size: 1.2em;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 8px 24px;
+  text-align: center;
 }
 
 .clear {

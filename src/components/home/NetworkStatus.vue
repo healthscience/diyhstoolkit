@@ -183,6 +183,11 @@ a {
 .btn {
   font-size: 1.2em;
 }
+
+#disconnect-network {
+  color: red;
+}
+
 .reset {
   clear: both;
 }

@@ -240,7 +240,7 @@ TimeUtilities.prototype.calendarUtility = function () {
     if (numM >= monthNo && numM <= currentmonthNo) {
       let longDateformat = yearCommence + (numM * daysInmonth[numM] * secondsInday)
       let dayCount = daysInmonth[numM]
-      calendarUtil.push({dayCount, longDateformat})
+      calendarUtil.push({ dayCount, longDateformat })
     }
   }
   // console.log(calendarUtil)
@@ -288,7 +288,7 @@ TimeUtilities.prototype.timeDayArrayBuilder = function (liveTime, lastTime) {
         }
         firstbaseMills = longDateformat
         let dayCount = daysInmonthFirst[numM]
-        timeArray.push({dayCount, longDateformat})
+        timeArray.push({ dayCount, longDateformat })
         counter++
       }
     }
@@ -305,7 +305,7 @@ TimeUtilities.prototype.timeDayArrayBuilder = function (liveTime, lastTime) {
         }
         SecondbaseMills = longDateformat
         let dayCount = daysInmonthFirst[numM]
-        timeArray.push({dayCount, longDateformat})
+        timeArray.push({ dayCount, longDateformat })
         counter++
       }
     }
@@ -330,7 +330,7 @@ TimeUtilities.prototype.timeDayArrayBuilder = function (liveTime, lastTime) {
         }
         baseMills = longDateformat
         let dayCount = daysInmonth[numM]
-        timeArray.push({dayCount, longDateformat})
+        timeArray.push({ dayCount, longDateformat })
         counter++
       }
     }

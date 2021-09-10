@@ -24,6 +24,20 @@ util.inherits(contextUtility, events.EventEmitter)
 
 /**
 * update setting out
+* @method prepareSettingsTime
+*
+*/
+contextUtility.prototype.prepareSettingsTime = function (module, time, update, toolbar) {
+  // compute controls
+  module.value.info.controls.date = time[0]
+  module.value.info.controls.rangedate = time
+  // context toolbar
+  module.value.info.settings.date = time[0]
+  return module
+}
+
+/**
+* update setting out
 * @method prepareSettings
 *
 */
@@ -52,20 +66,6 @@ contextUtility.prototype.prepareSettings = function (module, time, update, toolb
 contextUtility.prototype.validateComputeSettings = function (peerChoices) {
   // compute controls
   return true
-}
-
-/**
-* update setting out
-* @method prepareSettingsTime
-*
-*/
-contextUtility.prototype.prepareSettingsTime = function (module, time, update, toolbar) {
-  // compute controls
-  module.value.info.controls.date = time[0]
-  module.value.info.controls.rangedate = time
-  // context toolbar
-  module.value.info.settings.date = time[0]
-  return module
 }
 
 /**

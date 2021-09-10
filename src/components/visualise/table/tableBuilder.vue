@@ -1,6 +1,6 @@
 <template>
   <div id="table-live">
-    <ul v-for="tp in tableData.tablePackage" >
+    <ul v-for="tp in tableData.tablePackage" :key="key.id>
      <li>
       <table v-html="tp">
         {{ tp }}
@@ -12,26 +12,26 @@
 </template>
 
 <script>
-  export default {
-    name: 'table-view',
-    components: {
-    },
-    props: {
-      tableData: {
-        type: Object
-      }
-    },
-    data: () => ({
-    }),
-    created () {
-    },
-    mounted () {
-    },
-    computed: {
-    },
-    methods: {
+export default {
+  name: 'table-view',
+  components: {
+  },
+  props: {
+    tableData: {
+      type: Object
     }
+  },
+  data: () => ({
+  }),
+  created () {
+  },
+  mounted () {
+  },
+  computed: {
+  },
+  methods: {
   }
+}
 </script>
 
 <style>

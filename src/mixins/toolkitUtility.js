@@ -638,26 +638,20 @@ ToolkitUtility.prototype.colourList = function () {
 ToolkitUtility.prototype.prepareTime = function (timeIN, update) {
   let newStartTime = []
   if (timeIN === 0) {
-    console.log('time1')
     let freshStart = Date.now() + update.startperiodchange
     newStartTime.push(freshStart)
   } else {
-    console.log('time2')
     // time state available
     if (update.startperiod !== 0 && update.rangechange.length === 0) {
-      console.log('time3')
       newStartTime.push(update.startperiod)
     } else if (update.rangechange.length > 0) {
-      console.log('time4')
       newStartTime = update.rangechange
     } else if (update.startperiod === 0 && update.startperiodchange) {
-      console.log('time5')
       let timeCon = new Date(timeIN)
       let convertTime = timeCon.getTime()
       let updateT = parseInt(convertTime) + update.startperiodchange
       newStartTime.push(updateT)
     } else {
-      console.log('time6')
       let updateSum = parseInt(timeIN) + update.startperiodchange
       newStartTime.push(updateSum)
     }

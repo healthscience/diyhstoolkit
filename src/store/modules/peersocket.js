@@ -31,7 +31,7 @@ export default {
     },
     // mutations for reconnect methods
     SOCKET_RECONNECT (state, count) {
-      console.info(state, count)
+      // console.info(state, count)
     },
     SOCKET_RECONNECT_ERROR (state) {
       state.socket.reconnectError = true
@@ -143,7 +143,7 @@ export default {
       } else if (backJSON.safeflow === true) {
         // safeFLOW inflow
         if (backJSON.type === 'auth') {
-          console.log('saeFLOW auth')
+          // console.log('saeFLOW auth')
           // set remove welcome message
           this.state.peerauthStatus = true
           // get starting experiments
@@ -185,10 +185,11 @@ export default {
           Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('NEW----NEW----NEW')
+        console.log('SCECOND RETURNED-----')
         console.log(backJSON)
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {
+          console.log('NO DATA RETURNED')
           // switch off progress message and inform toolkit
           let setnxpProgress = { text: 'Experiment in progress', active: false }
           Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -408,7 +409,11 @@ export default {
           singleDTref.push(dtCheck)
         }
       }
+      // keep tabs that open data updated
+      this.state.opendataUpdate = true
       this.state.visModuleHolder.yaxis = singleDTref
+      console.log('y axies selected')
+      console.log(this.state.visModuleHolder)
     },
     SET_NEWNXP_VISCATEGORY (state, inVerified) {
       Vue.set(this.state.visModuleHolder, 'category', inVerified)

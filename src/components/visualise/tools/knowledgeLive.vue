@@ -108,11 +108,11 @@
             </li>
           <div v-if="feedback.resolution" class="feedback">---</div>
       </div>
-      <div v-if="toolInfo" id="context-learn" class="live-kelement">
+      <!-- <div v-if="toolInfo" id="context-learn" class="live-kelement">
         <li v-if="toolInfo.active === true">
           <button id="learn-update" @click.prevent="learnUpdate($event)">Learn</button>
         </li>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -369,8 +369,8 @@ export default {
     deviceSelect () {
       this.mData = this.visualsettings.device
       this.$store.dispatch('actionNewVisDevice', this.visualsettings.device)
-    },
-    learnUpdate () {
+    }
+    /* learnUpdate () {
       let contextK = {}
       contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
@@ -386,7 +386,7 @@ export default {
       } else {
         this.$store.dispatch('actionVisUpdate', contextK)
       }
-    }
+    } */
   }
 }
 </script>

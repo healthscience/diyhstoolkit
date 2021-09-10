@@ -23,8 +23,6 @@ export default ({
       deep: true,
       // immediate: true,
       handler: function (val, oldVal) {
-        console.log('watcher options changed')
-        console.log(this.options.annotation)
         this.renderChart(this.chartData, this.options)
       }
     }
@@ -32,9 +30,6 @@ export default ({
   mounted () {
     // this.chartData is created in the mixin
     this.renderChart(this.chartData, this.options)
-    console.log('option live?')
-    console.log(this.options)
-    console.log(this.options.annotation.annotations[0].value)
   }
 })
 </script>

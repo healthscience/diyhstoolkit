@@ -11,7 +11,6 @@
 */
 const util = require('util')
 const events = require('events')
-const crypto = require('crypto')
 const hashObject = require('object-hash')
 
 var KBLcryptoUtility = function () {

@@ -1,25 +1,29 @@
 <template>
   <div class="about">
-    <h1>Bentobox - decentralised data science toolkit</h1>
+    <h1>Bentobox - Decentralised data science toolkit</h1>
     <div id="toolkit-summary">
       <ul>
         <li>
           <article>
             <p>
-              The BB - Decentralised Data Science Toolkit is an open source project providing no-code tools to perform data science: setup visualisations, perform computations and network with other peers.
+              <img class="small-bbdds" alt="bentox data science" src=".././assets/bbdds.png">
             </p>
             <p>
-              The toolkit connects to the Health Oracle Protocol.
+              The BB - Decentralised Data Science Toolkit is an open source project providing graphical tools and no coding required to perform data science: whether that is looking at historical data today or looking ahead to tomorrow for our self, family, community or nature.
+            </p>
+            <p>
+              The toolkit connects to the <a href="#" @click="webLink">Health Oracle Protocol</a> and use the <a href="#" @click="webLinkdamahub">DaMaHub Network Library</a>
             </p>
             <p>
             </p>
-              The software is still at an experimental stage of development.  Drop by github heathscience page to clone the code.
+              The software is still at an experimental stage of development.  Drop by <a href="#" @click="webLinkgithub">github heathscience</a> repository to clone the code.
             <p>
             </p>
           </article>
         </li>
         <li>
           <article>
+            <p>INSTRUCTIONS</p>
             <p>
               1. Interacive lifeboard visualisations
             </p>
@@ -66,7 +70,7 @@
               4. Personal AI - CALE (not active)
             </p>
             <p>
-              The first goal of CALE AI is to produce future times series data base on learning from historical data. This uses an evolutionary algorithm to tune variables in an autregressional model.
+              The first goal of CALE AI is to produce future times series data based on learning from historical data. This uses an evolutionary algorithm to tune variables in an autregressional model.
             </p>
             <p>
               The toolkit is open source to encourage others to add AI and other capabilites to aid none-code tools
@@ -78,9 +82,44 @@
   </div>
 </template>
 
+<script>
+// const { BrowserWindow } = require('electron')
+
+export default {
+  name: 'about',
+  components: {
+  },
+  data () {
+    return {
+    }
+  },
+  computed: {
+  },
+  methods: {
+    webLink () {
+      window.open('https://www.healthscience.network', '_blank')
+      // shell.openExternal('https://www.healthscience.network')
+      /* const win = new BrowserWindow()
+      // Instead bare webContents:
+      win.webContents.on('will-navigate', '_blank')
+      win.loadURL('https://www.healthscience.network') */
+    },
+    webLinkdamahub () {
+      window.open('https://www.damahub.org/', '_blank')
+    },
+    webLinkgithub () {
+      window.open('https://www.github.com/healthscience/diyhstoolkit', '_blank')
+    }
+  }
+}
+</script>
+
 <style lang="scss">
 #about h1 {
   font-size: 1.4em;
+}
+.small-bbdds {
+  width: 400px;
 }
 
 #toolkit-summary ul li {

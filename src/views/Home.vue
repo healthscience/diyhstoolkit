@@ -12,14 +12,19 @@
       </div>
     </div>
     <div class="network-experiments">
-      <div id="peer-views" v-if="peerviews === true">
-        <ul>
-          <li>
-            <button class="peer-medium" id="lifestyleworld" @click.prevent="setView($event)">Lifeboards</button>
-            <button class="peer-medium" id="nxp-view" @click.prevent="setView($event)">Network experiments</button>
-            <button class="peer-medium" id="timeline" @click.prevent="setView($event)">Timeline</button>
-          </li>
-        </ul>
+      <div id="toolkit-boards">
+        <div class="toolkit-logo">
+          <img class="small-logo" alt="logo" src=".././assets/logo.png">
+        </div>
+        <div id="peer-views" v-if="peerviews === true">
+          <ul>
+            <li>
+              <button class="peer-medium" id="lifestyleworld" @click.prevent="setView($event)">Lifeboards</button>
+              <button class="peer-medium" id="nxp-view" @click.prevent="setView($event)">Network experiments</button>
+              <button class="peer-medium" id="timeline" @click.prevent="setView($event)">Timeline</button>
+            </li>
+          </ul>
+        </div>
       </div>
       <live-lifestyle v-if="viewLifestyleworld === true"></live-lifestyle>
       <live-network v-if="viewNXP === true"></live-network>
@@ -53,11 +58,9 @@ export default {
   },
   computed: {
     connected: function () {
-      console.log(this.$store.state.connectStatus)
       return this.$store.state.connectStatus
     },
     peerauth: function () {
-      console.log(this.$store.state.peerauthStatus)
       return this.$store.state.peerauthStatus
     }
   },
@@ -84,14 +87,14 @@ export default {
 
 <style>
 .home {
-  border: 1px solid grey;
+  border-right: 1px solid lightgrey;
+  border-left: 1px solid lightgrey;
 }
 .help-info {
   border: 1px solid orange;
 }
 
 .diy-settings {
-  border: 1px solid lighgrey;
   margin: 2px;
 }
 
@@ -111,7 +114,7 @@ export default {
 }
 
 .network-info {
-  border: 1px solid grey;
+  border: 0px solid grey;
 }
 
 .diy-help {
@@ -120,6 +123,18 @@ export default {
 
 .network-experiments {
   border: 0px solid orange;
+}
+
+img {
+  width: 90px;
+}
+
+.toolkit-logo {
+  float: left;
+  margin-left: 2em;
+}
+
+.small-logo {
 }
 
 /* Clear floats after the columns */

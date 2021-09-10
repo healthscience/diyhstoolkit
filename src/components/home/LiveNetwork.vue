@@ -28,14 +28,18 @@
         </li>
       </ul>
     </div>
-    PEER EXPERIMENTS
+    <div class="nxp-experimentslist">
+      PEER EXPERIMENTS
+    </div>
     <experiment-network v-if="peerExperimentListlive.data"
       class="experiment-info"
       :experiments="peerExperimentListlive.data"
       :columns="peerExperimentListlive.columns"
       :filter-key="searchQuery">
     </experiment-network>
-    AVAILABLE ON NETWORK
+    <div class="nxp-experimentslist">
+      AVAILABLE ON NETWORK
+    </div>
     <experimentnetwork-join
       class="experiment-info" v-if="networkNXPListlive.data"
       :experiments="networkNXPListlive.data"
@@ -97,6 +101,10 @@ export default {
 #live-network-experiment {
   width: inherit;
   border: 0px solid red;
+}
+
+.nxp-experimentslist {
+  padding: 1em;
 }
 
 .experiment-info {
