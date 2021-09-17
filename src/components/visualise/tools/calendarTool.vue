@@ -236,6 +236,8 @@ export default {
       }
     },
     setTimeData (seg) {
+      // first clear the range of existing
+      this.$store.dispatch('actionSetTimerange', [])
       // back and forward and time
       let contextK = {}
       contextK.nxpCNRL = this.shellID
