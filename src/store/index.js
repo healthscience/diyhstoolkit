@@ -318,9 +318,10 @@ const store = new Vuex.Store({
       state.timeStartperiod = inVerified
     },
     SET_TIME_RANGE: (state, inVerified) => {
+      console.log('set time range')
+      console.log(inVerified)
       state.setTimerange = inVerified
-      // console.log('set time range')
-      // console.log(state.setTimerange)
+      console.log(state.setTimerange)
     },
     SET_CLEAR_TIMERANGE: (state, inVerified) => {
       state.setTimerange = []
@@ -555,9 +556,9 @@ const store = new Vuex.Store({
           } else {
             // set default time for toolkit
             context.commit('setTimeAsk', timeModule)
-            let setTimerange = []
-            setTimerange.push(timeModule)
-            context.commit('SET_TIME_RANGE', setTimerange)
+            let setTimerangeLocal = []
+            setTimerangeLocal.push(timeModule)
+            // context.commit('SET_TIME_RANGE', setTimerangeLocal)
             peerOptions.push(newestContract)
           }
         } else if (pmod.value.type === 'visualise') {
@@ -614,6 +615,7 @@ const store = new Vuex.Store({
       if (this.state.opendataUpdate === true) {
         contextState = 'opendataUpdate'
       }
+      console.log(contextState)
       // if no summary then first time use, extract modules from source
       let nxpRefcontract = {}
       let nxpModules = []

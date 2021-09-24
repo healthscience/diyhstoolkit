@@ -157,7 +157,7 @@ export default {
   methods: {
     calendarSelect () {
       if (this.calendarTools.active !== true && this.rangeActive !== true) {
-        // console.log('timeLogic1')
+        console.log('timeLogic1')
         // convert to correct time format and update KBundle and build new visStyle
         let bTime = {}
         bTime.selectDate = this.calendarvalue
@@ -169,25 +169,28 @@ export default {
         this.$store.dispatch('actionSetTimerange', this.calendarListMS)
       } else if (this.rangeActive === true) {
         // reset the timeholder
-        // console.log('timeLogic2')
+        console.log('timeLogic2')
         this.calendarListMS = []
         let rangeSelected = moment.range(this.calendarvalue[0], this.calendarvalue[1])
+        console.log(rangeSelected)
         let segText = 'days'
         let sourceRangeTimes = Array.from(rangeSelected.by(segText))
         // loop over range and build date range format
         for (let dr of sourceRangeTimes) {
           this.calendarListMS.push(moment(dr).valueOf())
         }
-        // console.log('range lcoal')
-        // console.log(this.calendarListMS)
+        console.log('range lcoal')
+        console.log(this.calendarListMS)
+        // set time range in store so other toolbars have access
+        this.$store.dispatch('actionSetTimerange', this.calendarListMS)
       } else if (this.calendarTools.active === true) {
-        // console.log('timeLogic3')
+        console.log('timeLogic3')
         let formatTimeDisplay = moment(this.calendarvalue).format('LLll')
         this.calendarList.push(formatTimeDisplay)
         this.calendarListMS.push(moment(this.calendarvalue).valueOf())
+        // set time range in store so other toolbars have access
+        this.$store.dispatch('actionSetTimerange', this.calendarListMS)
       }
-      // set time range in store so other toolbars have access
-      this.$store.dispatch('actionSetTimerange', this.calendarListMS)
     },
     setTimeBundle () {
       // console.log('time bundle select format')
@@ -211,6 +214,8 @@ export default {
     },
     updateKbundle (cm) {
       // prepare update for safeFLOW
+      console.log('live range time ')
+      console.log(this.timeRange)
       let contextK = {}
       contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL

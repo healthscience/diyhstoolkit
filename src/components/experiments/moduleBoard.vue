@@ -34,14 +34,14 @@
     </section>
     <footer class="board-footer">
       <slot name="footer">
-        <button
+        <!-- <button
           type="button"
           class="btn-green"
           @click="close"
           aria-label="Close board"
         >
           Close
-        </button>
+        </button> -->
       </slot>
     </footer>
   </div>

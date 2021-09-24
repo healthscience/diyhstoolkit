@@ -39,4 +39,7 @@ export default {
 </script>
 
 <style>
+#plain-nxp {
+  font-size: 1.4em;
+}
 </style>

@@ -193,7 +193,7 @@ export default {
         this.setYaxisOptions(newDatatypes)
       }
       // set the current time range
-      this.setTimerangeStart(computeContract.value.info.controls.rangedate)
+      // this.setTimerangeStart(computeContract.value.info.controls.rangedate)
       return computeContract.value.info.compute
     },
     refContractsComputeLive: function () {
@@ -370,23 +370,6 @@ export default {
       this.mData = this.visualsettings.device
       this.$store.dispatch('actionNewVisDevice', this.visualsettings.device)
     }
-    /* learnUpdate () {
-      let contextK = {}
-      contextK.nxpCNRL = this.shellID
-      contextK.moduleCNRL = this.moduleCNRL
-      contextK.moduleType = this.moduleType
-      contextK.mData = this.mData
-      contextK.opendata = 'updated'
-      contextK.startperiodchange = ''
-      contextK.startperiod = this.calendarDate
-      contextK.rangechange = this.timeRange
-      contextK.timeformat = this.selectedTimeFormat
-      if (contextK.rangechange.length === 0) {
-        console.log('time range not set')
-      } else {
-        this.$store.dispatch('actionVisUpdate', contextK)
-      }
-    } */
   }
 }
 </script>

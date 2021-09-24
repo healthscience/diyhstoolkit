@@ -636,6 +636,9 @@ ToolkitUtility.prototype.colourList = function () {
 *
 */
 ToolkitUtility.prototype.prepareTime = function (timeIN, update) {
+  console.log('prepare time')
+  console.log(timeIN)
+  console.log(update)
   let newStartTime = []
   if (timeIN === 0) {
     let freshStart = Date.now() + update.startperiodchange

@@ -14,6 +14,9 @@
               <li>
                 <button @click.prevent="chartSelect()">Mixed</button>
               </li>
+              <li>
+                <button @click.prevent="labelsSelect()">Labels</button>
+              </li>
             </div>
           <li>
             <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
@@ -99,6 +102,17 @@ export default {
   methods: {
     chartSelect () {
       console.log('chart select type bar line mixed')
+    },
+    labelsSelect () {
+      console.log('legends')
+      console.log(this.liveData.data.chartOptions)
+      // this.liveData.data.chartOptions.legend.display = !this.liveData.data.chartOptions.legend.display
+      let legendContext = {}
+      legendContext.shellID = this.shellID
+      legendContext.moduleCNRL = this.moduleCNRL
+      legendContext.moduleType = this.moduleType
+      legendContext.mData = this.mData
+      this.$store.dispatch('actionLegendStatus', legendContext)
     },
     visToolbarUpdate () {
       let updateVisTools = {}

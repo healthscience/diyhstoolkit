@@ -7,11 +7,12 @@
       <div id="future-tools">
         <ul>
           <li>
-            <select v-model="selectedChartnumber" @change.prevent="setChartNumber()">
+            <button id="new-visspace" @click.prevent="setChartNumber()">add Space</button>
+            <!-- <select v-model="selectedChartnumber" @change.prevent="setChartNumber()">
               <option v-for="cnoption in numbechartoptions" v-bind:value="cnoption.value" :key='cnoption.id' :selected="cnoption.id === selectedChartnumber">
               {{ cnoption.text }}
               </option>
-            </select>
+            </select> -->
           </li>
           <li class="context-future">
             <!-- <button class="button is-primary" @click.prevent="setFuture('future')">{{ future.text }}</button> -->
@@ -111,13 +112,16 @@ export default {
   height: inherit;
   border: 0px solid black;
 }
+#new-visspace {
+  margin-bottom: 1.4em;
+}
 
 #future-tools {
   padding-top: 1em;
   width: 100px;
-  height: inherit;
+  height: 600px;
   float: right;
-  border: 2px solid orange;
+  border-left: 1px solid orange;
 }
 
 .clear {

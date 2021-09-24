@@ -267,7 +267,7 @@ export default {
 }
 
 #peer-pages {
-  border: 1px solid red;
+  border: 0px solid red;
   display: inline;
 }
 

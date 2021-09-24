@@ -477,6 +477,18 @@ export default {
     SET_TIMEFORMAT_STYLE (state, inVerified) {
       this.state.setTimeFormat = inVerified
       Vue.set(this.state.visModuleHolder, 'setTimeFormat', inVerified)
+    },
+    SET_LEGEND_STATUS (state, inVerified) {
+      console.log('set legeend')
+      console.log(inVerified)
+      console.log(this.state.NXPexperimentData[inVerified.shellID][inVerified.moduleCNRL].data[inVerified.mData])
+      let updataLegened = false
+      if (this.state.NXPexperimentData[inVerified.shellID][inVerified.moduleCNRL].data[inVerified.mData].data.chartOptions.legend.display === true) {
+        updataLegened = false
+      } else if (this.state.NXPexperimentData[inVerified.shellID][inVerified.moduleCNRL].data[inVerified.mData].data.chartOptions.legend.display === false) {
+        updataLegened = true
+      }
+      Vue.set(this.state.NXPexperimentData[inVerified.shellID][inVerified.moduleCNRL].data[inVerified.mData].data.chartOptions.legend, 'display', updataLegened)
     }
   },
   actions: {
@@ -730,6 +742,9 @@ export default {
     },
     actionSetTimeFormat (context, update) {
       context.commit('SET_TIMEFORMAT_STYLE', update)
+    },
+    actionLegendStatus (context, update) {
+      context.commit('SET_LEGEND_STATUS', update)
     },
     actionNewNXPrefcontract (context, update) {
       // add the question module
