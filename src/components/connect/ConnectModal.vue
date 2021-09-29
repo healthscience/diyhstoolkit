@@ -21,6 +21,11 @@
                 <!-- no default title for form -->
               </slot>
             </div>
+            <div id="network-status">
+              <slot name="connect-network">
+                Connection status unknown
+              </slot>
+            </div>
             <div id="form-input">
               <slot name="input-form">
                 <!-- No default input -->
@@ -158,14 +163,30 @@ export default {
     border-radius: 2px;
   }
 
+#network-status {
+  height: 60px;
+  border-bottom: 1px solid grey;
+  margin-bottom: 1em;
+}
+
+#form-input {
+  margin: 1em;
+}
+
+#form-submit {
+  margin-bottom: 1em;
+}
+
 #connect-peerlink {
   border: 1px solid blue;
   min-height: 200px;
 }
 
 #peers-warm-cold {
-  border: 1px solid green;
+  border-bottom: 1px solid green;
   min-height: 200px;
+  margin-top: 2em;
+  padding-bottom: 2em;
 }
 
 #warm-peers, #cold-peers {

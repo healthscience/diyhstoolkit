@@ -4,11 +4,14 @@
       <div v-if="peerauth === false" id="diy-summary">
         <header>BentoBox - Decentralised Data Science</header>
         <ul>
-          <li>1. Interacive lifeboard visualisations</li>
+          <li>1. Interacive visualisations</li>
           <li>2. Join network experiments</li>
           <li>3. Share knowledge with peers & communities</li>
           <li>4. Personal AI - CALE</li>
         </ul>
+        <div id="bentobox-datascience">
+          <img class="medium-start" alt="bentox data science" src=".././assets/bbdds.png">
+        </div>
       </div>
     </div>
     <div class="network-experiments">
@@ -103,7 +106,11 @@ export default {
 }
 
 #diy-summary {
-  border: 0px solid black;
+  font-size: 1.4em;
+}
+
+#diy-summary ul li {
+  font: 1.2em;
 }
 
 #diy-summary header {
@@ -139,6 +146,10 @@ img {
 }
 
 .small-logo {
+}
+
+.medium-start {
+  width: 360px;
 }
 
 /* Clear floats after the columns */

@@ -9,7 +9,11 @@
       <template v-slot:title-form>
         {{ connectContext.message }}
       </template>
+      <template v-slot:connect-network>
+        Connected to Health Oracle Network
+      </template>
       <template v-slot:input-form>
+        External data source connections
         <token-reader v-if="connectContext.type === 'self-verify'" @closeTreader="closeModal"></token-reader>
         <div id="self-in" v-if="connectContext.type === 'self-verify'">
           <input v-model="secretPeer" placeholder="public key">
@@ -17,10 +21,10 @@
         </div>
       </template>
       <template v-slot:submit-form>
-        <button>{{ buttonName }}</button>
+        <!-- <button>{{ buttonName }}</button> -->
       </template>
       <template v-slot:peers-warm>
-        <button type="button" class="btn" @click="addWarmpeer()">Add new</button>
+        <button type="button" class="btn" @click.prevent="addWarmpeer()">Add new</button>
         <div v-if="addWarm === true" id="add-warm-peer">
           <input v-model="newPeername" placeholder="name">
           <input v-model="newPeer" placeholder="public key">
@@ -40,12 +44,12 @@
         </ul>
       </template>
       <template v-slot:peers-cold>
-        <button>Connect CALE AI</button>
+        <!-- <button>Connect CALE AI</button> -->
       </template>
       <template v-slot:peer-keys>
         <div v-if="swarmState === true" id="open-connect">Public Library OPEN for replication</div>
         <ul v-for='pk in publicKeysList' :key='pk.id'>
-          <li>{{ pk }} <button type="button" class="btn" @click="openReplication(pk)">Closed sync</button></li>
+          <li>{{ pk }} <button type="button" class="btn" @click="openReplication(pk)">sync</button></li>
         </ul>
       </template>
       <template v-slot:replicate-library>
