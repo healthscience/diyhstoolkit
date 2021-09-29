@@ -39,7 +39,7 @@
               <li v-if="refContractPackage.xaxisSet.length > 0">
               <label for="xaxis-select"></label>
                 <select class="select-xaxis-id" id="xaxis-mapping-build" @change="xaxisSelect" v-model="visualsettings.xaxis">
-                  <!-- <option value="none" selected="">please select</option> -->
+                  <option value="none" selected="">please select</option>
                   <option v-for="colpair in refContractPackage.xaxisSet" :key="colpair.refcontract" v-bind:value="colpair.key">
                   {{ colpair.column }}
                   </option>
@@ -69,8 +69,8 @@
           <ul>
             <li id="cat-items">
               <label for="category-select"></label>
-              <select class="select-category-id" id="category-mapping-build" @change="categorySelect" v-model="visualsettings.category">
-                <option value="none" selected="">none</option>
+              <select  multiple="true" class="select-category-id" id="category-mapping-build" @change="categorySelect" v-model="visualsettings.category">
+                <option value="please" selected="">Please select</option>
                 <option v-for="catL in category" :key="catL" v-bind:value="catL.key">
                   {{ catL.name }}
                 </option>
@@ -108,11 +108,6 @@
             </li>
           <div v-if="feedback.resolution" class="feedback">---</div>
       </div>
-      <!-- <div v-if="toolInfo" id="context-learn" class="live-kelement">
-        <li v-if="toolInfo.active === true">
-          <button id="learn-update" @click.prevent="learnUpdate($event)">Learn</button>
-        </li>
-      </div> -->
     </div>
   </div>
 </template>
@@ -156,7 +151,7 @@ export default {
       let xDatatypeContracts = []
       // let yDatatypeContracts = []
       for (let dtKey of datatypeMatcher.xaxisSet) {
-        let dtMatch = this.$store.state.liveRefContIndex.datatype.find(elem => elem.key === dtKey) //
+        let dtMatch = this.$store.state.liveRefContIndex.datatype.find(elem => elem.key === dtKey)
         let dtPair = {}
         if (typeof dtMatch === 'object') {
           dtPair.key = dtKey
@@ -164,6 +159,9 @@ export default {
           xDatatypeContracts.push(dtPair)
         }
       }
+      // set defaults
+      this.xaxisSelect()
+      this.yaxisSelect()
       let datatypeHolder = {}
       datatypeHolder.xaxisSet = xDatatypeContracts
       datatypeHolder.yaxisSet = datatypeMatcher.yaxisSet
@@ -178,7 +176,7 @@ export default {
         }
       }
       // if default set is no observation then yaxis will need updated
-      if (computeContract.value.info.compute.key !== '9fa74bc282591f401470c6e3523197997e96702c') {
+      if (computeContract.value.info.compute.key !== '9a23c342893348879e71a75c45e48914787445f6') {
         // this.observataionDts = this.refContractPackage.yaxisSet
         let newDatatypes = []
         for (let dt of this.refContractPackage.yaxisSet) {
@@ -201,34 +199,40 @@ export default {
       return computesLive
     },
     category: function () {
-      if (this.$store.state.refcontractPackaging.length === 0) {
-        return []
-      } else {
-        const catLive = this.$store.state.refcontractPackaging[this.dataSource].value.concept.category
-        const catIndex = Object.keys(catLive)
-        let catList = []
-        for (let cat of catIndex) {
-          if (catLive[cat].category !== undefined) {
-            catList.push(catLive[cat].category)
-          }
+      let catDisplay = []
+      let modulesMatch = this.$store.state.experimentStatus[this.shellID].modules
+      let visContract = {}
+      for (let modC of modulesMatch) {
+        if (modC.key === this.moduleCNRL) {
+          visContract = modC
         }
-        // usage example:
-        let unique = catList.filter(this.onlyUnique)
-        // need to look up each datatype id to get text name
-        let catDisplay = []
-        for (let uc of unique) {
-          for (let dtl of this.$store.state.liveRefContIndex.datatype) {
-            if (uc === dtl.key) {
-              // build pair
-              let catPair = {}
-              catPair.key = uc
-              catPair.name = dtl.value.concept.name
-              catDisplay.push(catPair)
-            }
-          }
-        }
-        return catDisplay
       }
+      // default settings from data contract
+      let catSetup = []
+      if (visContract.value.info.settings.category.length === 0) {
+        let defaultCatOptions = {}
+        defaultCatOptions.key = 'none'
+        defaultCatOptions.name = 'none'
+        defaultCatOptions.rule = 'none'
+        catSetup.push(defaultCatOptions)
+      } else {
+        // set default none & from contract
+        let ndefautCatOptions = {}
+        ndefautCatOptions.key = 'none'
+        ndefautCatOptions.name = 'none'
+        ndefautCatOptions.rule = 'none'
+        catSetup.push(ndefautCatOptions)
+        for (let ncat of visContract.value.info.settings.category) {
+          let defaultCatOptions = {}
+          defaultCatOptions.key = ncat.key
+          defaultCatOptions.name = this.convertReftoText(ncat.key, this.$store.state.liveRefContIndex.datatype)
+          defaultCatOptions.rule = ncat.rule
+          catSetup.push(defaultCatOptions)
+        }
+        // catSetup = [...new Set(catSetup)]
+      }
+      catDisplay = catSetup
+      return catDisplay
     },
     calendarDate: function () {
       return this.$store.state.liveDate
@@ -268,10 +272,9 @@ export default {
         compute: null,
         xaxis: null,
         yaxis: [],
-        category: 'none',
+        category: ['none'],
         time: 'cnrl-t1',
         resolution: 'cnrl-t11'
-
       },
       feedback:
       {
@@ -298,6 +301,15 @@ export default {
     onlyUnique (value, index, self) {
       return self.indexOf(value) === index
     },
+    convertReftoText (cat, dtList) {
+      let nameText = ''
+      for (let dtref of dtList) {
+        if (dtref.key === cat) {
+          nameText = dtref.value.concept.name
+        }
+      }
+      return nameText
+    },
     setDefaultDevice () {
       this.visualsettings.device = this.mData
     },
@@ -315,7 +327,7 @@ export default {
           computeContractMatch = compC
         }
       }
-      if (computeContractMatch.key !== '9fa74bc282591f401470c6e3523197997e96702c') {
+      if (computeContractMatch.key !== '9a23c342893348879e71a75c45e48914787445f6') {
         this.observataionDts = this.refContractPackage.yaxisSet
         this.setYaxis(computeContractMatch)
       } else {
@@ -349,6 +361,7 @@ export default {
     },
     xaxisSelect () {
       // set default x-axis chart setting
+      console.log(this.visualsettings.xaxis)
       this.$store.dispatch('actionNewVisXaxis', this.visualsettings.xaxis)
     },
     yaxisSelect () {

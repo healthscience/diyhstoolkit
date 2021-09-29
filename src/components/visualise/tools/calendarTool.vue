@@ -76,8 +76,6 @@ export default {
   },
   computed: {
     timeRange: function () {
-      console.log('timerange deafult')
-      console.log(this.$store.state.setTimerange)
       return this.$store.state.setTimerange
     }
   },
@@ -172,15 +170,12 @@ export default {
         console.log('timeLogic2')
         this.calendarListMS = []
         let rangeSelected = moment.range(this.calendarvalue[0], this.calendarvalue[1])
-        console.log(rangeSelected)
         let segText = 'days'
         let sourceRangeTimes = Array.from(rangeSelected.by(segText))
         // loop over range and build date range format
         for (let dr of sourceRangeTimes) {
           this.calendarListMS.push(moment(dr).valueOf())
         }
-        console.log('range lcoal')
-        console.log(this.calendarListMS)
         // set time range in store so other toolbars have access
         this.$store.dispatch('actionSetTimerange', this.calendarListMS)
       } else if (this.calendarTools.active === true) {
@@ -214,8 +209,6 @@ export default {
     },
     updateKbundle (cm) {
       // prepare update for safeFLOW
-      console.log('live range time ')
-      console.log(this.timeRange)
       let contextK = {}
       contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
@@ -235,8 +228,6 @@ export default {
       if (contextK.rangechange.length === 0) {
         console.log('no time present, prompt peer2')
       } else {
-        // console.log('contexK')
-        // console.log(contextK)
         this.$store.dispatch('actionVisUpdate', contextK)
       }
     },
@@ -255,11 +246,7 @@ export default {
       // check that time is selected
       if (contextK.startperiod !== 0) {
         console.log('no time present, prompt peer1')
-        console.log(this.timeRange)
-        console.log(contextK)
       } else {
-        console.log('plus or minus one day')
-        console.log(contextK)
         this.$store.dispatch('actionVisUpdate', contextK)
       }
     },

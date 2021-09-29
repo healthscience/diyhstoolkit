@@ -45,6 +45,19 @@ const store = new Vuex.Store({
     },
     visCount: {},
     opendataUpdate: false,
+    newSetupHolder:
+    {
+      devices: null,
+      data: null,
+      compute: null,
+      visualise: null,
+      category: null,
+      timeperiod: null,
+      xaxis: null,
+      yaxis: [],
+      resolution: null,
+      setTimeFormat: null
+    },
     visModuleHolder:
     {
       devices: null,
@@ -318,10 +331,7 @@ const store = new Vuex.Store({
       state.timeStartperiod = inVerified
     },
     SET_TIME_RANGE: (state, inVerified) => {
-      console.log('set time range')
-      console.log(inVerified)
       state.setTimerange = inVerified
-      console.log(state.setTimerange)
     },
     SET_CLEAR_TIMERANGE: (state, inVerified) => {
       state.setTimerange = []
@@ -615,7 +625,6 @@ const store = new Vuex.Store({
       if (this.state.opendataUpdate === true) {
         contextState = 'opendataUpdate'
       }
-      console.log(contextState)
       // if no summary then first time use, extract modules from source
       let nxpRefcontract = {}
       let nxpModules = []

@@ -6,6 +6,7 @@ import moment from 'moment'
 const ToolUtility = new ToolkitUtility()
 const VisualUtility = new VisToolsUtility()
 const ValidateUtility = new ContextUtility()
+const remote = require('electron').remote
 
 export default {
   state: {
@@ -27,6 +28,7 @@ export default {
     },
     SOCKET_ONERROR (state, event) {
       console.error(state, event)
+      remote.getCurrentWindow().close()
       // inform Peer connection to network lost
     },
     // mutations for reconnect methods
@@ -387,6 +389,41 @@ export default {
     SET_NXP_REFCONTRACT (state, inVerified) {
       this.state.nxpRefContract = inVerified
     },
+    SET_SETNXP_VISDEVICES (state, inVerified) {
+      Vue.set(this.state.newSetupHolder, 'devices', inVerified)
+    },
+    SET_SETNXP_VISCOMPUTE (state, inVerified) {
+      Vue.set(this.state.newSetupHolder, 'compute', inVerified)
+    },
+    SET_SETNXP_VISRESULTS (state, inVerified) {
+      Vue.set(this.state.newSetupHolder, 'results', inVerified)
+    },
+    SET_SETNXP_VISXAXIS (state, inVerified) {
+      Vue.set(this.state.newSetupHolder, 'xaxis', inVerified)
+    },
+    SET_SETNXP_VISYAXIS (state, inVerified) {
+      // y axis can hold many datatypes
+      let singleDTref = []
+      for (let dtCheck of inVerified) {
+        if (typeof dtCheck === 'object') {
+          singleDTref.push(dtCheck.sourcedt)
+        } else {
+          singleDTref.push(dtCheck)
+        }
+      }
+      // keep tabs that open data updated
+      this.state.opendataUpdate = true
+      this.state.newSetupHolder.yaxis = singleDTref
+    },
+    SET_SETNXP_VISCATEGORY (state, inVerified) {
+      Vue.set(this.state.newSetupHolder, 'category', inVerified)
+    },
+    SET_SETNXP_VISTIME (state, inVerified) {
+      Vue.set(this.state.newSetupHolder, 'timeperiod', inVerified)
+    },
+    SET_SETNXP_VISRESOLUTION (state, inVerified) {
+      Vue.set(this.state.newSetupHolder, 'resolution', inVerified)
+    },
     SET_NEWNXP_VISDEVICES (state, inVerified) {
       Vue.set(this.state.visModuleHolder, 'devices', inVerified)
     },
@@ -397,6 +434,8 @@ export default {
       Vue.set(this.state.visModuleHolder, 'results', inVerified)
     },
     SET_NEWNXP_VISXAXIS (state, inVerified) {
+      console.log('set x asis')
+      console.log(inVerified)
       Vue.set(this.state.visModuleHolder, 'xaxis', inVerified)
     },
     SET_NEWNXP_VISYAXIS (state, inVerified) {
@@ -479,9 +518,6 @@ export default {
       Vue.set(this.state.visModuleHolder, 'setTimeFormat', inVerified)
     },
     SET_LEGEND_STATUS (state, inVerified) {
-      console.log('set legeend')
-      console.log(inVerified)
-      console.log(this.state.NXPexperimentData[inVerified.shellID][inVerified.moduleCNRL].data[inVerified.mData])
       let updataLegened = false
       if (this.state.NXPexperimentData[inVerified.shellID][inVerified.moduleCNRL].data[inVerified.mData].data.chartOptions.legend.display === true) {
         updataLegened = false
@@ -572,13 +608,13 @@ export default {
       dataCNRLbundle2.grid = []
       moduleContracts.push(dataCNRLbundle2)
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      const dataCNRLbundle3 = {}
+      /* const dataCNRLbundle3 = {}
       dataCNRLbundle3.reftype = 'module'
       dataCNRLbundle3.type = 'device'
       dataCNRLbundle3.primary = 'genesis'
       dataCNRLbundle3.concept = ''
       dataCNRLbundle3.grid = []
-      moduleContracts.push(dataCNRLbundle3)
+      moduleContracts.push(dataCNRLbundle3) */
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
       const dataCNRLbundle4 = {}
       dataCNRLbundle4.reftype = 'module'
@@ -711,6 +747,24 @@ export default {
     buildRefComputeAutomation (context, update) {
       context.commit('SET_JOIN_NXP_COMPUTE_AUTO', update)
     },
+    actionSetVisDevice (context, update) {
+      context.commit('SET_SETNXP_VISDEVICES', update)
+    },
+    actionSetVisCompute (context, update) {
+      context.commit('SET_SETNXP_VISCOMPUTE', update)
+    },
+    actionSetVisResults (context, update) {
+      context.commit('SET_SETNXP_VISRESULTS', update)
+    },
+    actionSetVisXaxis (context, update) {
+      context.commit('SET_SETNXP_VISXAXIS', update)
+    },
+    actionSetVisYaxis (context, update) {
+      context.commit('SET_SETNXP_VISYAXIS', update)
+    },
+    actionSetVisCategory (context, update) {
+      context.commit('SET_SETNXP_VISCATEGORY', update)
+    },
     actionNewVisDevice (context, update) {
       context.commit('SET_NEWNXP_VISDEVICES', update)
     },
@@ -779,6 +833,7 @@ export default {
     actionJoinExperiment (context, update) {
       // map experiment refcont to genesis contract
       // make first module contracts for this peer to record start and other module refs with new computations
+      console.log('join NXP start================')
       const genesisExpRefCont = this.state.joinNXPlive.experiment
       // validate all the NXP join inputs are present?
       let validJoinInput = false
@@ -794,7 +849,7 @@ export default {
         let optionsSelected = {}
         optionsSelected.data = this.state.joinNXPselected.data
         optionsSelected.compute = this.state.joinNXPselected.compute
-        optionsSelected.visualise = this.state.visModuleHolder
+        optionsSelected.visualise = this.state.newSetupHolder
         dataChoices.options = optionsSelected
         let newJoinExperiment = {}
         newJoinExperiment.type = 'library'

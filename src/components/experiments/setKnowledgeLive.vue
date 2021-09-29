@@ -16,37 +16,6 @@
             </li>
           </ul>
         </div> -->
-        <!-- <div id="context-compute" class="live-kelement">
-          <header>Compute:</header>
-          <ul>
-            <li>
-              <label for="compute-select"></label>
-              <select class="select-compute-id" id="compute-mapping-build" @change="computeSelect" v-model="visualsettings.compute">
-                <option value="none" selected="">please select</option>
-                <option v-for="comp in refContractCompute" :key="comp.option.key" v-bind:value="comp.option.key">
-                {{ comp.option.value.computational.name }}
-                </option>
-                <option v-for="compL in refContractComputeLive" :key="compL.key" v-bind:value="compL.key">
-                {{ compL.value.computational.name }}
-                </option>
-              </select>
-            </li>
-          </ul>
-        </div> -->
-        <!-- <div id="context-results" class="live-kelement">
-          <header>Datatype-Results:</header>
-          <ul>
-            <li>
-              <label for="results-select"></label>
-              <select class="select-results-id" id="results-mapping-build" @change="resultsSelect" v-model="visualsettings.results">
-                <option value="none" selected="">please select</option>
-                <option v-for="rDT in datatypeResults" :key="rDT.refcontract" v-bind:value="rDT">
-                {{ rDT.column }}
-                </option>
-              </select>
-            </li>
-          </ul>
-        </div> -->
       </div>
       <div id="live-context-datatypes">
         <ul>
@@ -77,6 +46,22 @@
             </ul>
             <div v-if="feedback.datatypes" class="feedback">
               ---
+            </div>
+          </li>
+          <li  class="live-item">
+            <div id="live-context-category">
+              <header>Category</header>
+                <ul>
+                  <li v-if="category.length > 0" id="cat-items">
+                    <label for="category-select"></label>
+                    <select  multiple="true" class="select-category-id" id="category-mapping-build" @change="categorySelect" v-model="visualsettings.category">
+                      <option value="please" selected="">please select</option>
+                      <option v-for="catL in category" :key="catL.key" v-bind:value="catL.key">
+                        {{ catL.name }}
+                      </option>
+                    </select>
+                  </li>
+                </ul>
             </div>
           </li>
         </ul>
@@ -147,9 +132,6 @@ export default {
     datatypesLive: function () {
       return this.$store.state.liveRefContIndex.datatype
     },
-    resultsDTs: function () {
-      return []
-    },
     refContractPackage: function () {
       // match ids to visualise contract
       let setupDataPackage = {}
@@ -160,14 +142,14 @@ export default {
       }
       let datatypeMatcher = {}
       datatypeMatcher.xaxisSet = []
-      datatypeMatcher.xaxisSet = [ { column: 'timestamp', refcontract: '209d8d2e4127b14d1503a2169733e52306a38dc8' } ]
+      datatypeMatcher.xaxisSet = [ { column: 'timestamp', refcontract: '2d11318841f43034df41de9b38ab5e77b6b01bcf' } ]
       // observation or computation require in compute contract?
       // need to create new units based on compute and source datatype
       let newDatatypes = []
       let activeContractStage = {}
       let liveComputeRefcontractID = ''
       if (this.refContractComputeLive[0] === undefined) {
-        liveComputeRefcontractID = '9fa74bc282591f401470c6e3523197997e96702c'
+        liveComputeRefcontractID = '9a23c342893348879e71a75c45e48914787445f6'
       } else {
         if (this.refContractComputeLive[0].option === undefined) {
           liveComputeRefcontractID = this.refContractComputeLive[0].key
@@ -177,14 +159,12 @@ export default {
           activeContractStage = this.refContractComputeLive[0].option
         }
       }
-      if (liveComputeRefcontractID !== '9fa74bc282591f401470c6e3523197997e96702c') {
+      if (liveComputeRefcontractID !== '9a23c342893348879e71a75c45e48914787445f6') {
         let computeDTprefix = {}
         for (let dt of setupDataPackage.value.concept.tablestructure) {
           let combinComputeDT = dt
           for (let dtr of this.datatypesLive) {
             if (dtr.key === activeContractStage.value.computational.dtprefix) {
-              // console.log('match dt')
-              // console.log(dtr)
               computeDTprefix = dtr
             }
           }
@@ -205,34 +185,41 @@ export default {
       return datatypeHolder
     },
     category: function () {
-      if (this.$store.state.refcontractPackaging.length === 0) {
-        return []
+      let catDisplay = []
+      let setupDataPackage = {}
+      if (this.$store.state.refcontractPackaging[0] !== undefined) {
+        setupDataPackage = this.$store.state.refcontractPackaging[0]
       } else {
-        const catLive = this.$store.state.refcontractPackaging[this.dataSource].value.concept.category
-        const catIndex = Object.keys(catLive)
-        let catList = []
-        for (let cat of catIndex) {
-          if (catLive[cat].category !== undefined) {
-            catList.push(catLive[cat].category)
-          }
-        }
-        // usage example:
-        let unique = catList.filter(this.onlyUnique)
-        // need to look up each datatype id to get text name
-        let catDisplay = []
-        for (let uc of unique) {
-          for (let dtl of this.$store.state.liveRefContIndex.datatype) {
-            if (uc === dtl.key) {
-              // build pair
-              let catPair = {}
-              catPair.key = uc
-              catPair.name = dtl.value.concept.name
-              catDisplay.push(catPair)
-            }
-          }
-        }
-        return catDisplay
+        setupDataPackage = {}
       }
+      // default settings from data contract
+      let catSetup = []
+      let anyCategoryset = Object.keys(setupDataPackage.value.concept.category)
+      if (anyCategoryset.length === 0) {
+        let defaultCatOptions = {}
+        defaultCatOptions.key = 'none'
+        defaultCatOptions.name = 'none'
+        defaultCatOptions.rule = 'none'
+        catSetup.push(defaultCatOptions)
+      } else {
+        // set default none & from contract
+        let ndefautCatOptions = {}
+        ndefautCatOptions.key = 'none'
+        ndefautCatOptions.name = 'none'
+        ndefautCatOptions.rule = 'none'
+        catSetup.push(ndefautCatOptions)
+        let catKeys = Object.keys(setupDataPackage.value.concept.category)
+        for (let ncat of catKeys) {
+          let defaultCatOptions = {}
+          defaultCatOptions.key = setupDataPackage.value.concept.category[ncat].category
+          defaultCatOptions.name = this.convertReftoText(setupDataPackage.value.concept.category[ncat].category, this.$store.state.liveRefContIndex.datatype)
+          defaultCatOptions.rule = setupDataPackage.value.concept.category[ncat].category.rule
+          catSetup.push(defaultCatOptions)
+        }
+        // catSetup = [...new Set(catSetup)]
+      }
+      catDisplay = catSetup
+      return catDisplay
     },
     calendarDate: function () {
       return this.$store.state.liveDate
@@ -258,9 +245,6 @@ export default {
       resList.push(resItem)
       return resList
     },
-    results: function () {
-      return this.$store.state.refContractPackaging
-    },
     devices: function () {
       return this.$store.state.devicesLive[this.shellID]
     },
@@ -276,8 +260,13 @@ export default {
       xaxisSet: '',
       yaxisSet: '',
       visualsettings: {
+        device: null,
+        compute: null,
         xaxis: null,
-        yaxis: []
+        yaxis: [],
+        category: [],
+        time: 'cnrl-t1',
+        resolution: 'cnrl-t11'
       },
       feedback:
       {
@@ -299,30 +288,14 @@ export default {
     clearKnowledgeBox () {
       // set defaults
     },
-    onlyUnique (value, index, self) {
-      return self.indexOf(value) === index
-    },
-    xaxisSelect () {
-      // set default x-axis chart setting
-      this.$store.dispatch('actionNewVisXaxis', this.visualsettings.xaxis)
-    },
-    yaxisSelect () {
-      // set default y-axis chart setting
-      this.$store.dispatch('actionNewVisYaxis', this.visualsettings.yaxis)
-    },
-    categorySelect () {
-      this.$store.dispatch('actionNewVisCategory', this.visualsettings.category)
-    },
-    timeSelect () {
-      // set default time chart setting
-      this.$store.dispatch('actionNewVisTime', this.visualsettings.time)
-    },
-    resolutionSelect () {
-      // set default resolution chart setting
-      this.$store.dispatch('actionNewVisResolution', this.visualsettings.resolution)
-    },
-    deviceSelect () {
-      this.$store.dispatch('actionNewVisDevice', this.visualsettings.device)
+    convertReftoText (cat, dtList) {
+      let nameText = ''
+      for (let dtref of dtList) {
+        if (dtref.key === cat) {
+          nameText = dtref.value.concept.name
+        }
+      }
+      return nameText
     },
     computeSelect () {
       // prepare the results datatype
@@ -345,25 +318,32 @@ export default {
           } */
         }
       }
-      this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
+      this.$store.dispatch('actionSetVisCompute', this.visualsettings.compute)
     },
-    resultsSelect () {
-      // transfer this result type to chart y axis
-      this.$store.dispatch('actionNewVisResults', this.visualsettings.results)
-      this.refContractPackage.push(this.visualsettings.results)
+    onlyUnique (value, index, self) {
+      return self.indexOf(value) === index
     },
-    learnUpdate () {
-      let contextK = {}
-      contextK.nxpCNRL = this.shellID
-      contextK.moduleCNRL = this.moduleCNRL
-      contextK.moduleType = this.moduleType
-      contextK.mData = this.mData
-      contextK.opendata = 'updated'
-      contextK.startperiodchange = ''
-      contextK.startperiod = this.calendarDate
-      contextK.rangechange = this.timeRange
-      contextK.timeformat = this.selectedTimeFormat
-      this.$store.dispatch('actionVisUpdate', contextK)
+    xaxisSelect () {
+      // set default x-axis chart setting
+      this.$store.dispatch('actionSetVisXaxis', this.visualsettings.xaxis)
+    },
+    yaxisSelect () {
+      // set default y-axis chart setting
+      this.$store.dispatch('actionSetVisYaxis', this.visualsettings.yaxis)
+    },
+    categorySelect () {
+      this.$store.dispatch('actionSetVisCategory', this.visualsettings.category)
+    },
+    timeSelect () {
+      // set default time chart setting
+      this.$store.dispatch('actionSetVisTime', this.visualsettings.time)
+    },
+    resolutionSelect () {
+      // set default resolution chart setting
+      this.$store.dispatch('actionSetVisResolution', this.visualsettings.resolution)
+    },
+    deviceSelect () {
+      this.$store.dispatch('actionSetVisDevice', this.visualsettings.device)
     }
   }
 }
