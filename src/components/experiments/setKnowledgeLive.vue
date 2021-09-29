@@ -236,7 +236,7 @@ export default {
       return timeList
     },
     timeRange: function () {
-      return this.$store.state.setTimerange
+      return this.$store.state.setTimerange[this.mData]
     },
     resolution: function () {
       // mock units refContract

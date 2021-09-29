@@ -101,7 +101,7 @@ export default {
   },
   computed: {
     timeRange: function () {
-      return this.$store.state.setTimerange
+      return this.$store.state.setTimerange[this.mData]
     }
   },
   created () {
@@ -198,7 +198,10 @@ export default {
         this.$store.dispatch('singleDateUpdate', numberTimeformat)
         this.calendarListMS = []
         this.calendarListMS.push(numberTimeformat)
-        this.$store.dispatch('actionSetTimerange', this.calendarListMS)
+        let timeContext = {}
+        timeContext.device = this.mData
+        timeContext.timerange = this.calendarListMS
+        this.$store.dispatch('actionSetTimerange', timeContext)
       } else if (this.calendarRangeTools.active === true) {
         // reset the timeholder
         this.calendarListMS = []
@@ -214,7 +217,10 @@ export default {
         this.calendarListMS.push(moment(this.calendarvalue).valueOf())
       }
       // set time range in store so other toolbars have access
-      this.$store.dispatch('actionSetTimerange', this.calendarListMS)
+      let timeContext = {}
+      timeContext.device = this.mData
+      timeContext.timerange = this.calendarListMS
+      this.$store.dispatch('actionSetTimerange', timeContext)
     },
     setRangedays (md) {
       this.rangeActive = !this.rangeActive
@@ -222,11 +228,17 @@ export default {
       if (this.calendarRangeTools.active === false) {
         // set store value to empty
         this.calendarListMS = []
-        this.$store.dispatch('actionClearTimerange')
+        let timeContext = {}
+        timeContext.device = this.mData
+        timeContext.timerange = this.calendarListMS
+        this.$store.dispatch('actionClearTimerange', timeContext)
       }
     },
     setTimerangeStart (timerange) {
-      this.$store.dispatch('actionSetTimerange', timerange)
+      let timeContext = {}
+      timeContext.device = this.mData
+      timeContext.timerange = timerange
+      this.$store.dispatch('actionSetTimerange', timeContext)
     },
     setMultidays (md) {
       this.calendarTools.active = !this.calendarTools.active

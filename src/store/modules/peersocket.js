@@ -229,6 +229,8 @@ export default {
                 // set new grid
                 this.state.moduleGrid[displayDataUpdate.module].push(modG)
                 if (backJSON.data.context.triplet.device === modG.i) {
+                  // set setting holder
+                  Vue.set(this.state.visModuleHolder, modG.i, this.state.visSettings)
                   // set toolbars
                   let setVisTools = {}
                   setVisTools = { text: 'open tools', active: true }
@@ -284,6 +286,8 @@ export default {
                 // set the toolbars per vis module per device
                 let listDevices = Object.keys(displayModulesReady.data[modID].data)
                 for (let deviceP of listDevices) {
+                  // set setting holder
+                  Vue.set(this.state.visModuleHolder, deviceP, this.state.visSettings)
                   // set vis e.g. chart progress message per device
                   let setVisProgress = { text: 'Preparing visualisation', active: false }
                   Vue.set(this.state.visProgress[modID], deviceP, setVisProgress)
@@ -425,43 +429,43 @@ export default {
       Vue.set(this.state.newSetupHolder, 'resolution', inVerified)
     },
     SET_NEWNXP_VISDEVICES (state, inVerified) {
-      Vue.set(this.state.visModuleHolder, 'devices', inVerified)
+      Vue.set(this.state.visModuleHolder[inVerified.device], 'devices', inVerified.setting)
     },
     SET_NEWNXP_VISCOMPUTE (state, inVerified) {
-      Vue.set(this.state.visModuleHolder, 'compute', inVerified)
+      Vue.set(this.state.visModuleHolder[inVerified.device], 'compute', inVerified.setting)
     },
     SET_NEWNXP_VISRESULTS (state, inVerified) {
       Vue.set(this.state.visModuleHolder, 'results', inVerified)
     },
     SET_NEWNXP_VISXAXIS (state, inVerified) {
-      console.log('set x asis')
-      console.log(inVerified)
-      Vue.set(this.state.visModuleHolder, 'xaxis', inVerified)
+      Vue.set(this.state.visModuleHolder[inVerified.device], 'xaxis', inVerified.setting)
     },
     SET_NEWNXP_VISYAXIS (state, inVerified) {
       // y axis can hold many datatypes
-      let singleDTref = []
+      console.log(inVerified)
+      /* let singleDTref = []
       for (let dtCheck of inVerified) {
         if (typeof dtCheck === 'object') {
           singleDTref.push(dtCheck.sourcedt)
         } else {
           singleDTref.push(dtCheck)
         }
-      }
+      } */
       // keep tabs that open data updated
       this.state.opendataUpdate = true
-      this.state.visModuleHolder.yaxis = singleDTref
-      console.log('y axies selected')
-      console.log(this.state.visModuleHolder)
+      // this.state.visModuleHolder.yaxis = singleDTref
+      Vue.set(this.state.visModuleHolder[inVerified.device], 'yaxis', inVerified.setting)
     },
     SET_NEWNXP_VISCATEGORY (state, inVerified) {
-      Vue.set(this.state.visModuleHolder, 'category', inVerified)
+      console.log('category')
+      console.log(inVerified)
+      Vue.set(this.state.visModuleHolder[inVerified.device], 'category', inVerified.setting)
     },
     SET_NEWNXP_VISTIME (state, inVerified) {
-      Vue.set(this.state.visModuleHolder, 'timeperiod', inVerified)
+      Vue.set(this.state.visModuleHolder[inVerified.device], 'timeperiod', inVerified.setting)
     },
     SET_NEWNXP_VISRESOLUTION (state, inVerified) {
-      Vue.set(this.state.visModuleHolder, 'resolution', inVerified)
+      Vue.set(this.state.visModuleHolder[inVerified.device], 'resolution', inVerified.setting)
     },
     SET_MODULE_LIST (state, inVerified) {
       this.state.nxpModulesList = inVerified
@@ -809,7 +813,7 @@ export default {
       for (let newMod of this.state.moduleHolder) {
         if (newMod.moduleinfo.name === 'visualise') {
           let addSettings = newMod
-          addSettings.option['settings'] = this.state.visModuleHolder
+          addSettings.option['settings'] = this.state.newSetupHolder // this.state.visModuleHolder
           newAddsettingHolder.push(addSettings)
         } else {
           newAddsettingHolder.push(newMod)
@@ -827,8 +831,6 @@ export default {
       Vue.prototype.$socket.send(genesisNXPjson)
       // clear the new NXP forms
       this.state.moduleHolder = []
-      // this.state.refcontractCompute = []
-      // this.state.visModuleHolder = {}
     },
     actionJoinExperiment (context, update) {
       // map experiment refcont to genesis contract

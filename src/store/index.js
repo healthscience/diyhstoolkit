@@ -44,6 +44,7 @@ const store = new Vuex.Store({
       compute: {}
     },
     visCount: {},
+    flowviews: false,
     opendataUpdate: false,
     newSetupHolder:
     {
@@ -58,7 +59,8 @@ const store = new Vuex.Store({
       resolution: null,
       setTimeFormat: null
     },
-    visModuleHolder:
+    visModuleHolder: {},
+    visSettings:
     {
       devices: null,
       data: null,
@@ -72,7 +74,7 @@ const store = new Vuex.Store({
       setTimeFormat: null
     },
     setTimeFormat: 'timeseries',
-    setTimerange: [],
+    setTimerange: {},
     dashboardNXP: {},
     ECSupdateOUT: {},
     referenceContract: {},
@@ -331,10 +333,13 @@ const store = new Vuex.Store({
       state.timeStartperiod = inVerified
     },
     SET_TIME_RANGE: (state, inVerified) => {
-      state.setTimerange = inVerified
+      console.log('set range time')
+      console.log(inVerified)
+      Vue.set(state.setTimerange, inVerified.device, inVerified.timerange)
+      console.log(state.setTimerange)
     },
     SET_CLEAR_TIMERANGE: (state, inVerified) => {
-      state.setTimerange = []
+      Vue.set(state.setTimerange, inVerified.device, [])
     },
     setUpdatesOUT: (state, inVerified) => {
       state.ECSupdateOUT = inVerified
@@ -390,6 +395,9 @@ const store = new Vuex.Store({
       // close modal
       state.connectStatus = !state.connectStatus
       Vue.prototype.$socket.send(safeFlowMessage)
+    },
+    SET_VIEWFLOW_START (state, inVerified) {
+      state.flowviews = true
     }
   },
   actions: {
@@ -520,13 +528,16 @@ const store = new Vuex.Store({
     },
     async actionDashboardState (context, update) {
       // console.log('clicked VIEW NXP------------')
-      // console.log(update)
+      console.log(update)
       let futureTimeCheck = false
       context.commit('setLiveNXP', update)
       context.commit('setDashboardNXP', update)
       context.commit('setNXPprogressUpdate', update)
       // clear the time range for new NXP view
-      context.commit('SET_CLEAR_TIMERANGE', null)
+      let timeContext = {}
+      timeContext.device = update.mData
+      timeContext.timerange = []
+      context.commit('SET_CLEAR_TIMERANGE', timeContext)
       // build the safeFLOW-ECS input bundle
       let matchExp = {}
       for (let nxp of this.state.networkPeerExpModules) {
@@ -568,7 +579,6 @@ const store = new Vuex.Store({
             context.commit('setTimeAsk', timeModule)
             let setTimerangeLocal = []
             setTimerangeLocal.push(timeModule)
-            // context.commit('SET_TIME_RANGE', setTimerangeLocal)
             peerOptions.push(newestContract)
           }
         } else if (pmod.value.type === 'visualise') {
@@ -653,7 +663,7 @@ const store = new Vuex.Store({
           if (contextState === 'timeupdate') {
             updateSettings = ContextOut.prepareSettingsTime(mmod, newStartTime, update, null)
           } else if (contextState === 'opendataUpdate') {
-            updateSettings = ContextOut.prepareSettings(mmod, newStartTime, update, this.state.visModuleHolder)
+            updateSettings = ContextOut.prepareSettings(mmod, newStartTime, update, this.state.visModuleHolder[update.mData])
           }
           // what device has seen selected
           updateSettings = ContextOut.prepareSettingsDevices(updateSettings, update.mData)
@@ -672,7 +682,7 @@ const store = new Vuex.Store({
             }
             updateSettings = ContextOut.prepareSettingsVisTime(mmod, newStartTime, update, null)
           } else if (contextState === 'opendataUpdate') {
-            updateSettings = ContextOut.prepareVisSettings(mmod, newStartTime, update, this.state.visModuleHolder)
+            updateSettings = ContextOut.prepareVisSettings(mmod, newStartTime, update, this.state.visModuleHolder[update.mData])
           }
           updateModules.push(updateSettings)
         } else if (mmod.value.type === 'data') {
@@ -760,6 +770,9 @@ const store = new Vuex.Store({
     },
     actionRemoveDashboard (context, update) {
       context.commit('SET_DASHBOARD_REMOVE', update)
+    },
+    actionFlowviews (context, update) {
+      context.commit('SET_VIEWFLOW_START', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

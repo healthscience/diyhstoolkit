@@ -71,7 +71,7 @@
               <label for="category-select"></label>
               <select  multiple="true" class="select-category-id" id="category-mapping-build" @change="categorySelect" v-model="visualsettings.category">
                 <option value="please" selected="">Please select</option>
-                <option v-for="catL in category" :key="catL" v-bind:value="catL.key">
+                <option v-for="catL in category" :key="catL.key" v-bind:value="catL.key">
                   {{ catL.name }}
                 </option>
               </select>
@@ -159,9 +159,6 @@ export default {
           xDatatypeContracts.push(dtPair)
         }
       }
-      // set defaults
-      this.xaxisSelect()
-      this.yaxisSelect()
       let datatypeHolder = {}
       datatypeHolder.xaxisSet = xDatatypeContracts
       datatypeHolder.yaxisSet = datatypeMatcher.yaxisSet
@@ -190,8 +187,6 @@ export default {
         // set y axis options
         this.setYaxisOptions(newDatatypes)
       }
-      // set the current time range
-      // this.setTimerangeStart(computeContract.value.info.controls.rangedate)
       return computeContract.value.info.compute
     },
     refContractsComputeLive: function () {
@@ -249,7 +244,7 @@ export default {
       return timeList
     },
     timeRange: function () {
-      return this.$store.state.setTimerange
+      return this.$store.state.setTimerange[this.mData]
     },
     resolution: function () {
       // mock units refContract
@@ -336,10 +331,10 @@ export default {
           this.refContractPackage.yaxisSet = this.observataionDts
         }
       }
-      this.$store.dispatch('actionNewVisCompute', this.visualsettings.compute)
-    },
-    setTimerangeStart (timerange) {
-      this.$store.dispatch('actionSetTimerange', timerange)
+      let visSetContext = {}
+      visSetContext.device = this.mData
+      visSetContext.setting = this.visualsettings.compute
+      this.$store.dispatch('actionNewVisCompute', visSetContext)
     },
     setYaxisOptions (startYdts) {
       this.refContractPackage.yaxisSet = startYdts
@@ -356,32 +351,47 @@ export default {
         newDatatypes.push(dtCombine)
       }
       this.refContractPackage.yaxisSet = newDatatypes
-      // what is default y axis(s) listed in computeContract?
-      // this.visualsettings.yaxis = computeContract.value.info.settings.yaxis // ['81de8e9a2c70d3867f2f16a531b8824480b641fc', '2b70f05722868c1111d84da267f683aa95a7cb85']
     },
     xaxisSelect () {
       // set default x-axis chart setting
-      console.log(this.visualsettings.xaxis)
-      this.$store.dispatch('actionNewVisXaxis', this.visualsettings.xaxis)
+      let visSetContext = {}
+      visSetContext.device = this.mData
+      visSetContext.setting = this.visualsettings.xaxis
+      this.$store.dispatch('actionNewVisXaxis', visSetContext)
     },
     yaxisSelect () {
       // set default y-axis chart setting
-      this.$store.dispatch('actionNewVisYaxis', this.visualsettings.yaxis)
+      let visSetContext = {}
+      visSetContext.device = this.mData
+      visSetContext.setting = this.visualsettings.yaxis
+      this.$store.dispatch('actionNewVisYaxis', visSetContext)
     },
     categorySelect () {
-      this.$store.dispatch('actionNewVisCategory', this.visualsettings.category)
+      let visSetContext = {}
+      visSetContext.device = this.mData
+      visSetContext.setting = this.visualsettings.category
+      this.$store.dispatch('actionNewVisCategory', visSetContext)
     },
     timeSelect () {
       // set default time chart setting
-      this.$store.dispatch('actionNewVisTime', this.visualsettings.time)
+      let visSetContext = {}
+      visSetContext.device = this.mData
+      visSetContext.setting = this.visualsettings.time
+      this.$store.dispatch('actionNewVisTime', visSetContext)
     },
     resolutionSelect () {
       // set default resolution chart setting
-      this.$store.dispatch('actionNewVisResolution', this.visualsettings.resolution)
+      let visSetContext = {}
+      visSetContext.device = this.mData
+      visSetContext.setting = this.visualsettings.resolution
+      this.$store.dispatch('actionNewVisResolution', visSetContext)
     },
     deviceSelect () {
       this.mData = this.visualsettings.device
-      this.$store.dispatch('actionNewVisDevice', this.visualsettings.device)
+      let visSetContext = {}
+      visSetContext.device = this.mData
+      visSetContext.setting = this.visualsettings.device
+      this.$store.dispatch('actionNewVisDevice', visSetContext)
     }
   }
 }

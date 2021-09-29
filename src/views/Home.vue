@@ -16,7 +16,7 @@
         <div class="toolkit-logo">
           <img class="small-logo" alt="logo" src=".././assets/logo.png">
         </div>
-        <div id="peer-views" v-if="peerviews === true">
+        <div id="peer-views" v-if="flowviews === true">
           <ul>
             <li>
               <button class="peer-medium" id="lifestyleworld" @click.prevent="setView($event)">Lifeboards</button>
@@ -26,9 +26,11 @@
           </ul>
         </div>
       </div>
-      <live-lifestyle v-if="viewLifestyleworld === true"></live-lifestyle>
-      <live-network v-if="viewNXP === true"></live-network>
-      <live-timeline v-if="viewTimeline === true"></live-timeline>
+      <div id="view-flows">
+        <live-lifestyle v-if="viewLifestyleworld === true"></live-lifestyle>
+        <live-network v-if="viewNXP === true"></live-network>
+        <live-timeline v-if="viewTimeline === true"></live-timeline>
+      </div>
     </div>
   </div>
 </template>
@@ -48,20 +50,22 @@ export default {
     LiveTimeline,
     LiveLifestyle
   },
-  data () {
-    return {
-      viewNXP: true,
-      viewTimeline: false,
-      viewLifestyleworld: false,
-      peerviews: true
-    }
-  },
   computed: {
     connected: function () {
       return this.$store.state.connectStatus
     },
     peerauth: function () {
       return this.$store.state.peerauthStatus
+    },
+    flowviews: function () {
+      return this.$store.state.flowviews
+    }
+  },
+  data () {
+    return {
+      viewNXP: true,
+      viewTimeline: false,
+      viewLifestyleworld: false
     }
   },
   methods: {

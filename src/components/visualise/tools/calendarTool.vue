@@ -18,7 +18,7 @@
             <div id="select-time">
               <ul>
                 <li v-for="tv in navTime" :key='tv.id' class="context-time">
-                  <button class="button is-primary" @click.prevent="setTimeData(tv)">{{ tv.text.word }}</button>
+                  <button class="button is-primary" @click.prevent="setShiftTimeData(tv)">{{ tv.text.word }}</button>
                 </li>
               </ul>
             </div>
@@ -76,7 +76,7 @@ export default {
   },
   computed: {
     timeRange: function () {
-      return this.$store.state.setTimerange
+      return this.$store.state.setTimerange[this.mData]
     }
   },
   created () {
@@ -96,7 +96,7 @@ export default {
       id: 'range-days',
       active: false
     },
-    calendarTools:
+    calendarToolMulti:
     {
       name: 'Mulit Days',
       id: 'multi-days',
@@ -154,7 +154,7 @@ export default {
   }),
   methods: {
     calendarSelect () {
-      if (this.calendarTools.active !== true && this.rangeActive !== true) {
+      if (this.calendarToolMulti.active !== true && this.rangeActive !== true) {
         console.log('timeLogic1')
         // convert to correct time format and update KBundle and build new visStyle
         let bTime = {}
@@ -164,7 +164,10 @@ export default {
         this.$store.dispatch('singleDateUpdate', numberTimeformat)
         this.calendarListMS = []
         this.calendarListMS.push(numberTimeformat)
-        this.$store.dispatch('actionSetTimerange', this.calendarListMS)
+        let timeContext = {}
+        timeContext.device = this.mData
+        timeContext.timerange = this.calendarListMS
+        this.$store.dispatch('actionSetTimerange', timeContext)
       } else if (this.rangeActive === true) {
         // reset the timeholder
         console.log('timeLogic2')
@@ -177,27 +180,39 @@ export default {
           this.calendarListMS.push(moment(dr).valueOf())
         }
         // set time range in store so other toolbars have access
-        this.$store.dispatch('actionSetTimerange', this.calendarListMS)
-      } else if (this.calendarTools.active === true) {
+        let timeContext = {}
+        timeContext.device = this.mData
+        timeContext.timerange = this.calendarListMS
+        this.$store.dispatch('actionSetTimerange', timeContext)
+      } else if (this.calendarToolMulti.active === true) {
         console.log('timeLogic3')
         let formatTimeDisplay = moment(this.calendarvalue).format('LLll')
         this.calendarList.push(formatTimeDisplay)
         this.calendarListMS.push(moment(this.calendarvalue).valueOf())
         // set time range in store so other toolbars have access
-        this.$store.dispatch('actionSetTimerange', this.calendarListMS)
+        let timeContext = {}
+        timeContext.device = this.mData
+        timeContext.timerange = this.calendarListMS
+        this.$store.dispatch('actionSetTimerange', timeContext)
       }
     },
     setTimeBundle () {
       // console.log('time bundle select format')
-      // console.log(this.selectedTimeBundle)
       if (this.selectedTimeBundle === 'range') {
         this.rangeActive = !this.rangeActive
-        this.calendarTools.active = false
+        this.calendarToolMulti.active = false
       } else if (this.selectedTimeBundle === 'multi') {
-        this.calendarTools.active = !this.calendarTools.active
+        // clear the timerange for this device
+        // set time range in store so other toolbars have access
+        this.calendarListMS = []
+        let timeContext = {}
+        timeContext.device = this.mData
+        timeContext.timerange = []
+        this.$store.dispatch('actionSetTimerange', timeContext)
+        this.calendarToolMulti.active = !this.calendarToolMulti.active
         this.rangeActive = false
       } else {
-        this.calendarTools.active = false
+        this.calendarToolMulti.active = false
         this.rangeActive = false
       }
     },
@@ -205,7 +220,32 @@ export default {
       this.calendarList = []
       this.calendarListMS = []
       this.makeTimeBundles = []
-      // this.calendarTools.active = false
+    },
+    setTimeFormat () {
+      // set in store so open data can pick up setting
+      this.$store.dispatch('actionSetTimeFormat', this.selectedTimeFormat)
+    },
+    setShiftTimeData (seg) {
+      // first clear the range of existing
+      let timeContext = {}
+      timeContext.device = this.mData
+      timeContext.timerange = []
+      this.$store.dispatch('actionSetTimerange', timeContext)
+      // back and forward and time
+      let contextK = {}
+      contextK.nxpCNRL = this.shellID
+      contextK.moduleCNRL = this.moduleCNRL
+      contextK.moduleType = this.moduleType
+      contextK.mData = this.mData
+      contextK.startperiodchange = seg.text.number
+      contextK.startperiod = 0
+      contextK.rangechange = [] // this.timeRange
+      // check that time is selected
+      if (contextK.startperiod !== 0) {
+        console.log('no time present, prompt peer1')
+      } else {
+        this.$store.dispatch('actionVisUpdate', contextK)
+      }
     },
     updateKbundle (cm) {
       // prepare update for safeFLOW
@@ -230,31 +270,6 @@ export default {
       } else {
         this.$store.dispatch('actionVisUpdate', contextK)
       }
-    },
-    setTimeData (seg) {
-      // first clear the range of existing
-      this.$store.dispatch('actionSetTimerange', [])
-      // back and forward and time
-      let contextK = {}
-      contextK.nxpCNRL = this.shellID
-      contextK.moduleCNRL = this.moduleCNRL
-      contextK.moduleType = this.moduleType
-      contextK.mData = this.mData
-      contextK.startperiodchange = seg.text.number
-      contextK.startperiod = 0
-      contextK.rangechange = [] // this.timeRange
-      // check that time is selected
-      if (contextK.startperiod !== 0) {
-        console.log('no time present, prompt peer1')
-      } else {
-        this.$store.dispatch('actionVisUpdate', contextK)
-      }
-    },
-    setTimeFormat () {
-      // set in store so open data can pick up setting
-      this.$store.dispatch('actionSetTimeFormat', this.selectedTimeFormat)
-    },
-    setChartNumber () {
     },
     setFuture () {
       let buildContext = {}
