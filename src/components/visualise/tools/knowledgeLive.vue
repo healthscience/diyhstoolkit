@@ -1,6 +1,6 @@
 <template>
   <div id="live-view-opendata">
-    <div id="knowledge-selector">dd  {{ deviceSettings }}
+    <div id="knowledge-selector">
       <div id="live-context-datatypes">
         <div id="context-devices" class="live-kelement">
           <header>Devices:</header>
