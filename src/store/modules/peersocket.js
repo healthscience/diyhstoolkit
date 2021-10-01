@@ -208,7 +208,6 @@ export default {
           }
           if (this.state.devicesLive[this.state.liveNXP].length === 0) {
             // need to set devices per network experiment id
-            // this.state.devicesLive = backJSON.devices
             Vue.set(this.state.devicesLive, this.state.liveNXP, backJSON.devices)
           }
           let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.input.key, this.state.networkPeerExpModules)
@@ -230,7 +229,20 @@ export default {
                 this.state.moduleGrid[displayDataUpdate.module].push(modG)
                 if (backJSON.data.context.triplet.device === modG.i) {
                   // set setting holder
-                  Vue.set(this.state.visModuleHolder, modG.i, this.state.visSettings)
+                  let visSettings =
+                  {
+                    devices: null,
+                    data: null,
+                    compute: null,
+                    visualise: null,
+                    category: [],
+                    timeperiod: null,
+                    xaxis: null,
+                    yaxis: [],
+                    resolution: null,
+                    setTimeFormat: null
+                  }
+                  Vue.set(this.state.visModuleHolder, modG.i, visSettings)
                   // set toolbars
                   let setVisTools = {}
                   setVisTools = { text: 'open tools', active: true }
@@ -287,7 +299,20 @@ export default {
                 let listDevices = Object.keys(displayModulesReady.data[modID].data)
                 for (let deviceP of listDevices) {
                   // set setting holder
-                  Vue.set(this.state.visModuleHolder, deviceP, this.state.visSettings)
+                  let visSettings =
+                  {
+                    devices: null,
+                    data: null,
+                    compute: null,
+                    visualise: null,
+                    category: [],
+                    timeperiod: null,
+                    xaxis: null,
+                    yaxis: [],
+                    resolution: null,
+                    setTimeFormat: null
+                  }
+                  Vue.set(this.state.visModuleHolder, deviceP, visSettings)
                   // set vis e.g. chart progress message per device
                   let setVisProgress = { text: 'Preparing visualisation', active: false }
                   Vue.set(this.state.visProgress[modID], deviceP, setVisProgress)
@@ -429,7 +454,15 @@ export default {
       Vue.set(this.state.newSetupHolder, 'resolution', inVerified)
     },
     SET_NEWNXP_VISDEVICES (state, inVerified) {
-      Vue.set(this.state.visModuleHolder[inVerified.device], 'devices', inVerified.setting)
+      console.log('set devices')
+      console.log(inVerified)
+      console.log(this.state.visModuleHolder)
+      let deviceHold = {}
+      deviceHold = this.state.visModuleHolder[inVerified.device]
+      deviceHold.devices = inVerified.setting
+      Vue.set(this.state.visModuleHolder,  inVerified.device, deviceHold)
+      // Vue.set(this.state.visModuleHolder[inVerified.device], 'devices', inVerified.setting)
+      console.log(this.state.visModuleHolder)
     },
     SET_NEWNXP_VISCOMPUTE (state, inVerified) {
       Vue.set(this.state.visModuleHolder[inVerified.device], 'compute', inVerified.setting)
@@ -438,28 +471,25 @@ export default {
       Vue.set(this.state.visModuleHolder, 'results', inVerified)
     },
     SET_NEWNXP_VISXAXIS (state, inVerified) {
+      console.log('set x axis toolbar optn data')
+      console.log(inVerified)
       Vue.set(this.state.visModuleHolder[inVerified.device], 'xaxis', inVerified.setting)
+      console.log(this.state.visModuleHolder)
     },
     SET_NEWNXP_VISYAXIS (state, inVerified) {
       // y axis can hold many datatypes
+      console.log('set Y axis')
       console.log(inVerified)
-      /* let singleDTref = []
-      for (let dtCheck of inVerified) {
-        if (typeof dtCheck === 'object') {
-          singleDTref.push(dtCheck.sourcedt)
-        } else {
-          singleDTref.push(dtCheck)
-        }
-      } */
       // keep tabs that open data updated
       this.state.opendataUpdate = true
-      // this.state.visModuleHolder.yaxis = singleDTref
       Vue.set(this.state.visModuleHolder[inVerified.device], 'yaxis', inVerified.setting)
+      console.log(this.state.visModuleHolder)
     },
     SET_NEWNXP_VISCATEGORY (state, inVerified) {
       console.log('category')
       console.log(inVerified)
       Vue.set(this.state.visModuleHolder[inVerified.device], 'category', inVerified.setting)
+      console.log(this.state.visModuleHolder)
     },
     SET_NEWNXP_VISTIME (state, inVerified) {
       Vue.set(this.state.visModuleHolder[inVerified.device], 'timeperiod', inVerified.setting)
@@ -813,7 +843,7 @@ export default {
       for (let newMod of this.state.moduleHolder) {
         if (newMod.moduleinfo.name === 'visualise') {
           let addSettings = newMod
-          addSettings.option['settings'] = this.state.newSetupHolder // this.state.visModuleHolder
+          addSettings.option['settings'] = this.state.newSetupHolder
           newAddsettingHolder.push(addSettings)
         } else {
           newAddsettingHolder.push(newMod)

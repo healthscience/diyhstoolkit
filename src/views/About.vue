@@ -97,12 +97,13 @@ export default {
   },
   methods: {
     webLink () {
-      window.open('https://www.healthscience.network', '_blank')
+      // window.open('https://www.healthscience.network', '_blank')
       // shell.openExternal('https://www.healthscience.network')
       /* const win = new BrowserWindow()
       // Instead bare webContents:
       win.webContents.on('will-navigate', '_blank')
       win.loadURL('https://www.healthscience.network') */
+      window.open('https://www.healthscience.network', '_blank')
     },
     webLinkdamahub () {
       window.open('https://www.damahub.org/', '_blank')

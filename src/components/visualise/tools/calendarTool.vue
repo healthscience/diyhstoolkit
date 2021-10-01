@@ -1,7 +1,7 @@
 <template>
   <div id="time-context">
     <div id="calendar-selector">
-      <date-picker v-model="calendarvalue" @change="calendarSelect($event)" :lang="lang" :range="rangeActive === true" ></date-picker>
+      <date-picker v-model="calendarvalue" @change="calendarSelect()" :lang="lang" :range="rangeActive === true" ></date-picker>
       <div id="time-calendar-tools">
         <ul>
           <li>
@@ -77,6 +77,21 @@ export default {
   computed: {
     timeRange: function () {
       return this.$store.state.setTimerange[this.mData]
+    },
+    activeComputeContract: function () {
+      console.log('compute cont')
+      let modulesMatch = this.$store.state.experimentStatus[this.shellID].modules
+      let computeContract = {}
+      for (let modC of modulesMatch) {
+        if (modC.value.type === 'compute') {
+          computeContract = modC
+        }
+      }
+      // set default last time set
+      // console.log('compute calandar tools')
+      // console.log(computeContract.value.info.controls)
+      // this.setDefaultTime(computeContract.value.info.controls.rangedate)
+      return computeContract.value.info.compute
     }
   },
   created () {
@@ -153,6 +168,9 @@ export default {
     }
   }),
   methods: {
+    setDefaultTime (dtime) {
+      this.calendarvalue = dtime
+    },
     calendarSelect () {
       if (this.calendarToolMulti.active !== true && this.rangeActive !== true) {
         console.log('timeLogic1')
@@ -260,10 +278,6 @@ export default {
       // contextK.singlechart = true
       contextK.singlechart = this.selectedChartnumber
       contextK.timeformat = this.selectedTimeFormat
-      /*
-      contextK.opendata = 'updated'
-      contextK.startperiod = this.calendarDate
-      */
       // check that time is selected
       if (contextK.rangechange.length === 0) {
         console.log('no time present, prompt peer2')

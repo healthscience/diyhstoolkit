@@ -1,15 +1,15 @@
 <template>
   <div id="live-view-opendata">
-    <div id="knowledge-selector">
+    <div id="knowledge-selector">dd  {{ deviceSettings }}
       <div id="live-context-datatypes">
         <div id="context-devices" class="live-kelement">
           <header>Devices:</header>
           <ul>
             <li>
               <label for="devices-select"></label>
-              <select class="select-device-id" id="device-mapping-build" @change="deviceSelect" v-model="visualsettings.device">
+              <select class="select-device-id" id="device-mapping-build" v-model="deviceSettings.devices">
                 <option value="none" >please select</option>
-                <option v-for="dev in devices" :key="dev.device_mac" v-bind:value="dev.device_mac">
+                <option v-for="dev in deviceList" :key="dev.device_mac" v-bind:value="dev.device_mac">
                   {{ dev.device_name + ' ' + dev.device_mac }}
                 </option>
               </select>
@@ -21,7 +21,7 @@
           <ul>
             <li>
               <label for="compute-select"></label>
-              <select class="select-compute-id" id="compute-mapping-build" @change="computeSelect" v-model="visualsettings.compute">
+              <select class="select-compute-id" id="compute-mapping-build" v-model="deviceSettings.compute">
                 <option value="none" >please select</option>
                 <option v-for="compL in refContractsComputeLive" :key="compL.key" v-bind:value="compL.key">
                   {{ compL.value.computational.name }}
@@ -38,7 +38,7 @@
             <ul>
               <li v-if="refContractPackage.xaxisSet.length > 0">
               <label for="xaxis-select"></label>
-                <select class="select-xaxis-id" id="xaxis-mapping-build" @change="xaxisSelect" v-model="visualsettings.xaxis">
+                <select class="select-xaxis-id" id="xaxis-mapping-build" v-model="deviceSettings.xaxis">
                   <option value="none" selected="">please select</option>
                   <option v-for="colpair in refContractPackage.xaxisSet" :key="colpair.refcontract" v-bind:value="colpair.key">
                   {{ colpair.column }}
@@ -51,7 +51,7 @@
             <header>Y-axis</header>
             <ul v-if="refContractPackage.yaxisSet.length > 0">
               <label for="yaxis-select"></label>
-              <select multiple="true" class="select-yaxis-id" id="yaxis-mapping-build" @change="yaxisSelect" v-model="visualsettings.yaxis">
+              <select multiple="true" class="select-yaxis-id" id="yaxis-mapping-build" v-model="deviceSettings.yaxis">
                 <!-- <option value="none" selected="">please select</option> -->
                 <option v-for="colpairy in refContractPackage.yaxisSet" :key="colpairy.refcontract" v-bind:value="colpairy.refcontract">
                 {{ colpairy.column }}
@@ -69,7 +69,7 @@
           <ul>
             <li id="cat-items">
               <label for="category-select"></label>
-              <select  multiple="true" class="select-category-id" id="category-mapping-build" @change="categorySelect" v-model="visualsettings.category">
+              <select  multiple="true" class="select-category-id" id="category-mapping-build" v-model="deviceSettings.category">>
                 <option value="please" selected="">Please select</option>
                 <option v-for="catL in category" :key="catL.key" v-bind:value="catL.key">
                   {{ catL.name }}
@@ -84,7 +84,7 @@
           <ul>
             <li id="time-items">
               <label for="time-select"></label>
-              <select class="select-time-id" id="time-mapping-build" @change="timeSelect" v-model="visualsettings.time">
+              <select class="select-time-id" id="time-mapping-build" v-model="deviceSettings.timeperiod">
                 <option value="none" selected="">please select</option>
                 <option v-for="t in time" :key="t.id" v-bind:value="t.id">
                   {{ t.text }}
@@ -99,7 +99,7 @@
           <div class="live-item"></div>
             <li id="resolution-items">
               <label for="resolution-select"></label>
-              <select class="select-resolution-id" id="resolution-mapping-build" @change="resolutionSelect" v-model="visualsettings.resolution">
+              <select class="select-resolution-id" id="resolution-mapping-build" v-model="deviceSettings.resolution">
                 <option value="none" selected="">please select</option>
                 <option v-for="rs in resolution" :key="rs.id" v-bind:value="rs.id">
                   {{ rs.text }}
@@ -124,9 +124,15 @@ export default {
     mData: String,
     toolInfo: Object
   },
+  beforeMount () {
+    this.deviceList = this.devices
+  },
   computed: {
+    deviceSettings: function () {
+      return this.$store.state.visModuleHolder[this.mData]
+    },
     devices: function () {
-      return this.$store.state.devicesLive[this.shellID]
+      return this.$store.getters.deviceList[this.shellID]
     },
     refContractPackage: function () {
       // match ids to visualise contract
@@ -145,7 +151,6 @@ export default {
       datatypeMatcher.xaxisSet = []
       datatypeMatcher.xaxisSet.push(visContract.value.info.settings.xaxis)
       // set timestamp  as default xaxis
-      this.setDefaultXaxis(datatypeMatcher.xaxisSet[0])
       datatypeMatcher.yaxisSet = dataContract.value.concept.tablestructure
       // now match datatype references to their contract
       let xDatatypeContracts = []
@@ -172,21 +177,12 @@ export default {
           computeContract = modC
         }
       }
-      // if default set is no observation then yaxis will need updated
-      if (computeContract.value.info.compute.key !== '9a23c342893348879e71a75c45e48914787445f6') {
-        // this.observataionDts = this.refContractPackage.yaxisSet
-        let newDatatypes = []
-        for (let dt of this.refContractPackage.yaxisSet) {
-          let combinComputeDT = dt
-          // lookup datatype contract
-          let dtCombine = {}
-          dtCombine.refcontract = combinComputeDT.refcontract + '-' + computeContract.value.info.compute.value.computational.dtprefix
-          dtCombine.column = combinComputeDT.column + '-' + computeContract.value.info.compute.value.computational.name
-          newDatatypes.push(dtCombine)
-        }
-        // set y axis options
-        this.setYaxisOptions(newDatatypes)
-      }
+      // set defaults for opentool bar
+      this.setDefaultXaxis(computeContract.value.info.settings.xaxis)
+      this.setYaxisOptions(computeContract.value.info.settings.yaxis)
+      this.setDefaultCategory(computeContract.value.info.settings.category)
+      this.setDefaultTimeperiod(computeContract.value.info.settings.timeperiod)
+      this.setDefaultResolution(computeContract.value.info.settings.resolution)
       return computeContract.value.info.compute
     },
     refContractsComputeLive: function () {
@@ -243,34 +239,17 @@ export default {
       timeList.push(timeItem3)
       return timeList
     },
-    timeRange: function () {
-      return this.$store.state.setTimerange[this.mData]
-    },
     resolution: function () {
       // mock units refContract
       let resList = []
       const resItem = { text: 'minute', id: 'cnrl-t11', active: false }
       resList.push(resItem)
       return resList
-    },
-    selectedTimeFormat: function () {
-      return this.$store.state.setTimeFormat
     }
   },
   data () {
     return {
-      selectChange: {
-        'xaxis': false
-      },
-      visualsettings: {
-        device: null,
-        compute: null,
-        xaxis: null,
-        yaxis: [],
-        category: ['none'],
-        time: 'cnrl-t1',
-        resolution: 'cnrl-t11'
-      },
+      deviceList: [],
       feedback:
       {
         devices: false,
@@ -306,38 +285,25 @@ export default {
       return nameText
     },
     setDefaultDevice () {
-      this.visualsettings.device = this.mData
-    },
-    setDefaultXaxis (xdefault) {
-      this.visualsettings.xaxis = xdefault
+      this.deviceSettings.devices = this.mData
     },
     setComputeContract () {
-      this.visualsettings.compute = this.activeComputeContract.key
+      this.deviceSettings.compute = this.activeComputeContract.key
     },
-    computeSelect () {
-      // match to computeContract
-      let computeContractMatch = {}
-      for (let compC of this.refContractsComputeLive) {
-        if (compC.key === this.visualsettings.compute) {
-          computeContractMatch = compC
-        }
-      }
-      if (computeContractMatch.key !== '9a23c342893348879e71a75c45e48914787445f6') {
-        this.observataionDts = this.refContractPackage.yaxisSet
-        this.setYaxis(computeContractMatch)
-      } else {
-        // restore observation datatypes
-        if (this.observataionDts.length !== 0) {
-          this.refContractPackage.yaxisSet = this.observataionDts
-        }
-      }
-      let visSetContext = {}
-      visSetContext.device = this.mData
-      visSetContext.setting = this.visualsettings.compute
-      this.$store.dispatch('actionNewVisCompute', visSetContext)
+    setDefaultXaxis (xdefault) {
+      this.deviceSettings.xaxis = xdefault
     },
     setYaxisOptions (startYdts) {
-      this.refContractPackage.yaxisSet = startYdts
+      this.deviceSettings.yaxis = startYdts
+    },
+    setDefaultCategory (cat) {
+      this.deviceSettings.category = cat
+    },
+    setDefaultTimeperiod (tperiod) {
+      this.deviceSettings.timeperiod = tperiod
+    },
+    setDefaultResolution (res) {
+      this.deviceSettings.resolution = res
     },
     setYaxis (computeContractMatch) {
       // form the y axis options
@@ -352,46 +318,67 @@ export default {
       }
       this.refContractPackage.yaxisSet = newDatatypes
     },
+    deviceSelect (ev) {
+      let visSetContext = {}
+      visSetContext.device = this.mData
+      visSetContext.setting = ev.target.value
+      this.$store.dispatch('actionNewVisDevice', visSetContext)
+    },
+    computeSelect () {
+      // match to computeContract
+      let computeContractMatch = {}
+      for (let compC of this.refContractsComputeLive) {
+        if (compC.key === this.toolbarHolder[this.mData].compute) {
+          computeContractMatch = compC
+        }
+      }
+      if (computeContractMatch.key !== '9a23c342893348879e71a75c45e48914787445f6') {
+        this.observataionDts = this.refContractPackage.yaxisSet
+        // this.setYaxis(computeContractMatch)
+      } else {
+        // restore observation datatypes
+        if (this.observataionDts.length !== 0) {
+          this.refContractPackage.yaxisSet = this.observataionDts
+        }
+      }
+      let visSetContext = {}
+      visSetContext.device = this.mData
+      visSetContext.setting = this.toolbarHolder[this.mData].compute
+      this.$store.dispatch('actionNewVisCompute', visSetContext)
+    },
     xaxisSelect () {
       // set default x-axis chart setting
       let visSetContext = {}
       visSetContext.device = this.mData
-      visSetContext.setting = this.visualsettings.xaxis
+      visSetContext.setting = this.toolbarHolder[this.mData].xaxis
       this.$store.dispatch('actionNewVisXaxis', visSetContext)
     },
     yaxisSelect () {
       // set default y-axis chart setting
       let visSetContext = {}
       visSetContext.device = this.mData
-      visSetContext.setting = this.visualsettings.yaxis
+      visSetContext.setting = this.toolbarHolder[this.mData].yaxis
       this.$store.dispatch('actionNewVisYaxis', visSetContext)
     },
     categorySelect () {
       let visSetContext = {}
       visSetContext.device = this.mData
-      visSetContext.setting = this.visualsettings.category
+      visSetContext.setting = this.toolbarHolder[this.mData].category
       this.$store.dispatch('actionNewVisCategory', visSetContext)
     },
     timeSelect () {
       // set default time chart setting
       let visSetContext = {}
       visSetContext.device = this.mData
-      visSetContext.setting = this.visualsettings.time
+      visSetContext.setting = this.toolbarHolder[this.mData].time
       this.$store.dispatch('actionNewVisTime', visSetContext)
     },
     resolutionSelect () {
       // set default resolution chart setting
       let visSetContext = {}
       visSetContext.device = this.mData
-      visSetContext.setting = this.visualsettings.resolution
+      visSetContext.setting = this.toolbarHolder[this.mData].resolution
       this.$store.dispatch('actionNewVisResolution', visSetContext)
-    },
-    deviceSelect () {
-      this.mData = this.visualsettings.device
-      let visSetContext = {}
-      visSetContext.device = this.mData
-      visSetContext.setting = this.visualsettings.device
-      this.$store.dispatch('actionNewVisDevice', visSetContext)
     }
   }
 }

@@ -10,7 +10,7 @@
           <li>4. Personal AI - CALE</li>
         </ul>
         <div id="bentobox-datascience">
-          <img class="medium-start" alt="bentox data science" src=".././assets/bbdds.png">
+          <img class="medium-start" alt="bentox data science" src=".././assets/logo.png">
         </div>
       </div>
     </div>

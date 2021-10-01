@@ -60,19 +60,6 @@ const store = new Vuex.Store({
       setTimeFormat: null
     },
     visModuleHolder: {},
-    visSettings:
-    {
-      devices: null,
-      data: null,
-      compute: null,
-      visualise: null,
-      category: null,
-      timeperiod: null,
-      xaxis: null,
-      yaxis: [],
-      resolution: null,
-      setTimeFormat: null
-    },
     setTimeFormat: 'timeseries',
     setTimerange: {},
     dashboardNXP: {},
@@ -144,7 +131,8 @@ const store = new Vuex.Store({
   },
   getters: {
     liveGrid: state => state.moduleGrid,
-    watchFlow: state => function (state) { return state.experimentStatus }
+    watchFlow: state => function (state) { return state.experimentStatus },
+    deviceList: state => state.devicesLive
   },
   mutations: {
     setAuthorisation: (state, inVerified) => {
@@ -333,8 +321,6 @@ const store = new Vuex.Store({
       state.timeStartperiod = inVerified
     },
     SET_TIME_RANGE: (state, inVerified) => {
-      console.log('set range time')
-      console.log(inVerified)
       Vue.set(state.setTimerange, inVerified.device, inVerified.timerange)
       console.log(state.setTimerange)
     },
@@ -363,15 +349,15 @@ const store = new Vuex.Store({
       state.liveDate = inVerified
     },
     SET_RESET_MODULEHOLDER (state, inVerified) {
-      Vue.set(this.state.visModuleHolder, 'devices', [])
-      Vue.set(this.state.visModuleHolder, 'compute', '')
-      Vue.set(this.state.visModuleHolder, 'visualise', '')
-      Vue.set(this.state.visModuleHolder, 'xaxis', '')
-      this.state.visModuleHolder.yaxis = []
-      Vue.set(this.state.visModuleHolder, 'category', '')
-      Vue.set(this.state.visModuleHolder, 'timeperiod', '')
-      Vue.set(this.state.visModuleHolder, 'resolution', '')
-      Vue.set(this.state.visModuleHolder, 'setTimeFormat', '')
+      Vue.set(this.state.newSetupHolder, 'devices', [])
+      Vue.set(this.state.newSetupHolder, 'compute', '')
+      Vue.set(this.state.newSetupHolder, 'visualise', '')
+      Vue.set(this.state.newSetupHolder, 'xaxis', '')
+      Vue.set(this.state.newSetupHolder, 'yaxis', [])
+      Vue.set(this.state.newSetupHolder, 'category', '')
+      Vue.set(this.state.newSetupHolder, 'timeperiod', '')
+      Vue.set(this.state.newSetupHolder, 'resolution', '')
+      Vue.set(this.state.newSetupHolder, 'setTimeFormat', '')
     },
     SET_DASHBOARD_CLOSE (state, inVerified) {
       // remove dashboard item
@@ -436,7 +422,6 @@ const store = new Vuex.Store({
     actionJOINViewexperiment (context, update) {
       console.log('action JOIN selected')
       console.log(update)
-      // reset state.visModuleHolder
       context.commit('SET_RESET_MODULEHOLDER', null)
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
@@ -467,7 +452,6 @@ const store = new Vuex.Store({
       Vue.set(this.state.toolbarVisStatus[update.moduleCNRL], update.mData, setVisTools)
       // set the chart open data as true
       let setOPenDataToolbar = { text: 'open data', active: true, learn: false }
-      // Vue.set(this.state.opendataTools, 'default', openDatatoolbar)
       Vue.set(this.state.opendataTools, update.moduleCNRL, {})
       Vue.set(this.state.opendataTools[update.moduleCNRL], update.mData, setOPenDataToolbar)
       // break out the module via sending message to network library utility
@@ -616,7 +600,7 @@ const store = new Vuex.Store({
       console.log(update)
       this.state.ecsMessageLive = ''
       // perform checks for missing input data to form ECS-out bundle
-
+      // TODO
       // need to start update message to keep peer informed
       let progressContext = {}
       let firstTimeCheck = false
@@ -631,9 +615,13 @@ const store = new Vuex.Store({
         context.commit('setTimeAsk', update.startperiod)
       }
       // is the context set from opendata tools or time nav tools?
+      let opendataStatus = this.state.opendataTools[update.moduleCNRL][update.mData].active
       let contextState = 'timeupdate'
-      if (this.state.opendataUpdate === true) {
+      if (opendataStatus === true) {
         contextState = 'opendataUpdate'
+        // close the opendata toolbar
+        let setOPenDataToolbar = { text: 'open data', active: false, learn: false }
+        Vue.set(this.state.opendataTools[update.moduleCNRL], update.mData, setOPenDataToolbar)
       }
       // if no summary then first time use, extract modules from source
       let nxpRefcontract = {}
