@@ -23,6 +23,7 @@ const store = new Vuex.Store({
       feedback: '',
       refcontract: ''
     },
+    feedbackMessage: {},
     publickeys: [],
     warmNetwork: [],
     swarmStatus: false,
@@ -274,6 +275,7 @@ const store = new Vuex.Store({
       }
     },
     setOpendataBar: (state, inVerified) => {
+      console.log(inVerified)
       let setToolbar = state.opendataTools[inVerified.module]
       if (inVerified.state === false) {
         setToolbar[inVerified.dtid] = { text: 'hide data', active: true }
@@ -281,6 +283,11 @@ const store = new Vuex.Store({
       } else {
         setToolbar[inVerified.dtid] = { text: 'open data', active: false }
         Vue.set(state.opendataTools, inVerified.module, setToolbar)
+      }
+      // check if time range is set?
+      console.log(state.setTimerange)
+      if (state.setTimerange === undefined) {
+        state.setTimerange[inVerified.dtid] = []
       }
     },
     setNXPprogressUpdate: (state, inVerified) => {

@@ -30,6 +30,9 @@
         <opendata-tool v-if="openDataLive[mData].active === true" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" :toolInfo="visToolbarStatusLive"></opendata-tool>
       </div>
     </div>
+    <div id="feedback-time" v-if="feedbackmessage !== 'clear'" v-bind:class="{ active: feedbackActive }">
+      {{ feedbackmessage }}
+    </div>
     <hsvisual v-if="liveData.data" :datacollection="liveData.data.chartPackage" :options="liveData.data.chartOptions"></hsvisual>
   </div>
 </template>
@@ -91,21 +94,31 @@ export default {
       } else {
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
       }
+    },
+    feedbackmessage: function () {
+      this.setFeedbackstyle(this.$store.state.feedbackMessage[this.mData])
+      return this.$store.state.feedbackMessage[this.mData]
     }
   },
   data: () => ({
     timeSelect: true,
     kContext: {},
     saveStatusEK: {},
-    openDataState: { 'active': true }
+    openDataState: { 'active': true },
+    feedbackActive: false
   }),
   methods: {
     chartSelect () {
       console.log('chart select type bar line mixed')
     },
+    setFeedbackstyle (message) {
+      if (message !== 'clear') {
+        this.feedbackActive = true
+      } else {
+        this.feedbackActive = false
+      }
+    },
     labelsSelect () {
-      console.log('legends')
-      console.log(this.liveData.data.chartOptions)
       // this.liveData.data.chartOptions.legend.display = !this.liveData.data.chartOptions.legend.display
       let legendContext = {}
       legendContext.shellID = this.shellID
@@ -154,6 +167,11 @@ ul {
 li {
   display: inline-block;
   margin: 0 10px;
+}
+
+#feedback-time {
+  font-size: 1.4em;
+  background-color: yellow;
 }
 
 </style>

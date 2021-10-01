@@ -79,7 +79,6 @@ export default {
       return this.$store.state.setTimerange[this.mData]
     },
     activeComputeContract: function () {
-      console.log('compute cont')
       let modulesMatch = this.$store.state.experimentStatus[this.shellID].modules
       let computeContract = {}
       for (let modC of modulesMatch) {
@@ -172,6 +171,12 @@ export default {
       this.calendarvalue = dtime
     },
     calendarSelect () {
+      // clear feedback if required
+      let feedbackTime = {}
+      feedbackTime.device = this.mData
+      feedbackTime.message = 'clear'
+      feedbackTime.active = false
+      this.$store.dispatch('actionFeeback', feedbackTime)
       if (this.calendarToolMulti.active !== true && this.rangeActive !== true) {
         console.log('timeLogic1')
         // convert to correct time format and update KBundle and build new visStyle
@@ -274,13 +279,23 @@ export default {
       contextK.mData = this.mData
       contextK.startperiod = moment(this.calendarvalue).valueOf()
       contextK.startperiodchange = 0
-      contextK.rangechange = this.timeRange
+      let rangeSet = []
+      if (this.timeRange === undefined) {
+        rangeSet = []
+      } else {
+        rangeSet = this.timeRange
+      }
+      contextK.rangechange = rangeSet
       // contextK.singlechart = true
       contextK.singlechart = this.selectedChartnumber
       contextK.timeformat = this.selectedTimeFormat
       // check that time is selected
-      if (contextK.rangechange.length === 0) {
+      if (contextK.rangechange.length === undefined || contextK.rangechange.length === 0) {
         console.log('no time present, prompt peer2')
+        let feedbackDevice = {}
+        feedbackDevice.device = this.mData
+        feedbackDevice.message = 'please select a date'
+        this.$store.dispatch('actionFeeback', feedbackDevice)
       } else {
         this.$store.dispatch('actionVisUpdate', contextK)
       }

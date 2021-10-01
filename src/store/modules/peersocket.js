@@ -460,7 +460,7 @@ export default {
       let deviceHold = {}
       deviceHold = this.state.visModuleHolder[inVerified.device]
       deviceHold.devices = inVerified.setting
-      Vue.set(this.state.visModuleHolder,  inVerified.device, deviceHold)
+      Vue.set(this.state.visModuleHolder, inVerified.device, deviceHold)
       // Vue.set(this.state.visModuleHolder[inVerified.device], 'devices', inVerified.setting)
       console.log(this.state.visModuleHolder)
     },
@@ -559,6 +559,9 @@ export default {
         updataLegened = true
       }
       Vue.set(this.state.NXPexperimentData[inVerified.shellID][inVerified.moduleCNRL].data[inVerified.mData].data.chartOptions.legend, 'display', updataLegened)
+    },
+    SET_FEEDBACK_MEASSAGE (state, inVerified) {
+      Vue.set(this.state.feedbackMessage, inVerified.device, inVerified.message)
     }
   },
   actions: {
@@ -833,6 +836,9 @@ export default {
     },
     actionLegendStatus (context, update) {
       context.commit('SET_LEGEND_STATUS', update)
+    },
+    actionFeeback (context, update) {
+      context.commit('SET_FEEDBACK_MEASSAGE', update)
     },
     actionNewNXPrefcontract (context, update) {
       // add the question module

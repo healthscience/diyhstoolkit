@@ -300,6 +300,7 @@ export default {
       this.deviceSettings.category = cat
     },
     setDefaultTimeperiod (tperiod) {
+      console.log(tperiod)
       this.deviceSettings.timeperiod = tperiod
     },
     setDefaultResolution (res) {
