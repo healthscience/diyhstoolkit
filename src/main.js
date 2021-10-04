@@ -10,7 +10,7 @@ Vue.use(NonReactive)
 
 Vue.config.productionTip = false
 // 165.227.244.213:9888
-Vue.use(VueNativeSock, 'wss://127.0.0.1:8088', {
+Vue.use(VueNativeSock, 'wss://127.0.0.1:9888', {
   store: store,
   // format: 'json',
   reconnection: true,

@@ -19,8 +19,16 @@ function createWindow () {
   win = new BrowserWindow({ width: 1600,
     height: 900,
     webPreferences: {
-      nodeIntegration: true
-    } })
+      nodeIntegration: true,
+      webSecurity: false,
+      allowRunningInsecureContent: true
+    }
+  })
+
+  win.webContents.on('certificate-error', (event, url, error, certificate, callback) => {
+      event.preventDefault()
+      callback(true)
+  })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode

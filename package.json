@@ -3,24 +3,25 @@
   "version": "0.7.1",
   "private": true,
   "scripts": {
-    "safeflow": "node /var/www/html/damahub/code/peerlink/src/index.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
+    "couple": "npm-run-all electron:serve safeflow",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
-    "couple": "npm-run-all electron:serve safeflow",
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postuninstall": "electron-builder install-app-deps",
+    "safeflow": "node /var/www/html/damahub/code/peerlink/src/index.js"
   },
   "main": "background.js",
   "dependencies": {
     "axios": "^0.19.2",
     "bs58": "^4.0.1",
     "cale-ai": "^0.0.4",
+    "chai-as-promised": "^7.1.1",
     "chart.js": "2.9.3",
     "chartjs-plugin-annotation": "^0.5.7",
     "chartjs-plugin-draggable": "^0.1.6",
