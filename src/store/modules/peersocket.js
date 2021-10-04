@@ -6,7 +6,7 @@ import moment from 'moment'
 const ToolUtility = new ToolkitUtility()
 const VisualUtility = new VisToolsUtility()
 const ValidateUtility = new ContextUtility()
-const remote = require('electron').remote
+// const remote = require('electron').remote
 
 export default {
   state: {
@@ -28,7 +28,7 @@ export default {
     },
     SOCKET_ONERROR (state, event) {
       console.error(state, event)
-      remote.getCurrentWindow().close()
+      // remote.getCurrentWindow().close()
       // inform Peer connection to network lost
     },
     // mutations for reconnect methods
@@ -40,8 +40,8 @@ export default {
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
-      // console.log('message')
-      // console.log(message)
+      console.log('message')
+      console.log(message)
       let backJSON = {}
       backJSON = JSON.parse(message.data)
       if (backJSON.stored === true) {

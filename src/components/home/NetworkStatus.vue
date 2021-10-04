@@ -64,7 +64,7 @@
 <script>
 import ConnectModal from '@/components/connect/ConnectModal.vue'
 import TokenReader from '@/components/connect/token-reader.vue'
-const remote = require('electron').remote
+// const remote = require('electron').remote
 
 export default {
   name: 'Network-Connect',
@@ -100,7 +100,7 @@ export default {
   },
   data () {
     return {
-      w: remote.getCurrentWindow(),
+      // w: remote.getCurrentWindow(),
       isModalVisible: false,
       buttonName: 'verify token',
       /* connectContext:

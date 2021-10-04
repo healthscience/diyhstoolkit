@@ -9,8 +9,8 @@ import VueNativeSock from 'vue-native-websocket'
 Vue.use(NonReactive)
 
 Vue.config.productionTip = false
-
-Vue.use(VueNativeSock, 'ws://localhost:9888', {
+// 165.227.244.213:9888
+Vue.use(VueNativeSock, 'wss://127.0.0.1:8088', {
   store: store,
   // format: 'json',
   reconnection: true,
