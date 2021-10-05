@@ -1,28 +1,30 @@
 <template>
-  <div id="k-toolkit"> Device: {{ mData }}
+  <div id="vis-toolkit"> Device: {{ mData }}
     <div id="diy-tools">
       <div id="chart-type">
         <ul>
           <li>
             <div class="chart-style-tools">
-              <li>
-                <button @click.prevent="chartSelect()">Bar</button>
-              </li>
-              <li>
-                <button @click.prevent="chartSelect()">Line</button>
-              </li>
-              <li>
-                <button @click.prevent="chartSelect()">Mixed</button>
-              </li>
-              <li>
-                <button @click.prevent="labelsSelect()">Labels</button>
-              </li>
+              <ul>
+                <li>
+                  <button @click.prevent="chartSelect()">Bar</button>
+                </li>
+                <li>
+                  <button @click.prevent="chartSelect()">Line</button>
+                </li>
+                <li>
+                  <button @click.prevent="chartSelect()">Mixed</button>
+                </li>
+                <li>
+                  <button @click.prevent="labelsSelect()">Labels</button>
+                </li>
+              </ul>
             </div>
           <li>
             <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
           </li>
           <li v-if="openDataLive[mData] !== undefined">
-            <a href="#" id="opendata" @click.prevent="openDataToolbar()">{{ openDataLive[mData].text }}</a>
+            <a href="#" id="opendata-space" @click.prevent="openDataToolbar()">{{ openDataLive[mData].text }}</a>
           </li>
         </ul>
       </div>
@@ -146,12 +148,14 @@ export default {
 </script>
 
 <style>
-#k-toolkit {
-  border: 0px solid red;
+#vis-toolkit {
+  height: inherit;
+  width: inherit;
+  border: 0px solid green;
 }
 
 #diy-tools {
-  border: 0px solid #E9EDF0;
+  border: 2px solid #E9EDF0;
   background-color: #f0ece9; /*#E9EDF0;*/
 }
 

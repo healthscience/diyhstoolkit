@@ -2,7 +2,9 @@
   <div id="visualise-nxp">
     <div id="prime-visualise" v-if="visPrepareStatus !== undefined">
       <progress-vismessage v-if="visPrepareStatus.active === true" :progressMessage="visPrepareStatus" ></progress-vismessage>
-      <component v-bind:is="moduleVisType" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></component>
+      <div id="vis-chartbuilder">
+        <component v-bind:is="moduleVisType" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></component>
+      </div>
     </div>
   </div>
 </template>
@@ -133,13 +135,23 @@ export default {
 
 <style>
 #visualise-nxp {
-  border: 0px solid blue;
+  height: inherit;
+  width: inherit;
+  border: 0px solid pink;
 }
 
 #visualise-nxp header{
   font-weight: bold;
 }
 
+#vis-chartbuilder {
+  height: inherit;
+  width: inherit;
+  border: 0px solid grey;
+}
+
 #prime-visualise {
+  height: inherit;
+  width: inherit;
 }
 </style>

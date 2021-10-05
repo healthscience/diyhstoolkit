@@ -1,12 +1,12 @@
 <template>
-  <div id="visual-view">
+  <div id="visual-view" ref="visualView">
     <div id="visual-container">
       <div id="charts-live" v-if="datacollection !== undefined">
-        <reactive class="chartholder" :chartData="datacollection" :options="options" :width="1200" :height="600"></reactive>
+        <reactive :chartData="datacollection" :options="options"></reactive>
       </div>
       <div id="future-tools">
         <ul>
-          <li>
+          <li class="context-future">
             <button id="new-visspace" @click.prevent="setChartNumber()">add Space</button>
             <!-- <select v-model="selectedChartnumber" @change.prevent="setChartNumber()">
               <option v-for="cnoption in numbechartoptions" v-bind:value="cnoption.value" :key='cnoption.id' :selected="cnoption.id === selectedChartnumber">
@@ -15,14 +15,13 @@
             </select> -->
           </li>
           <li class="context-future">
-            <!-- <button class="button is-primary" @click.prevent="setFuture('future')">{{ future.text }}</button> -->
             <select v-model="selectedFuture" @change.prevent="setFuture()">
               <option disabled value="">make future</option>
               <option v-for="foption in futureoptions" :key='foption.value'>
                   {{ foption.text }}
                 </option>
             </select>
-            <!-- <span>Selected: {{ selectedFuture }}</span> -->
+            <div id="future-selected">Selected: {{ selectedFuture }}</div>
           </li>
         </ul>
       </div>
@@ -61,8 +60,31 @@ export default {
       type: Object
     }
   },
+  computed: {
+    spaceDimention: function () {
+      let spaceSizes = 0
+      if (this.isMounted !== false) {
+        spaceSizes = this.spaceHeight()
+      }
+      return spaceSizes
+    },
+    scaleWidth: function () {
+      return 1200
+    },
+    scaleHeight: function () {
+      return 400
+    }
+  },
+  created () {
+  },
+  mounted () {
+    this.isMounted = true
+    this.spaceHeight()
+  },
   data () {
     return {
+      dimentionH: 0,
+      dimentionW: 0,
       selectedFuture: '',
       network:
       {
@@ -81,13 +103,17 @@ export default {
       selectedChartnumber: 0
     }
   },
-  computed: {
-  },
-  created () {
-  },
-  mounted () {
-  },
   methods: {
+    spaceHeight () {
+      console.log('spacehight')
+      let spaceD = 0
+      if (this.$refs.visualView !== undefined) {
+        this.dimentionH = this.$refs.visualView.clientHeight
+        this.dimentionW = this.$refs.visualView.clientWidth
+        spaceD = this.$refs.visualView.clientWidth
+      }
+      return spaceD
+    },
     setNetwork (nv) {
       console.log('is a network visualisation available?')
       console.log(nv)
@@ -98,30 +124,36 @@ export default {
 
 <style>
 #visual-view {
-  border: 0px solid green;
+  height: 90%;
+  width: 99%;
+  border: 0px solid orange;
 }
 
 #visual-container {
-  display: block;
+  display: flex;
   border: 0px solid red;
-  padding-bottom: 10px;
 }
 
-.chartholder {
-  float: left;
-  height: inherit;
-  border: 0px solid black;
-}
-#new-visspace {
-  margin-bottom: 1.4em;
+#charts-live {
+  flex-grow: 1; /* Set the middle element to grow and stretch */
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border: 0px solid blue;
 }
 
 #future-tools {
-  padding-top: 1em;
-  width: 100px;
-  height: 600px;
-  float: right;
+  padding-top: 50px;
+  flex-grow: 1; /* Set the middle element to grow and stretch */
   border-left: 1px solid orange;
+}
+
+.context-future {
+  border: 0px solid purple;
+}
+
+#new-visspace {
+  margin-bottom: 0em;
 }
 
 .clear {
@@ -129,9 +161,8 @@ export default {
 }
 
 #social-graph {
-  margin-top: 1em;
-  display: block;
-  border-top: 1px solid blue;
+  /* margin-top: 0em;
+  border-top: 1px solid blue; */
 }
 
 </style>

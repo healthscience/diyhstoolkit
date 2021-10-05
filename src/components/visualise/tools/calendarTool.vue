@@ -323,7 +323,6 @@ export default {
 }
 
 #time-context {
-  min-margin: 40px;
   text-align: center;
   border: 0px solid pink;
 }

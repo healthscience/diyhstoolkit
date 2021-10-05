@@ -1,6 +1,6 @@
 <template>
   <div id="dashboard-holder" >
-    <div id="dash-modules">
+    <div id="dash-modules"> <!-- @wheel.prevent="wheelItBetter($event)"> -->
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->
@@ -10,37 +10,39 @@
         </template>
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
-          <div id="module-toolbar">
-            <!-- <button @click='decreaseWidth'>Decrease Width</button>
-            <button @click='increaseWidth'>Increase Width</button> v-if="toolbarStatusLive.active" -->
-            <div id="layouttools" >
-              <!-- <button @click='addItem'>Add an item</button> -->
-              <input class="layout-controls" type='checkbox' v-model='draggable'/> Draggable
-              <input class="layout-controls" type='checkbox' v-model='resizable'/> Resizable
-            </div>
-            <br/>
-            <div class="grid-section" v-if="localGrid.length > 0">
-              <grid-layout v-if="localGrid"
-                           :layout='localGrid'
-                           :col-num='12'
-                           :row-height='30'
-                           :is-draggable='draggable'
-                           :is-resizable='resizable'
-                           :responsive="responsive"
-                           :vertical-compact='true'
-                           :use-css-transforms='true'
-              >
-                <grid-item v-for='item in localGrid' :key='item.id'
-                           :static='item.static'
-                           :x='item.x'
-                           :y='item.y'
-                           :w='item.w'
-                           :h='item.h'
-                           :i='item.i'
-                        >
+          <div id="layouttools" >
+            <!-- <button @click='addItem'>Add an item</button> -->
+            <input class="layout-controls" type='checkbox' v-model='draggable'/> Draggable
+            <input class="layout-controls" type='checkbox' v-model='resizable'/> Resizable
+          </div>
+          <div id="zoom-holder">
+            <div id="module-toolbar">
+              <!-- <button @click='decreaseWidth'>Decrease Width</button>
+              <button @click='increaseWidth'>Increase Width</button> v-if="toolbarStatusLive.active" -->
+              <br/>
+              <div class="grid-section" v-if="localGrid.length > 0">
+                <grid-layout v-if="localGrid"
+                 :layout='localGrid'
+                 :col-num='12'
+                 :row-height='30'
+                 :is-draggable='draggable'
+                 :is-resizable='resizable'
+                 :responsive="responsive"
+                 :vertical-compact='true'
+                 :use-css-transforms='true'
+                >
+                  <grid-item v-for='item in localGrid' :key='item.id'
+                    :static='item.static'
+                    :x='item.x'
+                    :y='item.y'
+                    :w='item.w'
+                    :h='item.h'
+                    :i='item.i'
+                  >
                     <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i" class="module-placer"></component>
-                </grid-item>
-              </grid-layout>
+                  </grid-item>
+                </grid-layout>
+              </div>
             </div>
           </div>
         </template>
@@ -127,7 +129,8 @@ export default {
       draggable: false,
       resizable: false,
       responsive: true,
-      index: 0
+      index: 0,
+      zoomdata: 0
     }
   },
   mounted () {
@@ -142,6 +145,16 @@ export default {
     },
     closeModule () {
       console.log('close module')
+    },
+    wheelItBetter (event) {
+      // use mouse wheel to zoom in out
+      console.log('mouse zooming')
+      if (event.deltaY < 0) {
+        this.zoomdata += 1
+      } else {
+        this.zoomdata -= 1
+      }
+      console.log(this.zoomdata)
     },
     itemTitle (item) {
       var result = item.i
@@ -172,15 +185,6 @@ export default {
       this.index++
       // this.layout.push(item)
       this.$store.dispatch('actionGrideupdateItem', item)
-    },
-    setDashTime () {
-      // call action to update state
-      this.updateChartOptions()
-    },
-    updateChartOptions () {
-      let optState = {}
-      optState.syncOptions = []
-      optState.expCNRL = this.moduleCNRL
     }
   }
 }
@@ -188,15 +192,20 @@ export default {
 
 <style>
 #dashboard-holder {
+  border: 0px solid red;
 }
 
 #dash-modules {
-  border: 1px solid grey;
+  border: 0px solid grey;
   list-style: none;
 }
 
-#module-toolbar {
+#zoom-holder {
   border: 0px solid green;
+}
+
+#module-toolbar {
+  border: 0px solid red;
 }
 
 .layout-controls {
@@ -216,6 +225,7 @@ export default {
 
 .vue-grid-layout {
   border: 0px solid red;
+  /* transform: scale(0.3); */
 }
 
 .columns {
@@ -240,18 +250,21 @@ export default {
     cursor: se-resize;
 }*/
 
-.vue-grid-item:not(.vue-grid-placeholder) {
-    background: white;
-    border: 0px solid blue;
-    min-width: 1400px;
+/* :not(.vue-grid-placeholder)
+transform: scale(0.25)
+ */
+.vue-grid-item {
+  background: white;
+  border: 0px solid blue;
+  overflow: auto;
 }
 
 .vue-grid-item.resizing {
-    opacity: 1;
+  opacity: 1;
 }
 
 .vue-grid-item.static {
-    background: #E9EDF0;
+  background: #E9EDF0;
 }
 
 .vue-grid-item .text {
@@ -268,7 +281,6 @@ export default {
 }
 
 .vue-grid-item .no-drag {
-
 }
 
 .vue-grid-item .minMax {
@@ -281,11 +293,11 @@ export default {
 
 .vue-draggable-handle {
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     top: 0;
     left: 0;
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><circle cx='5' cy='5' r='5' fill='#999999'/></svg>") no-repeat;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><circle cx='5' cy='5' r='5' fill='#999999'/></svg>") no-repeat;
     background-position: bottom right;
     padding: 0 8px 8px 0;
     background-repeat: no-repeat;

@@ -25,7 +25,7 @@ util.inherits(VisualUtility, events.EventEmitter)
 
 /**
 * prepare grid layout for display per module type.
-* @method displayModules
+* @method displayPrepareModules
 *
 */
 VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
@@ -70,9 +70,9 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
       let makeGrid = []
       let newGriditem = {}
       if (entityData.data !== 'none') {
-        newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': entityData.data.context.triplet.device, static: false }
+        newGriditem = { 'x': 0, 'y': 0, 'w': 4, 'h': 4, 'i': entityData.data.context.triplet.device, static: false }
       } else {
-        newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': 'none', static: false }
+        newGriditem = { 'x': 0, 'y': 0, 'w': 4, 'h': 4, 'i': 'none', static: false }
       }
       makeGrid.push(newGriditem)
       let visDataHold = {}

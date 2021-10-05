@@ -348,7 +348,7 @@ ToolkitUtility.prototype.displayUpdateSpaceSingle = function (entityData, liveDa
 
 /**
 * prepare grid layout for display and set data ids and data for visualisation e.g. charts etc.
-* @method diplayFilter
+* @method displaySpaceUpdate
 *
 */
 ToolkitUtility.prototype.displaySpaceUpdate = function (liveData, entityData) {
