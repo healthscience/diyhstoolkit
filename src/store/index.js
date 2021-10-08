@@ -3,9 +3,11 @@ import Vuex from 'vuex'
 import modules from './modules'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
+import VisToolsUtility from '@/mixins/visualUtility.js'
 const moment = require('moment')
 const ToolUtility = new ToolkitUtility()
 const ContextOut = new ContextUtility()
+const VisualUtility = new VisToolsUtility()
 
 Vue.use(Vuex)
 
@@ -32,11 +34,13 @@ const store = new Vuex.Store({
     liveRefContIndex: {},
     livePeerRefContIndex: {},
     liveNXP: '',
+    nxpModulelist: {},
     liveNXPcontract: {},
     liveNXPbundle: {},
     devicesLive: {},
     nxpModulesLive: [],
     liveDashList: [],
+    combineSpaceList: [],
     joinNXPlive: {},
     lengthMholder: 0,
     lengthMholderj: 0,
@@ -147,6 +151,21 @@ const store = new Vuex.Store({
     },
     setLiveNXP: (state, inVerified) => {
       state.liveNXP = inVerified
+    },
+    SET_NXP_MODULED: (state, inVerified) => {
+      // match to NXP contract to get array of modules
+      // set the order of the modules
+      let modulesPerNXP = []
+      for (let lnxp of state.networkPeerExpModules) {
+        if (lnxp.exp.key === inVerified) {
+          modulesPerNXP = VisualUtility.orderModules(lnxp.modules, 'private')
+        }
+      }
+      let modulesRefKey = []
+      for (let modk of modulesPerNXP) {
+        modulesRefKey.push(modk.key)
+      }
+      Vue.set(state.nxpModulelist, inVerified, modulesRefKey)
     },
     SET_DATASOURCECOUNT: (state, inVerified) => {
       state.datasourceCount = inVerified
@@ -275,7 +294,6 @@ const store = new Vuex.Store({
       }
     },
     setOpendataBar: (state, inVerified) => {
-      console.log(inVerified)
       let setToolbar = state.opendataTools[inVerified.module]
       if (inVerified.state === false) {
         setToolbar[inVerified.dtid] = { text: 'hide data', active: true }
@@ -285,14 +303,11 @@ const store = new Vuex.Store({
         Vue.set(state.opendataTools, inVerified.module, setToolbar)
       }
       // check if time range is set?
-      console.log(state.setTimerange)
       if (state.setTimerange === undefined) {
         state.setTimerange[inVerified.dtid] = []
       }
     },
     setNXPprogressUpdate: (state, inVerified) => {
-      // console.log('set progress message')
-      // console.log(inVerified)
       let setProgress = { text: 'Experiment in progress', active: true }
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
@@ -329,7 +344,6 @@ const store = new Vuex.Store({
     },
     SET_TIME_RANGE: (state, inVerified) => {
       Vue.set(state.setTimerange, inVerified.device, inVerified.timerange)
-      console.log(state.setTimerange)
     },
     SET_CLEAR_TIMERANGE: (state, inVerified) => {
       Vue.set(state.setTimerange, inVerified.device, [])
@@ -368,7 +382,9 @@ const store = new Vuex.Store({
     },
     SET_DASHBOARD_CLOSE (state, inVerified) {
       // remove dashboard item
-      state.liveDashList = state.liveDashList.filter(item => item !== inVerified)
+      let updateNXPlist = state.liveDashList.filter(item => item !== inVerified)
+      state.liveDashList = updateNXPlist
+      delete state.nxpModulelist[inVerified]
     },
     SET_DASHBOARD_REMOVE (state, inVerified) {
       // remove NXP from peer list
@@ -391,6 +407,46 @@ const store = new Vuex.Store({
     },
     SET_VIEWFLOW_START (state, inVerified) {
       state.flowviews = true
+    },
+    SET_ADD_VISSPACE (state, inVerified) {
+      // need unquie identifer for grid
+      let random = Math.random()
+      let deviceUUID = random.toString()
+      let modG = inVerified.mData + deviceUUID.slice(2, 8)
+      let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': modG, static: false }
+      this.state.moduleGrid[inVerified.moduleCNRL].push(newGriditem)
+      // set setting holder
+      let visSettings =
+      {
+        devices: null,
+        data: null,
+        compute: null,
+        visualise: null,
+        category: [],
+        timeperiod: null,
+        xaxis: null,
+        yaxis: [],
+        resolution: null,
+        setTimeFormat: null
+      }
+      Vue.set(this.state.visModuleHolder, modG, visSettings)
+      // set toolbars
+      let setVisTools = {}
+      setVisTools = { text: 'open tools', active: true }
+      Vue.set(this.state.toolbarVisStatus[inVerified.moduleCNRL], modG, setVisTools)
+      // set the open data toolbar
+      let setOPenDataToolbar = {}
+      setOPenDataToolbar = { text: 'open data', active: false }
+      Vue.set(this.state.opendataTools[inVerified.moduleCNRL], modG, setOPenDataToolbar)
+      // set the data for the visualisation
+      let repeatDataBundle = this.state.NXPexperimentData[inVerified.nxpCNRL][inVerified.moduleCNRL].data[inVerified.mData]
+      Vue.set(this.state.NXPexperimentData[inVerified.nxpCNRL][inVerified.moduleCNRL].data, modG, repeatDataBundle)
+      let contextPlacer = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': modG, 'data': repeatDataBundle }
+      Vue.set(this.state.NXPexperimentData[inVerified.nxpCNRL][inVerified.moduleCNRL], 'prime', contextPlacer.prime)
+      // set a placer for any subsequent updates
+      let setProgress = {}
+      setProgress = { text: 'Updating visualisation', active: false }
+      Vue.set(this.state.visProgress[inVerified.moduleCNRL], modG, setProgress)
     }
   },
   actions: {
@@ -427,8 +483,6 @@ const store = new Vuex.Store({
       context.commit('SET_LIVE_DATE', update)
     },
     actionJOINViewexperiment (context, update) {
-      console.log('action JOIN selected')
-      console.log(update)
       context.commit('SET_RESET_MODULEHOLDER', null)
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
@@ -519,9 +573,10 @@ const store = new Vuex.Store({
     },
     async actionDashboardState (context, update) {
       // console.log('clicked VIEW NXP------------')
-      console.log(update)
+      // console.log(update)
       let futureTimeCheck = false
       context.commit('setLiveNXP', update)
+      context.commit('SET_NXP_MODULED', update)
       context.commit('setDashboardNXP', update)
       context.commit('setNXPprogressUpdate', update)
       // clear the time range for new NXP view
@@ -756,6 +811,9 @@ const store = new Vuex.Store({
       } else if (update.future === 'self') {
         console.log('self')
       }
+    },
+    actionVisSpaceAdd (context, update) {
+      context.commit('SET_ADD_VISSPACE', update)
     },
     actionDatasourceCount (context, update) {
       context.commit('SET_DATASOURCECOUNT', update)

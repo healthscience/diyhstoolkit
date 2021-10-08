@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard-holder" >
+  <div id="dashboard-holder" v-if="moduleContent">
     <div id="dash-modules"> <!-- @wheel.prevent="wheelItBetter($event)"> -->
       <module-board @close="closeModule">
         <template v-slot:header>
@@ -10,27 +10,29 @@
         </template>
         <template v-slot:body>
         <!-- The code below goes into the header slot -->
-          <div id="layouttools" >
-            <!-- <button @click='addItem'>Add an item</button> -->
-            <input class="layout-controls" type='checkbox' v-model='draggable'/> Draggable
-            <input class="layout-controls" type='checkbox' v-model='resizable'/> Resizable
-          </div>
-          <div id="zoom-holder">
-            <div id="module-toolbar">
+          <div id="module-toolbar">
+            <div id="layouttools" v-if="moduleContent.prime.text !== 'Question'">
+              <!-- <button @click='addItem'>Add an item</button> -->
+              <input class="layout-controls" type='checkbox' v-model='draggable'/> Draggable
+              <input class="layout-controls" type='checkbox' v-model='resizable'/> Resizable
               <!-- <button @click='decreaseWidth'>Decrease Width</button>
               <button @click='increaseWidth'>Increase Width</button> v-if="toolbarStatusLive.active" -->
-              <br/>
-              <div class="grid-section" v-if="localGrid.length > 0">
-                <grid-layout v-if="localGrid"
-                 :layout='localGrid'
-                 :col-num='12'
-                 :row-height='30'
-                 :is-draggable='draggable'
-                 :is-resizable='resizable'
-                 :responsive="responsive"
-                 :vertical-compact='true'
-                 :use-css-transforms='true'
-                >
+            </div>
+          </div>
+          <div id="zoom-holder">
+            <br/>
+            <div class="grid-section" v-if="localGrid.length > 0">
+              <grid-layout v-if="localGrid"
+               :layout='localGrid'
+               :col-num='12'
+               :row-height='30'
+               :is-draggable='draggable'
+               :is-resizable='resizable'
+               :responsive="responsive"
+               :vertical-compact='true'
+               :use-css-transforms='true'
+              >
+                <div class="scale-space">
                   <grid-item v-for='item in localGrid' :key='item.id'
                     :static='item.static'
                     :x='item.x'
@@ -41,8 +43,8 @@
                   >
                     <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="item.i" class="module-placer"></component>
                   </grid-item>
-                </grid-layout>
-              </div>
+                </div>
+              </grid-layout>
             </div>
           </div>
         </template>
@@ -53,7 +55,6 @@
 
 <script>
 import _ from 'lodash'
-import { mapState, mapActions } from 'vuex'
 import ModuleBoard from './moduleBoard.vue'
 import VueGridLayout from 'vue-grid-layout'
 // need to dynamically plug in modules required into toolkit see https://itnext.io/create-a-vue-js-component-library-part-2-c92a42af84e9
@@ -112,8 +113,9 @@ export default {
         return contentModule[this.moduleCNRL]
       }
     },
-    ...mapState(['moduleGrid']),
+    // ...mapState(['moduleGrid']),
     storeGrid () {
+      this.setLocalGrid(this.$store.state.moduleGrid[this.moduleCNRL])
       return _.cloneDeep(this.$store.state.moduleGrid[this.moduleCNRL])
     }
   },
@@ -125,7 +127,7 @@ export default {
   data () {
     return {
       moduleType: 'nxp-visualise',
-      localGrid: _.cloneDeep(this.$store.state.moduleGrid),
+      localGrid: [],
       draggable: false,
       resizable: false,
       responsive: true,
@@ -136,7 +138,9 @@ export default {
   mounted () {
   },
   methods: {
-    ...mapActions(['actionLocalGrid']),
+    setLocalGrid (grid) {
+      this.localGrid = grid
+    },
     toolbarUpdate (bp) {
       let updateToolbar = {}
       updateToolbar.state = this.toolbarStatusLive.active
@@ -194,46 +198,37 @@ export default {
 #dashboard-holder {
   border: 0px solid red;
 }
-
 #dash-modules {
   border: 0px solid grey;
   list-style: none;
 }
-
 #zoom-holder {
   border: 0px solid green;
 }
-
 #module-toolbar {
   border: 0px solid red;
 }
-
 .layout-controls {
   display: inline;
 }
-
 .grid-section {
   border: 0px solid orange;
 }
-
 .module-placer {
   border: 0px solid blue;
 }
 #nxp-content {
   font-size: 1.4em;
 }
-
 .vue-grid-layout {
   border: 0px solid red;
   /* transform: scale(0.3); */
 }
-
 .columns {
     -moz-columns: 120px;
     -webkit-columns: 120px;
     columns: 120px;
 }
-
 /*.vue-resizable-handle {
     z-index: 5000;
     position: absolute;
@@ -249,7 +244,6 @@ export default {
     box-sizing: border-box;
     cursor: se-resize;
 }*/
-
 /* :not(.vue-grid-placeholder)
 transform: scale(0.25)
  */
@@ -258,15 +252,12 @@ transform: scale(0.25)
   border: 0px solid blue;
   overflow: auto;
 }
-
 .vue-grid-item.resizing {
   opacity: 1;
 }
-
 .vue-grid-item.static {
   background: #E9EDF0;
 }
-
 .vue-grid-item .text {
     font-size: 24px;
     text-align: center;
@@ -279,18 +270,14 @@ transform: scale(0.25)
     height: 100%;
     width: 100%; */
 }
-
 .vue-grid-item .no-drag {
 }
-
 .vue-grid-item .minMax {
     font-size: 12px;
 }
-
 .vue-grid-item .add {
     cursor: pointer;
 }
-
 .vue-draggable-handle {
     position: absolute;
     width: 30px;

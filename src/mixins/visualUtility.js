@@ -70,9 +70,9 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
       let makeGrid = []
       let newGriditem = {}
       if (entityData.data !== 'none') {
-        newGriditem = { 'x': 0, 'y': 0, 'w': 4, 'h': 4, 'i': entityData.data.context.triplet.device, static: false }
+        newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 10, 'i': entityData.data.context.triplet.device, static: false }
       } else {
-        newGriditem = { 'x': 0, 'y': 0, 'w': 4, 'h': 4, 'i': 'none', static: false }
+        newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 10, 'i': 'none', static: false }
       }
       makeGrid.push(newGriditem)
       let visDataHold = {}
@@ -173,7 +173,7 @@ VisualUtility.prototype.addVisData = function (visModule, liveGrid, existingData
   }
   let placerSet = placerAlready.includes(checkDevice)
   if (placerSet === false) {
-    let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': checkDevice, static: false }
+    let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 10, 'i': checkDevice, static: false }
     gridUpdate.push(newGriditem)
   }
   // add prime info context data placer
@@ -475,7 +475,7 @@ VisualUtility.prototype.displaySpaceUpdate = function (liveData, entityData) {
     // nB temp measure
     let unique = Array.from(new Set(entityData.liveVislist[dl]))
     for (let dr of unique) {
-      let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': dr, static: false }
+      let newGriditem = { 'x': 0, 'y': 0, 'w': 1, 'h': 1, 'i': dr, static: false }
       updateGrid.push(newGriditem)
       setVistoolbar[dr] = { text: 'open tools', active: true }
       setOpendata[dr] = { text: 'open data', active: false }

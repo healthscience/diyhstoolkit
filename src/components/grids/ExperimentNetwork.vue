@@ -27,34 +27,48 @@
           </tr>
         </tbody>
       </table>
-      <div id="dashboard-placeholder">
-        <ul class="clear" v-for="dashi of dashLive" :key="dashi.id">
+      <div id="dashboard-placeholder" v-bind:style="{ transform: scaleZoom}" @wheel.prevent="wheelItBetter($event)"> <!-- @wheel.prevent="wheelItBetter($event)" -->
+        <ul id="zoom-dashboard" class="clear" v-for="dashi of dashLive" :key="dashi.id" >
           <li class="dashboard-place">
-            <header>Dashboard</header>feedback:
+            <ul>
+              <li>
+                Left
+              </li>
+              <li>
+                <header>Dashboard</header>
+              </li>
+              <li class="remove-controls">
+                <div id="dashboard-controls">
+                  <ul>
+                    <li>
+                      <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
+                    <li>
+                    <li>
+                      <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
+                    </li>
+                  </ul>
+                </div>
+                <div id="remove-message" v-if="messageRemove === true">
+                  Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Y</a>  N
+                </div>
+              </li>
+            </ul>
+          </li>
+          <li>
+            feedback:
             <div v-if="ecsMessage" id="ecs-message">
               {{ ecsMessage }}
             </div>
+          </li>
+          <li class="dashboard-view">
             <!-- view the dashboard per network experiment -->
-            <div id="module-list" v-if="NXPstatusData !== false">
-              <progress-message :progressMessage="NXPprogress"></progress-message>
-              <div id="module-ready" v-if="NXPstatusData[shellContract]">
-                <ul v-for="modI in NXPstatusData[shellContract]" :key="modI">
-                  <dash-board v-if="isModalDashboardVisible === true" :expCNRL="shellContract" :moduleCNRL="modI"></dash-board>
+            <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
+              <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
+              <div id="module-ready" v-if="NXPstatusData[dashi]">
+                <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
+                  <dash-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></dash-board>
                 </ul>
               </div>
-            </div>
-              <ul>
-                <li>
-                  <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
-                <li>
-                <li>
-                  <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
-                </li>
-              </ul>
-          </li>
-          <li>
-            <div id="remove-message" v-if="messageRemove === true">
-              Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Y</a>  N
             </div>
           </li>
         </ul>
@@ -90,18 +104,7 @@ export default {
       return this.$store.state.joinNXPselected
     },
     NXPstatusData: function () {
-      let nxpContractRC = this.shellContract.trim()
-      let modData = this.$store.state.NXPexperimentData
-      let modHolder = {}
-      if (this.shellContract.length !== 0 && modData[nxpContractRC] !== undefined) {
-        let extractMod = modData[nxpContractRC]
-        let modList = Object.keys(extractMod)
-        modHolder[nxpContractRC] = []
-        modHolder[nxpContractRC] = modList
-        return modHolder
-      } else {
-        return false
-      }
+      return this.$store.state.nxpModulelist
     },
     dashLive: function () {
       return this.$store.state.liveDashList
@@ -126,7 +129,7 @@ export default {
       }
     },
     NXPprogress: function () {
-      return this.$store.state.nxpProgress[this.shellContract]
+      return this.$store.state.nxpProgress
     },
     ecsMessage: function () {
       return this.$store.state.ecsMessageLive
@@ -191,10 +194,27 @@ export default {
       mData: '',
       visualRefCont: '',
       messageRemove: false,
-      removeNXPid: ''
+      removeNXPid: '',
+      zoomdashdata: 0,
+      scaleZoom: '',
+      zoomCalibrate: 1
     }
   },
   methods: {
+    wheelItBetter (event) {
+      // use mouse wheel to zoom in out
+      console.log('mouse zooming')
+      if (event.deltaY < 0) {
+        this.zoomdashdata += 1
+        this.zoomCalibrate = this.zoomCalibrate + 0.1
+      } else {
+        this.zoomdashdata -= 1
+        this.zoomCalibrate = this.zoomCalibrate - 0.1
+      }
+      console.log(this.zoomdashdata)
+      console.log(this.zoomCalibrate)
+      this.scaleZoom = 'scale(' + this.zoomCalibrate + ')'
+    },
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
@@ -324,14 +344,34 @@ th.active .arrow {
   border-top: 4px solid #fff;
 }
 
+.dashboard-view {
+  width: 100%;
+}
+
+#module-list {
+}
+
 #dashboard-placeholder {
   display: block;
-  border: 0px solid black;
+  border: 1px solid grey;
+}
+
+#zoom-dashboard {
+  transform: scale(1);
+  transform-origin: left top;
+  margin-top: 5px;
+  border: 1px solid orange;
 }
 
 .dashboard-place {
   width: 98%;
-  border: 1px solid green;
+  border: 0px solid green;
+
+}
+
+.remove-controls {
+  float: right;
+  margin-right: 2em;
 }
 
 #ecs-message {

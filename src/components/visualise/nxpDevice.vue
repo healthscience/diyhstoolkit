@@ -1,11 +1,11 @@
 <template>
-  <div id="device-nxp">Device --
-    <ul>
+  <div id="device-nxp">Device
+    <ul v-if="liveDevice">
       <li>
-        {{ liveData.device_name }}
+        {{ liveDevice.device_name }}
       </li>
       <li>
-        {{ liveData.device_mac }}
+        {{ liveDevice.device_mac }}
       </li>
     </ul>
   </div>
@@ -22,7 +22,7 @@ export default {
     mData: String
   },
   computed: {
-    liveData: function () {
+    liveDevice: function () {
       return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
     }
   },

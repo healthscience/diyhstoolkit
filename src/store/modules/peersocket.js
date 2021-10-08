@@ -187,7 +187,7 @@ export default {
           Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('SCECOND RETURNED-----')
+        console.log('SECOND------DATA RETURNED-----')
         console.log(backJSON)
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {
@@ -562,6 +562,16 @@ export default {
     },
     SET_FEEDBACK_MEASSAGE (state, inVerified) {
       Vue.set(this.state.feedbackMessage, inVerified.device, inVerified.message)
+    },
+    SET_COMBINE_CONTEXT (state, inVerified) {
+      console.log('list of COMBINE')
+      this.state.combineSpaceList.push(inVerified)
+      console.log(this.state.combineSpaceList)
+    },
+    SET_COMBINE_CLEAR (state, inVerified) {
+      console.log('CLEAR COMBINE')
+      this.state.combineSpaceList = []
+      console.log(this.state.combineSpaceList)
     }
   },
   actions: {
@@ -902,6 +912,12 @@ export default {
         // provide feedback to Peer on what is missing from joining the NXP
         // this.joinFeedback()
       }
+    },
+    actionCombineSpace (context, update) {
+      // combine two visualisation data space and combine
+      console.log('combine SPACES')
+      console.log(update)
+      context.commit('SET_COMBINE_CONTEXT', update)
     }
   }
 }

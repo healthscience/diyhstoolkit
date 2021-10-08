@@ -7,7 +7,7 @@
       <div id="future-tools">
         <ul>
           <li class="context-future">
-            <button id="new-visspace" @click.prevent="setChartNumber()">add Space</button>
+            <button id="new-visspace" @click.prevent="setChartSpace()">add Space</button>
             <!-- <select v-model="selectedChartnumber" @change.prevent="setChartNumber()">
               <option v-for="cnoption in numbechartoptions" v-bind:value="cnoption.value" :key='cnoption.id' :selected="cnoption.id === selectedChartnumber">
               {{ cnoption.text }}
@@ -22,6 +22,9 @@
                 </option>
             </select>
             <div id="future-selected">Selected: {{ selectedFuture }}</div>
+          </li>
+          <li class="context-future">
+            <button class="new-viscombine" v-bind:class="{ active: combineSetting.active }" @click.prevent="setCombine()">{{ combineSetting.text }}</button>
           </li>
         </ul>
       </div>
@@ -58,16 +61,13 @@ export default {
     },
     options: {
       type: Object
-    }
+    },
+    shellID: String,
+    moduleCNRL: String,
+    moduleType: String,
+    mData: String
   },
   computed: {
-    spaceDimention: function () {
-      let spaceSizes = 0
-      if (this.isMounted !== false) {
-        spaceSizes = this.spaceHeight()
-      }
-      return spaceSizes
-    },
     scaleWidth: function () {
       return 1200
     },
@@ -78,8 +78,6 @@ export default {
   created () {
   },
   mounted () {
-    this.isMounted = true
-    this.spaceHeight()
   },
   data () {
     return {
@@ -100,23 +98,51 @@ export default {
         { text: 'Self decide', value: 'self' },
         { text: 'Ask CALE', value: 'CALE' }
       ],
-      selectedChartnumber: 0
+      selectedChartnumber: 0,
+      combineSetting:
+      {
+        text: 'combine',
+        active: false
+      }
     }
   },
   methods: {
-    spaceHeight () {
-      console.log('spacehight')
-      let spaceD = 0
-      if (this.$refs.visualView !== undefined) {
-        this.dimentionH = this.$refs.visualView.clientHeight
-        this.dimentionW = this.$refs.visualView.clientWidth
-        spaceD = this.$refs.visualView.clientWidth
-      }
-      return spaceD
-    },
     setNetwork (nv) {
       console.log('is a network visualisation available?')
       console.log(nv)
+    },
+    setChartSpace () {
+      console.log('set up a new vis chart space')
+      let spaceContext = {}
+      spaceContext.nxpCNRL = this.shellID
+      spaceContext.moduleCNRL = this.moduleCNRL
+      spaceContext.moduleType = this.moduleType
+      spaceContext.mData = this.mData
+      this.$store.dispatch('actionVisSpaceAdd', spaceContext)
+    },
+    setFuture () {
+      let buildContext = {}
+      buildContext.future = this.selectedFuture
+      let refContracts = {}
+      refContracts.shellCNRL = this.shellID
+      refContracts.moduleCNRL = this.moduleCNRL
+      refContracts.moduleType = this.moduleType
+      refContracts.mData = this.mData
+      buildContext.refs = refContracts
+      this.$store.dispatch('actionFuture', buildContext)
+    },
+    setCombine () {
+      console.log('combine two or more chart???')
+      // switch on and off button
+      this.combineSetting.active = !this.combineSetting.active
+      console.log(this.combineSetting.active)
+      let combineContext = {}
+      combineContext.shellCNRL = this.shellID
+      combineContext.moduleCNRL = this.moduleCNRL
+      combineContext.moduleType = this.moduleType
+      combineContext.mData = this.mData
+      combineContext.active = this.combineSetting.active
+      this.$store.dispatch('actionCombineSpace', combineContext)
     }
   }
 }
@@ -136,7 +162,7 @@ export default {
 
 #charts-live {
   flex-grow: 1; /* Set the middle element to grow and stretch */
-  width: 100%;
+  width: 88%;
   height: 100%;
   position: relative;
   border: 0px solid blue;
@@ -149,11 +175,22 @@ export default {
 }
 
 .context-future {
+  display: block;
+  margin-bottom: 16px;
   border: 0px solid purple;
 }
 
 #new-visspace {
   margin-bottom: 0em;
+}
+
+.new-viscombine.active {
+  font-size: 1.2em;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  text-align: center;
 }
 
 .clear {

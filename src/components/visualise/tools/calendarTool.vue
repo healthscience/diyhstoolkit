@@ -299,17 +299,6 @@ export default {
       } else {
         this.$store.dispatch('actionVisUpdate', contextK)
       }
-    },
-    setFuture () {
-      let buildContext = {}
-      buildContext.future = this.selectedFuture
-      let refContracts = {}
-      refContracts.shellCNRL = this.shellID
-      refContracts.moduleCNRL = this.moduleCNRL
-      refContracts.moduleType = this.moduleType
-      refContracts.mData = this.mData
-      buildContext.refs = refContracts
-      this.$store.dispatch('actionFuture', buildContext)
     }
   }
 }
