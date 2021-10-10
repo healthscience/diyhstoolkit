@@ -302,20 +302,6 @@ export default {
       this.datatypeResults = []
       for (let scomp of this.refContractComputeLive) {
         if (scomp.key === this.visualsettings.compute) {
-          // extract compute dtprefix and add to all datatype active in toolbar
-          // need to build new datatypes for results
-          /* for (let updateRDTS of this.refContractPackage) {
-            // console.log(updateRDTS)
-            let buildDTR = {}
-            buildDTR.column = scomp.value.computational.name + updateRDTS.column
-            let sourceComputeDT = {}
-            sourceComputeDT.computedt = scomp.key
-            sourceComputeDT.computerefcontract = updateRDTS.refcontract
-            // make hash of combined
-            let combineDThash = hashObject(sourceComputeDT)
-            buildDTR.refcontract = combineDThash // scomp.key + '-' + updateRDTS.refcontract
-            this.datatypeResults.push(buildDTR)
-          } */
         }
       }
       this.$store.dispatch('actionSetVisCompute', this.visualsettings.compute)

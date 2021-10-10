@@ -27,7 +27,10 @@
           </tr>
         </tbody>
       </table>
-      <div id="dashboard-placeholder" v-bind:style="{ transform: scaleZoom}" @wheel.prevent="wheelItBetter($event)"> <!-- @wheel.prevent="wheelItBetter($event)" -->
+      <div id="scale-tools">
+        <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
+      </div>
+      <div id="dashboard-placeholder" v-bind:style="{ transform: scaleZoom}" @wheel.prevent="wheelItBetter($event)">
         <ul id="zoom-dashboard" class="clear" v-for="dashi of dashLive" :key="dashi.id" >
           <li class="dashboard-place">
             <ul>
@@ -197,23 +200,43 @@ export default {
       removeNXPid: '',
       zoomdashdata: 0,
       scaleZoom: '',
+      scaleSetting:
+      {
+        text: 'scale off',
+        active: false
+      },
+      zoomscaleStatus: false,
       zoomCalibrate: 1
     }
   },
   methods: {
     wheelItBetter (event) {
       // use mouse wheel to zoom in out
-      console.log('mouse zooming')
-      if (event.deltaY < 0) {
-        this.zoomdashdata += 1
-        this.zoomCalibrate = this.zoomCalibrate + 0.1
-      } else {
-        this.zoomdashdata -= 1
-        this.zoomCalibrate = this.zoomCalibrate - 0.1
+      if (this.zoomscaleStatus === true) {
+        console.log('mouse zooming')
+        if (event.deltaY < 0) {
+          this.zoomdashdata += 1
+          this.zoomCalibrate = this.zoomCalibrate + 0.1
+        } else {
+          this.zoomdashdata -= 1
+          this.zoomCalibrate = this.zoomCalibrate - 0.1
+        }
+        console.log(this.zoomdashdata)
+        console.log(this.zoomCalibrate)
+        this.scaleZoom = 'scale(' + this.zoomCalibrate + ')'
       }
-      console.log(this.zoomdashdata)
-      console.log(this.zoomCalibrate)
-      this.scaleZoom = 'scale(' + this.zoomCalibrate + ')'
+    },
+    setSpacescale () {
+      // set mouse scaling on or off  (add slider with time)
+      this.scaleSetting.active = !this.scaleSetting.active
+      if (this.scaleSetting.active === true) {
+        this.scaleSetting.text = 'Scale On'
+        this.zoomscaleStatus = true
+      } else if (this.scaleSetting.active === false) {
+        this.scaleSetting.text = 'Scale Off'
+        this.zoomscaleStatus = false
+      }
+      console.log('scale space')
     },
     sortBy: function (key) {
       this.sortKey = key
@@ -348,18 +371,22 @@ th.active .arrow {
   width: 100%;
 }
 
+.scale-space.active {
+  background-color: #4CAF50; /* Green */
+}
+
 #module-list {
 }
 
 #dashboard-placeholder {
+  width: 90%;
+  transform: scale(1);
   display: block;
   border: 1px solid grey;
 }
 
 #zoom-dashboard {
-  transform: scale(1);
-  transform-origin: left top;
-  margin-top: 5px;
+  margin-top: 0px;
   border: 1px solid orange;
 }
 

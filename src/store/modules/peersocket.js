@@ -850,6 +850,12 @@ export default {
     actionFeeback (context, update) {
       context.commit('SET_FEEDBACK_MEASSAGE', update)
     },
+    actionSetVisTime (context, update) {
+      context.commit('SET_SETNXP_VISTIME', update)
+    },
+    actionSetVisResolution (context, update) {
+      context.commit('SET_SETNXP_VISRESOLUTION', update)
+    },
     actionNewNXPrefcontract (context, update) {
       // add the question module
       context.commit('SET_QUESTION_MODULE')

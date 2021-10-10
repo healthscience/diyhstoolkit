@@ -178,6 +178,8 @@ export default {
         }
       }
       // set defaults for opentool bar
+      console.log('start concpntect')
+      console.log(computeContract.value.info.settings)
       this.setDefaultXaxis(computeContract.value.info.settings.xaxis)
       this.setYaxisOptions(computeContract.value.info.settings.yaxis)
       this.setDefaultCategory(computeContract.value.info.settings.category)
