@@ -5,8 +5,10 @@ import store from './store'
 import i18n from './i18n'
 import NonReactive from 'vue-nonreactive'
 import VueNativeSock from 'vue-native-websocket'
+import VueDragscroll from 'vue-dragscroll'
 
 Vue.use(NonReactive)
+Vue.use(VueDragscroll)
 
 Vue.config.productionTip = false
 // 165.227.244.213:9888

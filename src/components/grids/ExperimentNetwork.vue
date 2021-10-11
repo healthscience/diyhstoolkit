@@ -29,58 +29,72 @@
       </table>
       <div id="scale-tools">
         <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
+        <div id="toolbar-scale">
+          <input type="range" min="0.1" max="2" step="0.1" v-model.number="scale">
+          <label>Scale</label>
+        </div>
       </div>
-      <div id="dashboard-placeholder" v-bind:style="{ transform: scaleZoom}" @wheel.prevent="wheelItBetter($event)">
-        <ul id="zoom-dashboard" class="clear" v-for="dashi of dashLive" :key="dashi.id" >
-          <li class="dashboard-place">
-            <ul>
-              <li>
-                Left
-              </li>
-              <li>
-                <header>Dashboard</header>
-              </li>
-              <li class="remove-controls">
-                <div id="dashboard-controls">
-                  <ul>
-                    <li>
-                      <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
-                    <li>
-                    <li>
-                      <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
-                    </li>
-                  </ul>
-                </div>
-                <div id="remove-message" v-if="messageRemove === true">
-                  Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Y</a>  N
-                </div>
-              </li>
-            </ul>
-          </li>
-          <li>
-            feedback:
-            <div v-if="ecsMessage" id="ecs-message">
-              {{ ecsMessage }}
+      <div id="dashboard-placeholder" @wheel.prevent="wheelScale($event)">
+      <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '800px' }" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0" drag-handle=".drag-handle">
+        <ul id="single-space" v-bind:style="{ transform: 'scale(' + scale + ')' }">
+          <div class="dashboard-space">
+            <div class="vis-spaceitem">
+              <div class="drag-handle">--- Activation Bar ---</div>
+              <p>Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
+                X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}
+              </p>
+              <ul>
+                <li>
+                  Left
+                </li>
+                <li>
+                  <header>Dashboard</header>
+                </li>
+                <li class="remove-controls">
+                  <div id="dashboard-controls">
+                    <ul>
+                      <li>
+                        <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
+                      <li>
+                      <li>
+                        <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div id="remove-message" v-if="messageRemove === true">
+                    Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Y</a>  N
+                  </div>
+                </li>
+              </ul>
             </div>
-          </li>
-          <li class="dashboard-view">
-            <!-- view the dashboard per network experiment -->
-            <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
-              <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
-              <div id="module-ready" v-if="NXPstatusData[dashi]">
-                <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
-                  <dash-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></dash-board>
-                </ul>
+            <div class="vis-spaceitem">
+              feedback:
+              <div v-if="ecsMessage" id="ecs-message">
+                {{ ecsMessage }}
               </div>
             </div>
-          </li>
+            <div class="vis-spaceitem">
+              <!-- view the dashboard per network experiment -->
+              <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
+                <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
+                <div id="module-ready" v-if="NXPstatusData[dashi]">
+                  <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
+                    <dash-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></dash-board>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
         </ul>
+      </vue-draggable-resizable>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import VueDraggableResizable from 'vue-draggable-resizable'
+import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 import DashBoard from '@/components/experiments/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
 
@@ -88,7 +102,8 @@ export default {
   name: 'ExperimentNetwork',
   components: {
     DashBoard,
-    ProgressMessage
+    ProgressMessage,
+    VueDraggableResizable
   },
   created () {
   },
@@ -206,10 +221,28 @@ export default {
         active: false
       },
       zoomscaleStatus: false,
-      zoomCalibrate: 1
+      zoomCalibrate: 1,
+      width: 2000,
+      height: 700,
+      x: 800,
+      y: 0,
+      scale: 1
     }
   },
   methods: {
+    onResize: function (x, y, width, height) {
+      this.x = x
+      this.y = y
+      this.width = width
+      this.height = height
+    },
+    onDrag: function (x, y) {
+      this.x = x
+      this.y = y
+    },
+    onDragStop: function (x, y) {
+      // this.dragging = false
+    },
     wheelItBetter (event) {
       // use mouse wheel to zoom in out
       if (this.zoomscaleStatus === true) {
@@ -224,6 +257,18 @@ export default {
         console.log(this.zoomdashdata)
         console.log(this.zoomCalibrate)
         this.scaleZoom = 'scale(' + this.zoomCalibrate + ')'
+      }
+    },
+    wheelScale (event) {
+      // use mouse wheel to zoom in out
+      if (this.zoomscaleStatus === true) {
+        console.log('mouse zooming')
+        if (event.deltaY < 0) {
+          this.scale = this.scale + 0.05
+        } else {
+          this.scale = this.scale - 0.05
+        }
+        console.log(this.scale)
       }
     },
     setSpacescale () {
@@ -367,10 +412,6 @@ th.active .arrow {
   border-top: 4px solid #fff;
 }
 
-.dashboard-view {
-  width: 100%;
-}
-
 .scale-space.active {
   background-color: #4CAF50; /* Green */
 }
@@ -378,22 +419,48 @@ th.active .arrow {
 #module-list {
 }
 
+#toolbar-scale {
+  margin-left: 2em;
+  display: inline;
+}
+
+#ecs-message {
+  font-weight: bold;
+}
+
 #dashboard-placeholder {
-  width: 90%;
-  transform: scale(1);
   display: block;
-  border: 1px solid grey;
+  min-height: 4000px;
+  width: 200%;
+  margin: auto;
+  border: 2px solid orange;
+  position: 'relative';
+  background-color: #fff4f4;
+  background: linear-gradient(-90deg, rgba(0, 0, 0, .1) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, .1) 1px, transparent 1px);
+  background-size: 60px 60px, 60px 60px;
 }
 
-#zoom-dashboard {
-  margin-top: 0px;
-  border: 1px solid orange;
-}
-
-.dashboard-place {
+#single-space {
+  transform-origin: left top;
   width: 98%;
-  border: 0px solid green;
+  height: 96%;
+  /* min-width: 1200px; */
+  border: 2px solid black;
+}
 
+.dashboard-space {
+  width: auto;
+  height: auto;
+  border: 2px solid blue;
+}
+
+.vis-spaceitem {
+  border: 1px solid red;
+}
+
+.drag-handle {
+  background-color: lightgrey;
+  height: 50px;
 }
 
 .remove-controls {
@@ -401,9 +468,6 @@ th.active .arrow {
   margin-right: 2em;
 }
 
-#ecs-message {
-  font-weight: bold;
-}
 .clear {
   clear: both;
 }

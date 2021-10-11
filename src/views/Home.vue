@@ -40,7 +40,6 @@
 
 <script>
 // @ is an alias to /src
-// import StartNetworkExperiment from '@/components/home/StartNetworkExperiment.vue'
 import LiveNetwork from '@/components/home/LiveNetwork.vue'
 import LiveTimeline from '@/components/home/LiveTimeline.vue'
 import LiveLifestyle from '@/components/home/LiveLifestyle.vue'
@@ -48,7 +47,6 @@ import LiveLifestyle from '@/components/home/LiveLifestyle.vue'
 export default {
   name: 'home',
   components: {
-    // StartNetworkExperiment,
     LiveNetwork,
     LiveTimeline,
     LiveLifestyle
