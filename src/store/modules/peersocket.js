@@ -172,7 +172,11 @@ export default {
         Vue.set(this.state.networkPeerExpModules, updateListContracts)
         // context.commit('SET_ENTITY_RETURN', entityReturn)
         this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
-        this.state.entityUUIDsummary = backJSON
+        // keep copy of latest returne nxp state
+        if (this.state.entityUUIDsummary[this.state.liveNXP] === undefined) {
+          this.state.entityUUIDsummary[this.state.liveNXP] = {}
+        }
+        this.state.entityUUIDsummary[this.state.liveNXP] = backJSON
         // set the grid base for the experiment
         for (let mod of backJSON.data[this.state.liveNXP].modules) {
           Vue.set(this.state.moduleGrid, mod.key, [])

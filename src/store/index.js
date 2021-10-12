@@ -149,8 +149,23 @@ const store = new Vuex.Store({
     SET_CONNECT_CONTEXT: (state, inVerifed) => {
       state.connectContext = inVerifed
     },
-    setLiveNXP: (state, inVerified) => {
+    SET_LIVE_NXP: (state, inVerified) => {
       state.liveNXP = inVerified
+    },
+    SEL_LIVE_MODULES: (state, inVerified) => {
+      /*
+      console.log(state.networkPeerExpModules)
+      let nxpLiveModules = []
+      for (let nxpMod of state.networkPeerExpModules) {
+        if (nxpMod.exp.key === inVerified) {
+          nxpLiveModules = nxpMod.modules
+        }
+      }
+      let buildDataPerNXPmodules = {}
+      buildDataPerNXPmodules.data = []
+      buildDataPerNXPmodules.data[inVerified] = nxpLiveModules
+      console.log(buildDataPerNXPmodules)
+      state.entityUUIDsummary = buildDataPerNXPmodules */
     },
     SET_NXP_MODULED: (state, inVerified) => {
       // match to NXP contract to get array of modules
@@ -546,6 +561,11 @@ const store = new Vuex.Store({
     actionClearTimerange (context, update) {
       context.commit('SET_CLEAR_TIMERANGE', update)
     },
+    actionActiveNXP (context, update) {
+      context.commit('SET_LIVE_NXP', update)
+      // also need to set modules associated with this NXP ref contract
+      // context.commit('SEL_LIVE_MODULES', update)
+    },
     actionDisplayLearn (context, update) {
       this.state.ecsMessageLive = ''
       let mod = []
@@ -575,7 +595,7 @@ const store = new Vuex.Store({
       // console.log('clicked VIEW NXP------------')
       // console.log(update)
       let futureTimeCheck = false
-      context.commit('setLiveNXP', update)
+      context.commit('SET_LIVE_NXP', update)
       context.commit('SET_NXP_MODULED', update)
       context.commit('setDashboardNXP', update)
       context.commit('setNXPprogressUpdate', update)
@@ -667,7 +687,7 @@ const store = new Vuex.Store({
       let progressContext = {}
       let firstTimeCheck = false
       // entity container
-      let entityUUID = this.state.entityUUIDReturn // update.nxpCNRL
+      let entityUUID = this.state.entityUUIDsummary[update.nxpCNRL].data[update.nxpCNRL].shellID // this.state.entityUUIDReturn
       // prepare info. to update library ref contracts
       let updateContract = {}
       // the visulisation and compute module contract need updating
@@ -688,7 +708,7 @@ const store = new Vuex.Store({
       // if no summary then first time use, extract modules from source
       let nxpRefcontract = {}
       let nxpModules = []
-      if (Object.keys(this.state.entityUUIDsummary).length === 0) {
+      if (Object.keys(this.state.entityUUIDsummary[update.nxpCNRL]).length === 0) {
         firstTimeCheck = true
         for (let nxp of this.state.networkPeerExpModules) {
           if (nxp.exp.key === update.nxpCNRL) {
@@ -697,7 +717,7 @@ const store = new Vuex.Store({
           }
         }
       } else {
-        nxpModules = this.state.entityUUIDsummary.data[update.nxpCNRL].modules
+        nxpModules = this.state.entityUUIDsummary[update.nxpCNRL].data[update.nxpCNRL].modules
       }
       let updateModules = []
       let newStartTime = []

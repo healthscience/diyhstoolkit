@@ -1,7 +1,7 @@
 <template>
   <div id="live-network-grid">
     <!-- peer network experiment added -->
-    <div id="grid-template">-- live --
+    <div id="grid-template">-- live
       <table>
         <thead>
           <tr>
@@ -31,18 +31,18 @@
         <div class="scale-item">
          <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
         </div>
-        <div id="toolbar-scale" class="scale-item">
-          <input type="range" min="0.1" max="2" step="0.1" v-model.number="scale">
+        <div class="scale-item">
           <label>Scale</label>
+          <input type="range" min="0.1" max="2" step="0.1" v-model.number="scale">
         </div>
         <div class="scale-item">
           {{ (scale * 100) }} %
         </div>
       </div>
       <div id="dashboard-placeholder" @wheel.prevent="wheelScale($event)" v-bind:style="{ transform: 'scale(' + scale + ')' }"> <!-- @wheel.prevent="wheelScale($event)"> , transform: 'scale(' + scale + ')' -->
-        <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '800px', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0" drag-handle=".drag-handle">
+        <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: 'auto', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0" drag-handle=".drag-handle">
           <div id="single-space">
-            <div class="drag-handle" @click.prevent="setActiveSpace()" v-bind:class="{ active: activeDrag }">
+            <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{ active: activeDrag[dashi].active === true }">
               --- Activation Bar ---
             </div>
             <div class="dashboard-space">
@@ -115,6 +115,9 @@ export default {
     ProgressMessage,
     VueDraggableResizable
   },
+  beforeMount () {
+    this.dragLocal = this.activeDrag
+  },
   created () {
   },
   mounted () {
@@ -182,6 +185,14 @@ export default {
         })
       }
       return experiments
+    },
+    activeDrag: function () {
+      let activeBarStatus = {}
+      for (let lnxp of this.filteredExperiments) {
+        activeBarStatus[lnxp.id] = {}
+        activeBarStatus[lnxp.id].active = false
+      }
+      return activeBarStatus
     }
   },
   filters: {
@@ -232,12 +243,12 @@ export default {
       },
       zoomscaleStatus: false,
       zoomCalibrate: 1,
-      width: 2000,
-      height: 700,
+      width: 0,
+      height: 0,
       x: 800,
       y: 0,
       scale: 1,
-      activeDrag: false
+      dragLocal: {}
     }
   },
   methods: {
@@ -248,7 +259,7 @@ export default {
       this.height = height
     },
     onDrag: function (x, y) {
-      this.x = x
+      this.x = x * (1 / this.zoomCalibrate)
       this.y = y
     },
     onDragStop: function (x, y) {
@@ -257,7 +268,6 @@ export default {
     wheelItBetter (event) {
       // use mouse wheel to zoom in out
       if (this.zoomscaleStatus === true) {
-        console.log('mouse zooming')
         if (event.deltaY < 0) {
           this.zoomdashdata += 1
           this.zoomCalibrate = this.zoomCalibrate + 0.1
@@ -265,8 +275,6 @@ export default {
           this.zoomdashdata -= 1
           this.zoomCalibrate = this.zoomCalibrate - 0.1
         }
-        console.log(this.zoomdashdata)
-        console.log(this.zoomCalibrate)
         this.scaleZoom = 'scale(' + this.zoomCalibrate + ')'
       }
     },
@@ -293,8 +301,10 @@ export default {
       }
       console.log('scale space')
     },
-    setActiveSpace () {
-      this.activeDrag = !this.activeDrag
+    setActiveSpace (nxpID) {
+      this.activeDrag[nxpID].active = !this.activeDrag[nxpID].active
+      // set this NXP as live
+      this.$store.dispatch('actionActiveNXP', nxpID)
     },
     sortBy: function (key) {
       this.sortKey = key
@@ -435,21 +445,20 @@ th.active .arrow {
   grid-template-columns: auto auto auto;
   justify-content: center;
   align-content: center;
+  gap: 40px;
+  /* grid-auto-flow: column; */
   position: sticky;
   top: 0;
   width: 100%;
+  height: 60px;
   border: 0px solid brown;
+  background-color: white;
   padding: .1em;
   z-index: 2;
 }
 
 .scale-item {
   border: 0px solid red;
-}
-
-#toolbar-scale {
-  margin-left: 2em;
-  display: inline-block;
 }
 
 #ecs-message {
@@ -459,7 +468,8 @@ th.active .arrow {
 
 #dashboard-placeholder {
   min-height: 4000px;
-  width: 200%;
+  width: 500%;
+  padding-top: 20px;
   margin: auto;
   transform-origin: left top;
   border: 1px solid orange;
@@ -503,6 +513,7 @@ th.active .arrow {
 
 .drag-handle.active {
   background-color: #4CAF50; /* Green */
+  height: 50px;
 }
 
 .remove-controls {
