@@ -186,6 +186,7 @@ export default {
     connectNetwork (typeConnect) {
       // remove the welcome message
       this.$store.dispatch('actionLiveConnect')
+      this.$store.dispatch('startconnectNSnetwork')
       // set flowviews active
       this.$store.dispatch('actionFlowviews')
       if (typeConnect === 'connect') {

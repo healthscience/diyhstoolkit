@@ -471,6 +471,17 @@ const store = new Vuex.Store({
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.action = 'auth'
+      message.network = null // update.network
+      message.settings = null // update.settings
+      const safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage)
+    },
+    async authDatastore (context, update) {
+      // send a auth requrst to peerlink
+      let message = {}
+      message.type = 'safeflow'
+      message.reftype = 'ignore'
+      message.action = 'datastoreauth'
       message.network = update.network
       message.settings = update.settings
       const safeFlowMessage = JSON.stringify(message)

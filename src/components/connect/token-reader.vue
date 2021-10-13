@@ -77,11 +77,11 @@ export default {
         authBundle.network = 'cloud'
         authBundle.settings = tokenJSON
         // data store authorisation
-        localthis.$store.dispatch('startconnectNSnetwork', authBundle)
+        // localthis.$store.dispatch('startconnectNSnetwork', authBundle)
+        localthis.$store.dispatch('authDatastore', authBundle)
         localthis.$emit('closeTreader')
       }
       reader.readAsText(file)
-      // Specify a data directory (optional; defaults to ~/.ethereum)
       // var datadir = process.cwd()
       // this.tokenJSONy = (datadir)
     },
