@@ -25,9 +25,11 @@ export default {
     },
     SOCKET_ONCLOSE (state, event) {
       state.socket.isConnected = false
+      state.peerauthStatus = false
     },
     SOCKET_ONERROR (state, event) {
       console.error(state, event)
+      state.peerauthStatus = false
       // remote.getCurrentWindow().close()
       // inform Peer connection to network lost
     },
@@ -37,6 +39,7 @@ export default {
     },
     SOCKET_RECONNECT_ERROR (state) {
       state.socket.reconnectError = true
+      state.peerauthStatus = false
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {

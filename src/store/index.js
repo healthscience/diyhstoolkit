@@ -18,6 +18,11 @@ const store = new Vuex.Store({
     connectStatus: false,
     peerauthStatus: false,
     connectContext: {},
+    networkConnetion: {
+      active: false,
+      type: 'self-verify',
+      text: 'Connect'
+    },
     helpModal:
     {
       type: 'help',
@@ -145,6 +150,25 @@ const store = new Vuex.Store({
     },
     SET_CONNECTION_STATUS: (state, inVerified) => {
       state.connectStatus = !state.connectStatus
+      state.networkConnetion.active = true
+      state.networkConnetion.text = 'edit-connection'
+      state.networkConnetion.type = 'self-verify'
+    },
+    SET_DISCONNECT_NETWORK (state, inVerified) {
+      let safeFlowMessage = {}
+      let message = {}
+      message.type = 'safeflow'
+      message.reftype = 'ignore'
+      message.action = 'disconnect'
+      safeFlowMessage = JSON.stringify(message)
+      // clear peer data
+      this.state.joinedNXPlist = []
+      // close modal
+      state.connectStatus = !state.connectStatus
+      state.networkConnetion.active = false
+      state.networkConnetion.text = 'connect'
+      state.networkConnetion.type = 'self-verify'
+      Vue.prototype.$socket.send(safeFlowMessage)
     },
     SET_CONNECT_CONTEXT: (state, inVerifed) => {
       state.connectContext = inVerifed
@@ -407,19 +431,6 @@ const store = new Vuex.Store({
       console.log(inVerified)
       // state.liveDashList = state.liveDashList.filter(item => item !== inVerified)
     },
-    SET_DISCONNECT_NETWORK (state, inVerified) {
-      let safeFlowMessage = {}
-      let message = {}
-      message.type = 'safeflow'
-      message.reftype = 'ignore'
-      message.action = 'disconnect'
-      safeFlowMessage = JSON.stringify(message)
-      // clear peer data
-      this.state.joinedNXPlist = []
-      // close modal
-      state.connectStatus = !state.connectStatus
-      Vue.prototype.$socket.send(safeFlowMessage)
-    },
     SET_VIEWFLOW_START (state, inVerified) {
       state.flowviews = true
     },
@@ -467,6 +478,8 @@ const store = new Vuex.Store({
   actions: {
     async startconnectNSnetwork (context, update) {
       // send a auth requrst to peerlink
+      console.log('secure socket active?')
+      console.log(this.state.peerauthStatus)
       let message = {}
       message.type = 'safeflow'
       message.reftype = 'ignore'

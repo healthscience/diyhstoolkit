@@ -136,6 +136,9 @@ export default {
     CalendarTool
   },
   computed: {
+    connectBut: function () {
+      return this.$store.state.networkConnetion
+    },
     helpState: function () {
       return this.$store.state.helpModal
     },
@@ -154,11 +157,6 @@ export default {
   data () {
     return {
       isModalVisible: false,
-      connectBut: {
-        active: false,
-        type: 'self-verify',
-        text: 'Connect'
-      },
       connectContext: {
         type: '',
         message: ''
@@ -185,6 +183,8 @@ export default {
     },
     connectNetwork (typeConnect) {
       // remove the welcome message
+      console.log('connect butoton')
+      console.log(typeConnect)
       this.$store.dispatch('actionLiveConnect')
       this.$store.dispatch('startconnectNSnetwork')
       // set flowviews active
@@ -199,9 +199,6 @@ export default {
         const refCJSON = JSON.stringify(refContract)
         this.$store.dispatch('actionGetRefContract', refCJSON)
       } else if (typeConnect.type === 'self-verify') {
-        this.connectBut.active = true
-        this.connectBut.text = 'edit-connections'
-        this.connectBut.type = 'self-verify'
         this.connectContext.type = 'self-verify'
         this.connectContext.message = 'Self verify keys'
         this.$store.dispatch('actionSelfVerify', this.connectContext)

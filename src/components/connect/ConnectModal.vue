@@ -52,7 +52,7 @@
             </slot>
           </div>
           <div id="key-management">
-            <header>Key Management</header>
+            <header>Peer Datastores Key Management</header>
             <slot name="peer-keys">
               Live connections
             </slot>
@@ -110,8 +110,8 @@ export default {
     background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
-    align-items: center;
-    z-index: 1;
+    align-items: top;
+    z-index: 5;
     overflow: auto;
   }
 
@@ -122,6 +122,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 60%;
+    margin-top: 20px;
   }
 
   .modal-header,
@@ -182,6 +183,10 @@ export default {
   min-height: 200px;
 }
 
+#peers-warm-cold header {
+  font-size: 1.4em;
+}
+
 #peers-warm-cold {
   border-bottom: 1px solid green;
   min-height: 200px;
@@ -195,7 +200,9 @@ export default {
 }
 
 #key-management {
-  margin-top: 20px;
+  border: 1px solid grey;
+  padding-top: 20px;
+  margin-top: 40px;
   display: block;
   min-height: 20px;
 }

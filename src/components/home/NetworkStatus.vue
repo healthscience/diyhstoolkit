@@ -1,47 +1,68 @@
 <template>
-  <div class="hello">
-    <div class="rest"></div>
+  <div class="network-connectstatus">
     <connect-modal v-show="connectToolstatus" @close="closeModal">
       <template v-slot:header>
-      <!-- The code below goes into the header slot -->
+        <!-- The code below goes into the header slot -->
         CONNECT <a href="#" id="disconnect-network" @click="disconnectNetwork">Disconnect</a>
       </template>
       <template v-slot:title-form>
-        {{ connectContext.message }}
+        <header class="connect-info">Health Oracle Network</header>
       </template>
       <template v-slot:connect-network>
-        Connected to Health Oracle Network
+        <div id="network-status">
+          <div class="status-info">
+            Status: <div class="hon-square-status"></div>
+          </div>
+          <div class="status-info">
+            Warm peers connected: {{ warmPeers.length }}
+          </div>
+        </div>
       </template>
       <template v-slot:input-form>
-        External data source connections
-        <token-reader v-if="connectContext.type === 'self-verify'" @closeTreader="closeModal"></token-reader>
-        <div id="self-in" v-if="connectContext.type === 'self-verify'">
-          <input v-model="secretPeer" placeholder="public key">
-          <input v-model="passwordPeer" placeholder="token">
+        <div id="external-datastores">
+          <header class="connect-info">External data source connections</header>
+          <div class="external-token-status">
+            <header>REST</header>
+            <token-reader v-if="connectContext.type === 'self-verify'" @closeTreader="closeModal"></token-reader>
+            <div id="self-in" v-if="connectContext.type === 'self-verify'">
+              <!-- <input v-model="secretPeer" placeholder="public key">
+              <input v-model="passwordPeer" placeholder="token"> -->
+            </div>
+          </div>
+          <div class="external-token-status">
+            <header>SQLite</header>
+            <ul>
+              <li>
+                gadgetbridge
+              </li>
+            </ul>
+          </div>
         </div>
       </template>
       <template v-slot:submit-form>
         <!-- <button>{{ buttonName }}</button> -->
       </template>
       <template v-slot:peers-warm>
-        <button type="button" class="btn" @click.prevent="addWarmpeer()">Add new</button>
-        <div v-if="addWarm === true" id="add-warm-peer">
-          <input v-model="newPeername" placeholder="name">
-          <input v-model="newPeer" placeholder="public key">
-          <ul v-if="replicateList.length > 0">
-            <label for="datastore-select"></label>
-            <select class="select-yaxis-id" id="datastore-select-rep" v-model="peerDStore">
-              <option value="none" selected="">please select</option>
-              <option v-for="ds in replicateList" :key="ds.id" v-bind:value="ds">
-              {{ ds }}
-              </option>
-            </select>
+        <div id="peer-social-network">
+          <button type="button" class="btn" @click.prevent="addWarmpeer()">Add new</button>
+          <div v-if="addWarm === true" id="add-warm-peer">
+            <input v-model="newPeername" placeholder="name">
+            <input v-model="newPeer" placeholder="public key">
+            <ul v-if="replicateList.length > 0">
+              <label for="datastore-select"></label>
+              <select class="select-yaxis-id" id="datastore-select-rep" v-model="peerDStore">
+                <option value="none" selected="">please select</option>
+                <option v-for="ds in replicateList" :key="ds.id" v-bind:value="ds">
+                {{ ds }}
+                </option>
+              </select>
+            </ul>
+            <button type="button" class="btn" @click="addWarmNetwork()">save</button>
+          </div>
+          <ul v-for='peer in warmPeers' :key='peer.id'>
+            <li>Peer {{ peer }} <button type="button" class="btn" @click="peerSyncLibrary(peer.publickey)">Replicate</button></li>
           </ul>
-          <button type="button" class="btn" @click="addWarmNetwork()">save</button>
         </div>
-        <ul v-for='peer in warmPeers' :key='peer.id'>
-          <li>Peer {{ peer }} <button type="button" class="btn" @click="peerSyncLibrary(peer.publickey)">Replicate</button></li>
-        </ul>
       </template>
       <template v-slot:peers-cold>
         <!-- <button>Connect CALE AI</button> -->
@@ -165,9 +186,40 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
+.network-connectstatus {
 }
+
+#network-status {
+  font-size: 1.4em;
+  border: 0px solid red;
+  margin-top: 10px;
+}
+
+.status-info {
+  display: inline-block;
+  margin-left: 30px;
+}
+
+.hon-square-status {
+  display: inline-block;
+  border: 1px solid grey;
+  width: 20px;
+  height: 20px;
+  background-color: green;
+}
+
+#external-datastores {
+  margin: 30px;
+}
+
+.external-token-status {
+  margin-top: 30px;
+}
+
+#peer-social-network {
+  margin-top: 20px;
+}
+
 ul {
   list-style-type: none;
   padding: 0;
@@ -178,6 +230,10 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.connect-info {
+  font-size: 1.4em;
 }
 
 .network-state {
@@ -195,4 +251,5 @@ a {
 .reset {
   clear: both;
 }
+
 </style>
