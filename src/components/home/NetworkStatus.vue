@@ -11,7 +11,7 @@
       <template v-slot:connect-network>
         <div id="network-status">
           <div class="status-info">
-            Status: <div class="hon-square-status"></div>
+            Status: <div class="hon-square-status" v-bind:class="{ active: connectBut.active === true }"></div>
           </div>
           <div class="status-info">
             Warm peers connected: {{ warmPeers.length }}
@@ -94,6 +94,9 @@ export default {
     TokenReader
   },
   computed: {
+    connectBut: function () {
+      return this.$store.state.networkConnetion
+    },
     connectToolstatus: function () {
       return this.$store.state.connectStatus
     },
@@ -205,6 +208,14 @@ export default {
   border: 1px solid grey;
   width: 20px;
   height: 20px;
+  background-color: red;
+}
+
+.hon-square-status.active {
+  display: inline-block;
+  border: 1px solid grey;
+  width: 20px;
+  height: 20px;
   background-color: green;
 }
 
@@ -213,6 +224,7 @@ export default {
 }
 
 .external-token-status {
+  display: block;
   margin-top: 30px;
 }
 

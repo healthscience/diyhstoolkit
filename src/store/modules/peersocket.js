@@ -22,6 +22,9 @@ export default {
     SOCKET_ONOPEN (state, event) {
       this.$socket = event.currentTarget
       state.socket.isConnected = true
+      this.state.networkConnetion.active = true
+      this.state.networkConnetion.text = 'connect'
+      this.state.networkConnetion.type = 'self-verify'
     },
     SOCKET_ONCLOSE (state, event) {
       state.socket.isConnected = false

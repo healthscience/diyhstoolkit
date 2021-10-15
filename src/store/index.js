@@ -150,9 +150,16 @@ const store = new Vuex.Store({
     },
     SET_CONNECTION_STATUS: (state, inVerified) => {
       state.connectStatus = !state.connectStatus
-      state.networkConnetion.active = true
-      state.networkConnetion.text = 'edit-connection'
-      state.networkConnetion.type = 'self-verify'
+      console.log('peerlink connect status')
+      console.log(state.networkConnection)
+      if (state.networkConnection === undefined) {
+        console.log('no peerlink')
+      } else {
+        console.log('live peerlnk')
+        state.networkConnetion.active = true
+        state.networkConnetion.text = 'edit-connection'
+        state.networkConnetion.type = 'self-verify'
+      }
     },
     SET_DISCONNECT_NETWORK (state, inVerified) {
       let safeFlowMessage = {}
@@ -164,6 +171,7 @@ const store = new Vuex.Store({
       // clear peer data
       this.state.joinedNXPlist = []
       // close modal
+      state.networkConnetion.active = !state.networkConnetion.active
       state.connectStatus = !state.connectStatus
       state.networkConnetion.active = false
       state.networkConnetion.text = 'connect'

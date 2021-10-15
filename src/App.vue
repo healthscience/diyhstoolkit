@@ -29,8 +29,8 @@
             {{ $t('help') }}
           </button>
         </div>
-        <div class="toolkit-settings">cc {{ connectBut.active }}
-          <button type="button" v-bind:class="{ networklive: connectBut.active === true}" class="connect-network" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
+        <div class="toolkit-settings">
+          <button type="button" v-bind:class="{ networklive: connectBut.active === true && authConnectStatus === true}" class="connect-network" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
         </div>
       </div>
     </div>
@@ -138,6 +138,9 @@ export default {
   computed: {
     connectBut: function () {
       return this.$store.state.networkConnetion
+    },
+    authConnectStatus: function () {
+      return this.$store.state.peerauthStatus
     },
     helpState: function () {
       return this.$store.state.helpModal
