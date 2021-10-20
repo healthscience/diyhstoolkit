@@ -186,6 +186,9 @@ export default {
       }
       return experiments
     },
+    activeNXPUUID: function () {
+      return this.$store.state.liveNXP
+    },
     activeDrag: function () {
       let activeBarStatus = {}
       for (let lnxp of this.filteredExperiments) {
@@ -281,7 +284,6 @@ export default {
     wheelScale (event) {
       // use mouse wheel to zoom in out
       if (this.zoomscaleStatus === true) {
-        console.log('mouse zooming')
         if (event.deltaY < 0) {
           this.scale = this.scale + 0.05
         } else {
@@ -299,9 +301,14 @@ export default {
         this.scaleSetting.text = 'Scale Off'
         this.zoomscaleStatus = false
       }
-      console.log('scale space')
     },
     setActiveSpace (nxpID) {
+      // only one active at a time
+      let activeListKeys = Object.keys(this.activeDrag)
+      for (let ak of activeListKeys) {
+        this.activeDrag[ak].active = false
+      }
+      // set the active one clicked
       this.activeDrag[nxpID].active = !this.activeDrag[nxpID].active
       // set this NXP as live
       this.$store.dispatch('actionActiveNXP', nxpID)
