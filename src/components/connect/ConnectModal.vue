@@ -38,27 +38,23 @@
             </div>
           </form>
         </div>
-        <div id="peers-warm-cold">
-          <header>Warm Peers</header>
+        <div id="peers-networks">
           <div id="warm-peers">
             <slot name="peers-warm">
               Peers or Groups Connected
             </slot>
           </div>
           <div id="cold-peers">
-            <header>Cold Peers</header>
             <slot name="peers-cold">
-              Live connections
+              AI peers connections
             </slot>
           </div>
           <div id="key-management">
-            <header>Peer Datastores Key Management</header>
-            <slot name="peer-keys">
-              Live connections
+            <slot name="peer-datastorekeys">
+              Datastores active
             </slot>
           </div>
           <div id="replicate-library">
-            <header>Network Library</header>
             <slot name="replicate-library">
               Network Library
             </slot>
@@ -110,19 +106,20 @@ export default {
     background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
-    align-items: top;
+    align-items: center;
     z-index: 5;
-    overflow: auto;
+    overflow: scroll;
   }
 
   .modal {
     background: #FFFFFF;
     box-shadow: 2px 2px 20px 1px;
     overflow-x: auto;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
-    width: 60%;
-    margin-top: 20px;
+    width: 80%;
+    margin-top: 200px;
   }
 
   .modal-header,
@@ -171,40 +168,42 @@ export default {
 }
 
 #form-input {
+  display: block;
   margin: 1em;
 }
 
 #form-submit {
+  display: block;
   margin-bottom: 1em;
 }
 
 #connect-peerlink {
-  border: 1px solid blue;
+  display: block;
   min-height: 200px;
 }
 
-#peers-warm-cold header {
-  font-size: 1.4em;
-}
-
-#peers-warm-cold {
-  border-bottom: 1px solid green;
-  min-height: 200px;
+#peers-networks {
+  display: block;
+  /* min-height: 200px;
   margin-top: 2em;
-  padding-bottom: 2em;
+  padding-bottom: 2em; */
 }
 
-#warm-peers, #cold-peers {
+#warm-peers {
+  display: block;
+  min-height: 20px;
+}
+
+#cold-peers {
   display: block;
   min-height: 20px;
 }
 
 #key-management {
-  border: 1px solid grey;
-  padding-top: 20px;
-  margin-top: 40px;
   display: block;
-  min-height: 20px;
 }
 
+#replicate-library {
+  display: block;
+}
 </style>

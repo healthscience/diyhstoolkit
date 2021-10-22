@@ -31,11 +31,7 @@
           </div>
           <div class="external-token-status">
             <header>SQLite</header>
-            <ul>
-              <li>
-                gadgetbridge
-              </li>
-            </ul>
+              <p>Gadgetbridge</p>
           </div>
         </div>
       </template>
@@ -44,6 +40,7 @@
       </template>
       <template v-slot:peers-warm>
         <div id="peer-social-network">
+          <header>Peers</header>
           <button type="button" class="btn" @click.prevent="addWarmpeer()">Add new</button>
           <div v-if="addWarm === true" id="add-warm-peer">
             <input v-model="newPeername" placeholder="name">
@@ -65,18 +62,28 @@
         </div>
       </template>
       <template v-slot:peers-cold>
-        <!-- <button>Connect CALE AI</button> -->
+        <div id="ai-peers">
+          <header>Cold Peers</header>
+          CALE AI is OFF
+          <!-- <button>Connect CALE AI</button> -->
+        </div>
       </template>
-      <template v-slot:peer-keys>
-        <div v-if="swarmState === true" id="open-connect">Public Library OPEN for replication</div>
-        <ul v-for='pk in publicKeysList' :key='pk.id'>
-          <li>{{ pk }} <button type="button" class="btn" @click="openReplication(pk)">sync</button></li>
-        </ul>
+      <template v-slot:peer-datastorekeys>
+        <div id="peers-listkeys">
+          <header>Peer Datastores Key Management</header>
+          <div v-if="swarmState === true" id="open-connect">Public Library OPEN for replication</div>
+          <ul v-for='pk in publicKeysList' :key='pk.id'>
+            <li>{{ pk }} <button type="button" class="btn" @click="openReplication(pk)">sync</button></li>
+          </ul>
+        </div>
       </template>
       <template v-slot:replicate-library>
-        Replicate library:
-        <input v-model="peerSynckey" placeholder="public key">
-        <button type="button" class="btn" @click="peerSyncLibrary()">Sync Library</button>
+        <div id="replicate-librarydatastore">
+          <header>Network Library</header>
+          Replicate library:
+          <input v-model="peerSynckey" placeholder="public key">
+          <button type="button" class="btn" @click="peerSyncLibrary()">Sync Library</button>
+        </div>
       </template>
     </connect-modal>
   </div>
@@ -193,13 +200,14 @@ export default {
 }
 
 #network-status {
+  display: block;
   font-size: 1.4em;
   border: 0px solid red;
   margin-top: 10px;
 }
 
 .status-info {
-  display: inline-block;
+  display: block;
   margin-left: 30px;
 }
 
@@ -220,16 +228,61 @@ export default {
 }
 
 #external-datastores {
-  margin: 30px;
+  display: block;
+  border-bottom: 1px solid grey;
 }
 
 .external-token-status {
   display: block;
-  margin-top: 30px;
+}
+
+.local-sqlite {
+  display: block;
 }
 
 #peer-social-network {
+  display: block;
+  height: 100%;
+  border-bottom: 1px solid grey;
+  margin-top: 0px;
+}
+
+#peer-social-network header {
+  font-size: 1.4em;
   margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#peers-listkeys {
+  display: block;
+  border-bottom: 1px solid grey;
+}
+
+#peers-listkeys header {
+  font-size: 1.4em;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#ai-peers {
+  border-bottom: 1px solid grey;
+}
+
+#ai-peers header {
+  font-size: 1.4em;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#replicate-librarydatastore {
+  display: block;
+  border-bottom: 1px solid grey;
+}
+
+#replicate-librarydatastore header {
+  font-size: 1.4em;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 ul {
