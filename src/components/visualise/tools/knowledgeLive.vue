@@ -150,8 +150,19 @@ export default {
       let datatypeMatcher = {}
       datatypeMatcher.xaxisSet = []
       datatypeMatcher.xaxisSet.push(visContract.value.info.settings.xaxis)
-      // set timestamp  as default xaxis
-      datatypeMatcher.yaxisSet = dataContract.value.concept.tablestructure
+      // set timestamp  as default yaxis
+      let buildDTlibrary = []
+      for (let dtt of dataContract.value.concept.tablestructure) {
+        let dtLibmatch = {}
+        dtLibmatch.refcontract = dtt.refcontract
+        for (let dtr of this.datatypesLive) {
+          if (dtr.key === dtt.refcontract) {
+            dtLibmatch.column = dtr.value.concept.name
+          }
+        }
+        buildDTlibrary.push(dtLibmatch)
+      }
+      datatypeMatcher.yaxisSet = buildDTlibrary
       // now match datatype references to their contract
       let xDatatypeContracts = []
       // let yDatatypeContracts = []
@@ -188,6 +199,9 @@ export default {
     refContractsComputeLive: function () {
       let computesLive = this.$store.state.liveRefContIndex.compute
       return computesLive
+    },
+    datatypesLive: function () {
+      return this.$store.state.liveRefContIndex.datatype
     },
     category: function () {
       let catDisplay = []
@@ -294,13 +308,23 @@ export default {
       this.deviceSettings.xaxis = xdefault
     },
     setYaxisOptions (startYdts) {
-      this.deviceSettings.yaxis = startYdts
+      let buildDTlibrary = []
+      for (let dtt of startYdts) {
+        let dtLibmatch = {}
+        dtLibmatch.refcontract = dtt.refcontract
+        for (let dtr of this.datatypesLive) {
+          if (dtr.key === dtt.refcontract) {
+            dtLibmatch.column = dtr.value.concept.name
+          }
+        }
+        buildDTlibrary.push(dtLibmatch)
+      }
+      this.deviceSettings.yaxis = buildDTlibrary
     },
     setDefaultCategory (cat) {
       this.deviceSettings.category = cat
     },
     setDefaultTimeperiod (tperiod) {
-      console.log(tperiod)
       this.deviceSettings.timeperiod = tperiod
     },
     setDefaultResolution (res) {

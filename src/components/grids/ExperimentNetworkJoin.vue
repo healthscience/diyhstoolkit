@@ -1,7 +1,7 @@
 <template>
   <div id="live-network-grid-join">
     <!-- peer network experiment added -->
-    <div id="grid-template-join">-- live --
+    <div id="grid-template-join">
       <table>
         <thead>
           <tr>

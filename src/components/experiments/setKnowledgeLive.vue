@@ -176,7 +176,18 @@ export default {
         }
       } else {
         // observation use source datatypes
-        newDatatypes = setupDataPackage.value.concept.tablestructure
+        let buildDTlibrary = []
+        for (let dtt of setupDataPackage.value.concept.tablestructure) {
+          let dtLibmatch = {}
+          dtLibmatch.refcontract = dtt.refcontract
+          for (let dtr of this.datatypesLive) {
+            if (dtr.key === dtt.refcontract) {
+              dtLibmatch.column = dtr.value.concept.name
+            }
+          }
+          buildDTlibrary.push(dtLibmatch)
+        }
+        newDatatypes = buildDTlibrary
       }
       datatypeMatcher.yaxisSet = newDatatypes
       let datatypeHolder = {}

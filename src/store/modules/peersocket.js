@@ -314,9 +314,6 @@ export default {
             let matchVisModuleType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
             // need to add data to vis module placer
             let displayDataUpdate = VisualUtility.addVisData(matchVisModuleType, this.state.moduleGrid[backJSON.context.moduleorder.visualise.key], this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], backJSON)
-            console.log('set NXP expere data')
-            console.log(backJSON.context.moduleorder.visualise.key)
-            console.log(this.state.NXPexperimentData[backJSON.context.input.key])
             // update setting grid
             if (displayDataUpdate.update.grid.length > 0) {
               for (let modG of displayDataUpdate.update.grid) {
@@ -368,7 +365,7 @@ export default {
               console.log(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device])
               let lastTime = 0
               if (Object.keys(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device]).length !== 0) {
-                lastTime =  this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device].context.triplet
+                lastTime = this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device].context.triplet
               }
               if (backJSON.data.context.triplet.timeout !== lastTime) {
                 // set data for experiment module

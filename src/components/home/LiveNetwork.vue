@@ -29,19 +29,17 @@
       </ul>
     </div>
     <div class="nxp-experimentslist">
-      PEER EXPERIMENTS
+      <a class="nxplist-space" v-bind:class="{ active: nxpState === 'private' }" href="" @click.prevent="statusNXP('private')" >Private EXPERIMENTS</a>
+      <a class="nxplist-space" v-bind:class="{ active: nxpState === 'public' }" href="" @click.prevent="statusNXP('public')" >Public Experiments</a>
     </div>
-    <experiment-network v-if="peerExperimentListlive.data"
+    <experiment-network v-if="nxpState === 'private' && peerExperimentListlive.data"
       class="experiment-info"
       :experiments="peerExperimentListlive.data"
       :columns="peerExperimentListlive.columns"
       :filter-key="searchQuery">
     </experiment-network>
-    <div class="nxp-experimentslist">
-      AVAILABLE ON NETWORK
-    </div>
     <experimentnetwork-join
-      class="experiment-info" v-if="networkNXPListlive.data"
+      class="experiment-info" v-if="nxpState === 'public' && networkNXPListlive.data"
       :experiments="networkNXPListlive.data"
       :columns="networkNXPListlive.columns"
       :filter-key="searchQuery">
@@ -73,11 +71,15 @@ export default {
   },
   data () {
     return {
+      nxpState: 'private',
       searchQuery: '',
       isModalNewNetworkExperiment: false
     }
   },
   methods: {
+    statusNXP (type) {
+      this.nxpState = type
+    },
     newExperiment () {
       this.isModalNewNetworkExperiment = true
       // create a set of modules and save if contributed
@@ -88,6 +90,7 @@ export default {
     },
     contributeNXP () {
       console.log('contribute NXP to world')
+      this.nxpState = 'public'
       // start building NXP refcontract
       this.$store.dispatch('actionNewNXPrefcontract')
       this.closeModalNewN1()
@@ -101,6 +104,17 @@ export default {
 #live-network-experiment {
   width: inherit;
   border: 0px solid red;
+}
+
+.nxplist-space.active {
+  font-size: 1.2em;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  margin-right: 2em;
+  margin-left: 2em;
+  text-align: center;
 }
 
 .nxp-experimentslist {

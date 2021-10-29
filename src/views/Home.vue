@@ -2,7 +2,7 @@
   <div class="home">
     <div class="diy-settings">
       <div v-if="peerauth === false" id="diy-summary">
-        <header>BentoBox - Decentralised Data Science</header>
+        <header>BentoBox - DaiaR</header>
         <ul>
           <li>1. Interacive visualisations</li>
           <li>2. Join network experiments</li>
@@ -34,6 +34,7 @@
         <live-network v-if="viewNXP === true"></live-network>
         <live-timeline v-if="viewTimeline === true"></live-timeline>
       </div>
+      <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png"> health oracle network
     </div>
   </div>
 </template>
@@ -148,6 +149,10 @@ img {
 
 .medium-start {
   width: 360px;
+}
+
+.hop-small {
+  width: 20px;
 }
 
 /* Clear floats after the columns */
