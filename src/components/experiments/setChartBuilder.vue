@@ -1,6 +1,5 @@
 <template>
-  <div id="k-toolkit"> Device: {{ mData }} od {{ openDataLive[mData] }}
-    <!-- <button v-if="visToolbarStatusLive.active === true" type="button" class="btn" @click="visToolbarUpdate">Tools</button> -->
+  <div id="k-toolkit">
     <div id="diy-tools">
       <div id="chart-type">
         <ul>

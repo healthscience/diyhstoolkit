@@ -119,14 +119,12 @@ export default {
       return computeLive
     },
     refContractComputeLive: function () {
-      console.log('refContractComputeLive')
       let liveCompute = []
       if (this.$store.state.refcontractCompute.length !== 0) {
         liveCompute = this.$store.state.refcontractCompute
       } else {
         liveCompute = []
       }
-      console.log(liveCompute)
       return liveCompute
     },
     datatypesLive: function () {

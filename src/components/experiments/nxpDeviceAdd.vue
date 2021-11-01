@@ -6,32 +6,32 @@
         <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
       </li>
       <li>
-        <ul>
+        <ul class="data-refspace">
           <li>
             <ul v-if="refContractPackage.key">
-              <li>
+              <li class="ref-pair">
                 {{ refContractPackage.key }} ---
               </li>
-              <li>
-                {{ refContractPackage.value.concept.name }} ---
+              <li class="ref-pair">
+                {{ refContractPackage.value.concept.name }}
               </li>
-              <li>
-                {{ refContractPackage.value.concept.description}} ---
+              <li class="ref-pair">
+                {{ refContractPackage.value.concept.description}}
               </li>
-              <li>
-                {{ refContractPackage.value.concept.api }} ---
+              <li class="ref-pair">
+                {{ refContractPackage.value.concept.api }}
               </li>
-              <li>
-                {{ refContractPackage.value.concept.apipath}} ---
+              <li class="ref-pair">
+                {{ refContractPackage.value.concept.apipath}}
               </li>
               <li class="ref-pair" v-for="colpair in refContractPackage.value.concept.tablestructure" :key="colpair.refcontract">
-                {{ colpair.refcontract }} --- {{ colpair.column }}
+                {{ colpair.refcontract }} - {{ colpair.column }}
               </li>
               <li class="ref-pair" v-for="cat in refContractPackage.value.concept.category" :key="cat.id">
-                {{ cat.category }} --- {{ cat.column }}
+                {{ cat.category }} - {{ cat.column }}
               </li>
               <li class="ref-pair" v-for="tidy in refContractPackage.value.concept.tidy" :key="tidy.id">
-                {{ tidy.tidy }} --- {{ tidy.tidydatatype }} --- {{ tidy.tidycode }}
+                {{ tidy.tidy }} - {{ tidy.tidydatatype }} - {{ tidy.tidycode }}
               </li>
             </ul>
           </li>
@@ -83,4 +83,14 @@ export default {
 </script>
 
 <style>
+
+.data-refspace {
+  background-color: white;
+  padding: 10px;
+}
+
+.ref-pair {
+  font-size: 1.2em;
+  padding: 4px;
+}
 </style>

@@ -9,18 +9,18 @@
             <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
           </li>
           <li v-for="cs of computesource" :key="cs.id">
-            <ul v-if="refContractCompute[cs]">
-              <li>
-                {{ refContractCompute[cs].option.key }} ---
+            <ul class="compute-refspace" v-if="refContractCompute[cs]">
+              <li class="compute-refcontract">
+                {{ refContractCompute[cs].option.key }} -
               </li>
-              <li>
-                {{ refContractCompute[cs].option.value.computational.name }} ---
+              <li class="compute-refcontract">
+                {{ refContractCompute[cs].option.value.computational.name }} -
               </li>
-              <li>
-                {{ refContractCompute[cs].option.value.computational.description}} ---
+              <li class="compute-refcontract">
+                {{ refContractCompute[cs].option.value.computational.description}} -
               </li>
-              <li>
-                {{ refContractCompute[cs].option.value.computational.code }} ---
+              <li class="compute-refcontract">
+                {{ refContractCompute[cs].option.value.computational.code }} -
               </li>
             </ul>
           </li>
@@ -106,5 +106,14 @@ export default {
 .compute-summary {
   display: block;
   margin: 2em;
+}
+
+.compute-refspace {
+  background-color: white;
+  padding: 10px;
+}
+.compute-refcontract {
+  font-size: 1.2em;
+  padding: 10px;
 }
 </style>

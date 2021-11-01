@@ -86,6 +86,8 @@ export default {
       this.$store.dispatch('actionMakeModuleRefContract')
     },
     closeModalNewN1 () {
+      // clear the form
+      this.$store.dispatch('actionClearContributeNXP')
       this.isModalNewNetworkExperiment = false
     },
     contributeNXP () {

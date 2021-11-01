@@ -115,7 +115,13 @@ const store = new Vuex.Store({
     moduleJoinedListEnd: false,
     networkExpModules: [],
     networkPeerExpModules: [],
-    refcontractQuestion: {},
+    refcontractQuestion:
+    {
+      question: {
+        text: '',
+        forum: ''
+      }
+    },
     refcontractPackaging: [],
     refcontractCompute: [],
     refcontractVisualise: [],

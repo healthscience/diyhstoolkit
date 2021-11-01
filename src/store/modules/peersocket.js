@@ -485,11 +485,22 @@ export default {
         }
       }
     },
+    CLEAR_CONTRIB_REFCONTRACTS (state, inVerified) {
+      // reset the contract holders
+      console.log('clear conbirute')
+      this.state.nxpMakeList = []
+      this.state.moduleHolder = []
+      let qOptions = {}
+      qOptions.text = ''
+      qOptions.forum = ''
+      this.state.refcontractQuestion.question = qOptions
+      this.state.refcontractCompute = []
+    },
     SET_QUESTION_REFCONTRACT (state, inVerified) {
       // build Question module data structure
       let questionStrucure = {}
       questionStrucure.moduleinfo = inVerified.module
-      questionStrucure.question = inVerified.question
+      questionStrucure.question = this.state.refcontractQuestion.question
       this.state.refcontractQuestion = questionStrucure
     },
     SET_PACKAGING_REFCONTRACT (state, inVerified) {
@@ -854,6 +865,9 @@ export default {
       const newTempModules = JSON.stringify(tempModules)
       Vue.prototype.$socket.send(newTempModules)
     },
+    actionClearContributeNXP (context, update) {
+      context.commit('CLEAR_CONTRIB_REFCONTRACTS', update)
+    },
     actionSetQuestionRefContract (context, update) {
       context.commit('SET_QUESTION_REFCONTRACT', update)
     },
@@ -980,6 +994,8 @@ export default {
       Vue.prototype.$socket.send(genesisNXPjson)
       // clear the new NXP forms
       this.state.moduleHolder = []
+      this.state.refcontractQuestion = {}
+      this.state.refcontractCompute = []
     },
     actionJoinExperiment (context, update) {
       // map experiment refcont to genesis contract

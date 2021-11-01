@@ -5,8 +5,12 @@
       <form id="question_form" name="question_form" method="post" action="#">
         <ul>
           <li class="question-item">
-            Prime question:
-            <textarea @paste="questionSave" @keyup="questionSave" required="" v-model="question.text" placeholder="prime"></textarea>
+            Ask question:
+            <textarea @paste="questionSave" @keyup="questionSave" required="" v-model="questionLive.question.text" placeholder="prime"></textarea>
+          </li>
+          <li class="question-live" v-if="questionLive.question !== undefined">
+            Question:
+            {{ questionLive.question.text }}
           </li>
           <!--<li class="question-item">
             Forum discussion:<input v-model="question.forum" placeholder="forum link">
@@ -28,26 +32,22 @@ export default {
     }
   },
   data: () => ({
-    question:
-    {
-      text: '',
-      forum: ''
-    }
   }),
   created () {
   },
   mounted () {
   },
   computed: {
+    questionLive: function () {
+      return this.$store.state.refcontractQuestion
+    }
   },
   methods: {
     questionSave () {
       let questionMod = {}
       questionMod.module = this.modData
-      questionMod.question = this.question
+      // questionMod.question = this.questionLive
       this.$store.dispatch('actionSetQuestionRefContract', questionMod)
-      // this.modData = ''
-      // this.question = ''
     }
   }
 }
@@ -70,5 +70,9 @@ export default {
 .question-item {
   display: block;
   margin: 1em;
+}
+
+.question-live {
+  font-size: 1.2em;
 }
 </style>
