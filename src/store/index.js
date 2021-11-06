@@ -500,6 +500,7 @@ const store = new Vuex.Store({
       message.action = 'auth'
       message.network = null // update.network
       message.settings = null // update.settings
+      message.cloudtoken = update
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },
