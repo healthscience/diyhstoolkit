@@ -30,7 +30,7 @@
           </button>
         </div>
         <div class="toolkit-settings">
-          <input v-model="cloudtoken" placeholder="cloudtoken">
+          <input type="password" v-model="cloudtoken" placeholder="cloudtoken">
           <button type="button" v-bind:class="{ networklive: connectBut.active === true && authConnectStatus === true}" class="connect-network" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
         </div>
       </div>
@@ -188,11 +188,9 @@ export default {
     },
     connectNetwork (typeConnect) {
       // remove the welcome message
-      console.log('connect butoton')
-      console.log(typeConnect)
-      console.log(this.cloudtoken)
       this.$store.dispatch('actionLiveConnect')
       this.$store.dispatch('startconnectNSnetwork', this.cloudtoken)
+      this.cloudtoken = ''
       // set flowviews active
       this.$store.dispatch('actionFlowviews')
       if (typeConnect === 'connect') {

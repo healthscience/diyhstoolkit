@@ -160,6 +160,7 @@ const store = new Vuex.Store({
       console.log(state.networkConnection)
       if (state.networkConnection === undefined) {
         console.log('no peerlink')
+        state.networkConnetion.active = true
       } else {
         console.log('live peerlnk')
         state.networkConnetion.active = true
@@ -177,6 +178,7 @@ const store = new Vuex.Store({
       // clear peer data
       this.state.joinedNXPlist = []
       // close modal
+      state.peerauthStatus = false
       state.networkConnetion.active = !state.networkConnetion.active
       state.connectStatus = !state.connectStatus
       state.networkConnetion.active = false
@@ -494,15 +496,20 @@ const store = new Vuex.Store({
       // send a auth requrst to peerlink
       console.log('secure socket active?')
       console.log(this.state.peerauthStatus)
-      let message = {}
-      message.type = 'safeflow'
-      message.reftype = 'ignore'
-      message.action = 'auth'
-      message.network = null // update.network
-      message.settings = null // update.settings
-      message.cloudtoken = update
-      const safeFlowMessage = JSON.stringify(message)
-      Vue.prototype.$socket.send(safeFlowMessage)
+      if (this.state.peerauthStatus === true) {
+        console.log('connect still live')
+        console.log(update)
+      } else {
+        let message = {}
+        message.type = 'safeflow'
+        message.reftype = 'ignore'
+        message.action = 'auth'
+        message.network = null // update.network
+        message.settings = null // update.settings
+        message.cloudtoken = update
+        const safeFlowMessage = JSON.stringify(message)
+        Vue.prototype.$socket.send(safeFlowMessage)
+      }
     },
     async authDatastore (context, update) {
       // send a auth requrst to peerlink

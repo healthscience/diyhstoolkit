@@ -11,7 +11,7 @@ Vue.use(NonReactive)
 Vue.use(VueDragscroll)
 
 Vue.config.productionTip = false
-// 165.227.244.213:9888
+// 165.227.244.213127.0.0.1:9888
 Vue.use(VueNativeSock, 'wss://127.0.0.1:9888', {
   store: store,
   // format: 'json',

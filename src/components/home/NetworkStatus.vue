@@ -11,7 +11,7 @@
       <template v-slot:connect-network>
         <div id="network-status">
           <div class="status-info">
-            Status: <div class="hon-square-status" v-bind:class="{ active: connectBut.active === true }"></div>
+            Status: <div class="hon-square-status" v-bind:class="{ active: connectBut.active === true && socketAuth === true }"></div>
           </div>
           <div class="status-info">
             Warm peers connected: {{ warmPeers.length }}
@@ -110,6 +110,9 @@ export default {
     connectContext: function () {
       return this.$store.state.connectContext
     },
+    socketAuth: function () {
+      return this.$store.state.peerauthStatus
+    },
     authState: function () {
       return this.$store.state.authorised
     },
@@ -155,7 +158,7 @@ export default {
       // close peerLINK
       this.$store.dispatch('actionDisconnect')
       // close electron / webapp
-      this.w.close()
+      // this.w.close()
     },
     addWarmpeer () {
       this.addWarm = !this.addWarm

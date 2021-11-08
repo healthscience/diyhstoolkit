@@ -32,7 +32,8 @@ export default {
     },
     SOCKET_ONERROR (state, event) {
       console.error(state, event)
-      state.peerauthStatus = false
+      this.state.peerauthStatus = false
+      this.state.networkConnetion.active = false
       // remote.getCurrentWindow().close()
       // inform Peer connection to network lost
     },
@@ -41,13 +42,13 @@ export default {
       // console.info(state, count)
     },
     SOCKET_RECONNECT_ERROR (state) {
-      state.socket.reconnectError = true
-      state.peerauthStatus = false
+      this.state.socket.reconnectError = true
+      this.state.peerauthStatus = false
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
-      // console.log('message')
-      // console.log(message)
+      console.log('message')
+      console.log(message)
       let backJSON = {}
       backJSON = JSON.parse(message.data)
       if (backJSON.stored === true) {
@@ -121,6 +122,14 @@ export default {
             // need to set toolbar settings TODO
           }
         }
+      } else if (backJSON.type === 'cloudtoken') {
+        if (backJSON.data === false) {
+          this.state.peerauthStatus = false
+        } else {
+          console.log('good token')
+        }
+      } else if (backJSON.type = 'authconfirm') {
+        this.state.peerauthStatus = true
       } else if (backJSON.type === 'publickey') {
         this.state.publickeys.push(backJSON.pubkey)
       } else if (backJSON.type === 'open-library') {
