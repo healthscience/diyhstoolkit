@@ -47,8 +47,8 @@ export default {
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
-      console.log('message')
-      console.log(message)
+      console.log('message-IN-----')
+      // console.log(message)
       let backJSON = {}
       backJSON = JSON.parse(message.data)
       if (backJSON.stored === true) {
@@ -80,8 +80,6 @@ export default {
           if (backJSON.contract.concept.state === 'joined') {
             // set the state of the experiment for the dashboard
             // set the exeriment status object i.e. add to list
-            // context.commit('SET_EXP_JOINLIST', joinNXP)
-            // SET_EXP_JOINLIST (state, inVerified) {
             // set state for experiment just joined
             let experBundle = {}
             experBundle.cnrl = backJSON.key
@@ -91,7 +89,6 @@ export default {
             experBundle.modules = backJSON.expanded
             let objectPropC = backJSON.key
             Vue.set(this.state.experimentStatus, objectPropC, experBundle)
-            // }
             // set local state exp expaneded
             let newFormed = {}
             newFormed.key = backJSON.key
@@ -122,21 +119,23 @@ export default {
             // need to set toolbar settings TODO
           }
         }
-      } else if (backJSON.type === 'cloudtoken') {
+      /* } else if (backJSON.type === 'cloudtoken') {
         if (backJSON.data === false) {
           this.state.peerauthStatus = false
         } else {
           console.log('good token')
-        }
-      } else if (backJSON.type = 'authconfirm') {
+        } */
+      } else if (backJSON.type === 'authconfirm') {
         this.state.peerauthStatus = true
       } else if (backJSON.type === 'publickey') {
+        console.log('publikey list for storessss')
         this.state.publickeys.push(backJSON.pubkey)
       } else if (backJSON.type === 'open-library') {
         this.state.swarmStatus = true
       } else if (backJSON.type === 'new-peer') {
         this.state.warmNetwork.push(backJSON.data.value)
       } else if (backJSON.type === 'warm-peers') {
+        console.log('prepare warm perers')
         this.state.warmNetwork = []
         for (let wp of backJSON.data) {
           this.state.warmNetwork.push(wp.value)
@@ -158,6 +157,7 @@ export default {
         Vue.set(this.state.joinNXPlive, 'compute', backJSON.compute)
         Vue.set(this.state.joinNXPlive, 'visualise', backJSON.visualise)
       } else if (backJSON.safeflow === true) {
+        console.log('safeflow message backbabkbkkc')
         // safeFLOW inflow
         if (backJSON.type === 'auth') {
           // console.log('saeFLOW auth')
