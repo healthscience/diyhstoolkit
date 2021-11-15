@@ -103,29 +103,25 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: rgba(0, 0, 0, .5);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 94%;
     z-index: 5;
-    overflow: scroll;
+    overflow-y: scroll;
   }
 
   .modal {
     background: #FFFFFF;
     box-shadow: 2px 2px 20px 1px;
-    overflow-x: auto;
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    margin-top: 200px;
+    display: block;
   }
 
   .modal-header,
   .modal-footer {
     padding: 15px;
-    display: flex;
+    display: bloack;
   }
 
   .modal-header {
@@ -179,7 +175,7 @@ export default {
 
 #connect-peerlink {
   display: block;
-  min-height: 200px;
+  min-height: 20px;
 }
 
 #peers-networks {

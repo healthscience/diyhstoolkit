@@ -128,14 +128,12 @@ export default {
       } else if (backJSON.type === 'authconfirm') {
         this.state.peerauthStatus = true
       } else if (backJSON.type === 'publickey') {
-        console.log('publikey list for storessss')
         this.state.publickeys.push(backJSON.pubkey)
       } else if (backJSON.type === 'open-library') {
         this.state.swarmStatus = true
       } else if (backJSON.type === 'new-peer') {
         this.state.warmNetwork.push(backJSON.data.value)
       } else if (backJSON.type === 'warm-peers') {
-        console.log('prepare warm perers')
         this.state.warmNetwork = []
         for (let wp of backJSON.data) {
           this.state.warmNetwork.push(wp.value)
@@ -157,7 +155,6 @@ export default {
         Vue.set(this.state.joinNXPlive, 'compute', backJSON.compute)
         Vue.set(this.state.joinNXPlive, 'visualise', backJSON.visualise)
       } else if (backJSON.safeflow === true) {
-        console.log('safeflow message backbabkbkkc')
         // safeFLOW inflow
         if (backJSON.type === 'auth') {
           // console.log('saeFLOW auth')
@@ -180,7 +177,7 @@ export default {
         }
       } else if (backJSON.type === 'ecssummary') {
         console.log('SUMMAERY==========================')
-        console.log(backJSON)
+        // console.log(backJSON)
         // update the NXP contract list held in toolkit
         let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[this.state.liveNXP], this.state.networkPeerExpModules)
         // this.state.networkPeerExpModules = updateListContracts
@@ -207,10 +204,10 @@ export default {
         }
       } else if (backJSON.type === 'newEntityRange') {
         console.log('SECOND------DATA RETURNED-----')
-        console.log(backJSON)
+        // console.log(backJSON)
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {
-          console.log('NO DATA RETURNED')
+        // console.log('NO DATA RETURNED')
           // switch off progress message and inform toolkit
           let setnxpProgress = { text: 'Experiment in progress', active: false }
           Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -370,8 +367,8 @@ export default {
               setProgress = { text: 'Updating visualisation', active: false }
               Vue.set(this.state.visProgress[backJSON.context.moduleorder.visualise.key], backJSON.data.context.triplet.device, setProgress)
               // check for data update?  are the times the same?
-              console.log('check times ')
-              console.log(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device])
+              // console.log('check times ')
+              // console.log(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device])
               let lastTime = 0
               if (Object.keys(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device]).length !== 0) {
                 lastTime = this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device].context.triplet
@@ -455,7 +452,7 @@ export default {
         backJSON = {}
       } else if (backJSON.type === 'displayEmpty') {
         console.log('no data show empty toolbar')
-        console.log(backJSON)
+        // console.log(backJSON)
         this.state.ecsMessageLive = 'no data available'
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
@@ -572,14 +569,14 @@ export default {
     },
     SET_NEWNXP_VISDEVICES (state, inVerified) {
       console.log('set devices')
-      console.log(inVerified)
-      console.log(this.state.visModuleHolder)
+      // console.log(inVerified)
+      // console.log(this.state.visModuleHolder)
       let deviceHold = {}
       deviceHold = this.state.visModuleHolder[inVerified.device]
       deviceHold.devices = inVerified.setting
       Vue.set(this.state.visModuleHolder, inVerified.device, deviceHold)
       // Vue.set(this.state.visModuleHolder[inVerified.device], 'devices', inVerified.setting)
-      console.log(this.state.visModuleHolder)
+      // console.log(this.state.visModuleHolder)
     },
     SET_NEWNXP_VISCOMPUTE (state, inVerified) {
       Vue.set(this.state.visModuleHolder[inVerified.device], 'compute', inVerified.setting)
@@ -595,18 +592,12 @@ export default {
     },
     SET_NEWNXP_VISYAXIS (state, inVerified) {
       // y axis can hold many datatypes
-      console.log('set Y axis')
-      console.log(inVerified)
       // keep tabs that open data updated
       this.state.opendataUpdate = true
       Vue.set(this.state.visModuleHolder[inVerified.device], 'yaxis', inVerified.setting)
-      console.log(this.state.visModuleHolder)
     },
     SET_NEWNXP_VISCATEGORY (state, inVerified) {
-      console.log('category')
-      console.log(inVerified)
       Vue.set(this.state.visModuleHolder[inVerified.device], 'category', inVerified.setting)
-      console.log(this.state.visModuleHolder)
     },
     SET_NEWNXP_VISTIME (state, inVerified) {
       Vue.set(this.state.visModuleHolder[inVerified.device], 'timeperiod', inVerified.setting)
@@ -681,14 +672,10 @@ export default {
       Vue.set(this.state.feedbackMessage, inVerified.device, inVerified.message)
     },
     SET_COMBINE_CONTEXT (state, inVerified) {
-      console.log('list of COMBINE')
       this.state.combineSpaceList.push(inVerified)
-      console.log(this.state.combineSpaceList)
     },
     SET_COMBINE_CLEAR (state, inVerified) {
-      console.log('CLEAR COMBINE')
       this.state.combineSpaceList = []
-      console.log(this.state.combineSpaceList)
     }
   },
   actions: {
@@ -997,8 +984,6 @@ export default {
       setNewNXPplusModules.reftype = 'newexperimentmodule'
       setNewNXPplusModules.action = 'newexperimentmodule'
       setNewNXPplusModules.data = this.state.moduleHolder
-      console.log('new NXP contributed, save and make available to network')
-      console.log(setNewNXPplusModules)
       const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
       Vue.prototype.$socket.send(genesisNXPjson)
       // clear the new NXP forms
@@ -1032,8 +1017,8 @@ export default {
         newJoinExperiment.reftype = 'joinexperiment'
         newJoinExperiment.action = 'joinexperiment'
         newJoinExperiment.data = dataChoices
-        console.log('newly joined nxp')
-        console.log(newJoinExperiment)
+        // console.log('newly joined nxp')
+        // console.log(newJoinExperiment)
         let ExpmoduleRefContract = JSON.stringify(newJoinExperiment)
         Vue.prototype.$socket.send(ExpmoduleRefContract)
       } else {

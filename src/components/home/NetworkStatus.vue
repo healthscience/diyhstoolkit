@@ -3,7 +3,11 @@
     <connect-modal v-show="connectToolstatus" @close="closeModal">
       <template v-slot:header>
         <!-- The code below goes into the header slot -->
-        CONNECT <a href="#" id="disconnect-network" @click="disconnectNetwork">Disconnect</a>
+        <header>CONNECT</header>
+        <div class="disconnect-button">
+          <a href="#" id="disconnect-network" @click="disconnectNetwork">Disconnect</a>
+        </div>
+        <div class="reset"></div>
       </template>
       <template v-slot:title-form>
         <header class="connect-info">Health Oracle Network</header>
@@ -209,6 +213,15 @@ export default {
   margin-top: 10px;
 }
 
+.disconnect-button {
+  float: right;
+  display: inline-block;
+}
+
+#disconnect-network {
+  color: red;
+}
+
 .status-info {
   display: block;
   margin-left: 30px;
@@ -310,10 +323,6 @@ a {
 
 .btn {
   font-size: 1.2em;
-}
-
-#disconnect-network {
-  color: red;
 }
 
 .reset {

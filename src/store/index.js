@@ -23,6 +23,7 @@ const store = new Vuex.Store({
       type: 'self-verify',
       text: 'Connect'
     },
+    token: {},
     helpModal:
     {
       type: 'help',
@@ -169,6 +170,10 @@ const store = new Vuex.Store({
       }
     },
     SET_DISCONNECT_NETWORK (state, inVerified) {
+      // for cloud setup  clear local component data
+      state.warmNetwork = []
+      state.publickeys = []
+      state.token = {}
       let safeFlowMessage = {}
       let message = {}
       message.type = 'safeflow'
@@ -513,6 +518,7 @@ const store = new Vuex.Store({
     },
     async authDatastore (context, update) {
       // send a auth requrst to peerlink
+      this.state.token = update.settings
       let message = {}
       message.type = 'safeflow'
       message.reftype = 'ignore'

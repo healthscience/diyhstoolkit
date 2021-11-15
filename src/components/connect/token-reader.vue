@@ -12,8 +12,14 @@
     <div v-if="viewPkeybuttons" id="publickey-view">
       <button @click.prevent="viewPublickey" class="button is-primary">View publickey address</button>
       <button @click.prevent="viewtToken" class="button is-primary">View Token</button>
-      {{ pubkeyView }}
-      {{ tokenTView }}
+      <div id="view-exttokens" v-if="socketAuth === true">
+        <div id="tok-pub" v-if="viewDSPubkey === true">
+          {{ token.publickey}}
+        </div>- --
+        <div id="tok-dstok" v-if="viewDStoken === true">
+          {{ token.token }}
+        </div>
+      </div>
     </div>
     <div id="pwinput-prompt" v-if="pwinputSeen">
       Please enter password
@@ -31,6 +37,14 @@ export default {
   components: {
     Passwordk
   },
+  computed: {
+    token: function () {
+      return this.$store.state.token
+    },
+    socketAuth: function () {
+      return this.$store.state.peerauthStatus
+    }
+  },
   props: {
     viewPkey: {
       type: Boolean,
@@ -41,23 +55,18 @@ export default {
   },
   mounted () {
   },
-  computed: {
-  },
   data: () => ({
     keyObject: {},
     verifyfeedbackM: '',
     viewPkeybuttons: false,
-    token: {},
+    // token: {},
     fileinputSeen: true,
     pwinputSeen: false,
-    pubkeyView: '',
-    tokenTView: '',
     passwordk: null,
-    text: '',
     keybuttonseen: false,
     feedbackM: '',
-    warningM: '',
-    devices: []
+    viewDSPubkey: false,
+    viewDStoken: false
   }),
   methods: {
     loadTextFromFile (ev) {
@@ -69,15 +78,14 @@ export default {
         const tJSONstring = reader.result
         const tokenJSON = JSON.parse(tJSONstring)
         // now use getter to store state
-        localthis.token = tokenJSON
-        localthis.$store.commit('setBoth', tokenJSON)
+        // localthis.token = tokenJSON
+        // localthis.$store.commit('setBoth', tokenJSON)
         localthis.verifyfeedbackM = 'Data token live'
         localthis.viewPkeybuttons = true
         let authBundle = {}
         authBundle.network = 'cloud'
         authBundle.settings = tokenJSON
-        // data store authorisation
-        // localthis.$store.dispatch('startconnectNSnetwork', authBundle)
+        // external data store authorisation
         localthis.$store.dispatch('authDatastore', authBundle)
         localthis.$emit('closeTreader')
       }
@@ -89,10 +97,10 @@ export default {
       // verify token is of right structure TODO
     },
     viewPublickey () {
-      this.pubkeyView = 'Publickey = ' + this.token.publickey
+      this.viewDSPubkey = !this.viewDSPubkey
     },
     viewtToken () {
-      this.tokenTView = 'TestToken = ' + this.token.token
+      this.viewDStoken = !this.viewDStoken
     }
   }
 }
