@@ -56,8 +56,10 @@
             </ul>
             <button type="button" class="btn" @click="addWarmNetwork()">save</button>
           </div>
-          <ul v-for='peer in warmPeers' :key='peer.id'>
-            <li>Peer {{ peer }} <button type="button" class="btn" @click="peerSyncLibrary(peer.publickey)">Replicate</button></li>
+          <ul class="peer-list-set" v-for='peer in warmPeers' :key='peer.id'>
+            <li>Peer {{ peer.datastore }} --- {{ peer.name }} --- {{ peer.publickey }}
+              <!-- <button type="button" class="btn" @click="peerSyncLibrary(peer.publickey)">Replicate</button> -->
+            </li>
           </ul>
         </div>
       </template>
@@ -72,8 +74,10 @@
         <div id="peers-listkeys">
           <header>Peer Datastores Key Management</header>
           <div v-if="swarmState === true" id="open-connect">Public Library OPEN for replication</div>
-          <ul v-for='pk in publicKeysList' :key='pk.id'>
-            <li>{{ pk }} <button type="button" class="btn" @click="openReplication(pk)">sync</button></li>
+          <ul class="peer-ledgers" v-for='pk in publicKeysList' :key='pk.id'>
+            <li>{{ pk.keyname }} pubkey- {{ pk.pubkey }}
+            <!-- <button type="button" class="btn" @click="openReplication(pk)">sync</button> -->
+            </li>
           </ul>
         </div>
       </template>
@@ -114,7 +118,15 @@ export default {
       return this.$store.state.authorised
     },
     publicKeysList: function () {
-      return this.$store.state.publickeys
+      let displayKeys = []
+      for (let keyi of this.$store.state.publickeys) {
+        let keyInfo = {}
+        let keyName = Object.keys(keyi)
+        keyInfo.keyname = keyName[0]
+        keyInfo.pubkey = keyi[keyInfo.keyname]
+        displayKeys.push(keyInfo)
+      }
+      return displayKeys
     },
     publicKeysIndex: function () {
       return this.$store.state.publickeysIndex
@@ -303,6 +315,14 @@ a {
 
 .network-state {
   display: inline-block;
+}
+
+.peer-list-set {
+  font-size: 1.4em;
+}
+
+.peer-ledgers {
+  font-size: 1.4em;
 }
 
 .btn {
