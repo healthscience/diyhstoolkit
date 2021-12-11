@@ -22,9 +22,45 @@
         <div id="peer-views" v-if="flowviews === true">
           <ul>
             <li>
-              <button class="peer-medium" id="lifestyleworld" @click.prevent="setView($event)">Lifeboards</button>
-              <button class="peer-medium" id="nxp-view" @click.prevent="setView($event)">Network experiments</button>
-              <button class="peer-medium" id="timeline" @click.prevent="setView($event)">Timeline</button>
+              <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'lifestyleflow' }" id="lifestyleflow" @click.prevent="setView($event)">
+                Lifeboards
+              </button>
+              <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'nxp-view' }" id="nxp-view" @click.prevent="setView($event)">
+                Network experiments
+              </button>
+              <button class="peer-medium" id="timeline" v-bind:class="{ active: viewFlowtype === 'timeline' }"  @click.prevent="setView($event)">
+                Timeline
+              </button>
+            </li>
+            <li>
+              <div class="live-network-header">
+                <ul>
+                  <li class="network-toolbar">
+                    <form id="search">
+                      Search <input name="query" @keyup="textQuery" v-model="searchText">
+                    </form>
+                  </li>
+                  <li class="network-toolbar">
+                    <button type="button" class="btn" @click="newExperiment()">new</button>
+                    <new-networkexperiment v-show="isModalNewNetworkExperiment" @close="closeModalNewN1">
+                      <template v-slot:header>
+                      <!-- The code below goes into the header slot -->
+                        NEW N=1 Network Experiment
+                      </template>
+                      <template v-slot:body>
+                      <!-- The code below goes into the header slot -->
+                        <header>Build Network Experiment</header>
+                      </template>
+                      <template v-slot:dashboard>
+                        <module-builder></module-builder>
+                      </template>
+                      <template v-slot:submit-join>
+                        <button @click="contributeNXP" >Contribute experiment to network</button>
+                      </template>
+                    </new-networkexperiment>
+                  </li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>
@@ -34,6 +70,7 @@
         <live-network v-if="viewNXP === true"></live-network>
         <live-timeline v-if="viewTimeline === true"></live-timeline>
       </div>
+      <experiment-network></experiment-network>
       <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png"> health oracle network
     </div>
   </div>
@@ -41,16 +78,22 @@
 
 <script>
 // @ is an alias to /src
+import LiveLifestyle from '@/components/home/LiveLifestyle.vue'
 import LiveNetwork from '@/components/home/LiveNetwork.vue'
 import LiveTimeline from '@/components/home/LiveTimeline.vue'
-import LiveLifestyle from '@/components/home/LiveLifestyle.vue'
+import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
+import ModuleBuilder from '@/components/grids/moduleBuilder.vue'
+import ExperimentNetwork from '@/components/grids/ExperimentNetwork.vue'
 
 export default {
   name: 'home',
   components: {
     LiveNetwork,
     LiveTimeline,
-    LiveLifestyle
+    LiveLifestyle,
+    NewNetworkexperiment,
+    ModuleBuilder,
+    ExperimentNetwork
   },
   computed: {
     connected: function () {
@@ -65,14 +108,18 @@ export default {
   },
   data () {
     return {
+      viewFlowtype: 'nxp-view',
       viewNXP: true,
       viewTimeline: false,
-      viewLifestyleworld: false
+      viewLifestyleworld: false,
+      isModalNewNetworkExperiment: false,
+      searchText: ''
     }
   },
   methods: {
     setView (e) {
       let viewLive = e.target.id
+      this.viewFlowtype = e.target.id
       if (viewLive === 'nxp-view') {
         this.viewNXP = !this.viewNXP
         this.viewTimeline = false
@@ -86,6 +133,26 @@ export default {
         this.viewNXP = false
         this.viewTimeline = false
       }
+    },
+    textQuery () {
+      this.$store.dispatch('actionTextquery', this.searchText)
+    },
+    newExperiment () {
+      this.isModalNewNetworkExperiment = true
+      // create a set of modules and save if contributed
+      this.$store.dispatch('actionMakeModuleRefContract')
+    },
+    closeModalNewN1 () {
+      // clear the form
+      this.$store.dispatch('actionClearContributeNXP')
+      this.isModalNewNetworkExperiment = false
+    },
+    contributeNXP () {
+      console.log('contribute NXP to world')
+      this.nxpState = 'public'
+      // start building NXP refcontract
+      this.$store.dispatch('actionNewNXPrefcontract')
+      this.closeModalNewN1()
     }
   }
 }
@@ -165,5 +232,16 @@ img {
 .peer-medium {
   font-size: 1.2em;
   margin-right: 1em
+}
+
+.peer-medium.active {
+  font-size: 1.2em;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  margin-right: 2em;
+  margin-left: 2em;
+  text-align: center;
 }
 </style>

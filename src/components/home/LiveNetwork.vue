@@ -1,43 +1,15 @@
 <template>
   <div id="live-network-experiment">
-    <div class="live-network-header">
-      <ul>
-        <li class="network-toolbar">
-          <form id="search">
-            Search <input name="query" v-model="searchQuery">
-          </form>
-        </li>
-        <li class="network-toolbar">
-          <button type="button" class="btn" @click="newExperiment()">new</button>
-          <new-networkexperiment v-show="isModalNewNetworkExperiment" @close="closeModalNewN1">
-            <template v-slot:header>
-            <!-- The code below goes into the header slot -->
-              NEW N=1 Network Experiment
-            </template>
-            <template v-slot:body>
-            <!-- The code below goes into the header slot -->
-              <header>Build Network Experiment</header>
-            </template>
-            <template v-slot:dashboard>
-              <module-builder></module-builder>
-            </template>
-            <template v-slot:submit-join>
-              <button @click="contributeNXP" >Contribute experiment to network</button>
-            </template>
-          </new-networkexperiment>
-        </li>
-      </ul>
-    </div>
     <div class="nxp-experimentslist">
       <a class="nxplist-space" v-bind:class="{ active: nxpState === 'private' }" href="" @click.prevent="statusNXP('private')" >Private EXPERIMENTS</a>
       <a class="nxplist-space" v-bind:class="{ active: nxpState === 'public' }" href="" @click.prevent="statusNXP('public')" >Public Experiments</a>
     </div>
-    <experiment-network v-if="nxpState === 'private' && peerExperimentListlive.data"
+    <list-contracts v-if="nxpState === 'private' && peerExperimentListlive.data"
       class="experiment-info"
       :experiments="peerExperimentListlive.data"
       :columns="peerExperimentListlive.columns"
       :filter-key="searchQuery">
-    </experiment-network>
+    </list-contracts>
     <experimentnetwork-join
       class="experiment-info" v-if="nxpState === 'public' && networkNXPListlive.data"
       :experiments="networkNXPListlive.data"
@@ -48,18 +20,14 @@
 </template>
 
 <script>
-import ExperimentNetwork from '@/components/grids/ExperimentNetwork.vue'
+import ListContracts from '@/components/lists/ListContracts.vue'
 import ExperimentnetworkJoin from '@/components/grids/ExperimentNetworkJoin.vue'
-import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
-import ModuleBuilder from '@/components/grids/moduleBuilder.vue'
 
 export default {
   name: 'LiveNetwork',
   components: {
-    ExperimentNetwork,
-    ExperimentnetworkJoin,
-    NewNetworkexperiment,
-    ModuleBuilder
+    ListContracts,
+    ExperimentnetworkJoin
   },
   computed: {
     peerExperimentListlive: function () {
@@ -67,35 +35,21 @@ export default {
     },
     networkNXPListlive: function () {
       return this.$store.state.NXPexperimentList
+    },
+    searchQuery: function () {
+      console.log(this.$store.state.searchQuery)
+      return this.$store.state.searchQuery
     }
   },
   data () {
     return {
       nxpState: 'private',
-      searchQuery: '',
       isModalNewNetworkExperiment: false
     }
   },
   methods: {
     statusNXP (type) {
       this.nxpState = type
-    },
-    newExperiment () {
-      this.isModalNewNetworkExperiment = true
-      // create a set of modules and save if contributed
-      this.$store.dispatch('actionMakeModuleRefContract')
-    },
-    closeModalNewN1 () {
-      // clear the form
-      this.$store.dispatch('actionClearContributeNXP')
-      this.isModalNewNetworkExperiment = false
-    },
-    contributeNXP () {
-      console.log('contribute NXP to world')
-      this.nxpState = 'public'
-      // start building NXP refcontract
-      this.$store.dispatch('actionNewNXPrefcontract')
-      this.closeModalNewN1()
     }
   }
 }

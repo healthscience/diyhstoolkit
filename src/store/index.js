@@ -30,6 +30,7 @@ const store = new Vuex.Store({
       feedback: '',
       refcontract: ''
     },
+    searchQuery: '',
     feedbackMessage: {},
     publickeys: [],
     warmNetwork: [],
@@ -38,6 +39,7 @@ const store = new Vuex.Store({
     devices: [],
     liveRefContIndex: {},
     livePeerRefContIndex: {},
+    activeXNPFilterlist: [],
     liveNXP: '',
     nxpModulelist: {},
     liveNXPcontract: {},
@@ -234,6 +236,14 @@ const store = new Vuex.Store({
       let activeHelp = !state.helpModal.active
       // Vue.set(state.helpModal, 'type', inVerified)
       Vue.set(state.helpModal, 'active', activeHelp)
+    },
+    SET_QUERY_TEXT: (state, inVerified) => {
+      console.log(inVerified)
+      state.searchQuery = inVerified
+    },
+    SET_NXP_LIVELIST: (state, inVerified) => {
+      console.log(inVerified)
+      state.activeXNPFilterlist = inVerified
     },
     setOutflowWatch: (state, inVerified) => {
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
@@ -534,6 +544,12 @@ const store = new Vuex.Store({
     },
     singleDateUpdate (context, update) {
       context.commit('SET_LIVE_DATE', update)
+    },
+    actionTextquery (context, update) {
+      context.commit('SET_QUERY_TEXT', update)
+    },
+    actionLiveNXPlist (context, update) {
+      context.commit('SET_NXP_LIVELIST', update)
     },
     actionJOINViewexperiment (context, update) {
       context.commit('SET_RESET_MODULEHOLDER', null)

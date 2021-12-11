@@ -1,108 +1,70 @@
 <template>
   <div id="live-network-grid">
-    <!-- peer network experiment added -->
-    <div id="grid-template">
-      <table>
-        <thead>
-          <tr>
-            <th v-for="key in columns" :key="key.id"
-              @click="sortBy(key)"
-              :class="{ active: sortKey == key }">
-              {{ key | capitalize }}
-              <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="alternate-bk" v-for="entry in filteredExperiments" :key="entry.id">
-            <td v-for="key in columns" :key="key.id">
-              <div v-if="key !== 'action'">
-              {{entry[key]}}
+    <grid-toolbar></grid-toolbar>
+    <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + scale + ')' }"> <!-- @wheel.prevent="wheelScale($event)"> , transform: 'scale(' + scale + ')' -->
+      <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: 'auto', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0" drag-handle=".drag-handle">
+        <div id="single-space">
+          <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{ active: activeDrag[dashi].active === true }">
+            --- Activation Bar ---
+          </div>
+          <div class="dashboard-space">
+            <div class="vis-spaceitem">
+              <!-- <div id="test-content">
+                Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
+                X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}
+              </div> -->
+              <div id="spaceitem-controls">
+                <ul>
+                  <li>
+                    Left
+                  </li>
+                  <li>
+                    <header>Dashboard</header>
+                  </li>
+                  <li class="remove-controls">
+                    <div id="dashboard-controls">
+                      <ul>
+                        <li>
+                          <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
+                        <li>
+                        <li>
+                          <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div id="remove-message" v-if="messageRemove === true">
+                      Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Y</a>  N
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <div v-else>
-                <button type="button" class="btn" @click="actionExperiment(entry.id, entry)">{{ entry[key] }}</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div id="scale-tools">
-        <div class="scale-item">
-         <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
-        </div>
-        <div class="scale-item">
-          <label>Scale</label>
-          <input type="range" min="0.1" max="2" step="0.1" v-model.number="scale">
-        </div>
-        <div class="scale-item">
-          {{ (scale * 100) }} %
-        </div>
-      </div>
-      <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + scale + ')' }"> <!-- @wheel.prevent="wheelScale($event)"> , transform: 'scale(' + scale + ')' -->
-        <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: 'auto', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0" drag-handle=".drag-handle">
-          <div id="single-space">
-            <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{ active: activeDrag[dashi].active === true }">
-              --- Activation Bar ---
             </div>
-            <div class="dashboard-space">
-              <div class="vis-spaceitem">
-                <!-- <div id="test-content">
-                  Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
-                  X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}
-                </div> -->
-                <div id="spaceitem-controls">
-                  <ul>
-                    <li>
-                      Left
-                    </li>
-                    <li>
-                      <header>Dashboard</header>
-                    </li>
-                    <li class="remove-controls">
-                      <div id="dashboard-controls">
-                        <ul>
-                          <li>
-                            <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
-                          <li>
-                          <li>
-                            <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
-                          </li>
-                        </ul>
-                      </div>
-                      <div id="remove-message" v-if="messageRemove === true">
-                        Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Y</a>  N
-                      </div>
-                    </li>
+            <div class="vis-spaceitem">
+              feedback:
+              <div v-if="ecsMessage" id="ecs-message">
+                {{ ecsMessage }}
+              </div>
+            </div>
+            <div class="vis-spaceitem">
+              <!-- view the dashboard per network experiment -->
+              <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
+                <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
+                <div id="module-ready" v-if="NXPstatusData[dashi]">
+                  <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
+                    <dash-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></dash-board>
                   </ul>
-                </div>
-              </div>
-              <div class="vis-spaceitem">
-                feedback:
-                <div v-if="ecsMessage" id="ecs-message">
-                  {{ ecsMessage }}
-                </div>
-              </div>
-              <div class="vis-spaceitem">
-                <!-- view the dashboard per network experiment -->
-                <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
-                  <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
-                  <div id="module-ready" v-if="NXPstatusData[dashi]">
-                    <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
-                      <dash-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></dash-board>
-                    </ul>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </vue-draggable-resizable>
-      </div>
+        </div>
+      </vue-draggable-resizable>
     </div>
   </div>
 </template>
 
 <script>
+import GridToolbar from './gridToolbar'
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 import DashBoard from '@/components/experiments/edashBoard.vue'
@@ -111,6 +73,7 @@ import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
 export default {
   name: 'ExperimentNetwork',
   components: {
+    GridToolbar,
     DashBoard,
     ProgressMessage,
     VueDraggableResizable
@@ -123,9 +86,6 @@ export default {
   mounted () {
   },
   props: {
-    experiments: Array,
-    columns: Array,
-    filterKey: String
   },
   computed: {
     visDefaults: function () {
@@ -140,80 +100,31 @@ export default {
     dashLive: function () {
       return this.$store.state.liveDashList
     },
-    NXPJoinModuleData: function () {
-      let modulesLive = []
-      if (this.$store.state.joinNXPlive.data !== undefined) {
-        modulesLive = this.$store.state.joinNXPlive.data
-      } else {
-        modulesLive = []
-      }
-      return modulesLive
-    },
-    NXPJoinModuleCompute: function () {
-      return this.$store.state.joinNXPlive.compute
-    },
-    NXPJoinModuleVisualise: function () {
-      if (this.$store.state.joinNXPlive.visualise === undefined) {
-        return {}
-      } else {
-        return this.$store.state.joinNXPlive.visualise
-      }
-    },
     NXPprogress: function () {
       return this.$store.state.nxpProgress
     },
     ecsMessage: function () {
       return this.$store.state.ecsMessageLive
     },
-    filteredExperiments: function () {
-      var sortKey = this.sortKey
-      var filterKey = this.filterKey && this.filterKey.toLowerCase()
-      var order = this.sortOrders[sortKey] || 1
-      var experiments = this.experiments
-      if (filterKey) {
-        experiments = experiments.filter(function (row) {
-          return Object.keys(row).some(function (key) {
-            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-          })
-        })
-      }
-      if (sortKey) {
-        experiments = experiments.slice().sort(function (a, b) {
-          a = a[sortKey]
-          b = b[sortKey]
-          return (a === b ? 0 : a > b ? 1 : -1) * order
-        })
-      }
-      return experiments
-    },
-    activeNXPUUID: function () {
-      return this.$store.state.liveNXP
+    filteredExperimentsList: function () {
+      return this.$store.state.activeXNPFilterlist
     },
     activeDrag: function () {
+      console.log('drag')
+      console.log(this.filteredExperimentsList)
+      console.log('after drag')
       let activeBarStatus = {}
-      for (let lnxp of this.filteredExperiments) {
+      for (let lnxp of this.filteredExperimentsList) {
         activeBarStatus[lnxp.id] = {}
         activeBarStatus[lnxp.id].active = false
       }
       return activeBarStatus
     }
   },
-  filters: {
-    capitalize: function (str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
-    }
-  },
   data: function () {
-    var sortOrders = {}
-    this.columns.forEach(function (key) {
-      sortOrders[key] = 1
-    })
     return {
       shellContract: '',
-      sortKey: '',
-      sortOrders: sortOrders,
-      isModalDashboardVisible: false,
-      isModalJoinVisible: false,
+      isModalDashboardVisible: true,
       actionKBundle: {},
       previewSeen: false,
       selectJoin:
@@ -313,45 +224,10 @@ export default {
       // set this NXP as live
       this.$store.dispatch('actionActiveNXP', nxpID)
     },
-    sortBy: function (key) {
-      this.sortKey = key
-      this.sortOrders[key] = this.sortOrders[key] * -1
-    },
     refContractLookup () {
       // create new temp shellID
       this.shellID = '7654321'
       this.mData = '8855332211'
-    },
-    actionExperiment (expCNRL, NXPcontract) {
-      this.shellContract = expCNRL
-      this.actionKBundle = NXPcontract
-      if (NXPcontract.action === 'View') {
-        this.$store.dispatch('actionDashboardState', expCNRL)
-        this.isModalDashboardVisible = true
-      } else {
-        // preview network experiment
-        this.$store.dispatch('actionJOINViewexperiment', expCNRL)
-        this.refContractLookup()
-        this.isModalJoinVisible = true
-      }
-    },
-    closeModalJoin () {
-      this.isModalJoinVisible = false
-    },
-    viewDashboard () {
-      this.previewSeen = true
-    },
-    sourceSelect () {
-      this.$store.dispatch('sourceDataExperiment', this.selectJoin.source)
-    },
-    computeSelect () {
-      this.$store.dispatch('sourceComputeExperiment', this.selectJoin.compute)
-    },
-    automationSave () {
-      this.$store.dispatch('buildRefComputeAutomation', this.newCompute.automation)
-    },
-    controlsSave () {
-      this.$store.dispatch('buildRefComputeControls', this.newCompute.controls)
     },
     datastartLookup () {
       this.newCompute.startperiod = 12345123451

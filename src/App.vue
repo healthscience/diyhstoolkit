@@ -233,6 +233,10 @@ export default {
 }
 
 #peer-being  {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: white;
   border-bottom: 1px solid grey;
   height: 3em;
 }
