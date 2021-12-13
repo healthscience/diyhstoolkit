@@ -1,13 +1,12 @@
 <template>
   <div id="scale-tools">
+    <div class="clearboth"></div>
     <div class="scale-item">
      <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
     </div>
     <div class="scale-item">
       <label>Scale</label>
-      <input type="range" min="0.1" max="2" step="0.1" v-model.number="scale">
-    </div>
-    <div class="scale-item">
+      <input type="range" min="0.1" max="2" step="0.1" v-model.number="scale" @change="zoomScale">
       {{ (scale * 100) }} %
     </div>
   </div>
@@ -27,23 +26,14 @@ export default {
   },
   computed: {
   },
-  filters: {
-  },
   data: function () {
     return {
-      zoomdashdata: 0,
-      scaleZoom: '',
       scaleSetting:
       {
-        text: 'scale off',
+        text: 'mouse scale off',
         active: false
       },
       zoomscaleStatus: false,
-      zoomCalibrate: 1,
-      width: 0,
-      height: 0,
-      x: 800,
-      y: 0,
       scale: 1
     }
   },
@@ -52,17 +42,51 @@ export default {
       // set mouse scaling on or off  (add slider with time)
       this.scaleSetting.active = !this.scaleSetting.active
       if (this.scaleSetting.active === true) {
-        this.scaleSetting.text = 'Scale On'
+        this.scaleSetting.text = 'Mouse Scale On'
         this.zoomscaleStatus = true
+        this.$store.dispatch('actionZoomscale', true)
       } else if (this.scaleSetting.active === false) {
-        this.scaleSetting.text = 'Scale Off'
+        this.scaleSetting.text = 'Mouse Scale Off'
         this.zoomscaleStatus = false
+        this.$store.dispatch('actionZoomscale', false)
       }
+    },
+    zoomScale () {
+      this.$store.dispatch('actionScalevalue', this.scale)
     }
   }
 }
 </script>
 
 <style>
+.clearboth {
+  display: clearboth;
+}
+
+#scale-tools {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: center;
+  align-content: center;
+  gap: 10px;
+  /* grid-auto-flow: column; */
+  position: sticky;
+  top: 3em;
+  width: 100%;
+  height: 60px;
+  border-bottom: 1px solid orange;
+  background-color: white;
+  padding: .1em;
+  z-index: 4;
+}
+
+.scale-space.active {
+  background-color: #4CAF50; /* Green */
+}
+
+.scale-item {
+  display: inline;
+  border: 0px solid red;
+}
 
 </style>

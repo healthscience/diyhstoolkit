@@ -3,6 +3,14 @@
     <connect-modal v-show="connectToolstatus" @close="closeModal">
       <template v-slot:header>
         <!-- The code below goes into the header slot -->
+        <button
+          type="button"
+          class="btn-green"
+          @click="closeModal"
+          aria-label="Close modal"
+        >
+          Close
+        </button>
         CONNECT <a href="#" id="disconnect-network" @click="disconnectNetwork">Disconnect</a>
       </template>
       <template v-slot:title-form>

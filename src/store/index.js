@@ -40,6 +40,8 @@ const store = new Vuex.Store({
     liveRefContIndex: {},
     livePeerRefContIndex: {},
     activeXNPFilterlist: [],
+    activeZoomscale: false,
+    activeScalevalue: 1,
     liveNXP: '',
     nxpModulelist: {},
     liveNXPcontract: {},
@@ -158,12 +160,9 @@ const store = new Vuex.Store({
     },
     SET_CONNECTION_STATUS: (state, inVerified) => {
       state.connectStatus = !state.connectStatus
-      console.log('peerlink connect status')
-      console.log(state.networkConnection)
       if (state.networkConnection === undefined) {
         console.log('no peerlink')
       } else {
-        console.log('live peerlnk')
         state.networkConnetion.active = true
         state.networkConnetion.text = 'edit-connection'
         state.networkConnetion.type = 'self-verify'
@@ -238,12 +237,19 @@ const store = new Vuex.Store({
       Vue.set(state.helpModal, 'active', activeHelp)
     },
     SET_QUERY_TEXT: (state, inVerified) => {
-      console.log(inVerified)
       state.searchQuery = inVerified
     },
     SET_NXP_LIVELIST: (state, inVerified) => {
-      console.log(inVerified)
       state.activeXNPFilterlist = inVerified
+    },
+    SET_ACTIVE_ZOOM: (state, inVerified) => {
+      state.activeZoomscale = inVerified
+    },
+    SET_ACTIVE_SCALE: (state, inVerified) => {
+      state.activeScalevalue = inVerified
+    },
+    SET_WHEEL_SCALE: (state, inVerified) => {
+      state.activeScalevalue = state.activeScalevalue + inVerified
     },
     setOutflowWatch: (state, inVerified) => {
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
@@ -596,8 +602,16 @@ const store = new Vuex.Store({
     actionLocalGrid (context, update) {
       console.log('action test watch called')
     },
+    actionZoomscale (context, update) {
+      context.commit('SET_ACTIVE_ZOOM', update)
+    },
+    actionScalevalue (context, update) {
+      context.commit('SET_ACTIVE_SCALE', update)
+    },
+    actionScalewheel (context, update) {
+      context.commit('SET_WHEEL_SCALE', update)
+    },
     actionoWatch (context, update) {
-      console.log('action watch called')
       context.commit('setOutflowWatch', update)
     },
     actionVisToolbar (context, update) {

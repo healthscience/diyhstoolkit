@@ -98,8 +98,6 @@ export default {
       shellContract: '',
       sortKey: '',
       sortOrders: sortOrders,
-      isModalDashboardVisible: false,
-      isModalJoinVisible: false,
       actionKBundle: {},
       previewSeen: false,
       type: 'chart.js',
@@ -130,12 +128,10 @@ export default {
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
         this.$store.dispatch('actionDashboardState', expCNRL)
-        this.isModalDashboardVisible = true
       } else {
         // preview network experiment
         this.$store.dispatch('actionJOINViewexperiment', expCNRL)
         this.refContractLookup()
-        this.isModalJoinVisible = true
       }
     }
   }

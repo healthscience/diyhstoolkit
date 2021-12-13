@@ -2,20 +2,23 @@
   <div id="live-network-experiment">
     <div class="nxp-experimentslist">
       <a class="nxplist-space" v-bind:class="{ active: nxpState === 'private' }" href="" @click.prevent="statusNXP('private')" >Private EXPERIMENTS</a>
-      <a class="nxplist-space" v-bind:class="{ active: nxpState === 'public' }" href="" @click.prevent="statusNXP('public')" >Public Experiments</a>
+      <a class="nxplist-space" v-bind:class="{ active: nxpState === 'public' }" href="" @click.prevent="statusNXP('public')" >Public Experiments </a>
+      <a class="nxplist-showspace" v-bind:class="{ active: listshowState === 'listshow' }" href="" @click.prevent="statusNXPshow()" > {{ showNXPstate }}</a>
     </div>
-    <list-contracts v-if="nxpState === 'private' && peerExperimentListlive.data"
-      class="experiment-info"
-      :experiments="peerExperimentListlive.data"
-      :columns="peerExperimentListlive.columns"
-      :filter-key="searchQuery">
-    </list-contracts>
-    <experimentnetwork-join
-      class="experiment-info" v-if="nxpState === 'public' && networkNXPListlive.data"
-      :experiments="networkNXPListlive.data"
-      :columns="networkNXPListlive.columns"
-      :filter-key="searchQuery">
-    </experimentnetwork-join>
+    <div id="show-nxplists" v-if="listshowState === true">
+      <list-contracts v-if="nxpState === 'private' && peerExperimentListlive.data"
+        class="experiment-info"
+        :experiments="peerExperimentListlive.data"
+        :columns="peerExperimentListlive.columns"
+        :filter-key="searchQuery">
+      </list-contracts>
+      <experimentnetwork-join
+        class="experiment-info" v-if="nxpState === 'public' && networkNXPListlive.data"
+        :experiments="networkNXPListlive.data"
+        :columns="networkNXPListlive.columns"
+        :filter-key="searchQuery">
+      </experimentnetwork-join>
+    </div>
   </div>
 </template>
 
@@ -44,12 +47,22 @@ export default {
   data () {
     return {
       nxpState: 'private',
+      listshowState: true,
+      showNXPstate: 'hide',
       isModalNewNetworkExperiment: false
     }
   },
   methods: {
     statusNXP (type) {
       this.nxpState = type
+    },
+    statusNXPshow () {
+      this.listshowState = !this.listshowState
+      if (this.listshowState === true) {
+        this.showNXPstate = 'hide'
+      } else {
+        this.showNXPstate = 'show'
+      }
     }
   }
 }
@@ -60,6 +73,10 @@ export default {
 #live-network-experiment {
   width: inherit;
   border: 0px solid red;
+}
+
+.nxplist-showspace {
+  padding-left: 2em;
 }
 
 .nxplist-space.active {

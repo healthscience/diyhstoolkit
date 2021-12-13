@@ -1,7 +1,7 @@
 <template>
   <div id="live-network-grid">
     <grid-toolbar></grid-toolbar>
-    <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + scale + ')' }"> <!-- @wheel.prevent="wheelScale($event)"> , transform: 'scale(' + scale + ')' -->
+    <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }"> <!-- @wheel.prevent="wheelScale($event)"> , transform: 'scale(' + scale + ')' -->
       <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: 'auto', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0" drag-handle=".drag-handle">
         <div id="single-space">
           <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{ active: activeDrag[dashi].active === true }">
@@ -109,10 +109,13 @@ export default {
     filteredExperimentsList: function () {
       return this.$store.state.activeXNPFilterlist
     },
+    zoomscaleStatus: function () {
+      return this.$store.state.activeZoomscale
+    },
+    zoomscaleValue: function () {
+      return this.$store.state.activeScalevalue
+    },
     activeDrag: function () {
-      console.log('drag')
-      console.log(this.filteredExperimentsList)
-      console.log('after drag')
       let activeBarStatus = {}
       for (let lnxp of this.filteredExperimentsList) {
         activeBarStatus[lnxp.id] = {}
@@ -123,45 +126,24 @@ export default {
   },
   data: function () {
     return {
-      shellContract: '',
       isModalDashboardVisible: true,
-      actionKBundle: {},
-      previewSeen: false,
-      selectJoin:
-      {
-        refcon: '',
-        source: ''
-      },
       newCompute: {
         automation: false,
         controls: false,
         startperiod: null
       },
-      newVisualise: {},
-      newVisualisation: {
-      },
-      type: 'chart.js',
       shellID: null,
       moduleCNRL: '',
-      moduleType: '',
       mData: '',
-      visualRefCont: '',
       messageRemove: false,
       removeNXPid: '',
       zoomdashdata: 0,
       scaleZoom: '',
-      scaleSetting:
-      {
-        text: 'scale off',
-        active: false
-      },
-      zoomscaleStatus: false,
       zoomCalibrate: 1,
       width: 0,
       height: 0,
       x: 800,
       y: 0,
-      scale: 1,
       dragLocal: {}
     }
   },
@@ -196,21 +178,10 @@ export default {
       // use mouse wheel to zoom in out
       if (this.zoomscaleStatus === true) {
         if (event.deltaY < 0) {
-          this.scale = this.scale + 0.05
+          this.$store.dispatch('actionScalewheel', 0.05)
         } else {
-          this.scale = this.scale - 0.05
+          this.$store.dispatch('actionScalewheel', -0.05)
         }
-      }
-    },
-    setSpacescale () {
-      // set mouse scaling on or off  (add slider with time)
-      this.scaleSetting.active = !this.scaleSetting.active
-      if (this.scaleSetting.active === true) {
-        this.scaleSetting.text = 'Scale On'
-        this.zoomscaleStatus = true
-      } else if (this.scaleSetting.active === false) {
-        this.scaleSetting.text = 'Scale Off'
-        this.zoomscaleStatus = false
       }
     },
     setActiveSpace (nxpID) {
@@ -249,101 +220,6 @@ export default {
 </script>
 
 <style>
-
-#live-network-grid {
-  border: 0px solid blue;
-  text-align: center;
-}
-
-#grid-template {
-  position: relative;
-  border: 0px solid blue;
-  text-align: center;
-}
-
-table {
-  border: 1px solid #42b4b9;
-  border-radius: 3px;
-  background-color: #fff;
-}
-
-th {
-  background-color: #42b4b9;
-  color: rgba(255,255,255,0.66);
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-td {
-  /* background-color: #f9f9f9; */
-}
-
-th, td {
-  min-width: 120px;
-  padding: 10px 20px;
-}
-
-th.active {
-  color: #fff;
-}
-
-th.active .arrow {
-  opacity: 1;
-}
-
-.alternate-bk:nth-child(even) {
-  background-color: #ffefd5;
-}
-
-.arrow {
-  display: inline-block;
-  vertical-align: middle;
-  width: 0;
-  height: 0;
-  margin-left: 5px;
-  opacity: 0.66;
-}
-
-.arrow.asc {
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-bottom: 4px solid #fff;
-}
-
-.arrow.dsc {
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid #fff;
-}
-
-.scale-space.active {
-  background-color: #4CAF50; /* Green */
-}
-
-#scale-tools {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  justify-content: center;
-  align-content: center;
-  gap: 40px;
-  /* grid-auto-flow: column; */
-  position: sticky;
-  top: 0;
-  width: 100%;
-  height: 60px;
-  border: 0px solid brown;
-  background-color: white;
-  padding: .1em;
-  z-index: 2;
-}
-
-.scale-item {
-  border: 0px solid red;
-}
-
 #ecs-message {
   font-weight: bold;
   margin-top: 10px;

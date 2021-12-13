@@ -67,11 +67,11 @@
       </div>
       <div id="view-flows">
         <live-lifestyle v-if="viewLifestyleworld === true"></live-lifestyle>
-        <live-network v-if="viewNXP === true"></live-network>
+        <live-networknxp v-if="viewNXP === true"></live-networknxp>
         <live-timeline v-if="viewTimeline === true"></live-timeline>
       </div>
-      <experiment-network></experiment-network>
-      <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png"> health oracle network
+      <experiment-network v-if="viewNXP === true"></experiment-network>
+      <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png"> HOP
     </div>
   </div>
 </template>
@@ -79,7 +79,7 @@
 <script>
 // @ is an alias to /src
 import LiveLifestyle from '@/components/home/LiveLifestyle.vue'
-import LiveNetwork from '@/components/home/LiveNetwork.vue'
+import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
 import LiveTimeline from '@/components/home/LiveTimeline.vue'
 import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
 import ModuleBuilder from '@/components/grids/moduleBuilder.vue'
@@ -88,9 +88,9 @@ import ExperimentNetwork from '@/components/grids/ExperimentNetwork.vue'
 export default {
   name: 'home',
   components: {
-    LiveNetwork,
-    LiveTimeline,
     LiveLifestyle,
+    LiveNetworknxp,
+    LiveTimeline,
     NewNetworkexperiment,
     ModuleBuilder,
     ExperimentNetwork
@@ -109,9 +109,9 @@ export default {
   data () {
     return {
       viewFlowtype: 'nxp-view',
+      viewLifestyleworld: false,
       viewNXP: true,
       viewTimeline: false,
-      viewLifestyleworld: false,
       isModalNewNetworkExperiment: false,
       searchText: ''
     }
@@ -120,7 +120,11 @@ export default {
     setView (e) {
       let viewLive = e.target.id
       this.viewFlowtype = e.target.id
-      if (viewLive === 'nxp-view') {
+      if (viewLive === 'lifestyleflow') {
+        this.viewLifestyleworld = !this.viewLifestyleworld
+        this.viewNXP = false
+        this.viewTimeline = false
+      } else if (viewLive === 'nxp-view') {
         this.viewNXP = !this.viewNXP
         this.viewTimeline = false
         this.viewLifestyleworld = false
@@ -128,10 +132,6 @@ export default {
         this.viewTimeline = !this.viewTimeline
         this.viewNXP = false
         this.viewLifestyleworld = false
-      } else if (viewLive === 'lifestyleworld') {
-        this.viewLifestyleworld = !this.viewLifestyleworld
-        this.viewNXP = false
-        this.viewTimeline = false
       }
     },
     textQuery () {
