@@ -1,13 +1,27 @@
 <template>
   <div id="visual-view" ref="visualView">
-    <div id="visual-container">
-      <div id="charts-live" v-if="datacollection !== undefined">
-        <reactive :chartData="datacollection" :options="options"></reactive>
+    <div id="grid-visual">
+      <div class="visual-item" id="grid-bentobox">
+        <div class="grid-item" v-if="datacollection !== undefined">
+          <reactive :chartData="datacollection" :options="options"></reactive>
+        </div>
+        <div class="grid-item" v-if="futurecollection.active !== false">
+          <reactive :chartData="futurecollection" :options="options"></reactive>
+        </div>
+        <div class="grid-item" v-if="networkcollection.active !== false">
+          <reactive :chartData="networkcollection" :options="options"></reactive>
+        </div>
+        <div class="grid-item" v-if="futurenetworkcollection.active !== false">
+          <reactive :chartData="futurenetworkcollection" :options="options"></reactive>
+        </div>
       </div>
-      <div id="future-tools">
+      <div class="visual-item" id="future-tools">
         <ul>
           <li class="context-future">
-            <button id="new-visspace" @click.prevent="setChartSpace()">add Space</button>
+            <button id="add-lifeboard" @click.prevent="addLifeboard()">add lifeBoard</button>
+          </li>
+          <li class="context-future">
+            <button id="new-visspace" @click.prevent="setChartSpace()">add BBox</button>
             <!-- <select v-model="selectedChartnumber" @change.prevent="setChartNumber()">
               <option v-for="cnoption in numbechartoptions" v-bind:value="cnoption.value" :key='cnoption.id' :selected="cnoption.id === selectedChartnumber">
               {{ cnoption.text }}
@@ -17,7 +31,7 @@
           <li class="context-future">
             <select v-model="selectedFuture" @change.prevent="setFuture()">
               <option disabled value="">make future</option>
-              <option v-for="foption in futureoptions" :key='foption.value'>
+              <option v-for="foption in futureoptions" :key='foption.value' v-bind:value="foption.value">
                   {{ foption.text }}
                 </option>
             </select>
@@ -34,9 +48,33 @@
       <header>Socialgraph</header>
       <ul>
         <li class="context-network">
-          <button class="button is-primary" @click.prevent="setNetwork('networkview')">{{ network.text }}</button>
+          <button class="button is-primary" @click.prevent="setNetworkgraph('networkview')">{{ network.text }}</button>
         </li>
       </ul>
+      <div id="social-network" v-if="socialState === true && socialgraphActive !== undefined && socialgraphActive.length > 0">
+        <ul v-for="sg in socialgraphActive" :key="sg.key" v-bind:value="sg.key">
+          <li class="graph-peer">
+            {{ sg }}
+          </li>
+        </ul>
+        <button class="button-past" @click.prevent="setPastNetwork()">Now</button>
+        <button class="button-future" @click.prevent="setFutureNetwork()">Future</button>
+      </div>
+    </div>
+    <div id="map-network">
+      <header>Map</header>
+      <ul>
+        <li class="context-network">
+          <button class="button is-primary" @click.prevent="setNetworkmap('networkview')">{{ network.text }}</button>
+        </li>
+      </ul>
+      <div id="open-map" v-if="mapState === true && networkMap !== undefined && networkMap.length > 0">
+        <ul  v-for="map in networkMap" :key="map.key" v-bind:value="map.key">
+          <li class="map-peer">
+            {{ map }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -68,11 +106,26 @@ export default {
     mData: String
   },
   computed: {
-    scaleWidth: function () {
-      return 1200
+    socialgraphActive: function () {
+      return this.$store.state.lifeBoard.liveSocialGraph
     },
-    scaleHeight: function () {
-      return 400
+    networkMap: function () {
+      return this.$store.state.lifeBoard.liveMapNetwork
+    },
+    futurecollection: () => {
+      let futureData = {}
+      futureData.active = false
+      return futureData
+    },
+    networkcollection: () => {
+      let aggData = {}
+      aggData.active = false
+      return aggData
+    },
+    futurenetworkcollection: () => {
+      let futureaggData = {}
+      futureaggData.active = false
+      return futureaggData
     }
   },
   created () {
@@ -81,6 +134,8 @@ export default {
   },
   data () {
     return {
+      socialState: false,
+      mapState: false,
       dimentionH: 0,
       dimentionW: 0,
       selectedFuture: '',
@@ -94,6 +149,7 @@ export default {
         { text: 'Multiple', value: 'multiplechart', id: 1 }
       ],
       futureoptions: [
+        { text: 'Remove', value: 'remove' },
         { text: 'Repeat day', value: 'month' },
         { text: 'Self decide', value: 'self' },
         { text: 'Ask CALE', value: 'CALE' }
@@ -107,9 +163,27 @@ export default {
     }
   },
   methods: {
-    setNetwork (nv) {
+    setNetworkgraph (nv) {
       console.log('is a network visualisation available?')
       console.log(nv)
+      this.socialState = !this.socialState
+      let spaceContext = {}
+      spaceContext.nxpCNRL = this.shellID
+      spaceContext.moduleCNRL = this.moduleCNRL
+      spaceContext.moduleType = this.moduleType
+      spaceContext.mData = this.mData
+      this.$store.dispatch('actionSocialgraph', spaceContext)
+    },
+    setNetworkmap (m) {
+      console.log('map')
+      console.log(m)
+      this.mapState = !this.mapState
+      let spaceContext = {}
+      spaceContext.nxpCNRL = this.shellID
+      spaceContext.moduleCNRL = this.moduleCNRL
+      spaceContext.moduleType = this.moduleType
+      spaceContext.mData = this.mData
+      this.$store.dispatch('actionMap', spaceContext)
     },
     setChartSpace () {
       console.log('set up a new vis chart space')
@@ -119,6 +193,16 @@ export default {
       spaceContext.moduleType = this.moduleType
       spaceContext.mData = this.mData
       this.$store.dispatch('actionVisSpaceAdd', spaceContext)
+    },
+    addLifeboard () {
+      console.log('add to lifeboard')
+      let lifeBoardHolder = {}
+      lifeBoardHolder.type = 'add'
+      lifeBoardHolder.shellID = this.shellID
+      lifeBoardHolder.moduleCNRL = this.moduleCNRL
+      lifeBoardHolder.moduleType = this.moduleType
+      lifeBoardHolder.mData = this.mData
+      this.$store.dispatch('actionLifeboardAdd', lifeBoardHolder)
     },
     setFuture () {
       let buildContext = {}
@@ -130,6 +214,33 @@ export default {
       refContracts.mData = this.mData
       buildContext.refs = refContracts
       this.$store.dispatch('actionFuture', buildContext)
+      if (this.selectedFuture === 'CALE') {
+        this.futurecollection.active = !this.futurecollection.active
+      } else if (this.selectedFuture === 'remove') {
+        this.futurecollection.active = false
+      }
+      console.log('future')
+      console.log(this.futurecollection.active)
+    },
+    setPastNetwork () {
+      console.log('past of socail graph agg')
+      let pastContext = {}
+      pastContext.shellCNRL = this.shellID
+      pastContext.moduleCNRL = this.moduleCNRL
+      pastContext.moduleType = this.moduleType
+      pastContext.mData = this.mData
+      pastContext.data = 'socailgrapharry'
+      this.$store.dispatch('actionPastGraph', pastContext)
+    },
+    setFutureNetwork () {
+      console.log('future of socail graph agg')
+      let futureContext = {}
+      futureContext.shellCNRL = this.shellID
+      futureContext.moduleCNRL = this.moduleCNRL
+      futureContext.moduleType = this.moduleType
+      futureContext.mData = this.mData
+      futureContext.data = 'socialgraphlist'
+      this.$store.dispatch('actionFutureGraph', futureContext)
     },
     setCombine () {
       console.log('combine two or more chart???')
@@ -155,17 +266,27 @@ export default {
   border: 0px solid orange;
 }
 
-#visual-container {
-  display: flex;
-  border: 0px solid red;
+#grid-visual {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  width: 100%;
+  border: 2px solid blue;
 }
 
-#charts-live {
-  flex-grow: 1; /* Set the middle element to grow and stretch */
-  width: 88%;
-  height: 100%;
-  position: relative;
-  border: 0px solid blue;
+.visual-item {
+  width: 100%;
+  border: 0px solid green;
+}
+
+#grid-bentobox {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  border: 2px solid blue;
+}
+
+.grid-item {
+  border: 2px solid red;
+  width: 100%;
 }
 
 #future-tools {
@@ -202,4 +323,11 @@ export default {
   border-top: 1px solid blue; */
 }
 
+.graph-peer {
+  display: inline-block;
+}
+
+.map-peer {
+  display: inline-block;
+}
 </style>

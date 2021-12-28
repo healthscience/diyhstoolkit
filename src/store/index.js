@@ -277,31 +277,7 @@ const store = new Vuex.Store({
       Vue.set(state.NXPexperimentData, state.liveNXP, inVerified.data)
     },
     setLiveDisplayNXPModulesItem: (state, inVerified) => {
-      // update title in options
-      let chartUpdateOptions = state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item].chartOptions
-      chartUpdateOptions.title.text = 'future'
-      let dataItem = state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item].chartPackage
-      for (let uit of inVerified.changes.label) {
-        dataItem.labels.push(uit)
-      }
-      let preparFuturedata = []
-      // future
-      for (let fit of dataItem.datasets[0].data) {
-        fit = null
-        preparFuturedata.push(fit)
-      }
-      for (let ffit of inVerified.changes.data) {
-        preparFuturedata.push(ffit)
-      }
-      let dataFuture = { label: 'future',
-        data: preparFuturedata,
-        borderColor: 'rgb(25, 52, 226)',
-        type: 'line',
-        fillColor: 'rgb(25, 52, 226)'
-      }
-      dataItem.datasets.push(dataFuture)
-      Vue.set(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item], 'chartPackage', dataItem)
-      Vue.set(state.NXPexperimentData[inVerified.refs.shellCNRL][inVerified.refs.moduleCNRL].data[inVerified.refs.item], 'chartOptions', chartUpdateOptions)
+      console.log('future in progress')
     },
     SET_ENTITY_RETURN: (state, inVerified) => {
       state.entityUUIDReturn = inVerified
@@ -867,11 +843,22 @@ const store = new Vuex.Store({
       context.commit('setVisProgressUpdate', progressContext)
     },
     actionFuture (context, update) {
+      console.log('action future')
+      console.log(update)
       let chartData = this.state.NXPexperimentData[update.refs.shellCNRL][update.refs.moduleCNRL].data
       // pick out data Chart object and add to dataset
       // what basis for future data for next day?
       if (update.future === 'CALE') {
-        // CALElive.startFuture('24')
+        console.log('pass to CALE')
+        let caleMessage = {}
+        caleMessage.type = 'cale'
+        caleMessage.reftype = 'future'
+        caleMessage.data = update.refs
+        console.log('CALE message out')
+        console.log(caleMessage)
+        const caleOUT = JSON.stringify(caleMessage)
+        console.log(caleOUT)
+        // Vue.prototype.$socket.send(caleOUT)
       } else if (update.future === 'month') {
         let dataKeys = Object.keys(chartData)
         for (let dItem of dataKeys) {

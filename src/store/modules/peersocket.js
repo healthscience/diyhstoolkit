@@ -121,6 +121,13 @@ export default {
             // need to set toolbar settings TODO
           }
         }
+      } else if (backJSON.type === 'lifeboard') {
+        if (backJSON.contract.concept.state === 'joined') {
+          console.log('lifeboard new ref contract confirmed')
+          console.log(backJSON.contract)
+        } else if (backJSON.contract.concept.state === 'add') {
+
+        } 
       } else if (backJSON.type === 'publickey') {
         this.state.publickeys.push(backJSON.pubkey)
       } else if (backJSON.type === 'open-library') {
