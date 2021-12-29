@@ -842,7 +842,7 @@ const store = new Vuex.Store({
       // need to start update message to keep peer informed
       context.commit('setVisProgressUpdate', progressContext)
     },
-    actionFuture (context, update) {
+    actionFutureOLD (context, update) {
       console.log('action future')
       console.log(update)
       let chartData = this.state.NXPexperimentData[update.refs.shellCNRL][update.refs.moduleCNRL].data

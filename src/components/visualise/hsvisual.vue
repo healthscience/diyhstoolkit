@@ -1,18 +1,22 @@
 <template>
   <div id="visual-view" ref="visualView">
     <div id="grid-visual">
-      <div class="visual-item" id="grid-bentobox">
-        <div class="grid-item" v-if="datacollection !== undefined">
-          <reactive :chartData="datacollection" :options="options"></reactive>
+      <div class="visual-item" id="bentobox-space">
+        <div id="grid-bentobox">
+          <div class="grid-item" v-if="datacollection !== undefined">
+            <reactive :chartData="datacollection" :options="options"></reactive>
+          </div>
+          <div class="grid-item" v-if="futurecollection !== undefined && futurecollection.active !== false">
+            <reactive :chartData="futurecollection" :options="options"></reactive>
+          </div>
         </div>
-        <div class="grid-item" v-if="futurecollection.active !== false">
-          <reactive :chartData="futurecollection" :options="options"></reactive>
-        </div>
-        <div class="grid-item" v-if="networkcollection.active !== false">
-          <reactive :chartData="networkcollection" :options="options"></reactive>
-        </div>
-        <div class="grid-item" v-if="futurenetworkcollection.active !== false">
-          <reactive :chartData="futurenetworkcollection" :options="options"></reactive>
+        <div id="grid-bentobox">
+          <div class="grid-item" v-if="networkcollection !== undefined && networkcollection.active !== false">
+            <reactive :chartData="networkcollection" :options="options"></reactive>
+          </div>
+          <div class="grid-item" v-if="futurenetworkcollection !== undefined && futurenetworkcollection.active !== false">
+            <reactive :chartData="futurenetworkcollection" :options="options"></reactive>
+          </div>
         </div>
       </div>
       <div class="visual-item" id="future-tools">
@@ -45,15 +49,14 @@
       <div class="clear"></div>
     </div>
     <div id="social-graph">
-      <header>Socialgraph</header>
       <ul>
         <li class="context-network">
           <button class="button is-primary" @click.prevent="setNetworkgraph('networkview')">{{ network.text }}</button>
         </li>
       </ul>
       <div id="social-network" v-if="socialState === true && socialgraphActive !== undefined && socialgraphActive.length > 0">
-        <ul v-for="sg in socialgraphActive" :key="sg.key" v-bind:value="sg.key">
-          <li class="graph-peer">
+        <ul class="graph-peer" v-for="sg in socialgraphActive" :key="sg.key" v-bind:value="sg.key">
+          <li>
             {{ sg }}
           </li>
         </ul>
@@ -62,10 +65,9 @@
       </div>
     </div>
     <div id="map-network">
-      <header>Map</header>
       <ul>
         <li class="context-network">
-          <button class="button is-primary" @click.prevent="setNetworkmap('networkview')">{{ network.text }}</button>
+          <button class="button is-primary" @click.prevent="setNetworkmap('mapview')">{{ mapButton.text }}</button>
         </li>
       </ul>
       <div id="open-map" v-if="mapState === true && networkMap !== undefined && networkMap.length > 0">
@@ -112,19 +114,16 @@ export default {
     networkMap: function () {
       return this.$store.state.lifeBoard.liveMapNetwork
     },
-    futurecollection: () => {
-      let futureData = {}
-      futureData.active = false
+    futurecollection: function () {
+      let futureData = this.$store.state.lifeBoard.liveFutureCollection
       return futureData
     },
-    networkcollection: () => {
-      let aggData = {}
-      aggData.active = false
+    networkcollection: function () {
+      let aggData = this.$store.state.lifeBoard.liveNetworkcollection
       return aggData
     },
-    futurenetworkcollection: () => {
-      let futureaggData = {}
-      futureaggData.active = false
+    futurenetworkcollection: function () {
+      let futureaggData = this.$store.state.lifeBoard.liveFutureNetworkcollection
       return futureaggData
     }
   },
@@ -141,7 +140,12 @@ export default {
       selectedFuture: '',
       network:
       {
-        text: 'network',
+        text: 'show social graph',
+        active: true
+      },
+      mapButton:
+      {
+        text: 'show map',
         active: true
       },
       numbechartoptions: [
@@ -167,12 +171,12 @@ export default {
       console.log('is a network visualisation available?')
       console.log(nv)
       this.socialState = !this.socialState
-      let spaceContext = {}
+      /* let spaceContext = {}
       spaceContext.nxpCNRL = this.shellID
       spaceContext.moduleCNRL = this.moduleCNRL
       spaceContext.moduleType = this.moduleType
       spaceContext.mData = this.mData
-      this.$store.dispatch('actionSocialgraph', spaceContext)
+      this.$store.dispatch('actionSocialgraph', spaceContext) */
     },
     setNetworkmap (m) {
       console.log('map')
@@ -214,13 +218,6 @@ export default {
       refContracts.mData = this.mData
       buildContext.refs = refContracts
       this.$store.dispatch('actionFuture', buildContext)
-      if (this.selectedFuture === 'CALE') {
-        this.futurecollection.active = !this.futurecollection.active
-      } else if (this.selectedFuture === 'remove') {
-        this.futurecollection.active = false
-      }
-      console.log('future')
-      console.log(this.futurecollection.active)
     },
     setPastNetwork () {
       console.log('past of socail graph agg')
@@ -270,22 +267,22 @@ export default {
   display: grid;
   grid-template-columns: 5fr 1fr;
   width: 100%;
-  border: 2px solid blue;
+  border: 0px solid green;
 }
 
 .visual-item {
   width: 100%;
-  border: 0px solid green;
+  border: 0px solid pink;
 }
 
 #grid-bentobox {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  border: 2px solid blue;
+  grid-template-columns: 50% 50%;/* repeat(50% - calc(100% - 2fr)); */
+  border: 0px solid blue;
 }
 
 .grid-item {
-  border: 2px solid red;
+  border: 0px solid red;
   width: 100%;
 }
 
@@ -325,6 +322,7 @@ export default {
 
 .graph-peer {
   display: inline-block;
+  padding: 0.8em;
 }
 
 .map-peer {
