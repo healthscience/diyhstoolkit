@@ -133,7 +133,8 @@ export default {
     optionTimeBundle: [
       { text: 'Single day', value: 'single', id: 0 },
       { text: 'Pick days', value: 'multi', id: 1 },
-      { text: 'Range days', value: 'range', id: 2 }
+      { text: 'Range days', value: 'range', id: 2 },
+      { text: 'Ask CALE', value: 'natlang', id: 3 }
     ],
     selectedTimeBundle: 'single',
     time1: '',
@@ -234,6 +235,9 @@ export default {
         this.$store.dispatch('actionSetTimerange', timeContext)
         this.calendarToolMulti.active = !this.calendarToolMulti.active
         this.rangeActive = false
+      } else if (this.selectedTimeBundle === 'natlang') {
+        // natural language ask CALE
+        this.$store.dispatch('actionAskCALE', 'askcale')
       } else {
         this.calendarToolMulti.active = false
         this.rangeActive = false

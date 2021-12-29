@@ -479,6 +479,10 @@ const store = new Vuex.Store({
       let setProgress = {}
       setProgress = { text: 'Updating visualisation', active: false }
       Vue.set(this.state.visProgress[inVerified.moduleCNRL], modG, setProgress)
+    },
+    SET_ASKCALE_HELP (state, inVerified) {
+      console.log('active help with CALE chat bot')
+      Vue.set(state.helpModal, 'active', true)
     }
   },
   actions: {
@@ -901,6 +905,9 @@ const store = new Vuex.Store({
     },
     actionFlowviews (context, update) {
       context.commit('SET_VIEWFLOW_START', update)
+    },
+    actionAskCALE (context, update) {
+      context.commit('SET_ASKCALE_HELP', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

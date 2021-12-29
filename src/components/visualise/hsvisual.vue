@@ -3,14 +3,6 @@
     <div id="grid-visual">
       <div class="visual-item" id="bentobox-space">
         <div id="grid-bentobox">
-          <div class="grid-item" v-if="datacollection !== undefined">
-            <reactive :chartData="datacollection" :options="options"></reactive>
-          </div>
-          <div class="grid-item" v-if="futurecollection !== undefined && futurecollection.active !== false">
-            <reactive :chartData="futurecollection" :options="options"></reactive>
-          </div>
-        </div>
-        <div id="grid-bentobox">
           <div class="grid-item" v-if="networkcollection !== undefined && networkcollection.active !== false">
             <reactive :chartData="networkcollection" :options="options"></reactive>
           </div>
@@ -18,10 +10,36 @@
             <reactive :chartData="futurenetworkcollection" :options="options"></reactive>
           </div>
         </div>
+        <div id="grid-bentobox">
+          <div class="grid-item" v-if="datacollection !== undefined">
+            <reactive :chartData="datacollection" :options="options"></reactive>
+          </div>
+          <div class="grid-item" v-if="futurecollection !== undefined && futurecollection.active !== false">
+            <reactive :chartData="futurecollection" :options="options"></reactive>
+          </div>
+        </div>
       </div>
       <div class="visual-item" id="future-tools">
         <ul>
           <li class="context-future">
+            <div class="scale-item">
+              Lifeboard:
+            </div>
+            <div class="scale-item">
+              <form id="lifeboard_form" name="lifeboard_addform" method="post" action="#">
+                <label for="lifeboard-select"></label>
+                <select class="select-lifeboard-id" id="lifeboard-list" @change="lifeboardSelect" v-model="lifeboardRef">
+                  <option v-for="lb in lifeboardList" :key="lb.id" v-bind:value="lb">
+                    {{ lb }}
+                  </option>
+                </select>
+                <!-- <button id="add-lifeboard-button" type="button" class="btn" @click="addLifeboard()">add</button> -->
+              </form>
+            </div>
+            <div class="scale-item">
+              New <input name="query" v-model="lifeboardName">
+              <button class="new-lifeboard" @click.prevent="saveLifeboard()">save</button>
+            </div>
             <button id="add-lifeboard" @click.prevent="addLifeboard()">add lifeBoard</button>
           </li>
           <li class="context-future">
@@ -47,36 +65,6 @@
         </ul>
       </div>
       <div class="clear"></div>
-    </div>
-    <div id="social-graph">
-      <ul>
-        <li class="context-network">
-          <button class="button is-primary" @click.prevent="setNetworkgraph('networkview')">{{ network.text }}</button>
-        </li>
-      </ul>
-      <div id="social-network" v-if="socialState === true && socialgraphActive !== undefined && socialgraphActive.length > 0">
-        <ul class="graph-peer" v-for="sg in socialgraphActive" :key="sg.key" v-bind:value="sg.key">
-          <li>
-            {{ sg }}
-          </li>
-        </ul>
-        <button class="button-past" @click.prevent="setPastNetwork()">Now</button>
-        <button class="button-future" @click.prevent="setFutureNetwork()">Future</button>
-      </div>
-    </div>
-    <div id="map-network">
-      <ul>
-        <li class="context-network">
-          <button class="button is-primary" @click.prevent="setNetworkmap('mapview')">{{ mapButton.text }}</button>
-        </li>
-      </ul>
-      <div id="open-map" v-if="mapState === true && networkMap !== undefined && networkMap.length > 0">
-        <ul  v-for="map in networkMap" :key="map.key" v-bind:value="map.key">
-          <li class="map-peer">
-            {{ map }}
-          </li>
-        </ul>
-      </div>
     </div>
   </div>
 </template>
@@ -108,11 +96,8 @@ export default {
     mData: String
   },
   computed: {
-    socialgraphActive: function () {
-      return this.$store.state.lifeBoard.liveSocialGraph
-    },
-    networkMap: function () {
-      return this.$store.state.lifeBoard.liveMapNetwork
+    lifeboardList: function () {
+      return this.$store.state.lifeBoard.peerLifeboards
     },
     futurecollection: function () {
       let futureData = this.$store.state.lifeBoard.liveFutureCollection
@@ -133,21 +118,9 @@ export default {
   },
   data () {
     return {
-      socialState: false,
-      mapState: false,
       dimentionH: 0,
       dimentionW: 0,
       selectedFuture: '',
-      network:
-      {
-        text: 'show social graph',
-        active: true
-      },
-      mapButton:
-      {
-        text: 'show map',
-        active: true
-      },
       numbechartoptions: [
         { text: 'Single', value: 'singlechart', id: 0 },
         { text: 'Multiple', value: 'multiplechart', id: 1 }
@@ -163,31 +136,19 @@ export default {
       {
         text: 'combine',
         active: false
-      }
+      },
+      lifeboardName: '',
+      lifeboardRef: ''
     }
   },
   methods: {
-    setNetworkgraph (nv) {
-      console.log('is a network visualisation available?')
-      console.log(nv)
-      this.socialState = !this.socialState
-      /* let spaceContext = {}
-      spaceContext.nxpCNRL = this.shellID
-      spaceContext.moduleCNRL = this.moduleCNRL
-      spaceContext.moduleType = this.moduleType
-      spaceContext.mData = this.mData
-      this.$store.dispatch('actionSocialgraph', spaceContext) */
+    lifeboardSelect () {
+      console.log(this.lifeboardRef)
     },
-    setNetworkmap (m) {
-      console.log('map')
-      console.log(m)
-      this.mapState = !this.mapState
-      let spaceContext = {}
-      spaceContext.nxpCNRL = this.shellID
-      spaceContext.moduleCNRL = this.moduleCNRL
-      spaceContext.moduleType = this.moduleType
-      spaceContext.mData = this.mData
-      this.$store.dispatch('actionMap', spaceContext)
+    saveLifeboard () {
+      console.log('save new lifeboard')
+      console.log(this.lifeboardName)
+      this.$store.dispatch('actionSaveLifeboard', this.lifeboardName)
     },
     setChartSpace () {
       console.log('set up a new vis chart space')
@@ -218,26 +179,6 @@ export default {
       refContracts.mData = this.mData
       buildContext.refs = refContracts
       this.$store.dispatch('actionFuture', buildContext)
-    },
-    setPastNetwork () {
-      console.log('past of socail graph agg')
-      let pastContext = {}
-      pastContext.shellCNRL = this.shellID
-      pastContext.moduleCNRL = this.moduleCNRL
-      pastContext.moduleType = this.moduleType
-      pastContext.mData = this.mData
-      pastContext.data = 'socailgrapharry'
-      this.$store.dispatch('actionPastGraph', pastContext)
-    },
-    setFutureNetwork () {
-      console.log('future of socail graph agg')
-      let futureContext = {}
-      futureContext.shellCNRL = this.shellID
-      futureContext.moduleCNRL = this.moduleCNRL
-      futureContext.moduleType = this.moduleType
-      futureContext.mData = this.mData
-      futureContext.data = 'socialgraphlist'
-      this.$store.dispatch('actionFutureGraph', futureContext)
     },
     setCombine () {
       console.log('combine two or more chart???')
@@ -277,8 +218,9 @@ export default {
 
 #grid-bentobox {
   display: grid;
-  grid-template-columns: 50% 50%;/* repeat(50% - calc(100% - 2fr)); */
+  grid-template-columns: min-content min-content; /* repeat(content-fill minmax(50% 50%)); 50% 50%; repeat(50% - calc(100% - 2fr)); */
   border: 0px solid blue;
+  width: 100%;
 }
 
 .grid-item {
