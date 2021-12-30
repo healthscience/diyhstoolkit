@@ -31,11 +31,20 @@ const store = new Vuex.Store({
       refcontract: ''
     },
     liveHelpcontext: 'home',
-    helpchatAsk: '',
+    helpchatAsk:
+    {
+      text: '',
+      active: false
+    },
     helpchatReply: '',
     helpchatHistory: [],
     searchQuery: '',
     feedbackMessage: {},
+    experimentListshow:
+    {
+      state: true,
+      text: 'hide'
+    },
     publickeys: [],
     warmNetwork: [],
     swarmStatus: false,
@@ -494,11 +503,12 @@ const store = new Vuex.Store({
       console.log('ash cale chat')
       console.log(inVerified)
       // set context
-      state.helpchatAsk = inVerified
+      Vue.set(state.helpchatAsk, 'text', inVerified)
     },
     SET_ASKCALE_ENTRY (state, inVerified) {
       console.log('complete question')
       // prepare input for SAFEFLOW-ECS
+      Vue.set(state.helpchatAsk, 'active', true)
     }
   },
   actions: {
@@ -658,6 +668,8 @@ const store = new Vuex.Store({
     async actionDashboardState (context, update) {
       // console.log('clicked VIEW NXP------------')
       // console.log(update)
+      // remove lists
+      context.commit('SET_NXPLIST_SHOW')
       let futureTimeCheck = false
       context.commit('SET_LIVE_NXP', update)
       context.commit('SET_NXP_MODULED', update)

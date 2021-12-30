@@ -36,14 +36,14 @@
                 <!-- <button id="add-lifeboard-button" type="button" class="btn" @click="addLifeboard()">add</button> -->
               </form>
             </div>
-            <div class="scale-item">
+            <!-- <div class="scale-item">
               New <input name="query" v-model="lifeboardName">
               <button class="new-lifeboard" @click.prevent="saveLifeboard()">save</button>
-            </div>
-            <button id="add-lifeboard" @click.prevent="addLifeboard()">add lifeBoard</button>
+            </div> -->
+            <button id="add-lifeboard" @click.prevent="addLifeboard()">add to lifeBoard</button>
           </li>
           <li class="context-future">
-            <button id="new-visspace" @click.prevent="setChartSpace()">add BBox</button>
+            <!-- <button id="new-visspace" @click.prevent="setChartSpace()">add BBox</button> -->
             <!-- <select v-model="selectedChartnumber" @change.prevent="setChartNumber()">
               <option v-for="cnoption in numbechartoptions" v-bind:value="cnoption.value" :key='cnoption.id' :selected="cnoption.id === selectedChartnumber">
               {{ cnoption.text }}

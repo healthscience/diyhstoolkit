@@ -3,9 +3,9 @@
     <div class="nxp-experimentslist">
       <a class="nxplist-space" v-bind:class="{ active: nxpState === 'private' }" href="" @click.prevent="statusNXP('private')" >Private EXPERIMENTS</a>
       <a class="nxplist-space" v-bind:class="{ active: nxpState === 'public' }" href="" @click.prevent="statusNXP('public')" >Public Experiments </a>
-      <a class="nxplist-showspace" v-bind:class="{ active: listshowState === 'listshow' }" href="" @click.prevent="statusNXPshow()" > {{ showNXPstate }}</a>
+      <a class="nxplist-showspace" v-bind:class="{ active: showExperimentList.text === 'listshow' }" href="" @click.prevent="statusNXPshow()" > {{ showExperimentList.text }}</a>
     </div>
-    <div id="show-nxplists" v-if="listshowState === true">
+    <div id="show-nxplists" v-if="showExperimentList.state === true">
       <list-contracts v-if="nxpState === 'private' && peerExperimentListlive.data"
         class="experiment-info"
         :experiments="peerExperimentListlive.data"
@@ -33,6 +33,9 @@ export default {
     ExperimentnetworkJoin
   },
   computed: {
+    showExperimentList: function () {
+      return this.$store.state.experimentListshow
+    },
     peerExperimentListlive: function () {
       return this.$store.state.joinedNXPlist
     },
@@ -47,8 +50,6 @@ export default {
   data () {
     return {
       nxpState: 'private',
-      listshowState: true,
-      showNXPstate: 'hide',
       isModalNewNetworkExperiment: false
     }
   },
@@ -57,12 +58,7 @@ export default {
       this.nxpState = type
     },
     statusNXPshow () {
-      this.listshowState = !this.listshowState
-      if (this.listshowState === true) {
-        this.showNXPstate = 'hide'
-      } else {
-        this.showNXPstate = 'show'
-      }
+      this.$store.dispatch('actionExperimentList')
     }
   }
 }

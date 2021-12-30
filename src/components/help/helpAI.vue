@@ -9,15 +9,15 @@
         <!-- Natural Language Chat -->
         <div id="natlang-ai">
           <div class="chat-flow" id="conversation">
-            <div class="peer-ask">
+            <div class="peer-ask"  id="peer-chat-left">
               <img class="left-chat" src="../.././assets/world.png" alt="Avatar">
-              <p class="left-chat"> {{ chatAsk }} </p>
+              <p v-if="chatAsk.active === true" class="left-chat"> {{ chatAsk.text }} </p>
               <span class="left-chat">11:00</span>
             </div>
-            <div class="cale-reply">
-              <span class="left-chat">11:01</span>
-              <p class="left-chat">Here are you dates, click chart to display.</p>
-              <img class="left-chat" src="../.././assets/logo.png" alt="Avatar">
+            <div class="cale-reply" id="cale-chat-right">
+              <span class="right-chat">11:01</span>
+              <p class="right-chat">Here are you dates, click chart to display.</p>
+              <img class="right-chat" src="../.././assets/logo.png" alt="Avatar">
             </div>
           </div>
           <div class="chat-flow" id="ai-interaction">
@@ -174,16 +174,30 @@ export default {
 
 .peer-ask {
   background-color: pink;
-  width: 80%;
+  width: 100%;
+}
+
+#peer-chat-left {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
 }
 
 .cale-reply {
   background-color: lightgrey;
-  width: 80%;
+  width: 100%;
   align-items: right;
 }
 
 .left-chat {
+  display: inline-grid;
+}
+
+#cale-chat-right {
+  display: grid;
+  grid-template-columns: auto 6fr 1fr;
+}
+
+.right-chat {
   display: inline-grid;
 }
 

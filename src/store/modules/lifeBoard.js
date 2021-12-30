@@ -3,7 +3,7 @@ import Vue from 'vue'
 export default {
   state: {
     lifeboardHolder: {},
-    peerLifeboards: ['networkedself', 'airquality', 'riverdee'],
+    peerLifeboards: ['networkedself', 'bioregion', 'air-quality', 'river-dee'],
     liveSocialGraph: [1, 2, 3],
     liveMapNetwork: ['a', 'b', 'c'],
     liveFutureCollection: { active: false },
@@ -33,6 +33,7 @@ export default {
       addLifeboard.reftype = 'addlifeboard'
       addLifeboard.action = 'addlifeboard'
       addLifeboard.data = inVerified
+      console.log(addLifeboard)
       const referenceContractReady = JSON.stringify(addLifeboard)
       Vue.prototype.$socket.send(referenceContractReady)
     },

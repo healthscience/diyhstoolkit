@@ -127,7 +127,7 @@ export default {
           console.log(backJSON.contract)
         } else if (backJSON.contract.concept.state === 'add') {
 
-        } 
+        }
       } else if (backJSON.type === 'publickey') {
         this.state.publickeys.push(backJSON.pubkey)
       } else if (backJSON.type === 'open-library') {
@@ -687,6 +687,18 @@ export default {
       console.log('CLEAR COMBINE')
       this.state.combineSpaceList = []
       console.log(this.state.combineSpaceList)
+    },
+    SET_NXPLIST_SHOW (state, inVerified) {
+      console.log('hide show nxp list')
+      let updateText = ''
+      if (this.state.experimentListshow.text === 'hide') {
+        updateText = 'show'
+      } else {
+        updateText = 'hide'
+      }
+      let updateState = !this.state.experimentListshow.state
+      Vue.set(this.state.experimentListshow, 'text', updateText)
+      Vue.set(this.state.experimentListshow, 'state', updateState)
     }
   },
   actions: {
@@ -1044,6 +1056,11 @@ export default {
       console.log('combine SPACES')
       console.log(update)
       context.commit('SET_COMBINE_CONTEXT', update)
+    },
+    actionExperimentList (context, update) {
+      console.log('hide show nxp list')
+      console.log(update)
+      context.commit('SET_NXPLIST_SHOW', update)
     }
   }
 }
