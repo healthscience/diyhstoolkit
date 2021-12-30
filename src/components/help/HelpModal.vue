@@ -10,19 +10,20 @@
           class="modal-header"
           id="modalTitle"
         >
-          <slot name="header">
-            This is the default tile!
-
-            <button
-              type="button"
-              class="btn-close"
-              @click="close"
-              aria-label="Close modal"
-            >
-              x
-            </button>
-          </slot>
+          <button
+            type="button"
+            class="btn-close"
+            @click="close"
+            aria-label="Close modal"
+          >
+            x
+          </button>
         </header>
+        <section class="modal-context">
+          <slot name="contextin">
+            Home is default context
+          </slot>
+        </section>
         <section
           class="modal-feedback"
           id="feedback-message"
@@ -36,12 +37,11 @@
           id="modalDescription"
         >
           <slot name="body">
-            I'm the default body!
+            No additional help information available
           </slot>
         </section>
         <footer class="modal-footer">
           <slot name="footer">
-
             <button
               type="button"
               class="btn-green"
@@ -90,34 +90,30 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 7;
+    z-index: 15;
     overflow: scroll;
   }
 
   .modal {
+    position: relative;
     background: #FFFFFF;
-    box-shadow: 2px 2px 20px 1px;
-    overflow-x: auto;
     display: flex;
     flex-direction: column;
     width: 80%;
-    position: absolute;
-    z-index: 7;
-  }
-
-  .modal-header,
-  .modal-footer {
-    padding: 15px;
-    display: flex;
+    margin-top: 200px;
+    box-shadow: 2px 2px 20px 1px;
+    z-index: 15;
   }
 
   .modal-header {
+    display: flex;
     border-bottom: 1px solid #eeeeee;
+    justify-content: flex-end;
     color: #4AAE9B;
-    justify-content: space-between;
   }
 
   .modal-footer {
+    display: flex;
     border-top: 1px solid #eeeeee;
     justify-content: flex-end;
   }

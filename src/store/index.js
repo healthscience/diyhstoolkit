@@ -30,6 +30,10 @@ const store = new Vuex.Store({
       feedback: '',
       refcontract: ''
     },
+    liveHelpcontext: 'home',
+    helpchatAsk: '',
+    helpchatReply: '',
+    helpchatHistory: [],
     searchQuery: '',
     feedbackMessage: {},
     publickeys: [],
@@ -482,7 +486,19 @@ const store = new Vuex.Store({
     },
     SET_ASKCALE_HELP (state, inVerified) {
       console.log('active help with CALE chat bot')
+      // set context
+      state.liveHelpcontext = 'cale'
       Vue.set(state.helpModal, 'active', true)
+    },
+    SET_ASKCALE_CHAT (state, inVerified) {
+      console.log('ash cale chat')
+      console.log(inVerified)
+      // set context
+      state.helpchatAsk = inVerified
+    },
+    SET_ASKCALE_ENTRY (state, inVerified) {
+      console.log('complete question')
+      // prepare input for SAFEFLOW-ECS
     }
   },
   actions: {
@@ -908,6 +924,12 @@ const store = new Vuex.Store({
     },
     actionAskCALE (context, update) {
       context.commit('SET_ASKCALE_HELP', update)
+    },
+    actionHelpAsk (context, update) {
+      context.commit('SET_ASKCALE_CHAT', update)
+    },
+    actionHelpaskentry (context, update) {
+      context.commit('SET_ASKCALE_ENTRY', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

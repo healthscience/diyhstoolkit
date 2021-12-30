@@ -2,7 +2,7 @@
   <div class="home">
     <div class="diy-settings">
       <div v-if="peerauth === false" id="diy-summary">
-        <header>BentoBox - DaiaR</header>
+        <header>BentoBox - DS</header>
         <ul>
           <li>1. Interacive visualisations</li>
           <li>2. Join network experiments</li>
