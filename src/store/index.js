@@ -38,6 +38,11 @@ const store = new Vuex.Store({
     },
     helpchatReply: '',
     helpchatHistory: [],
+    calaReply:
+    {
+      text: 'listening',
+      active: false
+    },
     searchQuery: '',
     feedbackMessage: {},
     experimentListshow:
@@ -246,7 +251,7 @@ const store = new Vuex.Store({
     },
     SET_HELP_STATUS: (state, inVerified) => {
       let activeHelp = !state.helpModal.active
-      // Vue.set(state.helpModal, 'type', inVerified)
+      state.liveHelpcontext = inVerified
       Vue.set(state.helpModal, 'active', activeHelp)
     },
     SET_QUERY_TEXT: (state, inVerified) => {

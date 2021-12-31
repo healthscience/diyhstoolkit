@@ -16,7 +16,7 @@
             </div>
             <div class="cale-reply" id="cale-chat-right">
               <span class="right-chat">11:01</span>
-              <p class="right-chat">Here are you dates, click chart to display.</p>
+              <p class="right-chat">{{ aiResponse.text }}</p>
               <img class="right-chat" src="../.././assets/logo.png" alt="Avatar">
             </div>
           </div>
@@ -123,6 +123,9 @@ export default {
     },
     chatAsk: function () {
       return this.$store.state.helpchatAsk
+    },
+    aiResponse: function () {
+      return this.$store.state.calaReply
     }
   },
   data () {

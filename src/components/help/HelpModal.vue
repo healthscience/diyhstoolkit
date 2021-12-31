@@ -91,17 +91,17 @@ export default {
     justify-content: center;
     align-items: center;
     z-index: 15;
-    overflow: scroll;
   }
 
   .modal {
-    position: relative;
+    height: 100%;
     background: #FFFFFF;
+    box-shadow: 2px 2px 20px 1px;
+    overflow-x: auto;
     display: flex;
     flex-direction: column;
     width: 80%;
-    margin-top: 200px;
-    box-shadow: 2px 2px 20px 1px;
+    margin-top: 20px;
     z-index: 15;
   }
 

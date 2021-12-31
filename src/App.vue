@@ -122,7 +122,7 @@ export default {
       }
     },
     showHelpModal () {
-      this.$store.dispatch('actionShowhelp')
+      this.$store.dispatch('actionShowhelp', 'home')
     },
     caleAIStatus () {
       this.statusCALE.active = !this.statusCALE.active
