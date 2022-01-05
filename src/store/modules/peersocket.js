@@ -22,17 +22,17 @@ export default {
     SOCKET_ONOPEN (state, event) {
       this.$socket = event.currentTarget
       state.socket.isConnected = true
-      this.state.networkConnetion.active = true
-      this.state.networkConnetion.text = 'connect'
-      this.state.networkConnetion.type = 'self-verify'
+      this.state.connectStatus = true
     },
     SOCKET_ONCLOSE (state, event) {
       state.socket.isConnected = false
-      state.peerauthStatus = false
+      this.state.connectStatus = false
+      this.state.peerauthStatus = false
     },
     SOCKET_ONERROR (state, event) {
       console.error(state, event)
-      state.peerauthStatus = false
+      this.state.connectStatus = false
+      this.state.peerauthStatus = false
       // remote.getCurrentWindow().close()
       // inform Peer connection to network lost
     },
@@ -42,7 +42,7 @@ export default {
     },
     SOCKET_RECONNECT_ERROR (state) {
       state.socket.reconnectError = true
-      state.peerauthStatus = false
+      this.state.peerauthStatus = false
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {

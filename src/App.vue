@@ -20,8 +20,8 @@
       <div id="peer-settings">
         <div class="toolkit-settings">
           CALE:
-          <button class="toolbar-top" type="button" @click="caleAIStatus">
-            {{ statusCALE.text }}
+          <button class="toolbar-top"  v-bind:class="{ active: caleAIStatus.active === true}" type="button" @click="caleAIset">
+            {{ caleAIStatus.text }}
           </button>
         </div>
         <div class="toolkit-settings">
@@ -53,10 +53,13 @@ export default {
   },
   computed: {
     connectBut: function () {
-      return this.$store.state.networkConnetion
+      return this.$store.state.networkConnection
     },
     authConnectStatus: function () {
       return this.$store.state.peerauthStatus
+    },
+    caleAIStatus: function () {
+      return this.$store.state.aiInterface.statusCALE
     },
     activeNetworkExperiment: function () {
       if (Object.keys(this.$store.state.entityUUIDsummary).length > 0) {
@@ -81,12 +84,7 @@ export default {
       languages: [
         { flag: 'en', language: 'en', title: 'English' },
         { flag: 'zh', language: 'zh', title: '普通话' } // 普通话
-      ],
-      statusCALE:
-      {
-        text: 'off',
-        active: false
-      }
+      ]
     }
   },
   methods: {
@@ -95,22 +93,13 @@ export default {
     },
     connectNetwork (typeConnect) {
       // remove the welcome message
-      console.log('connect butoton')
+      console.log('connect button')
       console.log(typeConnect)
-      this.$store.dispatch('actionLiveConnect')
+      this.$store.dispatch('actionCheckConnect')
       this.$store.dispatch('startconnectNSnetwork')
       // set flowviews active
       this.$store.dispatch('actionFlowviews')
-      if (typeConnect === 'connect') {
-        this.connectContext.type = 'connect'
-        this.connectContext.message = 'Anno. connect to network'
-        this.buttonName = 'Annon. connect'
-        const refContract = {}
-        refContract.reftype = 'datatype'
-        refContract.action = 'GET'
-        const refCJSON = JSON.stringify(refContract)
-        this.$store.dispatch('actionGetRefContract', refCJSON)
-      } else if (typeConnect.type === 'self-verify') {
+      if (typeConnect.type === 'self-verify') {
         this.connectContext.type = 'self-verify'
         this.connectContext.message = 'Self verify keys'
         this.$store.dispatch('actionSelfVerify', this.connectContext)
@@ -124,18 +113,13 @@ export default {
     showHelpModal () {
       this.$store.dispatch('actionShowhelp', 'home')
     },
-    caleAIStatus () {
-      this.statusCALE.active = !this.statusCALE.active
-      if (this.statusCALE.active === false) {
-        this.statusCALE.text = 'off'
-      } else {
-        this.statusCALE.text = 'ON'
-      }
+    caleAIset () {
+      this.$store.dispatch('actionCALEAI', 'click')
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -165,6 +149,15 @@ export default {
   border: 0px solid blue;
   margin-left: 1.2em;
   padding: .6em;
+}
+
+.toolbar-top.active {
+  font-size: 1.2em;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  text-align: center;
 }
 
 #nav {

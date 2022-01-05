@@ -43,7 +43,6 @@ export default {
       return this.$store.state.NXPexperimentList
     },
     searchQuery: function () {
-      console.log(this.$store.state.searchQuery)
       return this.$store.state.searchQuery
     }
   },

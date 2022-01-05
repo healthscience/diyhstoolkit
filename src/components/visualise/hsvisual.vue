@@ -74,9 +74,6 @@
 // import BarChart from '@/components/charts/BarChart'
 // import BubbleChart from '@/components/charts/BubbleChart'
 import Reactive from '@/components/visualise/charts/Reactive'
-// import Reactivestats from '@/components/visualise/charts/Reactivestats'
-// import multiChart from '@/components/visualise/multiChart'
-// const moment = require('moment')
 
 export default {
   name: 'visual-liveview',
@@ -197,7 +194,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #visual-view {
   height: 90%;
   width: 99%;

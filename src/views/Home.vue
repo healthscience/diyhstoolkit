@@ -9,13 +9,22 @@
           <li>3. Share knowledge with peers & communities</li>
           <li>4. Personal AI - CALE</li>
         </ul>
-        <div id="bentobox-datascience">
-          <img class="medium-start" alt="bentox data science" src=".././assets/logo.png">
+        <div id="interface">
+          <div id="cale-ai">
+            <div id="cale-interface" v-if="caleAIStatus.active === true">
+              <div class="ci-space"></div>
+              <img class="medium-start-cale" alt="caleAI" src=".././assets/caleailogo.png">
+              <chat-interface></chat-interface>
+            </div>
+          </div>
+          <div id="bentobox-datascience" v-if="caleAIStatus.active !== true">
+            <img class="medium-start" alt="bentox data science" src=".././assets/logo.png">
+          </div>
         </div>
       </div>
     </div>
-    <div class="network-experiments">
-      <div id="toolkit-boards">
+    <div class="network-experiments">{{ connected }} p {{ peerauth }}
+      <div id="toolkit-boards" v-if="connected === true">
         <div class="toolkit-logo">
           <img class="small-logo" alt="logo" src=".././assets/logo.png">
         </div>
@@ -78,6 +87,7 @@
 
 <script>
 // @ is an alias to /src
+import ChatInterface from '@/components/caleai/chatInterface.vue'
 import LiveLifestyle from '@/components/home/LiveLifestyle.vue'
 import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
 import LiveTimeline from '@/components/home/LiveTimeline.vue'
@@ -88,6 +98,7 @@ import ExperimentNetwork from '@/components/grids/ExperimentNetwork.vue'
 export default {
   name: 'home',
   components: {
+    ChatInterface,
     LiveLifestyle,
     LiveNetworknxp,
     LiveTimeline,
@@ -101,6 +112,9 @@ export default {
     },
     peerauth: function () {
       return this.$store.state.peerauthStatus
+    },
+    caleAIStatus: function () {
+      return this.$store.state.aiInterface.statusCALE
     },
     flowviews: function () {
       return this.$store.state.flowviews
@@ -214,8 +228,18 @@ img {
 .small-logo {
 }
 
+#interface {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
 .medium-start {
-  width: 360px;
+  width: 260px;
+}
+
+.medium-start-cale {
+  width: 200px;
+  align-self: center;
 }
 
 .hop-small {
@@ -243,5 +267,10 @@ img {
   margin-right: 2em;
   margin-left: 2em;
   text-align: center;
+}
+
+#cale-interface {
+  display: grid;
+  grid-template-columns: 1fr 1fr 3fr;
 }
 </style>

@@ -256,7 +256,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #vis-toolkit {
   height: inherit;
   width: inherit;

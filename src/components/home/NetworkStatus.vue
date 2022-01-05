@@ -1,6 +1,6 @@
 <template>
   <div class="network-connectstatus">
-    <connect-modal v-show="connectToolstatus" @close="closeModal">
+    <connect-modal v-show="connectBut.active === true" @close="closeModal">
       <template v-slot:header>
         <!-- The code below goes into the header slot -->
         <button
@@ -17,9 +17,9 @@
         <header class="connect-info">Health Oracle Network</header>
       </template>
       <template v-slot:connect-network>
-        <div id="network-status">
+        <div id="network-status"> {{  connectNetworkstatus  }} {{ peerauth }}
           <div class="status-info">
-            Status: <div class="hon-square-status" v-bind:class="{ active: connectBut.active === true }"></div>
+            Status: <div class="hon-square-status" v-bind:class="{ active: connectNetworkstatus === true && peerauth === true }"></div>
           </div>
           <div class="status-info">
             Warm peers connected: {{ warmPeers.length }}
@@ -74,8 +74,6 @@
       <template v-slot:peers-cold>
         <div id="ai-peers">
           <header>Cold Peers</header>
-          CALE AI is OFF
-          <!-- <button>Connect CALE AI</button> -->
         </div>
       </template>
       <template v-slot:peer-datastorekeys>
@@ -114,16 +112,16 @@ export default {
   },
   computed: {
     connectBut: function () {
-      return this.$store.state.networkConnetion
+      return this.$store.state.networkConnection
     },
-    connectToolstatus: function () {
+    connectNetworkstatus: function () {
       return this.$store.state.connectStatus
+    },
+    peerauth: function () {
+      return this.$store.state.peerauthStatus
     },
     connectContext: function () {
       return this.$store.state.connectContext
-    },
-    authState: function () {
-      return this.$store.state.authorised
     },
     publicKeysList: function () {
       let displayKeys = []
@@ -154,12 +152,6 @@ export default {
       // w: remote.getCurrentWindow(),
       isModalVisible: false,
       buttonName: 'verify token',
-      /* connectContext:
-      {
-        type: '',
-        message: '',
-        footer: ''
-      }, */
       secretPeer: '',
       passwordPeer: '',
       addWarm: false,
@@ -208,7 +200,7 @@ export default {
       this.$store.dispatch('actionPeersyncLibrary', pubkey)
     },
     closeModal () {
-      this.$store.dispatch('actionLiveConnect')
+      this.$store.dispatch('actionCloseNetworkModal')
     }
   }
 }

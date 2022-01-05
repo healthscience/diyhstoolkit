@@ -18,7 +18,7 @@ const store = new Vuex.Store({
     connectStatus: false,
     peerauthStatus: false,
     connectContext: {},
-    networkConnetion: {
+    networkConnection: {
       active: false,
       type: 'self-verify',
       text: 'Connect'
@@ -177,30 +177,44 @@ const store = new Vuex.Store({
       state.authorised = true
     },
     SET_CONNECTION_STATUS: (state, inVerified) => {
-      state.connectStatus = !state.connectStatus
-      if (state.networkConnection === undefined) {
+      Vue.set(state.networkConnection, 'active', true)
+      if (state.connectStatus === false) {
         console.log('no peerlink')
       } else {
-        state.networkConnetion.active = true
-        state.networkConnetion.text = 'edit-connection'
-        state.networkConnetion.type = 'self-verify'
+        // yes socket connection
+        // Vue.set(state.networkConnection, 'active', true)
+        // state.networkConnection.text = 'edit-connection'
+        // state.networkConnection.type = 'self-verify'
       }
     },
-    SET_DISCONNECT_NETWORK (state, inVerified) {
+    SET_CONECTIONSOCK_STATUS: (state, inVerified) => {
+      console.log('close connect modal')
+      console.log(inVerified)
+      let updateState = false
+      if (inVerified === false) {
+        updateState = true
+      } else {
+        updateState = false
+      }
+      Vue.set(state.networkConnection, 'active', updateState)
+    },
+    SET_DISCONNECT_NETWORK: (state, inVerifed) => {
       let safeFlowMessage = {}
+      // set auth to not auth
+      state.peerauthStatus = false
       let message = {}
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.action = 'disconnect'
       safeFlowMessage = JSON.stringify(message)
       // clear peer data
-      this.state.joinedNXPlist = []
+      state.joinedNXPlist = []
       // close modal
-      state.networkConnetion.active = !state.networkConnetion.active
-      state.connectStatus = !state.connectStatus
-      state.networkConnetion.active = false
-      state.networkConnetion.text = 'connect'
-      state.networkConnetion.type = 'self-verify'
+      // state.networkConnection.active = !state.networkConnection.active
+      // state.connectStatus = !state.connectStatus
+      state.networkConnection.active = false
+      state.networkConnection.text = 'connect'
+      state.networkConnection.type = 'self-verify'
       Vue.prototype.$socket.send(safeFlowMessage)
     },
     SET_CONNECT_CONTEXT: (state, inVerifed) => {
@@ -521,21 +535,26 @@ const store = new Vuex.Store({
       // send a auth requrst to peerlink
       console.log('secure socket active?')
       console.log(this.state.peerauthStatus)
-      let message = {}
-      message.type = 'safeflow'
-      message.reftype = 'ignore'
-      message.action = 'auth'
-      message.network = null // update.network
-      message.settings = null // update.settings
-      const safeFlowMessage = JSON.stringify(message)
-      Vue.prototype.$socket.send(safeFlowMessage)
+      if (this.state.connectStatus === true) {
+        let message = {}
+        message.type = 'safeflow'
+        message.reftype = 'ignore'
+        message.action = 'auth'
+        message.network = null // update.network
+        message.settings = null // update.settings
+        const safeFlowMessage = JSON.stringify(message)
+        Vue.prototype.$socket.send(safeFlowMessage)
+      }
     },
-    async authDatastore (context, update) {
+    actionCloseNetworkModal (context, update) {
+      context.commit('SET_CONECTIONSOCK_STATUS', update)
+    },
+    async authAPIdata (context, update) {
       // send a auth requrst to peerlink
       let message = {}
       message.type = 'safeflow'
       message.reftype = 'ignore'
-      message.action = 'datastoreauth'
+      message.action = 'dataAPIauth'
       message.network = update.network
       message.settings = update.settings
       const safeFlowMessage = JSON.stringify(message)
@@ -544,7 +563,7 @@ const store = new Vuex.Store({
     actionDisconnect (context, update) {
       context.commit('SET_DISCONNECT_NETWORK', update)
     },
-    actionLiveConnect (context, update) {
+    actionCheckConnect (context, update) {
       context.commit('SET_CONNECTION_STATUS', update)
     },
     actionSelfVerify (context, update) {

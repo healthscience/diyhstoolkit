@@ -77,8 +77,7 @@ export default {
         authBundle.network = 'cloud'
         authBundle.settings = tokenJSON
         // data store authorisation
-        // localthis.$store.dispatch('startconnectNSnetwork', authBundle)
-        localthis.$store.dispatch('authDatastore', authBundle)
+        localthis.$store.dispatch('authAPIdata', authBundle)
         localthis.$emit('closeTreader')
       }
       reader.readAsText(file)

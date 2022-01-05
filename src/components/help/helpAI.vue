@@ -6,35 +6,7 @@
         {{ $t('help') }} for -- {{ helpContext }}
       </template>
       <template v-slot:feedback>
-        <!-- Natural Language Chat -->
-        <div id="natlang-ai">
-          <div class="chat-flow" id="conversation">
-            <div class="peer-ask"  id="peer-chat-left">
-              <img class="left-chat" src="../.././assets/world.png" alt="Avatar">
-              <p v-if="chatAsk.active === true" class="left-chat"> {{ chatAsk.text }} </p>
-              <span class="left-chat">11:00</span>
-            </div>
-            <div class="cale-reply" id="cale-chat-right">
-              <span class="right-chat">11:01</span>
-              <p class="right-chat">{{ aiResponse.text }}</p>
-              <img class="right-chat" src="../.././assets/logo.png" alt="Avatar">
-            </div>
-          </div>
-          <div class="chat-flow" id="ai-interaction">
-            <form id="ask-ai-form">
-              <label for="askname"></label>
-              <input type="text" id="askinput" name="ainame" @keyup="askeCalesave" v-model="askInput">
-            </form>
-            <button id="natlang-ask" @click="submitAsk">Ask CALE</button>
-          </div>
-        </div>
-        <div v-if="helpState.type === 'future'" id="feedback-action">
-          Date asked for: {{ helpState.data }}
-          <calendar-tool :shellID="helpState.refcontract" :moduleCNRL="'future'" :moduleType="'future'" :mData="'future'"></calendar-tool>
-        </div>
-        <div class="help-section">
-          What is CALE?  An personal AI that helps manage the toolkit.
-        </div>
+        <chat-interface></chat-interface>
       </template>
       <template v-slot:body>
         <div v-if="helpContext === 'home'" class="help-section">
@@ -42,6 +14,9 @@
             <li>
               <article>
                 <p>INSTRUCTIONS</p>
+                <div class="help-section">
+                  What is CALE?  A personal AI that helps manage the toolkit.
+                </div>
                 <p>
                   1. Interacive lifeboard visualisations
                 </p>
@@ -104,13 +79,13 @@
 
 <script>
 import HelpModal from '@/components/help/HelpModal.vue'
-import CalendarTool from '@/components/visualise/tools/calendarTool'
+import ChatInterface from '@/components/caleai/chatInterface.vue'
 
 export default {
   name: 'Help-AI',
   components: {
     HelpModal,
-    CalendarTool
+    ChatInterface
   },
   props: {
   },

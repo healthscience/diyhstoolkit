@@ -2,9 +2,9 @@
   <div id="live-network-grid">
     <grid-toolbar></grid-toolbar>
     <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }"> <!-- @wheel.prevent="wheelScale($event)"> , transform: 'scale(' + scale + ')' -->
-      <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '10%', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0" drag-handle=".drag-handle">
+      <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '10%', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0"  drag-handle=".drag-handle">
         <div id="single-space">
-          <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{ active: activeDrag[dashi].active === true }">
+          <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{active: activeDrag[dashi].active === true }">
             --- Activation Bar ---
           </div>
           <div class="dashboard-space">
@@ -220,6 +220,10 @@ export default {
 </script>
 
 <style>
+#live-network-grid {
+  display: block;
+}
+
 #ecs-message {
   font-weight: bold;
   margin-top: 10px;
@@ -239,6 +243,7 @@ export default {
 }
 
 #single-space {
+  display: block;
   width: 98%;
   height: 96%;
   /* min-width: 1200px; */
@@ -266,6 +271,7 @@ export default {
 }
 
 .drag-handle {
+  display: block;
   background-color: lightgrey;
   height: 50px;
 }
