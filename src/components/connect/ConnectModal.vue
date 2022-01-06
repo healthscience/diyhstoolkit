@@ -21,7 +21,7 @@
                 <!-- no default title for form -->
               </slot>
             </div>
-            <div id="network-status">
+            <div id="network-status-space">
               <slot name="connect-network">
                 Connection status unknown
               </slot>
@@ -146,10 +146,7 @@ export default {
     border-radius: 2px;
   }
 
-#network-status {
-  height: 60px;
-  border-bottom: 1px solid grey;
-  margin-bottom: 1em;
+#network-status-space {
 }
 
 #form-input {

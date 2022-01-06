@@ -2,7 +2,7 @@
   <div id="connection-lists">
     <div id="peer-social-network">
       <div id="tabs-component">
-        <div class="tabs-component-tab"></div>
+        <div class="spacer-component-tab"></div>
         <div
           class="grid-component-tab" v-bind:class="{ active: listContext === 'peers' }"
           v-on:click="selectTab('peers')"
@@ -27,7 +27,7 @@
         >
           Wallet
         </div>
-        <div class="grid-component-tab"></div>
+        <div class="spacer-component-tab"></div>
       </div>
       <div id="list-content">
         <div class="list-space" id="peer-list" v-if="listContext === 'peers'">
@@ -195,6 +195,7 @@ export default {
   border-bottom: 1px solid grey;
   min-height: 240px;
   background-color: lightgrey;
+  font-size: 1.2em;
 }
 
 .list-space {

@@ -19,7 +19,7 @@
       <template v-slot:connect-network>
         <div id="network-status">
           <div class="status-info">
-            Status: <div class="hon-square-status" v-bind:class="{ active: connectNetworkstatus === true && peerauth === true }"></div>
+            Connection Status: <div class="hon-square-status" v-bind:class="{ active: connectNetworkstatus === true && peerauth === true }"></div>
           </div>
           <div class="status-info">
             Warm peers connected: {{ warmPeers.length }}
@@ -114,20 +114,21 @@ export default {
 
 #network-status {
   display: block;
+  border-bottom: 1px solid lightgrey;
+  padding: .5em;
   font-size: 1.4em;
-  border: 0px solid red;
-  margin-top: 10px;
 }
 
 .status-info {
   display: block;
   margin-left: 30px;
+  padding-top: 1em;
 }
 
 .hon-square-status {
   display: inline-block;
   border: 1px solid grey;
-  width: 20px;
+  width: 40px;
   height: 20px;
   background-color: red;
 }
@@ -135,7 +136,7 @@ export default {
 .hon-square-status.active {
   display: inline-block;
   border: 1px solid grey;
-  width: 20px;
+  width: 40px;
   height: 20px;
   background-color: green;
 }
@@ -154,7 +155,9 @@ export default {
 }
 
 .connect-info {
+  padding-bottom: 1.2em;
   font-size: 1.4em;
+  font-weight: bold;
 }
 
 .network-state {
