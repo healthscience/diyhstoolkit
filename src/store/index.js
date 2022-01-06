@@ -182,14 +182,12 @@ const store = new Vuex.Store({
         console.log('no peerlink')
       } else {
         // yes socket connection
-        // Vue.set(state.networkConnection, 'active', true)
-        // state.networkConnection.text = 'edit-connection'
-        // state.networkConnection.type = 'self-verify'
+        Vue.set(state.networkConnection, 'active', true)
+        Vue.set(state.networkConnection, 'text', 'edit-connection')
+        Vue.set(state.networkConnection, 'type', 'check-connection')
       }
     },
     SET_CONECTIONSOCK_STATUS: (state, inVerified) => {
-      console.log('close connect modal')
-      console.log(inVerified)
       let updateState = false
       if (inVerified === false) {
         updateState = true
@@ -209,16 +207,13 @@ const store = new Vuex.Store({
       safeFlowMessage = JSON.stringify(message)
       // clear peer data
       state.joinedNXPlist = []
-      // close modal
-      // state.networkConnection.active = !state.networkConnection.active
-      // state.connectStatus = !state.connectStatus
+      // clear peeers and data list
+      state.publickeys = []
+      state.warmNetwork = []
       state.networkConnection.active = false
       state.networkConnection.text = 'connect'
       state.networkConnection.type = 'self-verify'
       Vue.prototype.$socket.send(safeFlowMessage)
-    },
-    SET_CONNECT_CONTEXT: (state, inVerifed) => {
-      state.connectContext = inVerifed
     },
     SET_LIVE_NXP: (state, inVerified) => {
       state.liveNXP = inVerified
@@ -532,10 +527,8 @@ const store = new Vuex.Store({
   },
   actions: {
     async startconnectNSnetwork (context, update) {
-      // send a auth requrst to peerlink
-      console.log('secure socket active?')
-      console.log(this.state.peerauthStatus)
-      if (this.state.connectStatus === true) {
+      // send a auth requrst to peerlink if not already authorsed
+      if (this.state.connectStatus === true && this.state.peerauthStatus !== true) {
         let message = {}
         message.type = 'safeflow'
         message.reftype = 'ignore'
@@ -544,6 +537,8 @@ const store = new Vuex.Store({
         message.settings = null // update.settings
         const safeFlowMessage = JSON.stringify(message)
         Vue.prototype.$socket.send(safeFlowMessage)
+      } else {
+        // console.log('socket and authored already so nothing')
       }
     },
     actionCloseNetworkModal (context, update) {
@@ -565,9 +560,6 @@ const store = new Vuex.Store({
     },
     actionCheckConnect (context, update) {
       context.commit('SET_CONNECTION_STATUS', update)
-    },
-    actionSelfVerify (context, update) {
-      context.commit('SET_CONNECT_CONTEXT', update)
     },
     async annonconnectNSnetwork (context, update) {
       // for cloud

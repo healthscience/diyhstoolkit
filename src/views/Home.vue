@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="network-experiments">{{ connected }} p {{ peerauth }}
-      <div id="toolkit-boards" v-if="connected === true">
+      <div id="toolkit-boards" v-if="peerauth === true">
         <div class="toolkit-logo">
           <img class="small-logo" alt="logo" src=".././assets/logo.png">
         </div>
@@ -74,7 +74,7 @@
           </ul>
         </div>
       </div>
-      <div id="view-flows">
+      <div id="view-flows" v-if="peerauth === true">
         <live-lifestyle v-if="viewLifestyleworld === true"></live-lifestyle>
         <live-networknxp v-if="viewNXP === true"></live-networknxp>
         <live-timeline v-if="viewTimeline === true"></live-timeline>

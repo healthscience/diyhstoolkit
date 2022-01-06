@@ -17,7 +17,7 @@
         <header class="connect-info">Health Oracle Network</header>
       </template>
       <template v-slot:connect-network>
-        <div id="network-status"> {{  connectNetworkstatus  }} {{ peerauth }}
+        <div id="network-status">
           <div class="status-info">
             Status: <div class="hon-square-status" v-bind:class="{ active: connectNetworkstatus === true && peerauth === true }"></div>
           </div>
@@ -31,8 +31,8 @@
           <header class="connect-info">External data source connections</header>
           <div class="external-token-status">
             <header>REST</header>
-            <token-reader v-if="connectContext.type === 'self-verify'" @closeTreader="closeModal"></token-reader>
-            <div id="self-in" v-if="connectContext.type === 'self-verify'">
+            <token-reader v-if="peerauth === true" @closeTreader="closeModal"></token-reader>
+            <div id="self-in" v-if="peerauth === true">
               <!-- <input v-model="secretPeer" placeholder="public key">
               <input v-model="passwordPeer" placeholder="token"> -->
             </div>
@@ -47,53 +47,7 @@
         <!-- <button>{{ buttonName }}</button> -->
       </template>
       <template v-slot:peers-warm>
-        <div id="peer-social-network">
-          <header>Peers</header>
-          <button type="button" class="btn" @click.prevent="addWarmpeer()">Add new</button>
-          <div v-if="addWarm === true" id="add-warm-peer">
-            <input v-model="newPeername" placeholder="name">
-            <input v-model="newPeer" placeholder="public key">
-            <ul v-if="replicateList.length > 0">
-              <label for="datastore-select"></label>
-              <select class="select-yaxis-id" id="datastore-select-rep" v-model="peerDStore">
-                <option value="none" selected="">please select</option>
-                <option v-for="ds in replicateList" :key="ds.id" v-bind:value="ds">
-                {{ ds }}
-                </option>
-              </select>
-            </ul>
-            <button type="button" class="btn" @click="addWarmNetwork()">save</button>
-          </div>
-          <ul class="peer-list-set" v-for='peer in warmPeers' :key='peer.id'>
-            <li>Peer {{ peer.datastore }} --- {{ peer.name }} --- {{ peer.publickey }}
-              <!-- <button type="button" class="btn" @click="peerSyncLibrary(peer.publickey)">Replicate</button> -->
-            </li>
-          </ul>
-        </div>
-      </template>
-      <template v-slot:peers-cold>
-        <div id="ai-peers">
-          <header>Cold Peers</header>
-        </div>
-      </template>
-      <template v-slot:peer-datastorekeys>
-        <div id="peers-listkeys">
-          <header>Peer Datastores Key Management</header>
-          <div v-if="swarmState === true" id="open-connect">Public Library OPEN for replication</div>
-          <ul class="peer-ledgers" v-for='pk in publicKeysList' :key='pk.id'>
-            <li>{{ pk.keyname }} pubkey- {{ pk.pubkey }}
-            <!-- <button type="button" class="btn" @click="openReplication(pk)">sync</button> -->
-            </li>
-          </ul>
-        </div>
-      </template>
-      <template v-slot:replicate-library>
-        <div id="replicate-librarydatastore">
-          <header>Network Library</header>
-          Replicate library:
-          <input v-model="peerSynckey" placeholder="public key">
-          <button type="button" class="btn" @click="peerSyncLibrary()">Sync Library</button>
-        </div>
+        <connection-lists></connection-lists>
       </template>
     </connect-modal>
   </div>
@@ -102,13 +56,15 @@
 <script>
 import ConnectModal from '@/components/connect/ConnectModal.vue'
 import TokenReader from '@/components/connect/token-reader.vue'
+import ConnectionLists from '@/components/connect/connectionLists.vue'
 // const remote = require('electron').remote
 
 export default {
   name: 'Network-Connect',
   components: {
     ConnectModal,
-    TokenReader
+    TokenReader,
+    ConnectionLists
   },
   computed: {
     connectBut: function () {
@@ -123,25 +79,8 @@ export default {
     connectContext: function () {
       return this.$store.state.connectContext
     },
-    publicKeysList: function () {
-      let displayKeys = []
-      for (let keyi of this.$store.state.publickeys) {
-        let keyInfo = {}
-        let keyName = Object.keys(keyi)
-        keyInfo.keyname = keyName[0]
-        keyInfo.pubkey = keyi[keyInfo.keyname]
-        displayKeys.push(keyInfo)
-      }
-      return displayKeys
-    },
-    publicKeysIndex: function () {
-      return this.$store.state.publickeysIndex
-    },
     warmPeers: function () {
       return this.$store.state.warmNetwork
-    },
-    swarmState: function () {
-      return this.$store.state.swarmStatus
     }
   },
   props: {
@@ -151,15 +90,7 @@ export default {
     return {
       // w: remote.getCurrentWindow(),
       isModalVisible: false,
-      buttonName: 'verify token',
-      secretPeer: '',
-      passwordPeer: '',
-      addWarm: false,
-      newPeer: '',
-      newPeername: '',
-      peerDStore: '',
-      replicateList: ['peerlibrary', 'librarynetwork', 'resultspeer', 'kblpeer'],
-      peerSynckey: ''
+      buttonName: 'verify token'
     }
   },
   methods: {
@@ -168,36 +99,6 @@ export default {
       this.$store.dispatch('actionDisconnect')
       // close electron / webapp
       this.w.close()
-    },
-    addWarmpeer () {
-      this.addWarm = !this.addWarm
-    },
-    addWarmNetwork () {
-      let peerHolder = {}
-      peerHolder.name = this.newPeername
-      peerHolder.publickey = this.newPeer
-      peerHolder.datastore = this.peerDStore
-      const peerContract = {}
-      peerContract.type = 'library'
-      peerContract.reftype = 'peer-add'
-      peerContract.action = 'PUT'
-      peerContract.data = peerHolder
-      const peerCJSON = JSON.stringify(peerContract)
-      console.log(peerCJSON)
-      this.$store.dispatch('actionAddwarmPeer', peerCJSON)
-      this.newPeername = ''
-      this.newPeer = ''
-      this.peerDStore = ''
-      this.addWarm = false
-    },
-    openReplication (info) {
-      console.log('open close replication for data store')
-      console.log(info)
-      this.$store.dispatch('actionOpenLibrary', info)
-    },
-    peerSyncLibrary (pubkey) {
-      // pass on public key to peerlink and sync datastore for this peer
-      this.$store.dispatch('actionPeersyncLibrary', pubkey)
     },
     closeModal () {
       this.$store.dispatch('actionCloseNetworkModal')
@@ -250,63 +151,6 @@ export default {
 
 .local-sqlite {
   display: block;
-}
-
-#peer-social-network {
-  display: block;
-  height: 100%;
-  border-bottom: 1px solid grey;
-  margin-top: 0px;
-}
-
-#peer-social-network header {
-  font-size: 1.4em;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-#peers-listkeys {
-  display: block;
-  border-bottom: 1px solid grey;
-}
-
-#peers-listkeys header {
-  font-size: 1.4em;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-#ai-peers {
-  border-bottom: 1px solid grey;
-}
-
-#ai-peers header {
-  font-size: 1.4em;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-#replicate-librarydatastore {
-  display: block;
-  border-bottom: 1px solid grey;
-}
-
-#replicate-librarydatastore header {
-  font-size: 1.4em;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
 }
 
 .connect-info {

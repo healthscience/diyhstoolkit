@@ -46,10 +46,10 @@ export default {
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
-      // console.log('message')
-      // console.log(message)
+      console.log('message')
       let backJSON = {}
       backJSON = JSON.parse(message.data)
+      console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -175,6 +175,18 @@ export default {
           refContract.action = 'GET'
           const refCJSON = JSON.stringify(refContract)
           Vue.prototype.$socket.send(refCJSON)
+          // ask for datastore public keys
+          //  need call, added manualy for now  SET_ASK_KEYMANAGEMENT(state)
+          this.state.publickeys = []
+          const pubkeyGet = {}
+          pubkeyGet.type = 'library'
+          pubkeyGet.reftype = 'keymanagement'
+          Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
+          // get datastore
+          let getWarmPeers = {}
+          getWarmPeers.type = 'library'
+          getWarmPeers.reftype = 'warm-peers'
+          Vue.prototype.$socket.send(JSON.stringify(getWarmPeers))
         }
       } else if (backJSON.type === 'ecssummary') {
         console.log('SUMMAERY==========================')
@@ -492,6 +504,14 @@ export default {
         }
       }
     },
+    SET_ASK_KEYMANAGEMENT (state) {
+      console.log('key action sending')
+      this.state.publickeys = []
+      const pubkeyGet = {}
+      pubkeyGet.type = 'library'
+      pubkeyGet.reftype = 'keymanagement'
+      Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
+    },
     CLEAR_CONTRIB_REFCONTRACTS (state, inVerified) {
       // reset the contract holders
       console.log('clear conbirute')
@@ -716,13 +736,6 @@ export default {
       }
       const referenceContractReady = JSON.stringify(prepareRefContract)
       Vue.prototype.$socket.send(referenceContractReady)
-    },
-    actionKeymanagement (context, message) {
-      this.state.publickeys = []
-      const pubkeyGet = {}
-      pubkeyGet.type = 'library'
-      pubkeyGet.reftype = 'keymanagement'
-      Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
     },
     actionOpenLibrary (context, data) {
       let openLibrary = {}

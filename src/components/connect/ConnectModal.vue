@@ -44,21 +44,6 @@
               Peers or Groups Connected
             </slot>
           </div>
-          <div id="cold-peers">
-            <slot name="peers-cold">
-              AI peers connections
-            </slot>
-          </div>
-          <div id="key-management">
-            <slot name="peer-datastorekeys">
-              Datastores active
-            </slot>
-          </div>
-          <div id="replicate-library">
-            <slot name="replicate-library">
-              Network Library
-            </slot>
-          </div>
         </div>
         <footer class="modal-footer">
           <slot name="footer">

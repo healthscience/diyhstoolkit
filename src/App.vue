@@ -76,10 +76,6 @@ export default {
   data () {
     return {
       isModalVisible: false,
-      connectContext: {
-        type: '',
-        message: ''
-      },
       buttonName: 'Connect',
       languages: [
         { flag: 'en', language: 'en', title: 'English' },
@@ -92,23 +88,11 @@ export default {
       this.$i18n.locale = locale
     },
     connectNetwork (typeConnect) {
-      // remove the welcome message
-      console.log('connect button')
-      console.log(typeConnect)
       this.$store.dispatch('actionCheckConnect')
       this.$store.dispatch('startconnectNSnetwork')
       // set flowviews active
+      console.log(typeConnect.type)
       this.$store.dispatch('actionFlowviews')
-      if (typeConnect.type === 'self-verify') {
-        this.connectContext.type = 'self-verify'
-        this.connectContext.message = 'Self verify keys'
-        this.$store.dispatch('actionSelfVerify', this.connectContext)
-        // this.buttonName = ''
-        // ask peerlink for public keys
-        this.$store.dispatch('actionKeymanagement')
-        // list of active peers
-        this.$store.dispatch('actionWarmPeers')
-      }
     },
     showHelpModal () {
       this.$store.dispatch('actionShowhelp', 'home')
