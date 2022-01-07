@@ -5,7 +5,7 @@
       <a class="nxplist-space" v-bind:class="{ active: nxpState === 'public' }" href="" @click.prevent="statusNXP('public')" >Public Experiments </a>
       <a class="nxplist-showspace" v-bind:class="{ active: showExperimentList.text === 'listshow' }" href="" @click.prevent="statusNXPshow()" > {{ showExperimentList.text }}</a>
     </div>
-    <div id="show-nxplists" v-if="showExperimentList.state === true">
+    <div id="show-nxplists" v-if="nxpView === true">
       <list-contracts v-if="nxpState === 'private' && peerExperimentListlive.data"
         class="experiment-info"
         :experiments="peerExperimentListlive.data"
@@ -44,6 +44,9 @@ export default {
     },
     searchQuery: function () {
       return this.$store.state.searchQuery
+    },
+    nxpView: function () {
+      return this.$store.state.viewNXP
     }
   },
   data () {

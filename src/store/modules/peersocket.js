@@ -46,10 +46,10 @@ export default {
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
-      console.log('message')
+      // console.log('message')
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      console.log(backJSON)
+      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -709,7 +709,6 @@ export default {
       console.log(this.state.combineSpaceList)
     },
     SET_NXPLIST_SHOW (state, inVerified) {
-      console.log('hide show nxp list')
       let updateText = ''
       if (this.state.experimentListshow.text === 'hide') {
         updateText = 'show'
@@ -719,6 +718,10 @@ export default {
       let updateState = !this.state.experimentListshow.state
       Vue.set(this.state.experimentListshow, 'text', updateText)
       Vue.set(this.state.experimentListshow, 'state', updateState)
+    },
+    SET_NXPLIST_DEFAULT (state, inVerified) {
+      Vue.set(this.state.experimentListshow, 'text', 'show')
+      Vue.set(this.state.experimentListshow, 'state', false)
     }
   },
   actions: {
@@ -1066,14 +1069,13 @@ export default {
     },
     actionCombineSpace (context, update) {
       // combine two visualisation data space and combine
-      console.log('combine SPACES')
-      console.log(update)
       context.commit('SET_COMBINE_CONTEXT', update)
     },
     actionExperimentList (context, update) {
-      console.log('hide show nxp list')
-      console.log(update)
       context.commit('SET_NXPLIST_SHOW', update)
+    },
+    actionExperimentListDefault (context, update) {
+      context.commit('SET_NXPLIST_DEFAULT', update)
     }
   }
 }

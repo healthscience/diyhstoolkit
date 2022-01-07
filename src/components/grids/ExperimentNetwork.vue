@@ -107,6 +107,7 @@ export default {
       return this.$store.state.ecsMessageLive
     },
     filteredExperimentsList: function () {
+      console.log(this.$store.state.activeXNPFilterlist)
       return this.$store.state.activeXNPFilterlist
     },
     zoomscaleStatus: function () {

@@ -1,5 +1,5 @@
 <template>
-  <div id="grid-contracts" v-if="showExperimentList.state === true">
+  <div id="grid-contracts"> input -- {{ experiments }}
     <table>
       <thead>
         <tr>
@@ -46,12 +46,6 @@ export default {
     filterKey: String
   },
   computed: {
-    showExperimentList: function () {
-      return this.$store.state.experimentListshow
-    },
-    peerExperimentListlive: function () {
-      return this.$store.state.joinedNXPlist
-    },
     visDefaults: function () {
       return this.$store.state.visModuleHolder
     },
@@ -127,7 +121,7 @@ export default {
       this.mData = '8855332211'
     },
     setactiveXNPlist (nxp) {
-      this.$store.dispatch('actionLiveNXPlist', nxp)
+      this.$store.dispatch('actionLiveLBlist', nxp)
     },
     actionExperiment (expCNRL, NXPcontract) {
       this.shellContract = expCNRL

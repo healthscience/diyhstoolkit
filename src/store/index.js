@@ -50,6 +50,9 @@ const store = new Vuex.Store({
       state: true,
       text: 'hide'
     },
+    viewLifeboards: false,
+    viewNXP: true,
+    viewTimeline: false,
     publickeys: [],
     warmNetwork: [],
     swarmStatus: false,
@@ -57,6 +60,7 @@ const store = new Vuex.Store({
     devices: [],
     liveRefContIndex: {},
     livePeerRefContIndex: {},
+    activeLBFilterlist: [],
     activeXNPFilterlist: [],
     activeZoomscale: false,
     activeScalevalue: 1,
@@ -266,6 +270,9 @@ const store = new Vuex.Store({
     SET_QUERY_TEXT: (state, inVerified) => {
       state.searchQuery = inVerified
     },
+    SET_LIFEBOARD_LIVELIST: (state, inVerified) => {
+      state.activeLBFilterlist = inVerified
+    },
     SET_NXP_LIVELIST: (state, inVerified) => {
       state.activeXNPFilterlist = inVerified
     },
@@ -280,17 +287,6 @@ const store = new Vuex.Store({
     },
     setOutflowWatch: (state, inVerified) => {
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
-    },
-    setNetworkExperimentList: (state, inVerified) => {
-      let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
-      let gridData = []
-      for (let nxp of inVerified) {
-        gridData.push({ id: nxp.prime.cnrl, name: nxp.prime.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'Preview / Join' })
-      }
-      let gridAnnon = {}
-      gridAnnon.columns = gridColumns
-      gridAnnon.data = gridData
-      state.NXPexperimentList = gridAnnon
     },
     setDashboardNXP: (state, inVerified) => {
       // set live dashboard list
@@ -523,6 +519,24 @@ const store = new Vuex.Store({
       console.log('complete question')
       // prepare input for SAFEFLOW-ECS
       Vue.set(state.helpchatAsk, 'active', true)
+    },
+    SET_LIFE_VIEW (state, inVerified) {
+      console.log('set view')
+      console.log(inVerified)
+      if (inVerified === 'lifestyleflow') {
+        state.viewLifeboards = !state.viewLifeboards
+        state.viewNXP = false
+        state.viewTimeline = false
+      } else if (inVerified === 'nxp-view') {
+        state.viewNXP = !state.viewNXP
+        state.viewTimeline = false
+        state.viewLifeboards = false
+        // set list view to true
+      } else if (inVerified === 'timeline') {
+        state.viewTimeline = !state.viewTimeline
+        state.viewNXP = false
+        state.viewLifeboards = false
+      }
     }
   },
   actions: {
@@ -563,9 +577,6 @@ const store = new Vuex.Store({
     },
     async annonconnectNSnetwork (context, update) {
       // for cloud
-      // let nsNXPlive = await safeAPI.connectNSnetwork()
-      // context.commit('setNetworkExperimentList', nsNXPlive)
-      // context.commit('setProgressStart', nsNXPlive)
     },
     actionShowhelp (context, update) {
       context.commit('SET_HELP_STATUS', update)
@@ -578,6 +589,9 @@ const store = new Vuex.Store({
     },
     actionLiveNXPlist (context, update) {
       context.commit('SET_NXP_LIVELIST', update)
+    },
+    actionLiveLBlist (context, update) {
+      context.commit('SET_LIFEBOARD_LIVELIST', update)
     },
     actionJOINViewexperiment (context, update) {
       context.commit('SET_RESET_MODULEHOLDER', null)
@@ -958,6 +972,9 @@ const store = new Vuex.Store({
     },
     actionHelpaskentry (context, update) {
       context.commit('SET_ASKCALE_ENTRY', update)
+    },
+    actionLifeview (context, update) {
+      context.commit('SET_LIFE_VIEW', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

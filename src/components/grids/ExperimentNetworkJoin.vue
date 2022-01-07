@@ -1,5 +1,5 @@
 <template>
-  <div id="live-network-grid-join">
+  <div id="live-network-grid-join" v-if="showExperimentList.state === true">
     <!-- peer network experiment added -->
     <div id="grid-template-join">
       <table>
@@ -112,6 +112,9 @@ export default {
     filterKey: String
   },
   computed: {
+    showExperimentList: function () {
+      return this.$store.state.experimentListshow
+    },
     visDefaults: function () {
       return this.$store.state.visModuleHolder
     },

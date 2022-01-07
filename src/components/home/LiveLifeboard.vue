@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import ListContracts from '@/components/lists/ListContracts.vue'
+import ListContracts from '@/components/lists/ListLifeboards.vue'
 
 export default {
   name: 'LiveLifestyle',
@@ -58,14 +58,6 @@ export default {
   methods: {
     statusLifeboard (type) {
       this.lifeboardState = type
-    },
-    lifestyleHex () {
-      console.log('lifehex')
-      this.lifestyleActive = !this.lifestyleActive
-    },
-    worldHex () {
-      console.log('worldhex')
-      this.worldActive = !this.worldActive
     }
   }
 }

@@ -106,7 +106,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 4;
+  z-index: 14;
 }
 
 .modal {

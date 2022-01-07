@@ -4,7 +4,7 @@
     <div id="natlang-ai">
       <div class="chat-flow" id="conversation">
         <div class="peer-ask"  id="peer-chat-left">
-          <img class="left-chat" src="../.././assets/world.png" alt="Avatar">
+          <img class="left-chat" src="../.././assets/logo.png" alt="Avatar">
           <p v-if="chatAsk.active === true" class="left-chat"> {{ chatAsk.text }} </p>
           <span class="left-chat">11:00</span>
         </div>

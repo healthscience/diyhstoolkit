@@ -43,7 +43,7 @@
             <button id="add-lifeboard" @click.prevent="addLifeboard()">add to lifeBoard</button>
           </li>
           <li class="context-future">
-            <!-- <button id="new-visspace" @click.prevent="setChartSpace()">add BBox</button> -->
+            <button id="new-visspace" @click.prevent="setChartSpace()">copy BBox</button>
             <!-- <select v-model="selectedChartnumber" @change.prevent="setChartNumber()">
               <option v-for="cnoption in numbechartoptions" v-bind:value="cnoption.value" :key='cnoption.id' :selected="cnoption.id === selectedChartnumber">
               {{ cnoption.text }}
@@ -215,14 +215,13 @@ export default {
 
 #grid-bentobox {
   display: grid;
-  grid-template-columns: min-content min-content; /* repeat(content-fill minmax(50% 50%)); 50% 50%; repeat(50% - calc(100% - 2fr)); */
+  grid-template-columns: 1fr auto; /* repeat(content-fill minmax(50% 50%)); 50% 50%; repeat(50% - calc(100% - 2fr)); */
   border: 0px solid blue;
   width: 100%;
 }
 
 .grid-item {
   border: 0px solid red;
-  width: 100%;
 }
 
 #future-tools {
