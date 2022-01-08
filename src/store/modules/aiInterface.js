@@ -6,6 +6,20 @@ export default {
     {
       text: 'off',
       active: false
+    },
+    helpchatAsk:
+    {
+      text: '',
+      time: '',
+      active: false
+    },
+    helpchatReply: '',
+    helpchatHistory: [],
+    caleaiReply:
+    {
+      text: '... .. ...',
+      time: '',
+      active: false
     }
   },
   getters: {
@@ -22,12 +36,48 @@ export default {
         Vue.set(state.statusCALE, 'active', false)
         Vue.set(state.statusCALE, 'text', 'off')
       }
+    },
+    SET_ASKCALE_HELP: (state, inVerified) => {
+      console.log('active help with CALE chat bot')
+      // set context
+      state.liveHelpcontext = 'cale'
+      Vue.set(state.helpModal, 'active', true)
+    },
+    SET_ASKCALE_CHAT: (state, inVerified) => {
+      console.log('ash cale chat')
+      console.log(inVerified)
+      // set context
+      Vue.set(state.helpchatAsk, 'text', inVerified)
+      let date = new Date()
+      // get the time as a string
+      let time = date.toLocaleTimeString()
+      Vue.set(state.helpchatAsk, 'time', time)
+    },
+    SET_ASKCALE_ENTRY: (state, inVerified) => {
+      console.log('complete question')
+      Vue.set(state.helpchatAsk, 'active', true)
+      let aiMessageout = {}
+      aiMessageout.type = 'caleai'
+      aiMessageout.reftype = 'ignore'
+      aiMessageout.action = 'question'
+      aiMessageout.data = state.helpchatAsk
+      const caleMessage = JSON.stringify(aiMessageout)
+      Vue.prototype.$socket.send(caleMessage)
     }
   },
   actions: {
     actionCALEAI: (context, update) => {
     // filter a list of Kentity bundles given the Experiment CNRL
       context.commit('SET_CALEAI_STATE', update)
+    },
+    actionAskCALE: (context, update) => {
+      context.commit('SET_ASKCALE_HELP', update)
+    },
+    actionHelpAsk: (context, update) => {
+      context.commit('SET_ASKCALE_CHAT', update)
+    },
+    actionHelpaskentry: (context, update) => {
+      context.commit('SET_ASKCALE_ENTRY', update)
     }
   }
 }

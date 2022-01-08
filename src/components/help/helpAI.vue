@@ -100,7 +100,7 @@ export default {
       return this.$store.state.helpchatAsk
     },
     aiResponse: function () {
-      return this.$store.state.calaReply
+      return this.$store.state.caleaiReply
     }
   },
   data () {
@@ -128,70 +128,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-#natlang-ai {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid grey;
-}
-
-.chat-flow {
-  display: block;
-  width: 800px;
-  border: 1px solid red;
-}
-
-#conversation {
-  display: grid;
-  grid-template-columns: 1fr;
-  min-height: 100px;
-  overflow-y: scroll;
-}
-
-.peer-ask {
-  background-color: pink;
-  width: 100%;
-}
-
-#peer-chat-left {
-  display: grid;
-  grid-template-columns: 1fr 4fr 1fr;
-}
-
-.cale-reply {
-  background-color: lightgrey;
-  width: 100%;
-  align-items: right;
-}
-
-.left-chat {
-  display: inline-grid;
-}
-
-#cale-chat-right {
-  display: grid;
-  grid-template-columns: auto 6fr 1fr;
-}
-
-.right-chat {
-  display: inline-grid;
-}
-
-#ai-interaction {
-  display: grid;
-  grid-template-columns: 4fr 1fr
-}
-
-#askinput {
-  height:4em;
-  width: 600px;
-}
-
-#natlang-ask {
-}
-
 .help-section {
   margin: 4em;
 }

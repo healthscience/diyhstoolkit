@@ -49,7 +49,7 @@ export default {
       // console.log('message')
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      // console.log(backJSON)
+      console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -121,6 +121,14 @@ export default {
             // need to set toolbar settings TODO
           }
         }
+      } else if (backJSON.type === 'caleai') {
+        // flow messages to ai helper
+        let date = new Date()
+        // get the time as a string
+        let time = date.toLocaleTimeString()
+        Vue.set(this.state.aiInterface.caleaiReply, 'text', backJSON.data)
+        Vue.set(this.state.aiInterface.caleaiReply, 'time', time)
+        Vue.set(this.state.aiInterface.caleaiReply, 'active', true)
       } else if (backJSON.type === 'lifeboard') {
         if (backJSON.contract.concept.state === 'joined') {
           console.log('lifeboard new ref contract confirmed')

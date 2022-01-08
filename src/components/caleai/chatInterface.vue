@@ -5,13 +5,13 @@
       <div class="chat-flow" id="conversation">
         <div class="peer-ask"  id="peer-chat-left">
           <img class="left-chat" src="../.././assets/logo.png" alt="Avatar">
-          <p v-if="chatAsk.active === true" class="left-chat"> {{ chatAsk.text }} </p>
-          <span class="left-chat">11:00</span>
+          <div v-if="chatAsk.active === true" class="left-chat"> {{ chatAsk.text }} </div>
+          <span class="left-chat">{{ chatAsk.time }}</span>
         </div>
         <div class="cale-reply" id="cale-chat-right">
-          <span class="right-chat">11:01</span>
-          <p class="right-chat">{{ aiResponse.text }}</p>
-          <img class="right-chat" src="../.././assets/caleailogo.png" alt="Avatar">
+          <span class="right-chat">{{ aiResponse.time }}</span>
+          <div class="right-chat">{{ aiResponse.text }}</div>
+          <img class="right-chat" src="../.././assets/caleailogo.png" alt="caleAI">
         </div>
       </div>
       <div class="chat-flow" id="ai-interaction">
@@ -19,7 +19,9 @@
           <label for="askname"></label>
           <input type="text" id="askinput" name="ainame" @keyup="askeCalesave" v-model="askInput">
         </form>
-        <button v-if="caleAIStatus.active === true" id="natlang-ask" @click="submitAsk">Ask CALE</button>
+        <button v-if="caleAIStatus.active === true" id="natlang-ask" @click="submitAsk" v-on:keyup.enter.prevent="submitAsk">
+          Ask CALE
+        </button>
       </div>
     </div>
     <!-- <div v-if="helpState.type === 'future'" id="feedback-action">
@@ -44,10 +46,10 @@ export default {
       return this.$store.state.aiInterface.statusCALE
     },
     chatAsk: function () {
-      return this.$store.state.helpchatAsk
+      return this.$store.state.aiInterface.helpchatAsk
     },
     aiResponse: function () {
-      return this.$store.state.calaReply
+      return this.$store.state.aiInterface.caleaiReply
     }
   },
   data () {
@@ -57,13 +59,10 @@ export default {
   },
   methods: {
     askeCalesave () {
-      console.log('ask tigger')
       let chatASKCALE = this.askInput
-      console.log(chatASKCALE)
       this.$store.dispatch('actionHelpAsk', chatASKCALE)
     },
     submitAsk () {
-      console.log('sumbin question to CALE')
       this.$store.dispatch('actionHelpaskentry', true)
     }
   }
@@ -78,13 +77,16 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid grey;
+  border: 1px solid grey;
+  padding: 1em;
+  border-radius: 1em;
 }
 
 .chat-flow {
   display: block;
+  margin-top: .5em;
   width: 800px;
-  border: 1px solid red;
+  border: 0px solid red;
 }
 
 #conversation {
@@ -95,8 +97,11 @@ export default {
 }
 
 .peer-ask {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
   background-color: pink;
-  width: 100%;
+  border-radius: 25px;
+  width: 90%;
 }
 
 #peer-chat-left {
@@ -104,23 +109,22 @@ export default {
   grid-template-columns: 1fr 4fr 1fr;
 }
 
-.cale-reply {
-  background-color: lightgrey;
-  width: 100%;
-  align-items: right;
-}
-
 .left-chat {
+  padding-top: .8em;
   display: inline-grid;
 }
 
-#cale-chat-right {
+.cale-reply {
   display: grid;
-  grid-template-columns: auto 6fr 1fr;
+  grid-template-columns: 1fr 4fr 1fr;
+  background-color: #CFECCB;
+  width: 90%;
+  border-radius: 25px;
+  justify-self: end;
 }
 
 .right-chat {
-  display: inline-grid;
+  padding-top: 1em;
 }
 
 #ai-interaction {
@@ -129,6 +133,8 @@ export default {
 }
 
 #askinput {
+  font-size: 1.2em;
+  padding-left: 1em;
   height:4em;
   width: 600px;
 }

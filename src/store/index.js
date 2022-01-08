@@ -31,18 +31,6 @@ const store = new Vuex.Store({
       refcontract: ''
     },
     liveHelpcontext: 'home',
-    helpchatAsk:
-    {
-      text: '',
-      active: false
-    },
-    helpchatReply: '',
-    helpchatHistory: [],
-    calaReply:
-    {
-      text: 'listening',
-      active: false
-    },
     searchQuery: '',
     feedbackMessage: {},
     experimentListshow:
@@ -503,23 +491,6 @@ const store = new Vuex.Store({
       setProgress = { text: 'Updating visualisation', active: false }
       Vue.set(this.state.visProgress[inVerified.moduleCNRL], modG, setProgress)
     },
-    SET_ASKCALE_HELP (state, inVerified) {
-      console.log('active help with CALE chat bot')
-      // set context
-      state.liveHelpcontext = 'cale'
-      Vue.set(state.helpModal, 'active', true)
-    },
-    SET_ASKCALE_CHAT (state, inVerified) {
-      console.log('ash cale chat')
-      console.log(inVerified)
-      // set context
-      Vue.set(state.helpchatAsk, 'text', inVerified)
-    },
-    SET_ASKCALE_ENTRY (state, inVerified) {
-      console.log('complete question')
-      // prepare input for SAFEFLOW-ECS
-      Vue.set(state.helpchatAsk, 'active', true)
-    },
     SET_LIFE_VIEW (state, inVerified) {
       console.log('set view')
       console.log(inVerified)
@@ -963,15 +934,6 @@ const store = new Vuex.Store({
     },
     actionFlowviews (context, update) {
       context.commit('SET_VIEWFLOW_START', update)
-    },
-    actionAskCALE (context, update) {
-      context.commit('SET_ASKCALE_HELP', update)
-    },
-    actionHelpAsk (context, update) {
-      context.commit('SET_ASKCALE_CHAT', update)
-    },
-    actionHelpaskentry (context, update) {
-      context.commit('SET_ASKCALE_ENTRY', update)
     },
     actionLifeview (context, update) {
       context.commit('SET_LIFE_VIEW', update)
