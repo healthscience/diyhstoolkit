@@ -15,6 +15,11 @@
           </slot>
         </header>
         <div id="connect-peerlink">
+          <div id="form-submit">
+            <slot name="submit-cloud">
+              <!-- no default button -->
+            </slot>
+          </div>
           <form>
             <div id="form-title">
               <slot name="title-form">
@@ -29,11 +34,6 @@
             <div id="form-input">
               <slot name="input-form">
                 <!-- No default input -->
-              </slot>
-            </div>
-            <div id="form-submit">
-              <slot name="submit-form">
-                <!-- no default button -->
               </slot>
             </div>
           </form>

@@ -4,22 +4,22 @@
     <div id="natlang-ai">
       <div class="chat-flow" id="conversation">
         <div class="peer-ask"  id="peer-chat-left">
-          <img class="left-chat" src="../.././assets/logo.png" alt="Avatar">
+          <img class="left-chat-peer" src="../.././assets/logo.png" alt="Avatar">
           <div v-if="chatAsk.active === true" class="left-chat"> {{ chatAsk.text }} </div>
           <span class="left-chat">{{ chatAsk.time }}</span>
         </div>
         <div class="cale-reply" id="cale-chat-right">
           <span class="right-chat">{{ aiResponse.time }}</span>
           <div class="right-chat">{{ aiResponse.text }}</div>
-          <img class="right-chat" src="../.././assets/caleailogo.png" alt="caleAI">
+          <img class="right-chat-cale" src="../.././assets/caleailogo.png" alt="caleAI">
         </div>
       </div>
       <div class="chat-flow" id="ai-interaction">
-        <form id="ask-ai-form">
+        <form id="ask-ai-form" v-on:submit.prevent>
           <label for="askname"></label>
-          <input type="text" id="askinput" name="ainame" @keyup="askeCalesave" v-model="askInput">
+          <input type="text" id="askinput" name="ainame" v-on:keyup="askeCalesave" v-model="askInput">
         </form>
-        <button v-if="caleAIStatus.active === true" id="natlang-ask" @click="submitAsk" v-on:keyup.enter.prevent="submitAsk">
+        <button v-if="caleAIStatus.active === true" id="natlang-ask" @click.prevent="submitAsk">
           Ask CALE
         </button>
       </div>
@@ -121,6 +121,7 @@ export default {
   width: 90%;
   border-radius: 25px;
   justify-self: end;
+  margin-top: .5em;
 }
 
 .right-chat {

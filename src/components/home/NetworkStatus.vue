@@ -43,8 +43,22 @@
           </div>
         </div>
       </template>
-      <template v-slot:submit-form>
-        <!-- <button>{{ buttonName }}</button> -->
+      <template v-slot:submit-cloud v-if="cloudConnect === 'signin-cloud'">
+        <form id="cloud-signin-form">
+          <div class="cloud-inputs">
+            <label class="form-couple-type" for="signin-cloud">username</label>
+            <input class="form-couple" type="text" id="usernamecloud" name="username" v-model="cloudsigninInput">
+          </div>
+          <div class="cloud-inputs">
+            <label class="form-couple-type" for="password-cloud">password</label>
+            <input class="form-couple" type="password" id="passwordcloud" name="password" v-model="cloudpwInput">
+          </div>
+          <div class="cloud-confirm">
+            <button id="cloud-submit" @click="submitCloudin" v-on:keyup.enter.prevent="submitCloudin">
+              Sign-in
+            </button>
+          </div>
+        </form>
       </template>
       <template v-slot:peers-warm>
         <connection-lists></connection-lists>
@@ -90,7 +104,11 @@ export default {
     return {
       // w: remote.getCurrentWindow(),
       isModalVisible: false,
-      buttonName: 'verify token'
+      buttonName: 'verify token',
+      cloudConnect: '', // ''signin-cloud',
+      cloudsigninInput: '',
+      cloudpwInput: ''
+
     }
   },
   methods: {
@@ -102,6 +120,9 @@ export default {
     },
     closeModal () {
       this.$store.dispatch('actionCloseNetworkModal')
+    },
+    submitCloudin () {
+      console.log('cloud login')
     }
   }
 }
@@ -139,6 +160,36 @@ export default {
   width: 40px;
   height: 20px;
   background-color: green;
+}
+
+#cloud-signin-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid red
+}
+
+.cloud-inputs {
+  display: grid;
+  grid-template-columns: 200px 400px;
+  grid-gap: 16px;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+  font-size: 1.2em;
+}
+
+.form-couple-type {
+  justify-self: end;
+}
+.cloud-confirm {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+#cloud-submit {
+  width: 200px;
+  padding: 1em;
 }
 
 #external-datastores {
