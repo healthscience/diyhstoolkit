@@ -20,7 +20,8 @@ export default {
       text: '... .. ...',
       time: '',
       active: false
-    }
+    },
+    liveFutureCollection: { active: false }
   },
   getters: {
   },
@@ -39,7 +40,7 @@ export default {
     },
     SET_ASKCALE_HELP: (state, inVerified) => {
       console.log('active help with CALE chat bot')
-      // set context
+      // set context for help ie where orginiated
       state.liveHelpcontext = 'cale'
       Vue.set(state.helpModal, 'active', true)
     },
@@ -63,6 +64,21 @@ export default {
       aiMessageout.data = state.helpchatAsk
       const caleMessage = JSON.stringify(aiMessageout)
       Vue.prototype.$socket.send(caleMessage)
+    },
+    SET_FUTURE_DATA: (state, inVerified) => {
+      console.log('GET future data CALE')
+      state.liveFutureCollection.active = !state.liveFutureCollection.active
+      // data nxp context ref contracts
+      let refBundle = {}
+      refBundle.future = true
+      refBundle.contracts = inVerified.contracts
+      let aiMessageout = {}
+      aiMessageout.type = 'caleai'
+      aiMessageout.reftype = 'ignore'
+      aiMessageout.action = 'future'
+      aiMessageout.data = refBundle
+      const caleMessage = JSON.stringify(aiMessageout)
+      Vue.prototype.$socket.send(caleMessage)
     }
   },
   actions: {
@@ -71,13 +87,21 @@ export default {
       context.commit('SET_CALEAI_STATE', update)
     },
     actionAskCALE: (context, update) => {
-      context.commit('SET_ASKCALE_HELP', update)
+      console.log(context)
+      console.log(context.rootState)
+      console.log(update)
+      // context.commit('SET_ASKCALE_HELP', update)
+      context.rootState.liveHelpcontext = 'cale'
+      Vue.set(context.rootState.helpModal, 'active', true)
     },
     actionHelpAsk: (context, update) => {
       context.commit('SET_ASKCALE_CHAT', update)
     },
     actionHelpaskentry: (context, update) => {
       context.commit('SET_ASKCALE_ENTRY', update)
+    },
+    actionFuture: (context, update) => {
+      context.commit('SET_FUTURE_DATA', update)
     }
   }
 }

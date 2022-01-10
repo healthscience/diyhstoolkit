@@ -3,10 +3,20 @@ import Vue from 'vue'
 export default {
   state: {
     lifeboardHolder: {},
-    peerLifeboards: ['networkedself', 'bioregion', 'air-quality', 'river-dee'],
+    lifeboardtListshow:
+    {
+      state: true,
+      text: 'hide'
+    },
+    peerLifeboards:
+    [
+      { name: 'networkedself', refcontract: '88337722' },
+      { name: 'bioregion', refcontract: '66337766' },
+      { name: 'air-quality', refcontract: '44337444' },
+      { name: 'river-dee', refcontract: '33337733' }
+    ],
     liveSocialGraph: [1, 2, 3],
     liveMapNetwork: ['a', 'b', 'c'],
-    liveFutureCollection: { active: false },
     liveNetworkcollection: { active: false },
     liveFutureNetworkcollection: { active: false }
   },
@@ -59,10 +69,6 @@ export default {
       const referenceContractReady = JSON.stringify(addLifeboard)
       Vue.prototype.$socket.send(referenceContractReady) */
     },
-    SET_FUTURE_DATA: (state, inVerified) => {
-      console.log('GET future data CALE')
-      state.liveFutureCollection.active = !state.liveFutureCollection.active
-    },
     SET_PAST_GRAPH: (state, inVerified) => {
       console.log('GET past network data')
       state.liveNetworkcollection.active = !state.liveNetworkcollection.active
@@ -70,6 +76,18 @@ export default {
     SET_FUTURE_GRAPH: (state, inVerified) => {
       console.log('GET FUTURE social graph')
       state.liveFutureNetworkcollection.active = !state.liveFutureNetworkcollection.active
+    },
+    SET_LBLIST_SHOW: (state, inVerified) => {
+      console.log(inVerified)
+      let updateText = ''
+      if (state.lifeboardtListshow.text === 'hide') {
+        updateText = 'show'
+      } else {
+        updateText = 'hide'
+      }
+      let updateState = !state.lifeboardtListshow.state
+      Vue.set(state.lifeboardtListshow, 'text', updateText)
+      Vue.set(state.lifeboardtListshow, 'state', updateState)
     }
   },
   actions: {
@@ -86,14 +104,14 @@ export default {
     actionMap: (context, update) => {
       context.commit('SET_MAP_GETNETWORK', update)
     },
-    actionFuture: (context, update) => {
-      context.commit('SET_FUTURE_DATA', update)
-    },
     actionPastGraph: (context, update) => {
       context.commit('SET_PAST_GRAPH', update)
     },
     actionFutureGraph: (context, update) => {
       context.commit('SET_FUTURE_GRAPH', update)
+    },
+    actionLifeboardList: (context, update) => {
+      context.commit('SET_LBLIST_SHOW', update)
     }
   }
 }

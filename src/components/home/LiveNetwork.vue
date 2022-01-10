@@ -97,8 +97,4 @@ export default {
   text-align: center;
 }
 
-.network-toolbar {
-  display: inline-block;
-  padding-left: 10px;
-}
 </style>

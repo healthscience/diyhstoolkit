@@ -91,6 +91,7 @@ const store = new Vuex.Store({
     referenceContract: {},
     experimentList: {},
     NXPexperimentList: {},
+    joinedLifeboard: [],
     joinedNXPlist: [],
     experimentStatus: {},
     experimentPeerStatus: {},

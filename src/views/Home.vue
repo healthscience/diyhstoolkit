@@ -77,6 +77,7 @@
         <live-networknxp v-if="nxpView === true"></live-networknxp>
         <live-timeline v-if="timeView === true"></live-timeline>
       </div>
+      <lifeboard-network v-if="lifeView === true"></lifeboard-network>
       <experiment-network v-if="nxpView === true"></experiment-network>
     </div>
     <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png"> HOP
@@ -91,6 +92,7 @@ import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
 import LiveTimeline from '@/components/home/LiveTimeline.vue'
 import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
 import ModuleBuilder from '@/components/grids/moduleBuilder.vue'
+import LifeboardNetwork from '@/components/grids/LifeboardNetwork.vue'
 import ExperimentNetwork from '@/components/grids/ExperimentNetwork.vue'
 
 export default {
@@ -102,6 +104,7 @@ export default {
     LiveTimeline,
     NewNetworkexperiment,
     ModuleBuilder,
+    LifeboardNetwork,
     ExperimentNetwork
   },
   computed: {

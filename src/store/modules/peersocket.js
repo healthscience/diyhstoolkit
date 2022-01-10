@@ -195,6 +195,11 @@ export default {
           getWarmPeers.type = 'library'
           getWarmPeers.reftype = 'warm-peers'
           Vue.prototype.$socket.send(JSON.stringify(getWarmPeers))
+          // get the peer start lifeboard
+          let getLifeboard = {}
+          getLifeboard.type = 'library'
+          getLifeboard.reftype = 'peerLifeboard'
+          Vue.prototype.$socket.send(JSON.stringify(getLifeboard))
         }
       } else if (backJSON.type === 'ecssummary') {
         console.log('SUMMAERY==========================')
@@ -475,6 +480,14 @@ export default {
         console.log('no data show empty toolbar')
         console.log(backJSON)
         this.state.ecsMessageLive = 'no data available'
+      } else if (backJSON.type === 'peerLifeboard') {
+        console.log('peer lifeboard start')
+      } else if (backJSON.type === 'publicLifeboard') {
+        console.log('public lifeboard start')
+        let tempData = {}
+        tempData.data = [1, 2]
+        tempData.columns = ['a', 'b']
+        this.state.joinedLifeboard.push(tempData)
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
         this.state.livePeerRefContIndex = backJSON.referenceContracts

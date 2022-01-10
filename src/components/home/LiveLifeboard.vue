@@ -1,18 +1,12 @@
 <template>
-  <div class="lifestyle" id="live=lifestyle">LIFE FLOW
-    <!-- LIFESTYLE COMING SOON
-    <img src="../../assets/lifestyle.png" @click="lifestyleHex">
-    <img src="../../assets/world.png" @click="worldHex">
-    <div id="hexDashboard">
-      <img v-if="lifestyleActive === true" src="../../assets/swimming.png">
-      <img v-if="worldActive === true" src="../../assets/environment.png">
-    </div> -->
-    <div class="lifeflow-experimentslist">
-      <a class="flowlist-space" v-bind:class="{ active: lifeflowState === 'private' }" href="" @click.prevent="statusLifeboard('private')" >Private LIFEBOARDS</a>
-      <a class="flowlist-space" v-bind:class="{ active: lifeflowState === 'public' }" href="" @click.prevent="statusLifeboards('public')" >Public Lifeboards</a>
+  <div class="lifestyle" id="live=lifestyle">
+    <div class="lifeflow-spacelist">
+      <a class="flowlist-space" v-bind:class="{ active: lifeboardState === 'private' }" href="" @click.prevent="statusLifeboard('private')" >Private</a>
+      <a class="flowlist-space" v-bind:class="{ active: lifeboardState === 'public' }" href="" @click.prevent="statusLifeboard('public')" >Public</a>
+      <a class="flowlist-showspace" v-bind:class="{ active: showLifeboardList.text === 'listshow' }" href="" @click.prevent="statusLifeboardshow()" > {{ showLifeboardList.text }}</a>
     </div>
-    <list-contracts v-if="lifeflowState === 'private' && peerLifeflowListlive.data"
-      class="experiment-info"
+    <list-contracts v-if="lifeboardState === 'private' && peerLifeflowListlive.data"
+      class="lifeboard-info"
       :experiments="peerLifeflowListlive.data"
       :columns="peerLifeflowListlive.columns"
       :filter-key="searchQuery">
@@ -37,12 +31,12 @@ export default {
   props: {
   },
   computed: {
+    showLifeboardList: function () {
+      return this.$store.state.lifeBoard.lifeboardtListshow
+    },
     peerLifeflowListlive: function () {
-      let tempData = {}
-      tempData.data = [1, 2]
-      tempData.columns = ['a', 'b']
-      return tempData
-      // return this.$store.state.joinedLifeboard
+      console.log(this.$store.state.joinedLifeboard)
+      return this.$store.state.joinedLifeboard
     },
     searchQuery: function () {
       return this.$store.state.searchQuery
@@ -50,14 +44,18 @@ export default {
   },
   data () {
     return {
-      lifeflowState: 'private',
+      lifeboardState: 'private',
       lifestyleActive: false,
       worldActive: false
     }
   },
   methods: {
     statusLifeboard (type) {
+      console.log(type)
       this.lifeboardState = type
+    },
+    statusLifeboardshow () {
+      this.$store.dispatch('actionLifeboardList')
     }
   }
 }
@@ -68,4 +66,29 @@ export default {
   img {
     width: auto;
   }
+
+.flowlist-showspace {
+  padding-left: 2em;
+}
+
+.flowlist-space.active {
+  font-size: 1.2em;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  margin-right: 2em;
+  margin-left: 2em;
+  text-align: center;
+}
+
+.lifeflow-spacelist {
+  padding: 1em;
+}
+
+.lifeboard-info {
+  border: 0px solid grey;
+  text-align: center;
+}
+
 </style>

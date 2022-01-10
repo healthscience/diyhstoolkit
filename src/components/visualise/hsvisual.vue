@@ -29,8 +29,8 @@
               <form id="lifeboard_form" name="lifeboard_addform" method="post" action="#">
                 <label for="lifeboard-select"></label>
                 <select class="select-lifeboard-id" id="lifeboard-list" @change="lifeboardSelect" v-model="lifeboardRef">
-                  <option v-for="lb in lifeboardList" :key="lb.id" v-bind:value="lb">
-                    {{ lb }}
+                  <option v-for="lb in lifeboardList" :key="lb.refcontract" v-bind:value="lb.refcontract">
+                    {{ lb.name }}
                   </option>
                 </select>
                 <!-- <button id="add-lifeboard-button" type="button" class="btn" @click="addLifeboard()">add</button> -->
@@ -157,9 +157,10 @@ export default {
       this.$store.dispatch('actionVisSpaceAdd', spaceContext)
     },
     addLifeboard () {
-      console.log('add to lifeboard')
+      console.log('add to lifeboard button')
       let lifeBoardHolder = {}
       lifeBoardHolder.type = 'add'
+      lifeBoardHolder.lifeboard = this.lifeboardRef
       lifeBoardHolder.shellID = this.shellID
       lifeBoardHolder.moduleCNRL = this.moduleCNRL
       lifeBoardHolder.moduleType = this.moduleType

@@ -1,5 +1,5 @@
 <template>
-  <div id="grid-contracts"> input -- {{ experiments }}
+  <div id="grid-contracts"> input -- {{ lifeboards }}
     <table>
       <thead>
         <tr>
@@ -19,7 +19,7 @@
             {{entry[key]}}
             </div>
             <div v-else>
-              <button type="button" class="btn" @click="actionExperiment(entry.id, entry)">{{ entry[key] }}</button>
+              <button type="button" class="btn" @click="actionLifeboard(entry.id, entry)">{{ entry[key] }}</button>
             </div>
           </td>
         </tr>
@@ -41,7 +41,7 @@ export default {
   mounted () {
   },
   props: {
-    experiments: Array,
+    lifeboards: Array,
     columns: Array,
     filterKey: String
   },
@@ -65,7 +65,7 @@ export default {
       var sortKey = this.sortKey
       var filterKey = this.filterKey && this.filterKey.toLowerCase()
       var order = this.sortOrders[sortKey] || 1
-      var experiments = this.experiments
+      var experiments = this.experimentlifeboards
       if (filterKey) {
         experiments = experiments.filter(function (row) {
           return Object.keys(row).some(function (key) {
@@ -123,7 +123,7 @@ export default {
     setactiveXNPlist (nxp) {
       this.$store.dispatch('actionLiveLBlist', nxp)
     },
-    actionExperiment (expCNRL, NXPcontract) {
+    actionLifeboard (expCNRL, NXPcontract) {
       this.shellContract = expCNRL
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
