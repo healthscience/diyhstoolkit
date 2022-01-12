@@ -13,6 +13,9 @@
       <div id="story-life">
           <a @click.prevent="viewStorytools" href="" id="story-button">Story</a>
       </div>
+      <div id="routine-life">
+          <a @click.prevent="viewRoutines" href="" id="routine-button">Routines</a>
+      </div>
     </div>
     <div v-if="liveStorytools === true" id="story-board">
       <story-tools></story-tools>
@@ -67,6 +70,9 @@ export default {
     },
     viewStorytools (ev) {
       this.liveStorytools = !this.liveStorytools
+    },
+    viewRoutines () {
+      console.log('rounte patterns / reminders')
     }
   }
 }
@@ -79,7 +85,7 @@ export default {
 
 #scale-tools {
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto;
   justify-content: center;
   align-content: center;
   gap: 10px;

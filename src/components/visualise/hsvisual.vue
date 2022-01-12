@@ -33,13 +33,8 @@
                     {{ lb.name }}
                   </option>
                 </select>
-                <!-- <button id="add-lifeboard-button" type="button" class="btn" @click="addLifeboard()">add</button> -->
               </form>
             </div>
-            <!-- <div class="scale-item">
-              New <input name="query" v-model="lifeboardName">
-              <button class="new-lifeboard" @click.prevent="saveLifeboard()">save</button>
-            </div> -->
             <button id="add-lifeboard" @click.prevent="addLifeboard()">add to lifeBoard</button>
           </li>
           <li class="context-future">
@@ -141,11 +136,6 @@ export default {
   methods: {
     lifeboardSelect () {
       console.log(this.lifeboardRef)
-    },
-    saveLifeboard () {
-      console.log('save new lifeboard')
-      console.log(this.lifeboardName)
-      this.$store.dispatch('actionSaveLifeboard', this.lifeboardName)
     },
     setChartSpace () {
       console.log('set up a new vis chart space')

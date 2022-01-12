@@ -34,7 +34,7 @@
               Lifeboards
             </button>
             <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'nxp-view' }" id="nxp-view" @click.prevent="setView($event)">
-              Network experiments
+              Experiments
             </button>
             <button class="peer-medium" id="timeline" v-bind:class="{ active: viewFlowtype === 'timeline' }"  @click.prevent="setView($event)">
               Timeline
@@ -49,7 +49,23 @@
                   </form>
                 </li>
                 <li class="network-toolbar">
-                  <button type="button" class="btn" @click="newExperiment()">new</button>
+                  <button type="button" class="btn" @click="newType()">new</button>
+                  <div id="new-type" v-if="newtypeShow === true">
+                    <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button>
+                    <button type="button" class="btn-new" @click="newExperiment('experiment')">experiment</button>
+                  </div>
+                  <new-lifeboard v-show="isModalNewLifeboard" @close="closeModalNewLB">
+                    <template v-slot:header>
+                    <!-- The code below goes into the header slot -->
+                      NEW LIFEBOARD
+                    </template>
+                    <template v-slot:body>
+                      <div class="scale-item">
+                      New <input name="query" v-model="lifeboardName">
+                    <button class="new-lifeboard" @click.prevent="saveLifeboard()">save</button>
+                </div> -->
+                    </template>
+                  </new-lifeboard>
                   <new-networkexperiment v-show="isModalNewNetworkExperiment" @close="closeModalNewN1">
                     <template v-slot:header>
                     <!-- The code below goes into the header slot -->
@@ -90,6 +106,7 @@ import ChatInterface from '@/components/caleai/chatInterface.vue'
 import LiveLifestyle from '@/components/home/LiveLifeboard.vue'
 import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
 import LiveTimeline from '@/components/home/LiveTimeline.vue'
+import NewLifeboard from '@/components/lifeboard/NewLifeboard.vue'
 import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
 import ModuleBuilder from '@/components/grids/moduleBuilder.vue'
 import LifeboardNetwork from '@/components/grids/LifeboardNetwork.vue'
@@ -102,6 +119,7 @@ export default {
     LiveLifestyle,
     LiveNetworknxp,
     LiveTimeline,
+    NewLifeboard,
     NewNetworkexperiment,
     ModuleBuilder,
     LifeboardNetwork,
@@ -133,8 +151,11 @@ export default {
   data () {
     return {
       viewFlowtype: 'nxp-view',
+      isModalNewLifeboard: false,
       isModalNewNetworkExperiment: false,
-      searchText: ''
+      searchText: '',
+      newtypeShow: false,
+      lifeboardName: ''
     }
   },
   methods: {
@@ -146,10 +167,29 @@ export default {
     textQuery () {
       this.$store.dispatch('actionTextquery', this.searchText)
     },
-    newExperiment () {
-      this.isModalNewNetworkExperiment = true
-      // create a set of modules and save if contributed
-      this.$store.dispatch('actionMakeModuleRefContract')
+    newType () {
+      console.log('show what type of new?')
+      this.newtypeShow = !this.newtypeShow
+    },
+    saveLifeboard () {
+      console.log('save new lifeboard')
+      console.log(this.lifeboardName)
+      this.$store.dispatch('actionSaveLifeboard', this.lifeboardName)
+    },
+    newExperiment (type) {
+      if (type === 'experiment') {
+        this.isModalNewNetworkExperiment = true
+        // create a set of modules and save if contributed
+        this.$store.dispatch('actionMakeModuleRefContract')
+      } else if (type === 'lifeboard') {
+        console.log('new lifeboard flow')
+        this.isModalNewLifeboard = true
+      }
+      this.newtypeShow = !this.newtypeShow
+    },
+    closeModalNewLB () {
+      // this.$store.dispatch('actionClear')
+      this.isModalNewLifeboard = false
     },
     closeModalNewN1 () {
       // clear the form
@@ -288,5 +328,38 @@ img {
 
 #view-flows {
   margin-left: 2em;
+}
+
+#new-type {
+  position: absolute;
+  margin-left: -70px;
+}
+
+.btn {
+  font-size: 1.2em;
+  border: none;
+  padding: 6px 14px;
+}
+
+.btn-new {
+  font-size: 1.2em;
+  background-color: white; /*#4CAF50; /* Green */
+  border: 1px solid lightgrey;
+  color: black;
+  padding: 6px 14px;
+  margin-right: 2em;
+  margin-left: 2em;
+  text-align: left;
+}
+
+.btn-new:hover {
+  font-size: 1.2em;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  margin-right: 2em;
+  margin-left: 2em;
+  text-align: center;
 }
 </style>

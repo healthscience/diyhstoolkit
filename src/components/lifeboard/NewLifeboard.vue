@@ -27,19 +27,8 @@
           class="modal-body"
           id="modalDescription"
         >
-          <div class="network-experiment">
+          <div class="peer-lifeboard">
             <slot name="body">
-              N=1 network experiment summary
-            </slot>
-          </div>
-          <div class="network-dashboard">
-            <slot name="dashboard">
-              I'm the default body!
-            </slot>
-          </div>
-          <div id="join-submit">
-            <slot name="submit-join">
-              <!-- no default button -->
             </slot>
           </div>
         </section>
@@ -145,7 +134,7 @@ export default {
     border-radius: 2px;
   }
 
-.network-experiment {
+.peer-lifeboard {
   margin: 20px;
   border: 0px solid blue;
 }
