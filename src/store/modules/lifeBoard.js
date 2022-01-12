@@ -18,7 +18,12 @@ export default {
     liveSocialGraph: [1, 2, 3],
     liveMapNetwork: ['a', 'b', 'c'],
     liveNetworkcollection: { active: false },
-    liveFutureNetworkcollection: { active: false }
+    liveFutureNetworkcollection: { active: false },
+    storyLive: [{ name: 'Waterflow', id: '0001' }, { name: 'Rainfall', id: '0002' }, { name: 'Soil', id: '0003' }, { name: 'Plants', id: '0004' }, { name: 'Birds', id: '0005' }, { name: 'Snow', id: '0006' }, { name: 'Population', id: '0007' }],
+    liveStory: {},
+    liveStoryName: '',
+    storyStages: [],
+    stageCount: 0,
   },
   getters: {
   },
@@ -88,6 +93,27 @@ export default {
       let updateState = !state.lifeboardtListshow.state
       Vue.set(state.lifeboardtListshow, 'text', updateText)
       Vue.set(state.lifeboardtListshow, 'state', updateState)
+    },
+    SET_STORY_NAME: (state, inVerified) => {
+      state.liveStoryName = inVerified
+    },
+    SET_STAGE_DATA: (state, inVerified) => {
+      let stageData = state.experimentData[inVerified.refcontract]
+      state.liveDataLocation = stageData.data
+    },
+    SET_SAVE_STORY: (state, inVerified) => {
+      state.stageCount++
+      Vue.set(this.state.storyRefContracts, 'name', inVerified)
+      let storySummary = {}
+      storySummary.name = state.liveStoryName
+      storySummary.id = inVerified
+      this.state.storyLive.push(storySummary)
+    },
+    SET_NEW_STAGE: (state, inVerified) => {
+      state.storyStages.push(inVerified)
+    },
+    SET_EMPTY_STAGES: (state, inVerified) => {
+      state.storyStages = []
     }
   },
   actions: {
@@ -112,6 +138,21 @@ export default {
     },
     actionLifeboardList: (context, update) => {
       context.commit('SET_LBLIST_SHOW', update)
+    },
+    actionStoryname: (context, update) => {
+      context.commit('SET_STORY_NAME', update)
+    },
+    actionStageID: (context, update) => {
+      context.commit('SET_STAGE_DATA', update)
+    },
+    actionNewstory: (context, update) => {
+      context.commit('SET_SAVE_STORY', update)
+    },
+    actionNewstage: (context, update) => {
+      context.commit('SET_NEW_STAGE', update)
+    },
+    actionEmptystages (context, update) {
+      context.commit('SET_EMPTY_STAGES', update)
     }
   }
 }

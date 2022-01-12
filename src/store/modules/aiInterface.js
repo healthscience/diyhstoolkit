@@ -28,8 +28,6 @@ export default {
   mutations: {
     SET_CALEAI_STATE: (state, inVerified) => {
       // check current state and reverse
-      console.log('AIA ON OFF')
-      console.log(state.statusCALE)
       if (state.statusCALE.active === false) {
         Vue.set(state.statusCALE, 'active', true)
         Vue.set(state.statusCALE, 'text', 'on')

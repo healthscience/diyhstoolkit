@@ -1,22 +1,32 @@
 <template>
-  <div id="scale-tools">
-    <div class="clearboth"></div>
-    <div class="scale-item">
-     <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
+  <div id="toolbar-master">
+    <div id="scale-tools">
+      <div class="clearboth"></div>
+      <div class="scale-item">
+       <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
+      </div>
+      <div class="scale-item">
+        <label>Scale</label>
+        <input type="range" min="0.1" max="2" step="0.1" v-model.number="scale" @change="zoomScale">
+        {{ (scale * 100) }} %
+      </div>
+      <div id="story-life">
+          <a @click.prevent="viewStorytools" href="" id="story-button">Story</a>
+      </div>
     </div>
-    <div class="scale-item">
-      <label>Scale</label>
-      <input type="range" min="0.1" max="2" step="0.1" v-model.number="scale" @change="zoomScale">
-      {{ (scale * 100) }} %
+    <div v-if="liveStorytools === true" id="story-board">
+      <story-tools></story-tools>
     </div>
   </div>
 </template>
 
 <script>
+import StoryTools from '@/components/grids/story/storyTools.vue'
 
 export default {
   name: 'ExperimentNetwork',
   components: {
+    StoryTools
   },
   created () {
   },
@@ -34,7 +44,8 @@ export default {
         active: false
       },
       zoomscaleStatus: false,
-      scale: 1
+      scale: 1,
+      liveStorytools: false
     }
   },
   methods: {
@@ -53,6 +64,9 @@ export default {
     },
     zoomScale () {
       this.$store.dispatch('actionScalevalue', this.scale)
+    },
+    viewStorytools (ev) {
+      this.liveStorytools = !this.liveStorytools
     }
   }
 }
@@ -65,7 +79,7 @@ export default {
 
 #scale-tools {
   display: grid;
-  grid-template-columns: auto auto auto auto auto auto;
+  grid-template-columns: auto auto auto auto;
   justify-content: center;
   align-content: center;
   gap: 10px;
