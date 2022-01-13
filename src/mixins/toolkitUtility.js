@@ -24,6 +24,23 @@ var ToolkitUtility = function () {
 util.inherits(ToolkitUtility, events.EventEmitter)
 
 /**
+* Prepare table for peer Lifeboard list
+* @method prepareLifeboardList
+*
+*/
+ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
+  console.log('lifeboardIN')
+  console.log(lifeboardIN)
+  let listColumns = ['id', 'name', 'description', 'action']
+  let listDatapeer = []
+  listDatapeer.push({ id: 1, name: 'lb', description: '--', action: 'View' })
+  let listLBPeer = {}
+  listLBPeer.columns = listColumns
+  listLBPeer.data = listDatapeer
+  return listLBPeer
+}
+
+/**
 * Prepare table list view of experiments joined
 * @method prepareJoinedNXPlist
 *

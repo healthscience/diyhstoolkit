@@ -562,9 +562,6 @@ const store = new Vuex.Store({
     actionLiveNXPlist (context, update) {
       context.commit('SET_NXP_LIVELIST', update)
     },
-    actionLiveLBlist (context, update) {
-      context.commit('SET_LIFEBOARD_LIVELIST', update)
-    },
     actionJOINViewexperiment (context, update) {
       context.commit('SET_RESET_MODULEHOLDER', null)
       let joinNXP = {}

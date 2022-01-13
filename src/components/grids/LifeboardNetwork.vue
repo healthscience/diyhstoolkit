@@ -88,12 +88,6 @@ export default {
   props: {
   },
   computed: {
-    visDefaults: function () {
-      return this.$store.state.visModuleHolder
-    },
-    selectedOptions: function () {
-      return this.$store.state.joinNXPselected
-    },
     NXPstatusData: function () {
       return this.$store.state.nxpModulelist
     },
@@ -106,8 +100,9 @@ export default {
     ecsMessage: function () {
       return this.$store.state.ecsMessageLive
     },
-    filteredExperimentsList: function () {
-      return this.$store.state.activeXNPFilterlist
+    filteredLBList: function () {
+      console.log(this.$store.state.selectLBlist)
+      return this.$store.state.selectLBlist
     },
     zoomscaleStatus: function () {
       return this.$store.state.activeZoomscale
@@ -116,12 +111,18 @@ export default {
       return this.$store.state.activeScalevalue
     },
     activeDrag: function () {
-      let activeBarStatus = {}
-      for (let lnxp of this.filteredExperimentsList) {
-        activeBarStatus[lnxp.id] = {}
-        activeBarStatus[lnxp.id].active = false
+      console.log('active drag')
+      console.log(this.filteredLBList)
+      if (this.filteredLBList !== undefined) {
+        let activeBarStatus = {}
+        for (let lnxp of this.filteredLBList) {
+          activeBarStatus[lnxp.id] = {}
+          activeBarStatus[lnxp.id].active = false
+        }
+        return activeBarStatus
+      } else {
+        return {}
       }
-      return activeBarStatus
     }
   },
   data: function () {
@@ -184,24 +185,16 @@ export default {
         }
       }
     },
-    setActiveSpace (nxpID) {
+    setActiveSpace (lbID) {
       // only one active at a time
       let activeListKeys = Object.keys(this.activeDrag)
       for (let ak of activeListKeys) {
         this.activeDrag[ak].active = false
       }
       // set the active one clicked
-      this.activeDrag[nxpID].active = !this.activeDrag[nxpID].active
+      this.activeDrag[lbID].active = !this.activeDrag[lbID].active
       // set this NXP as live
-      this.$store.dispatch('actionActiveNXP', nxpID)
-    },
-    refContractLookup () {
-      // create new temp shellID
-      this.shellID = '7654321'
-      this.mData = '8855332211'
-    },
-    datastartLookup () {
-      this.newCompute.startperiod = 12345123451
+      this.$store.dispatch('actionLBlive', lbID)
     },
     closeDashboard (dc) {
       this.$store.dispatch('actionCloseDashboard', dc)

@@ -63,7 +63,7 @@
                       <div class="scale-item">
                       New <input name="query" v-model="lifeboardName">
                     <button class="new-lifeboard" @click.prevent="saveLifeboard()">save</button>
-                </div> -->
+                </div>
                     </template>
                   </new-lifeboard>
                   <new-networkexperiment v-show="isModalNewNetworkExperiment" @close="closeModalNewN1">

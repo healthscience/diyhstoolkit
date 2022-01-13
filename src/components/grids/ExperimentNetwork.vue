@@ -88,12 +88,6 @@ export default {
   props: {
   },
   computed: {
-    visDefaults: function () {
-      return this.$store.state.visModuleHolder
-    },
-    selectedOptions: function () {
-      return this.$store.state.joinNXPselected
-    },
     NXPstatusData: function () {
       return this.$store.state.nxpModulelist
     },

@@ -480,14 +480,11 @@ export default {
         console.log('no data show empty toolbar')
         console.log(backJSON)
         this.state.ecsMessageLive = 'no data available'
-      } else if (backJSON.type === 'peerLifeboard') {
-        console.log('peer lifeboard start')
-      } else if (backJSON.type === 'publicLifeboard') {
+      } else if (backJSON.type === 'peerlifeboard') {
         console.log('public lifeboard start')
-        let tempData = {}
-        tempData.data = [1, 2]
-        tempData.columns = ['a', 'b']
-        this.state.joinedLifeboard.push(tempData)
+        // prepare PEER JOINED LIST
+        let lbPeer = ToolUtility.prepareLifeboardList(backJSON.networkPeerExpModules)
+        this.state.joinedLifeboard.push(lbPeer)
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
         this.state.livePeerRefContIndex = backJSON.referenceContracts

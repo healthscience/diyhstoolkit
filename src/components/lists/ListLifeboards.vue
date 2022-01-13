@@ -46,26 +46,13 @@ export default {
     filterKey: String
   },
   computed: {
-    visDefaults: function () {
-      return this.$store.state.visModuleHolder
-    },
-    selectedOptions: function () {
-      return this.$store.state.joinNXPselected
-    },
-    NXPstatusData: function () {
-      return this.$store.state.nxpModulelist
-    },
-    NXPprogress: function () {
-      return this.$store.state.nxpProgress
-    },
-    ecsMessage: function () {
-      return this.$store.state.ecsMessageLive
-    },
     filteredExperiments: function () {
+      console.log('filter')
+      console.log(this.lifeboards)
       var sortKey = this.sortKey
       var filterKey = this.filterKey && this.filterKey.toLowerCase()
       var order = this.sortOrders[sortKey] || 1
-      var experiments = this.experimentlifeboards
+      var experiments = this.lifeboards
       if (filterKey) {
         experiments = experiments.filter(function (row) {
           return Object.keys(row).some(function (key) {
@@ -80,7 +67,7 @@ export default {
           return (a === b ? 0 : a > b ? 1 : -1) * order
         })
       }
-      this.setactiveXNPlist(experiments)
+      this.setactiveLBlist(experiments)
       return experiments
     }
   },
@@ -120,18 +107,14 @@ export default {
       this.shellID = '7654321'
       this.mData = '8855332211'
     },
-    setactiveXNPlist (nxp) {
-      this.$store.dispatch('actionLiveLBlist', nxp)
+    setactiveLBlist (lb) {
+      this.$store.dispatch('actionLiveLBlist', lb)
     },
-    actionLifeboard (expCNRL, NXPcontract) {
-      this.shellContract = expCNRL
-      this.actionKBundle = NXPcontract
-      if (NXPcontract.action === 'View') {
-        this.$store.dispatch('actionDashboardState', expCNRL)
-      } else {
-        // preview network experiment
-        this.$store.dispatch('actionJOINViewexperiment', expCNRL)
-        this.refContractLookup()
+    actionLifeboard (lbCNRL, LBcontract) {
+      this.shellContract = lbCNRL
+      this.actionKBundle = LBcontract
+      if (LBcontract.action === 'View') {
+        this.$store.dispatch('actionLBState', lbCNRL)
       }
     }
   }

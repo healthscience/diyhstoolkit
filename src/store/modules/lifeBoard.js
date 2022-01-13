@@ -15,6 +15,8 @@ export default {
       { name: 'air-quality', refcontract: '44337444' },
       { name: 'river-dee', refcontract: '33337733' }
     ],
+    liveLB: '',
+    viewLBlist: [],
     liveSocialGraph: [1, 2, 3],
     liveMapNetwork: ['a', 'b', 'c'],
     liveNetworkcollection: { active: false },
@@ -23,23 +25,29 @@ export default {
     liveStory: {},
     liveStoryName: '',
     storyStages: [],
-    stageCount: 0,
+    stageCount: 0
   },
   getters: {
   },
   mutations: {
     SET_LIFEBOAD_HOLD: (state, inVerified) => {
       // Vue.set(state.lifeboardHolder, 'name', inVerified)
-      // console.log(state.lifeboardHolder)
-      state.peerLifeboards.push(inVerified)
-      console.log(state.peerLifeboards)
+      console.log(state.lifeboardHolder)
+      let lifeboardRC = {}
+      lifeboardRC.name = inVerified
+      lifeboardRC.story = []
+      lifeboardRC.stages = []
+      lifeboardRC.routines = []
       const prepareLifeboard = {}
       prepareLifeboard.type = 'library'
       prepareLifeboard.reftype = 'newlifeboard'
       prepareLifeboard.action = 'newlifeboard'
-      prepareLifeboard.data = inVerified
+      prepareLifeboard.data = lifeboardRC
       const referenceContractReady = JSON.stringify(prepareLifeboard)
       Vue.prototype.$socket.send(referenceContractReady)
+      // when refcontract uuid add to list
+      // state.peerLifeboards.push(inVerified)
+      // console.log(state.peerLifeboards)
     },
     SET_LIFEBOAD_ADD: (state, inVerified) => {
       console.log('add to lifeboard')
@@ -114,6 +122,30 @@ export default {
     },
     SET_EMPTY_STAGES: (state, inVerified) => {
       state.storyStages = []
+    },
+    SET_LIFEBOARD_BUNDLE: (state, inVerified) => {
+      console.log('lifeboard bundles prpep an send')
+      /* let ECSbundle = {}
+      ECSbundle.exp = matchExp.exp
+      ECSbundle.modules = peerOptions
+      // send message to PeerLink for safeFLOW
+      let message = {}
+      message.type = 'safeflow'
+      message.reftype = 'ignore'
+      message.action = 'networkexperiment'
+      message.data = ECSbundle
+      console.log('OUTmesssage+++++++++OUT+FIRST++++++')
+      console.log(message)
+      const safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage) */
+    },
+    SET_LIFEBOARD_ACTIVE: (state, inVerified) => {
+      console.log('active lifeboard')
+      console.log(inVerified)
+      state.selectLBlist = inVerified
+    },
+    SET_LIVE_LB: (state, inVerified) => {
+      state.liveLB = inVerified
     }
   },
   actions: {
@@ -151,8 +183,23 @@ export default {
     actionNewstage: (context, update) => {
       context.commit('SET_NEW_STAGE', update)
     },
-    actionEmptystages (context, update) {
+    actionEmptystages: (context, update) => {
       context.commit('SET_EMPTY_STAGES', update)
+    },
+    actionLBState: async (context, update) => {
+      console.log('action life board selected')
+      console.log(update)
+      context.commit('SET_LIFEBOARD_BUNDLE', update)
+    },
+    actionLiveLBlist: (context, update) => {
+      console.log('lifeboard selected')
+      console.log(update)
+      context.commit('SET_LIFEBOARD_ACTIVE', update)
+    },
+    actionLBlive: (context, update) => {
+      console.log('lifeboard selected')
+      console.log(update)
+      context.commit('SET_LIFEBOARD_ACTIVE', update)
     }
   }
 }

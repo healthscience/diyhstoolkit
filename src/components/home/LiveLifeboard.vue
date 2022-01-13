@@ -7,7 +7,7 @@
     </div>
     <list-contracts v-if="lifeboardState === 'private' && peerLifeflowListlive.data"
       class="lifeboard-info"
-      :experiments="peerLifeflowListlive.data"
+      :lifeboards="peerLifeflowListlive.data"
       :columns="peerLifeflowListlive.columns"
       :filter-key="searchQuery">
     </list-contracts>
@@ -36,7 +36,7 @@ export default {
     },
     peerLifeflowListlive: function () {
       console.log(this.$store.state.joinedLifeboard)
-      return this.$store.state.joinedLifeboard
+      return this.$store.state.joinedLifeboard[0]
     },
     searchQuery: function () {
       return this.$store.state.searchQuery
