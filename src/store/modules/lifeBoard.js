@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import ToolkitUtility from '@/mixins/toolkitUtility.js'
+const ToolUtility = new ToolkitUtility()
 
 export default {
   state: {
@@ -44,13 +46,11 @@ export default {
       // console.log(state.peerLifeboards)
     },
     SET_LIFEBOAD_ADD: (state, inVerified) => {
-      console.log('add to lifeboard')
       const addLifeboard = {}
       addLifeboard.type = 'library'
       addLifeboard.reftype = 'addlifeboard'
       addLifeboard.action = 'addlifeboard'
       addLifeboard.data = inVerified
-      console.log(addLifeboard)
       const referenceContractReady = JSON.stringify(addLifeboard)
       Vue.prototype.$socket.send(referenceContractReady)
     },
@@ -120,19 +120,20 @@ export default {
     SET_LIFEBOARD_MEMBERS: (state, inVerified) => {
       console.log('lifeboard bundles prpep an send')
       console.log(inVerified)
-      /* let ECSbundle = {}
-      ECSbundle.exp = inverified.key
-      ECSbundle.modules = peerOptions
+      let ECSbundle = {}
+      // ECSbundle.exp = inVerified.key
+      // ECSbundle.modules = inVerified.modules
+      console.log(ECSbundle)
       // send message to PeerLink for safeFLOW
       let message = {}
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.action = 'networkexperiment'
       message.data = ECSbundle
-      console.log('OUTmesssage+++++++++OUT+FIRST++++++')
+      console.log('OUTmesssage+++++LIFEBOARD++++++')
       console.log(message)
-      const safeFlowMessage = JSON.stringify(message)
-      Vue.prototype.$socket.send(safeFlowMessage) */
+      // const safeFlowMessage = JSON.stringify(message)
+      // Vue.prototype.$socket.send(safeFlowMessage)
     },
     SET_LIFEBOARD_ACTIVE: (state, inVerified) => {
       console.log('active lifeboard')
@@ -186,11 +187,20 @@ export default {
       // need to loop through nxp ref contracts and ask HOP to preprae visualisation data
       let matchLBtoNXPs = []
       for (let memb of context.rootState.joinedLifeboard[0].members) {
-        if (memb.key === update) {
+        console.log(memb)
+        console.log(update)
+        if (memb.value.concept.lifeboard === update) {
           matchLBtoNXPs.push(memb)
         }
       }
-      context.commit('SET_LIFEBOARD_MEMBERS', matchLBtoNXPs)
+      // match nxp refs to full contracts
+      let matchContracts = []
+      for (let nxp of matchLBtoNXPs) {
+        console.log(nxp)
+        let matchExpRefContract = ToolUtility.matchExpModulesDetail(nxp.value.concept.shellID, context.rootState.networkPeerExpModules)
+        matchContracts.push(matchExpRefContract)
+      }
+      context.commit('SET_LIFEBOARD_MEMBERS', matchContracts)
     },
     actionLiveLBlist: (context, update) => {
       console.log('lifeboard selected')

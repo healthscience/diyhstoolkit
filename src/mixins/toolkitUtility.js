@@ -37,7 +37,7 @@ ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
   for (let lfb of lifeboardIN) {
     if (lfb.value.refcontract === 'lifeboard') {
       lifeboardList.push(lfb)
-    } else if (lfb.value.refcontract === 'lifeboard') {
+    } else if (lfb.value.refcontract === 'member') {
       lbMembersList.push(lfb)
     }
   }

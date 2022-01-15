@@ -1,7 +1,6 @@
 <template>
   <div id="toolbar-master">
     <div id="scale-tools">
-      <div class="clearboth"></div>
       <div class="scale-item">
        <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
       </div>
@@ -79,8 +78,12 @@ export default {
 </script>
 
 <style>
-.clearboth {
-  display: clearboth;
+#toolbar-master {
+  display: grid;
+  position: sticky;
+  border: 0px solid red;
+  top: 45px;
+  z-index: 14;
 }
 
 #scale-tools {
@@ -91,13 +94,13 @@ export default {
   gap: 10px;
   /* grid-auto-flow: column; */
   position: sticky;
-  top: 3em;
+  top: 400px;
   width: 100%;
   height: 60px;
   border-bottom: 1px solid orange;
   background-color: white;
   padding: .1em;
-  z-index: 4;
+  z-index: 14;
 }
 
 .scale-space.active {
