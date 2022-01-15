@@ -150,7 +150,7 @@ export default {
   },
   data () {
     return {
-      viewFlowtype: 'nxp-view',
+      viewFlowtype: 'lifestyleflow',
       isModalNewLifeboard: false,
       isModalNewNetworkExperiment: false,
       searchText: '',

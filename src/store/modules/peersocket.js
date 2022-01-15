@@ -483,7 +483,7 @@ export default {
       } else if (backJSON.type === 'peerlifeboard') {
         console.log('public lifeboard start')
         // prepare PEER JOINED LIST
-        let lbPeer = ToolUtility.prepareLifeboardList(backJSON.networkPeerExpModules)
+        let lbPeer = ToolUtility.prepareLifeboardList(backJSON.lifeboard)
         this.state.joinedLifeboard.push(lbPeer)
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
@@ -796,6 +796,7 @@ export default {
     },
     actionMakeModuleRefContract (context, update) {
       // reset the module forms
+      console.log('start modules')
       context.commit('SET_MODULE_HOLDER')
       const moduleContracts = []
       const dataCNRLbundle = {}

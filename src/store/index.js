@@ -38,8 +38,8 @@ const store = new Vuex.Store({
       state: true,
       text: 'hide'
     },
-    viewLifeboards: false,
-    viewNXP: true,
+    viewLifeboards: true,
+    viewNXP: false,
     viewTimeline: false,
     publickeys: [],
     warmNetwork: [],

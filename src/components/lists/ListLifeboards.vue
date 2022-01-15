@@ -1,5 +1,5 @@
 <template>
-  <div id="grid-contracts"> input -- {{ lifeboards }}
+  <div id="grid-contracts">
     <table>
       <thead>
         <tr>

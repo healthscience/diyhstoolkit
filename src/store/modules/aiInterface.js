@@ -85,9 +85,6 @@ export default {
       context.commit('SET_CALEAI_STATE', update)
     },
     actionAskCALE: (context, update) => {
-      console.log(context)
-      console.log(context.rootState)
-      console.log(update)
       // context.commit('SET_ASKCALE_HELP', update)
       context.rootState.liveHelpcontext = 'cale'
       Vue.set(context.rootState.helpModal, 'active', true)

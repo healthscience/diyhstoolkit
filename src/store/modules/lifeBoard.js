@@ -8,13 +8,7 @@ export default {
       state: true,
       text: 'hide'
     },
-    peerLifeboards:
-    [
-      { name: 'networkedself', refcontract: '88337722' },
-      { name: 'bioregion', refcontract: '66337766' },
-      { name: 'air-quality', refcontract: '44337444' },
-      { name: 'river-dee', refcontract: '33337733' }
-    ],
+    peerLifeboards: [],
     liveLB: '',
     viewLBlist: [],
     liveSocialGraph: [1, 2, 3],
@@ -123,10 +117,11 @@ export default {
     SET_EMPTY_STAGES: (state, inVerified) => {
       state.storyStages = []
     },
-    SET_LIFEBOARD_BUNDLE: (state, inVerified) => {
+    SET_LIFEBOARD_MEMBERS: (state, inVerified) => {
       console.log('lifeboard bundles prpep an send')
+      console.log(inVerified)
       /* let ECSbundle = {}
-      ECSbundle.exp = matchExp.exp
+      ECSbundle.exp = inverified.key
       ECSbundle.modules = peerOptions
       // send message to PeerLink for safeFLOW
       let message = {}
@@ -188,8 +183,14 @@ export default {
     },
     actionLBState: async (context, update) => {
       console.log('action life board selected')
-      console.log(update)
-      context.commit('SET_LIFEBOARD_BUNDLE', update)
+      // need to loop through nxp ref contracts and ask HOP to preprae visualisation data
+      let matchLBtoNXPs = []
+      for (let memb of context.rootState.joinedLifeboard[0].members) {
+        if (memb.key === update) {
+          matchLBtoNXPs.push(memb)
+        }
+      }
+      context.commit('SET_LIFEBOARD_MEMBERS', matchLBtoNXPs)
     },
     actionLiveLBlist: (context, update) => {
       console.log('lifeboard selected')

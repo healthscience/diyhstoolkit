@@ -31,12 +31,26 @@ util.inherits(ToolkitUtility, events.EventEmitter)
 ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
   console.log('lifeboardIN')
   console.log(lifeboardIN)
+  let lifeboardList = []
+  let lbMembersList = []
+  // need to splt into lifeboard and members and link members to lifeboar ids
+  for (let lfb of lifeboardIN) {
+    if (lfb.value.refcontract === 'lifeboard') {
+      lifeboardList.push(lfb)
+    } else if (lfb.value.refcontract === 'lifeboard') {
+      lbMembersList.push(lfb)
+    }
+  }
   let listColumns = ['id', 'name', 'description', 'action']
   let listDatapeer = []
-  listDatapeer.push({ id: 1, name: 'lb', description: '--', action: 'View' })
+  for (let lb of lifeboardList) {
+    console.log(lb)
+    listDatapeer.push({ id: lb.key, name: lb.value.concept.name, description: '--', action: 'View' })
+  }
   let listLBPeer = {}
   listLBPeer.columns = listColumns
   listLBPeer.data = listDatapeer
+  listLBPeer.members = lbMembersList
   return listLBPeer
 }
 

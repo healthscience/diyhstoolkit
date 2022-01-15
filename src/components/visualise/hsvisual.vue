@@ -29,7 +29,7 @@
               <form id="lifeboard_form" name="lifeboard_addform" method="post" action="#">
                 <label for="lifeboard-select"></label>
                 <select class="select-lifeboard-id" id="lifeboard-list" @change="lifeboardSelect" v-model="lifeboardRef">
-                  <option v-for="lb in lifeboardList" :key="lb.refcontract" v-bind:value="lb.refcontract">
+                  <option v-for="lb in lifeboardList[0].data" :key="lb.id" v-bind:value="lb.id">
                     {{ lb.name }}
                   </option>
                 </select>
@@ -89,7 +89,7 @@ export default {
   },
   computed: {
     lifeboardList: function () {
-      return this.$store.state.lifeBoard.peerLifeboards
+      return this.$store.state.joinedLifeboard
     },
     futurecollection: function () {
       let futureData = this.$store.state.lifeBoard.liveFutureCollection
