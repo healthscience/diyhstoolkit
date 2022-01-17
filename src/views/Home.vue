@@ -6,7 +6,7 @@
         <ul>
           <li>1. Interacive visualisations</li>
           <li>2. Join network experiments</li>
-          <li>3. Share knowledge with peers & communities</li>
+          <li>3. Share with peers & communities</li>
           <li>4. Personal AI - CALE</li>
         </ul>
         <div id="interface">

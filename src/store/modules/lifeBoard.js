@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
+import ContextUtility from '@/mixins/contextUtility.js'
+
 const ToolUtility = new ToolkitUtility()
+const ContextOut = new ContextUtility()
 
 export default {
   state: {
@@ -46,6 +49,8 @@ export default {
       // console.log(state.peerLifeboards)
     },
     SET_LIFEBOAD_ADD: (state, inVerified) => {
+      console.log('add life board nxp and dvice decatioa??')
+      console.log(inVerified)
       const addLifeboard = {}
       addLifeboard.type = 'library'
       addLifeboard.reftype = 'addlifeboard'
@@ -120,20 +125,16 @@ export default {
     SET_LIFEBOARD_MEMBERS: (state, inVerified) => {
       console.log('lifeboard bundles prpep an send')
       console.log(inVerified)
-      let ECSbundle = {}
-      // ECSbundle.exp = inVerified.key
-      // ECSbundle.modules = inVerified.modules
-      console.log(ECSbundle)
       // send message to PeerLink for safeFLOW
       let message = {}
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.action = 'networkexperiment'
-      message.data = ECSbundle
-      console.log('OUTmesssage+++++LIFEBOARD++++++')
+      message.data = inVerified
+      console.log('OUTmesssage++++LIFEBOARD++++++')
       console.log(message)
-      // const safeFlowMessage = JSON.stringify(message)
-      // Vue.prototype.$socket.send(safeFlowMessage)
+      const safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage)
     },
     SET_LIFEBOARD_ACTIVE: (state, inVerified) => {
       console.log('active lifeboard')
@@ -184,32 +185,64 @@ export default {
     },
     actionLBState: async (context, update) => {
       console.log('action life board selected')
+      console.log(update)
       // need to loop through nxp ref contracts and ask HOP to preprae visualisation data
       let matchLBtoNXPs = []
       for (let memb of context.rootState.joinedLifeboard[0].members) {
-        console.log(memb)
-        console.log(update)
         if (memb.value.concept.lifeboard === update) {
           matchLBtoNXPs.push(memb)
         }
       }
       // match nxp refs to full contracts
       let matchContracts = []
-      for (let nxp of matchLBtoNXPs) {
-        console.log(nxp)
-        let matchExpRefContract = ToolUtility.matchExpModulesDetail(nxp.value.concept.shellID, context.rootState.networkPeerExpModules)
-        matchContracts.push(matchExpRefContract)
+      let nxpRefcontract = {}
+      let nxpModules = []
+      for (let lbnxp of matchLBtoNXPs) {
+        //let matchExpRefContract = ToolUtility.matchExpModulesDetail(nxp.value.concept.shellID, context.rootState.networkPeerExpModules)
+        for (let nxp of context.rootState.networkPeerExpModules) {
+          if (nxp.exp.key === lbnxp.value.concept.shellID) {
+            nxpRefcontract = nxp
+            nxpModules = nxp.modules
+          }
+        }
+        // matchContracts.push(matchExpRefContract)
+        matchContracts = nxpModules
+        // base NXP ref contract
+        // for each member preapred Kbundle for HOP
+        let computeRefContract = {}
+        let visRefContMatch = false
+        let computeRefContKey = ''
+        for (let mod of matchContracts) {
+          // update compute ref contract  set for one device
+          if (mod.key === lbnxp.value.concept.moduleCNRL) {
+            visRefContMatch = true
+          }
+          if (mod.value.type === 'compute') {
+            computeRefContKey = mod.key
+            computeRefContract = mod
+          }
+        }
+        if (visRefContMatch === true) {
+          let setDeviceComRF = ContextOut.prepareSettingsDevices(computeRefContract, lbnxp.value.concept.mData)
+          // update compute contract in NXP ref contract modules list
+          let updateNXPmodules = []
+          for (let refc of matchContracts) {
+            // match to compute ref contr module
+            if (refc.key === computeRefContKey) {
+              updateNXPmodules.push(setDeviceComRF)
+            } else {
+              updateNXPmodules.push(refc)
+            }
+          }
+          nxpRefcontract.modules = updateNXPmodules
+          context.commit('SET_LIFEBOARD_MEMBERS', nxpRefcontract)
+        }
       }
-      context.commit('SET_LIFEBOARD_MEMBERS', matchContracts)
     },
     actionLiveLBlist: (context, update) => {
-      console.log('lifeboard selected')
-      console.log(update)
       context.commit('SET_LIFEBOARD_ACTIVE', update)
     },
     actionLBlive: (context, update) => {
-      console.log('lifeboard selected')
-      console.log(update)
       context.commit('SET_LIFEBOARD_ACTIVE', update)
     }
   }

@@ -81,9 +81,9 @@ export default {
 #toolbar-master {
   display: grid;
   position: sticky;
-  border: 0px solid red;
+  border: 0pmpx solid red;
   top: 45px;
-  z-index: 14;
+  z-index: 11;
 }
 
 #scale-tools {

@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="alternate-bk" v-for="entry in filteredExperiments" :key="entry.id">
+        <tr class="alternate-bk" v-for="entry in filteredLifeboards" :key="entry.id">
           <td v-for="key in columns" :key="key.id">
             <div v-if="key !== 'action'">
             {{entry[key]}}
@@ -46,7 +46,7 @@ export default {
     filterKey: String
   },
   computed: {
-    filteredExperiments: function () {
+    filteredLifeboards: function () {
       console.log('filter')
       console.log(this.lifeboards)
       var sortKey = this.sortKey
