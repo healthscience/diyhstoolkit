@@ -186,6 +186,7 @@ export default {
     actionLBState: async (context, update) => {
       console.log('action life board selected')
       console.log(update)
+      context.rootState.liveNXP = update
       // need to loop through nxp ref contracts and ask HOP to preprae visualisation data
       let matchLBtoNXPs = []
       for (let memb of context.rootState.joinedLifeboard[0].members) {
@@ -195,48 +196,49 @@ export default {
       }
       // match nxp refs to full contracts
       let matchContracts = []
-      let nxpRefcontract = {}
-      let nxpModules = []
+      let matchExp = {}
       for (let lbnxp of matchLBtoNXPs) {
-        //let matchExpRefContract = ToolUtility.matchExpModulesDetail(nxp.value.concept.shellID, context.rootState.networkPeerExpModules)
         for (let nxp of context.rootState.networkPeerExpModules) {
           if (nxp.exp.key === lbnxp.value.concept.shellID) {
-            nxpRefcontract = nxp
-            nxpModules = nxp.modules
+            matchExp = nxp
           }
         }
-        // matchContracts.push(matchExpRefContract)
-        matchContracts = nxpModules
-        // base NXP ref contract
-        // for each member preapred Kbundle for HOP
-        let computeRefContract = {}
-        let visRefContMatch = false
-        let computeRefContKey = ''
-        for (let mod of matchContracts) {
-          // update compute ref contract  set for one device
-          if (mod.key === lbnxp.value.concept.moduleCNRL) {
-            visRefContMatch = true
-          }
-          if (mod.value.type === 'compute') {
-            computeRefContKey = mod.key
-            computeRefContract = mod
-          }
-        }
-        if (visRefContMatch === true) {
-          let setDeviceComRF = ContextOut.prepareSettingsDevices(computeRefContract, lbnxp.value.concept.mData)
-          // update compute contract in NXP ref contract modules list
-          let updateNXPmodules = []
-          for (let refc of matchContracts) {
-            // match to compute ref contr module
-            if (refc.key === computeRefContKey) {
-              updateNXPmodules.push(setDeviceComRF)
+        let peerOptions = []
+        for (let pmod of matchExp.modules) {
+          // for each type of module look up ref contract
+          if (pmod.value.type === 'question') {
+            peerOptions.push(pmod)
+          } else if (pmod.value.type === 'data') {
+            let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.data, context.rootState.liveRefContIndex.packaging)
+            pmod.value.info.data = peerDataRC
+            peerOptions.push(pmod)
+          } else if (pmod.value.type === 'compute') {
+            // get the latest refcontract nB. link compute ie one to many, sort many list and this used in presentation
+            let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, context.rootState.liveRefContIndex.compute)
+            pmod.value.info.compute = peerDataRC
+            let newestContract = ToolUtility.refcontractLookupCompute(pmod, context.rootState.livePeerRefContIndex.module)
+            // set key to master ref contract key
+            newestContract.key = pmod.key
+            // check if data is not in the future
+            let timeModule = newestContract.value.info.controls.date
+            peerOptions.push(newestContract)
+          } else if (pmod.value.type === 'visualise') {
+            pmod.value.info.settings.single = true
+            let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.visualise, context.rootState.liveRefContIndex.visualise)
+            if (pmod.value.info.settings.yaxis.length > 1) {
+              pmod.value.info.settings.multidata = true
             } else {
-              updateNXPmodules.push(refc)
+              pmod.value.info.settings.multidata = false
             }
+            pmod.value.info.visualise = peerDataRC
+            peerOptions.push(pmod)
           }
-          nxpRefcontract.modules = updateNXPmodules
-          context.commit('SET_LIFEBOARD_MEMBERS', nxpRefcontract)
         }
+        // prepare bundle for sending
+        let ECSbundle = {}
+        ECSbundle.exp = matchExp.exp
+        ECSbundle.modules = peerOptions
+        context.commit('SET_LIFEBOARD_MEMBERS', ECSbundle)
       }
     },
     actionLiveLBlist: (context, update) => {

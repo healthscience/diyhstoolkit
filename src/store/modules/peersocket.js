@@ -231,6 +231,7 @@ export default {
       } else if (backJSON.type === 'newEntityRange') {
         console.log('SECOND------DATA RETURNED-----')
         console.log(backJSON)
+        // is the data for the Lifeboard or NXP space?
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {
           console.log('NO DATA RETURNED')

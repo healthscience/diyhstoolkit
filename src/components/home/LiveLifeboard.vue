@@ -5,7 +5,7 @@
       <a class="flowlist-space" v-bind:class="{ active: lifeboardState === 'public' }" href="" @click.prevent="statusLifeboard('public')" >Public</a>
       <a class="flowlist-showspace" v-bind:class="{ active: showLifeboardList.text === 'listshow' }" href="" @click.prevent="statusLifeboardshow()" > {{ showLifeboardList.text }}</a>
     </div>
-    <list-contracts v-if="lifeboardState === 'private' && peerLifeflowListlive.data"
+    <list-contracts v-if="lifeboardState === 'private' && peerLifeflowListlive !== undefined"
       class="lifeboard-info"
       :lifeboards="peerLifeflowListlive.data"
       :columns="peerLifeflowListlive.columns"

@@ -686,6 +686,8 @@ const store = new Vuex.Store({
           matchExp = nxp
         }
       }
+      console.log('match nxp contract')
+      console.log(matchExp)
       // prepare ECS inputs- lookup peer selected module options
       let peerOptions = []
       for (let pmod of matchExp.modules) {
