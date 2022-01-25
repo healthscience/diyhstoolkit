@@ -25,11 +25,13 @@ export default {
       this.state.connectStatus = true
     },
     SOCKET_ONCLOSE (state, event) {
+      console.log('close websocket1')
       state.socket.isConnected = false
       this.state.connectStatus = false
       this.state.peerauthStatus = false
     },
     SOCKET_ONERROR (state, event) {
+      console.log('close websocket2')
       console.error(state, event)
       this.state.connectStatus = false
       this.state.peerauthStatus = false
@@ -41,6 +43,7 @@ export default {
       // console.info(state, count)
     },
     SOCKET_RECONNECT_ERROR (state) {
+      console.log('close websocket3')
       state.socket.reconnectError = true
       this.state.peerauthStatus = false
     },
@@ -826,14 +829,14 @@ export default {
       dataCNRLbundle3.grid = []
       moduleContracts.push(dataCNRLbundle3) */
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      const dataCNRLbundle4 = {}
+      /* const dataCNRLbundle4 = {}
       dataCNRLbundle4.reftype = 'module'
       dataCNRLbundle4.type = 'mobile'
       dataCNRLbundle4.primary = 'genesis'
       dataCNRLbundle4.concept = ''
       dataCNRLbundle4.grid = []
-      moduleContracts.push(dataCNRLbundle4)
-      // CNRL implementation contract e.g. from mobile phone sqlite table structure
+      moduleContracts.push(dataCNRLbundle4) */
+      // module ref contract utility type
       const dataCNRLbundle6 = {}
       dataCNRLbundle6.reftype = 'module'
       dataCNRLbundle6.type = 'compute'
@@ -863,39 +866,34 @@ export default {
       dataCNRLbundle7.concept = ''
       dataCNRLbundle7.grid = []
       moduleContracts.push(dataCNRLbundle7)
-      // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      const dataCNRLbundle8 = {}
+      /* const dataCNRLbundle8 = {}
       dataCNRLbundle8.reftype = 'module'
       dataCNRLbundle8.type = 'lifestyle'
       dataCNRLbundle8.primary = 'genesis'
       dataCNRLbundle8.concet = ''
       dataCNRLbundle8.grid = []
-      moduleContracts.push(dataCNRLbundle8)
-      // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      const dataCNRLbundle9 = {}
+      moduleContracts.push(dataCNRLbundle8) */
+      /* const dataCNRLbundle9 = {}
       dataCNRLbundle9.reftype = 'module'
       dataCNRLbundle9.type = 'error'
       dataCNRLbundle9.primary = 'genesis'
       dataCNRLbundle9.concept = ''
       dataCNRLbundle9.grid = []
-      moduleContracts.push(dataCNRLbundle9)
-      // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      const dataCNRLbundle10 = {}
+      moduleContracts.push(dataCNRLbundle9) */
+      /* const dataCNRLbundle10 = {}
       dataCNRLbundle10.reftype = 'module'
       dataCNRLbundle10.type = 'control'
       dataCNRLbundle10.primary = 'genesis'
       dataCNRLbundle10.concept = ''
       dataCNRLbundle10.grid = []
-      moduleContracts.push(dataCNRLbundle10)
-      // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      const dataCNRLbundle11 = {}
+      moduleContracts.push(dataCNRLbundle10) */
+      /* const dataCNRLbundle11 = {}
       dataCNRLbundle11.reftype = 'module'
       dataCNRLbundle11.type = 'prescription'
       dataCNRLbundle11.primary = 'genesis'
       dataCNRLbundle11.concept = ''
       dataCNRLbundle11.grid = []
-      moduleContracts.push(dataCNRLbundle11)
-      // CNRL implementation contract e.g. from mobile phone sqlite table structure
+      moduleContracts.push(dataCNRLbundle11) */
       const dataCNRLbundle12 = {}
       dataCNRLbundle12.reftype = 'module'
       dataCNRLbundle12.type = 'communication'
@@ -904,13 +902,13 @@ export default {
       dataCNRLbundle12.grid = []
       moduleContracts.push(dataCNRLbundle12)
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      const dataCNRLbundle13 = {}
+      /* const dataCNRLbundle13 = {}
       dataCNRLbundle13.reftype = 'module'
       dataCNRLbundle13.type = 'idea'
       dataCNRLbundle13.primary = 'genesis'
       dataCNRLbundle13.concept = ''
       dataCNRLbundle13.grid = []
-      moduleContracts.push(dataCNRLbundle13)
+      moduleContracts.push(dataCNRLbundle13) */
       let tempModules = {}
       tempModules.type = 'library'
       tempModules.reftype = 'moduletemp'

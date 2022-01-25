@@ -17,7 +17,7 @@
         <button
           type="button"
           class="btn-close"
-          @click="close"
+          @click="closeNL"
           aria-label="Close modal"
         >
           x
@@ -25,7 +25,7 @@
         </header>
         <section class="modal-body">
           <slot name="body">
-            Network Library - daMaHub Project -
+            Network Library - DaMaHub Project - <img  alt="DaMaHub Network Library" src="../../.././assets/logo-damahub.png">
             <iframe
               :src="`./xlibrary-test.html`"
               width="90%"
@@ -39,7 +39,7 @@
             <button
               type="button"
               class="btn-green"
-              @click="close"
+              @click="closeNL"
               aria-label="Close modal"
             >
               Close
@@ -63,8 +63,8 @@ export default {
     }
   },
   methods: {
-    close () {
-      this.$emit('close')
+    closeNL () {
+      this.$emit('closenl')
     },
     routerStatus () {
       // console.log(this.$router.currentRoute)

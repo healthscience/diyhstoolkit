@@ -17,7 +17,7 @@
         <button
           type="button"
           class="btn-close"
-          @click="close"
+          @click="closeNnxp"
           aria-label="Close modal"
         >
           x
@@ -48,7 +48,7 @@
             <button
               type="button"
               class="btn-green"
-              @click="close"
+              @click="closeNnxp"
               aria-label="Close modal"
             >
               Close
@@ -72,8 +72,8 @@ export default {
     }
   },
   methods: {
-    close () {
-      this.$emit('close')
+    closeNnxp () {
+      this.$emit('closeNnxp')
     },
     routerStatus () {
       // console.log(this.$router.currentRoute)

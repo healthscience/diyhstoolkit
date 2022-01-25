@@ -92,7 +92,7 @@ export default {
       return this.$store.state.joinedLifeboard
     },
     futurecollection: function () {
-      let futureData = this.$store.state.lifeBoard.liveFutureCollection
+      let futureData = this.$store.state.aiInterface.liveFutureCollection
       return futureData
     },
     networkcollection: function () {

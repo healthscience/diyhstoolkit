@@ -66,7 +66,7 @@
                 </div>
                     </template>
                   </new-lifeboard>
-                  <new-networkexperiment v-show="isModalNewNetworkExperiment" @close="closeModalNewN1">
+                  <new-networkexperiment v-show="isModalNewNetworkExperiment" @closeNnxp="closeModalNewN1">
                     <template v-slot:header>
                     <!-- The code below goes into the header slot -->
                       NEW N=1 Network Experiment

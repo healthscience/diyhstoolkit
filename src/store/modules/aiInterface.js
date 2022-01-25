@@ -65,7 +65,9 @@ export default {
     },
     SET_FUTURE_DATA: (state, inVerified) => {
       console.log('GET future data CALE')
-      state.liveFutureCollection.active = !state.liveFutureCollection.active
+      let fstate = !state.liveFutureCollection.active
+      Vue.set(state.liveFutureCollection, 'active', fstate)
+      console.log(state.liveFutureCollection)
       // data nxp context ref contracts
       let refBundle = {}
       refBundle.future = true
@@ -75,8 +77,8 @@ export default {
       aiMessageout.reftype = 'ignore'
       aiMessageout.action = 'future'
       aiMessageout.data = refBundle
-      const caleMessage = JSON.stringify(aiMessageout)
-      Vue.prototype.$socket.send(caleMessage)
+      // const caleMessage = JSON.stringify(aiMessageout)
+      // Vue.prototype.$socket.send(caleMessage)
     }
   },
   actions: {

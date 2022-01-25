@@ -2,9 +2,9 @@
   <div id="device-nxp">
     <header>Device Data Source:</header>
     <div id="network-library">
-      All device, sensors, data stores need to be described in the <a href="" id="network-library-damahub" @click.prevent="networLibrary()">Network Library</a>
+       All device, sensors, data stores need to be described in the <a href="" id="network-library-damahub" @click.prevent="networLibrary()">Network Library</a>
     </div>
-    <networklibrary-modal v-show="isModalNLib" @close="closeModalNLib">
+    <networklibrary-modal v-show="isModalNLib" @closenl="closeModalNLib">
       <template v-slot:header>
       <!-- The code below goes into the header slot -->
         Network Library
