@@ -1054,6 +1054,15 @@ export default {
     },
     actionExperimentListDefault (context, update) {
       context.commit('SET_NXPLIST_DEFAULT', update)
+    },
+    actionCloudSignin (context, update) {
+      let cloudInfo = {}
+      cloudInfo.type = 'safeflow'
+      cloudInfo.reftype = 'cloudauth'
+      cloudInfo.action = 'cloudauth'
+      cloudInfo.data = update
+      let cloudAuth = JSON.stringify(cloudInfo)
+      Vue.prototype.$socket.send(cloudAuth)
     }
   }
 }

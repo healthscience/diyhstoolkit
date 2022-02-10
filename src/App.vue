@@ -89,7 +89,7 @@ export default {
     },
     connectNetwork (typeConnect) {
       this.$store.dispatch('actionCheckConnect')
-      this.$store.dispatch('startconnectNSnetwork')
+      // this.$store.dispatch('startconnectNSnetwork')
       // set flowviews active
       console.log(typeConnect.type)
       this.$store.dispatch('actionFlowviews')

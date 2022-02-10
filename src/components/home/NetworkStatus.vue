@@ -44,7 +44,7 @@
         </div>
       </template>
       <template v-slot:submit-cloud v-if="cloudConnect === 'signin-cloud'">
-        <form id="cloud-signin-form">
+        <form id="cloud-signin-form" @click.prevent="submitCloudin">
           <div class="cloud-inputs">
             <label class="form-couple-type" for="signin-cloud">username</label>
             <input class="form-couple" type="text" id="usernamecloud" name="username" v-model="cloudsigninInput">
@@ -105,7 +105,7 @@ export default {
       // w: remote.getCurrentWindow(),
       isModalVisible: false,
       buttonName: 'verify token',
-      cloudConnect: '', // ''signin-cloud',
+      cloudConnect: 'signin-cloud', // 'signin-cloud',
       cloudsigninInput: '',
       cloudpwInput: ''
 
@@ -123,6 +123,10 @@ export default {
     },
     submitCloudin () {
       console.log('cloud login')
+      let peerConnect = {}
+      peerConnect.peer = this.cloudsigninInput
+      peerConnect.password = this.cloudpwInput
+      this.$store.dispatch('actionCloudSignin')
     }
   }
 }
