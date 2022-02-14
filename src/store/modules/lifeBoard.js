@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
-import ContextUtility from '@/mixins/contextUtility.js'
+// import ContextUtility from '@/mixins/contextUtility.js'
 
 const ToolUtility = new ToolkitUtility()
 // const ContextOut = new ContextUtility()
@@ -195,7 +195,7 @@ export default {
         }
       }
       // match nxp refs to full contracts
-      let matchContracts = []
+      // let matchContracts = []
       let matchExp = {}
       for (let lbnxp of matchLBtoNXPs) {
         for (let nxp of context.rootState.networkPeerExpModules) {
