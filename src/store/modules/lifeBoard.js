@@ -3,7 +3,7 @@ import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
 
 const ToolUtility = new ToolkitUtility()
-const ContextOut = new ContextUtility()
+// const ContextOut = new ContextUtility()
 
 export default {
   state: {
@@ -220,7 +220,7 @@ export default {
             // set key to master ref contract key
             newestContract.key = pmod.key
             // check if data is not in the future
-            let timeModule = newestContract.value.info.controls.date
+            // let timeModule = newestContract.value.info.controls.date
             peerOptions.push(newestContract)
           } else if (pmod.value.type === 'visualise') {
             pmod.value.info.settings.single = true
