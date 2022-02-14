@@ -43,8 +43,8 @@
           </div>
         </div>
       </template>
-      <template v-slot:submit-cloud v-if="cloudConnect === 'signin-cloud'">
-        <form id="cloud-signin-form" @click.prevent="submitCloudin">
+      <template v-slot:submit-cloud v-if="cloudConnect === 'signin-cloud' && peerauth === false">
+        <form id="cloud-signin-form" >
           <div class="cloud-inputs">
             <label class="form-couple-type" for="signin-cloud">username</label>
             <input class="form-couple" type="text" id="usernamecloud" name="username" v-model="cloudsigninInput">
@@ -54,7 +54,7 @@
             <input class="form-couple" type="password" id="passwordcloud" name="password" v-model="cloudpwInput">
           </div>
           <div class="cloud-confirm">
-            <button id="cloud-submit" @click="submitCloudin" v-on:keyup.enter.prevent="submitCloudin">
+            <button id="cloud-submit" @click.prevent="submitCloudin">
               Sign-in
             </button>
           </div>
@@ -126,7 +126,7 @@ export default {
       let peerConnect = {}
       peerConnect.peer = this.cloudsigninInput
       peerConnect.password = this.cloudpwInput
-      this.$store.dispatch('actionCloudSignin')
+      this.$store.dispatch('actionCloudSignin', peerConnect)
     }
   }
 }

@@ -42,6 +42,7 @@ export default {
       prepareLifeboard.reftype = 'newlifeboard'
       prepareLifeboard.action = 'newlifeboard'
       prepareLifeboard.data = lifeboardRC
+      prepareLifeboard.jwt = this.state.jwttoken
       const referenceContractReady = JSON.stringify(prepareLifeboard)
       Vue.prototype.$socket.send(referenceContractReady)
       // when refcontract uuid add to list
@@ -56,6 +57,7 @@ export default {
       addLifeboard.reftype = 'addlifeboard'
       addLifeboard.action = 'addlifeboard'
       addLifeboard.data = inVerified
+      addLifeboard.jwt = this.state.jwttoken
       const referenceContractReady = JSON.stringify(addLifeboard)
       Vue.prototype.$socket.send(referenceContractReady)
     },
@@ -67,6 +69,7 @@ export default {
       addLifeboard.reftype = 'socialgraph'
       addLifeboard.action = 'socialgraph'
       addLifeboard.data = inVerified
+      addLifeboard.jwt = this.state.jwttoken
       const referenceContractReady = JSON.stringify(addLifeboard)
       Vue.prototype.$socket.send(referenceContractReady) */
     },
@@ -78,6 +81,7 @@ export default {
       addLifeboard.reftype = 'agg-network'
       addLifeboard.action = 'agg-netwokr'
       addLifeboard.data = inVerified
+      addLifeboard.jwt = this.state.jwttoken
       const referenceContractReady = JSON.stringify(addLifeboard)
       Vue.prototype.$socket.send(referenceContractReady) */
     },
@@ -131,6 +135,7 @@ export default {
       message.reftype = 'ignore'
       message.action = 'networkexperiment'
       message.data = inVerified
+      message.jwt = this.state.jwttoken
       console.log('OUTmesssage++++LIFEBOARD++++++')
       console.log(message)
       const safeFlowMessage = JSON.stringify(message)

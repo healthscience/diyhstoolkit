@@ -17,6 +17,7 @@ const store = new Vuex.Store({
     authorised: false,
     connectStatus: false,
     peerauthStatus: false,
+    jwttoken: '',
     connectContext: {},
     networkConnection: {
       active: false,
@@ -197,12 +198,15 @@ const store = new Vuex.Store({
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.action = 'disconnect'
+      message.jwt = state.jwttoken
       safeFlowMessage = JSON.stringify(message)
       // clear peer data
       state.joinedNXPlist = []
       // clear peeers and data list
       state.publickeys = []
       state.warmNetwork = []
+      state.moduleGrid = {}
+      state.NXPexperimentData = {}
       state.networkConnection.active = false
       state.networkConnection.text = 'connect'
       state.networkConnection.type = 'self-verify'
@@ -538,6 +542,7 @@ const store = new Vuex.Store({
       message.action = 'dataAPIauth'
       message.network = update.network
       message.settings = update.settings
+      message.jwt = this.state.jwttoken
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },
@@ -601,6 +606,7 @@ const store = new Vuex.Store({
       displayLibUtil.reftype = 'ignore'
       displayLibUtil.action = 'extractexperimentmodules'
       displayLibUtil.data = joinNXP
+      displayLibUtil.jwt = this.state.jwttoken
       const displayMessage = JSON.stringify(displayLibUtil)
       Vue.prototype.$socket.send(displayMessage)
     },
@@ -746,6 +752,7 @@ const store = new Vuex.Store({
         message.reftype = 'ignore'
         message.action = 'networkexperiment'
         message.data = ECSbundle
+        message.jwt = this.state.jwttoken
         console.log('OUTmesssage+++++++++OUT+FIRST++++++')
         console.log(message)
         const safeFlowMessage = JSON.stringify(message)
@@ -868,6 +875,7 @@ const store = new Vuex.Store({
       }
       message.type = 'safeflow'
       message.reftype = 'ignore'
+      message.jwt = this.state.jwttoken
       console.log('NXPMessage+++++UPDATE++++OUT')
       console.log(message)
       const safeFlowMessage = JSON.stringify(message)
@@ -887,10 +895,9 @@ const store = new Vuex.Store({
         caleMessage.type = 'cale'
         caleMessage.reftype = 'future'
         caleMessage.data = update.refs
-        console.log('CALE message out')
+        caleMessage.jwt = this.state.jwttoken
         console.log(caleMessage)
-        const caleOUT = JSON.stringify(caleMessage)
-        console.log(caleOUT)
+        // const caleOUT = JSON.stringify(caleMessage)
         // Vue.prototype.$socket.send(caleOUT)
       } else if (update.future === 'month') {
         let dataKeys = Object.keys(chartData)

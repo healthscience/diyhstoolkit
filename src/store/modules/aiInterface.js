@@ -60,6 +60,7 @@ export default {
       aiMessageout.reftype = 'ignore'
       aiMessageout.action = 'question'
       aiMessageout.data = state.helpchatAsk
+      aiMessageout.jwt = this.state.jwttoken
       const caleMessage = JSON.stringify(aiMessageout)
       Vue.prototype.$socket.send(caleMessage)
     },
@@ -77,6 +78,7 @@ export default {
       aiMessageout.reftype = 'ignore'
       aiMessageout.action = 'future'
       aiMessageout.data = refBundle
+      aiMessageout.jwt = this.state.jwttoken
       // const caleMessage = JSON.stringify(aiMessageout)
       // Vue.prototype.$socket.send(caleMessage)
     }
