@@ -122,11 +122,12 @@ export default {
       this.$store.dispatch('actionCloseNetworkModal')
     },
     submitCloudin () {
-      console.log('cloud login')
       let peerConnect = {}
       peerConnect.peer = this.cloudsigninInput
       peerConnect.password = this.cloudpwInput
       this.$store.dispatch('actionCloudSignin', peerConnect)
+      this.cloudsigninInput = ''
+      this.cloudpwInput = ''
     }
   }
 }

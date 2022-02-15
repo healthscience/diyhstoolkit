@@ -48,7 +48,7 @@ export default {
       // console.log('message')
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      console.log(backJSON)
+      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -167,50 +167,54 @@ export default {
       } else if (backJSON.safeflow === true) {
         // safeFLOW inflow
         if (backJSON.type === 'auth') {
-          // set remove welcome message
-          this.state.peerauthStatus = true
-          // set the JWT for this session
-          this.state.jwttoken = backJSON.jwt
-          // get starting experiments
-          const refContractp = {}
-          refContractp.type = 'library'
-          refContractp.reftype = 'publiclibrary'
-          refContractp.action = 'GET'
-          refContractp.jwt = this.state.jwttoken
-          const refCJSONp = JSON.stringify(refContractp)
-          Vue.prototype.$socket.send(refCJSONp)
-          // network library updates?
-          const refContract = {}
-          refContract.type = 'library'
-          refContract.reftype = 'privatelibrary'
-          refContract.action = 'GET'
-          refContract.jwt = this.state.jwttoken
-          const refCJSON = JSON.stringify(refContract)
-          Vue.prototype.$socket.send(refCJSON)
-          // ask for datastore public keys
-          //  need call, added manualy for now  SET_ASK_KEYMANAGEMENT(state)
-          this.state.publickeys = []
-          const pubkeyGet = {}
-          pubkeyGet.type = 'library'
-          pubkeyGet.reftype = 'keymanagement'
-          pubkeyGet.jwt = this.state.jwttoken
-          Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
-          // get datastore
-          let getWarmPeers = {}
-          getWarmPeers.type = 'library'
-          getWarmPeers.reftype = 'warm-peers'
-          getWarmPeers.jwt = this.state.jwttoken
-          Vue.prototype.$socket.send(JSON.stringify(getWarmPeers))
-          // get the peer start lifeboard
-          let getLifeboard = {}
-          getLifeboard.type = 'library'
-          getLifeboard.reftype = 'peerLifeboard'
-          getLifeboard.jwt = this.state.jwttoken
-          Vue.prototype.$socket.send(JSON.stringify(getLifeboard))
+          if (backJSON.auth !== false) {
+            // set remove welcome message
+            this.state.peerauthStatus = true
+            // set the JWT for this session
+            this.state.jwttoken = backJSON.jwt
+            // get starting experiments
+            const refContractp = {}
+            refContractp.type = 'library'
+            refContractp.reftype = 'publiclibrary'
+            refContractp.action = 'GET'
+            refContractp.jwt = this.state.jwttoken
+            const refCJSONp = JSON.stringify(refContractp)
+            Vue.prototype.$socket.send(refCJSONp)
+            // network library updates?
+            const refContract = {}
+            refContract.type = 'library'
+            refContract.reftype = 'privatelibrary'
+            refContract.action = 'GET'
+            refContract.jwt = this.state.jwttoken
+            const refCJSON = JSON.stringify(refContract)
+            Vue.prototype.$socket.send(refCJSON)
+            // ask for datastore public keys
+            //  need call, added manualy for now  SET_ASK_KEYMANAGEMENT(state)
+            this.state.publickeys = []
+            const pubkeyGet = {}
+            pubkeyGet.type = 'library'
+            pubkeyGet.reftype = 'keymanagement'
+            pubkeyGet.jwt = this.state.jwttoken
+            Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
+            // get datastore
+            let getWarmPeers = {}
+            getWarmPeers.type = 'library'
+            getWarmPeers.reftype = 'warm-peers'
+            getWarmPeers.jwt = this.state.jwttoken
+            Vue.prototype.$socket.send(JSON.stringify(getWarmPeers))
+            // get the peer start lifeboard
+            let getLifeboard = {}
+            getLifeboard.type = 'library'
+            getLifeboard.reftype = 'peerLifeboard'
+            getLifeboard.jwt = this.state.jwttoken
+            Vue.prototype.$socket.send(JSON.stringify(getLifeboard))
+          }
+        } else {
+          console.log('failed login')
         }
       } else if (backJSON.type === 'ecssummary') {
-        console.log('SUMMAERY==========================')
-        console.log(backJSON)
+        // console.log('SUMMAERY==========================')
+        // console.log(backJSON)
         // update the NXP contract list held in toolkit
         let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[this.state.liveNXP], this.state.networkPeerExpModules)
         // this.state.networkPeerExpModules = updateListContracts
@@ -236,12 +240,12 @@ export default {
           Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('SECOND------DATA RETURNED-----')
-        console.log(backJSON)
+        // console.log('SECOND------DATA RETURNED-----')
+        // console.log(backJSON)
         // is the data for the Lifeboard or NXP space?
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {
-          console.log('NO DATA RETURNED')
+          // console.log('NO DATA RETURNED')
           // switch off progress message and inform toolkit
           let setnxpProgress = { text: 'Experiment in progress', active: false }
           Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -315,7 +319,7 @@ export default {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
               } else {
-                console.log('no data available')
+                // console.log('no data available')
                 this.state.ecsMessageLive = 'no data available'
                 // set experiment progress message off
                 let setnxpProgress = { text: 'Experiment in progress', active: false }
@@ -328,7 +332,7 @@ export default {
             }
           }
         } else {
-          console.log('NEW data safeFLOW++++++')
+          // console.log('NEW data safeFLOW++++++')
           // switch off nxp Progress message
           let setnxpProgress = { text: 'Experiment in progress', active: true }
           Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -390,9 +394,9 @@ export default {
                   Vue.set(this.state.visProgress[displayDataUpdate.module], modG.i, setProgress)
                 }
               }
-              console.log('========FINISHED===========')
+              // console.log('========FINISHED===========')
             } else {
-              console.log('NO grid update but new data time change')
+              // console.log('NO grid update but new data time change')
               // switch off the update message for update
               let setProgress = {}
               setProgress = { text: 'Updating visualisation', active: false }
@@ -407,7 +411,7 @@ export default {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, backJSON.data.context.triplet.device, backJSON.data)
               }
             }
-            console.log('updated COMPLETE--------------------')
+            // console.log('updated COMPLETE--------------------')
           } else {
             // set experiment progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
@@ -463,7 +467,7 @@ export default {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
               } else {
-                console.log('no data available')
+                // console.log('no data available')
                 this.state.ecsMessageLive = 'no data available'
                 // set experiment progress message off
                 let setnxpProgress = { text: 'Experiment in progress', active: false }
@@ -1077,8 +1081,6 @@ export default {
       context.commit('SET_NXPLIST_DEFAULT', update)
     },
     actionCloudSignin (context, update) {
-      console.log('cloud auth start client')
-      console.log(update)
       let cloudInfo = {}
       cloudInfo.type = 'safeflow'
       cloudInfo.reftype = 'ignore'

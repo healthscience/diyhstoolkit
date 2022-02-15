@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
-import ContextUtility from '@/mixins/contextUtility.js'
+// import ContextUtility from '@/mixins/contextUtility.js'
 
 const ToolUtility = new ToolkitUtility()
-const ContextOut = new ContextUtility()
+// const ContextOut = new ContextUtility()
 
 export default {
   state: {
@@ -31,7 +31,7 @@ export default {
   mutations: {
     SET_LIFEBOAD_HOLD: (state, inVerified) => {
       // Vue.set(state.lifeboardHolder, 'name', inVerified)
-      console.log(state.lifeboardHolder)
+      // console.log(state.lifeboardHolder)
       let lifeboardRC = {}
       lifeboardRC.name = inVerified
       lifeboardRC.story = []
@@ -50,8 +50,8 @@ export default {
       // console.log(state.peerLifeboards)
     },
     SET_LIFEBOAD_ADD: (state, inVerified) => {
-      console.log('add life board nxp and dvice decatioa??')
-      console.log(inVerified)
+      // console.log('add life board nxp and dvice decatioa??')
+      // console.log(inVerified)
       const addLifeboard = {}
       addLifeboard.type = 'library'
       addLifeboard.reftype = 'addlifeboard'
@@ -62,7 +62,7 @@ export default {
       Vue.prototype.$socket.send(referenceContractReady)
     },
     SET_SOCAILGRAPH_GET: (state, inVerified) => {
-      console.log('add to lifeboard')
+      // console.log('add to lifeboard')
       state.liveSocialGraph = [1, 2, 3]
       /* const addLifeboard = {}
       addLifeboard.type = 'socialgraph'
@@ -74,7 +74,7 @@ export default {
       Vue.prototype.$socket.send(referenceContractReady) */
     },
     SET_MAP_GETNETWORK: (state, inVerified) => {
-      console.log('GET geojson')
+      // console.log('GET geojson')
       state.liveMapNetwork = ['a', 'b', 'c']
       /* const addLifeboard = {}
       addLifeboard.type = 'map'
@@ -86,15 +86,15 @@ export default {
       Vue.prototype.$socket.send(referenceContractReady) */
     },
     SET_PAST_GRAPH: (state, inVerified) => {
-      console.log('GET past network data')
+      // console.log('GET past network data')
       state.liveNetworkcollection.active = !state.liveNetworkcollection.active
     },
     SET_FUTURE_GRAPH: (state, inVerified) => {
-      console.log('GET FUTURE social graph')
+      // console.log('GET FUTURE social graph')
       state.liveFutureNetworkcollection.active = !state.liveFutureNetworkcollection.active
     },
     SET_LBLIST_SHOW: (state, inVerified) => {
-      console.log(inVerified)
+      // console.log(inVerified)
       let updateText = ''
       if (state.lifeboardtListshow.text === 'hide') {
         updateText = 'show'
@@ -127,8 +127,8 @@ export default {
       state.storyStages = []
     },
     SET_LIFEBOARD_MEMBERS: (state, inVerified) => {
-      console.log('lifeboard bundles prpep an send')
-      console.log(inVerified)
+      // console.log('lifeboard bundles prpep an send')
+      // console.log(inVerified)
       // send message to PeerLink for safeFLOW
       let message = {}
       message.type = 'safeflow'
@@ -136,14 +136,14 @@ export default {
       message.action = 'networkexperiment'
       message.data = inVerified
       message.jwt = this.state.jwttoken
-      console.log('OUTmesssage++++LIFEBOARD++++++')
-      console.log(message)
+      // console.log('OUTmesssage++++LIFEBOARD++++++')
+      // console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },
     SET_LIFEBOARD_ACTIVE: (state, inVerified) => {
-      console.log('active lifeboard')
-      console.log(inVerified)
+      // console.log('active lifeboard')
+      // console.log(inVerified)
       state.selectLBlist = inVerified
     },
     SET_LIVE_LB: (state, inVerified) => {
@@ -189,8 +189,8 @@ export default {
       context.commit('SET_EMPTY_STAGES', update)
     },
     actionLBState: async (context, update) => {
-      console.log('action life board selected')
-      console.log(update)
+      // console.log('action life board selected')
+      // console.log(update)
       context.rootState.liveNXP = update
       // need to loop through nxp ref contracts and ask HOP to preprae visualisation data
       let matchLBtoNXPs = []
@@ -200,7 +200,7 @@ export default {
         }
       }
       // match nxp refs to full contracts
-      let matchContracts = []
+      // let matchContracts = []
       let matchExp = {}
       for (let lbnxp of matchLBtoNXPs) {
         for (let nxp of context.rootState.networkPeerExpModules) {
@@ -225,7 +225,7 @@ export default {
             // set key to master ref contract key
             newestContract.key = pmod.key
             // check if data is not in the future
-            let timeModule = newestContract.value.info.controls.date
+            // let timeModule = newestContract.value.info.controls.date
             peerOptions.push(newestContract)
           } else if (pmod.value.type === 'visualise') {
             pmod.value.info.settings.single = true

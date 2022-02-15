@@ -29,8 +29,8 @@ util.inherits(ToolkitUtility, events.EventEmitter)
 *
 */
 ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
-  console.log('lifeboardIN')
-  console.log(lifeboardIN)
+  // console.log('lifeboardIN')
+  // console.log(lifeboardIN)
   let lifeboardList = []
   let lbMembersList = []
   // need to splt into lifeboard and members and link members to lifeboar ids
@@ -44,7 +44,7 @@ ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
   let listColumns = ['id', 'name', 'description', 'action']
   let listDatapeer = []
   for (let lb of lifeboardList) {
-    console.log(lb)
+    // console.log(lb)
     listDatapeer.push({ id: lb.key, name: lb.value.concept.name, description: '--', action: 'View' })
   }
   let listLBPeer = {}
