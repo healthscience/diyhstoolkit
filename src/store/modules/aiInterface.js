@@ -68,7 +68,6 @@ export default {
       console.log('GET future data CALE')
       let fstate = !state.liveFutureCollection.active
       Vue.set(state.liveFutureCollection, 'active', fstate)
-      console.log(state.liveFutureCollection)
       // data nxp context ref contracts
       let refBundle = {}
       refBundle.future = true
