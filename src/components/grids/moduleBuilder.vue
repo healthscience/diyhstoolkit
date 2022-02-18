@@ -1,6 +1,6 @@
 <template>
   <div id="module-builder">
-    <div class="row">
+    <div class="nxp-builder">
       <div class="col-3">
         <h3>Modules available</h3>
         <draggable class="list-group" :list="nxpModulesList" group="people" @change="log">
@@ -100,28 +100,29 @@ export default {
 
 <style>
 #module-builder {
-
 }
 
-.row {
-  border: 0px solid green;
+.nxp-builder {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  border: 4px solid green;
   min-height: 2em;
 }
 
 .col-3 {
-  display: inline-block;
+  display: grid;
+  grid-template-columns: 1fr;
   vertical-align: text-top;
   min-height: inherit;
-  width: 15%;
   border: 1px solid grey;
   margin-right: 4em;
 }
 
 .col-4 {
-  display: inline-block;
+  display: grid;
+  grid-template-columns: 1fr;
   vertical-align: text-top;
   min-height: inherit;
-  width: 80%;
   border: 0px solid grey;
 }
 
