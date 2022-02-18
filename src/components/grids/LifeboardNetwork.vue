@@ -211,7 +211,8 @@ export default {
 
 <style>
 #live-network-grid {
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 #ecs-message {

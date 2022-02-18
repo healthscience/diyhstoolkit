@@ -29,7 +29,7 @@
           <img class="small-logo" alt="logo" src=".././assets/logo.png">
         </div>
         <div id="peer-views" v-if="flowviews === true">
-          <div id="flow-menu">
+          <div class="flow-menu">
             <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'lifestyleflow' }" id="lifestyleflow" @click.prevent="setView($event)">
               Lifeboards
             </button>
@@ -40,50 +40,48 @@
               Timeline
             </button>
           </div>
-          <div>
+          <div class="flow-menu">
             <div class="live-network-header">
-              <ul>
-                <li class="network-toolbar">
-                  <form id="search">
-                    Search <input name="query" @keyup="textQuery" v-model="searchText">
-                  </form>
-                </li>
-                <li class="network-toolbar">
-                  <button type="button" class="btn" @click="newType()">new</button>
-                  <div id="new-type" v-if="newtypeShow === true">
-                    <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button>
-                    <button type="button" class="btn-new" @click="newExperiment('experiment')">experiment</button>
-                  </div>
-                  <new-lifeboard v-show="isModalNewLifeboard" @close="closeModalNewLB">
-                    <template v-slot:header>
-                    <!-- The code below goes into the header slot -->
-                      NEW LIFEBOARD
-                    </template>
-                    <template v-slot:body>
-                      <div class="scale-item">
-                      New <input name="query" v-model="lifeboardName">
-                    <button class="new-lifeboard" @click.prevent="saveLifeboard()">save</button>
+              <div class="network-toolbar">
+                <form id="search">
+                  Search <input name="query" @keyup="textQuery" v-model="searchText">
+                </form>
+              </div>
+              <div class="network-toolbar">
+                <button type="button" class="btn" @click="newType()">new</button>
+                <div id="new-type" v-if="newtypeShow === true">
+                  <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button>
+                  <button type="button" class="btn-new" @click="newExperiment('experiment')">experiment</button>
                 </div>
-                    </template>
-                  </new-lifeboard>
-                  <new-networkexperiment v-show="isModalNewNetworkExperiment" @closeNnxp="closeModalNewN1">
-                    <template v-slot:header>
-                    <!-- The code below goes into the header slot -->
-                      NEW N=1 Network Experiment
-                    </template>
-                    <template v-slot:body>
-                    <!-- The code below goes into the header slot -->
-                      <header>Build Network Experiment</header>
-                    </template>
-                    <template v-slot:dashboard>
-                      <module-builder></module-builder>
-                    </template>
-                    <template v-slot:submit-join>
-                      <button @click="contributeNXP" >Contribute experiment to network</button>
-                    </template>
-                  </new-networkexperiment>
-                </li>
-              </ul>
+                <new-lifeboard v-show="isModalNewLifeboard" @close="closeModalNewLB">
+                  <template v-slot:header>
+                  <!-- The code below goes into the header slot -->
+                    NEW LIFEBOARD
+                  </template>
+                  <template v-slot:body>
+                    <div class="scale-item">
+                    New <input name="query" v-model="lifeboardName">
+                  <button class="new-lifeboard" @click.prevent="saveLifeboard()">save</button>
+              </div>
+                  </template>
+                </new-lifeboard>
+                <new-networkexperiment v-show="isModalNewNetworkExperiment" @closeNnxp="closeModalNewN1">
+                  <template v-slot:header>
+                  <!-- The code below goes into the header slot -->
+                    NEW N=1 Network Experiment
+                  </template>
+                  <template v-slot:body>
+                  <!-- The code below goes into the header slot -->
+                    <header>Build Network Experiment</header>
+                  </template>
+                  <template v-slot:dashboard>
+                    <module-builder></module-builder>
+                  </template>
+                  <template v-slot:submit-join>
+                    <button @click="contributeNXP" >Contribute experiment to network</button>
+                  </template>
+                </new-networkexperiment>
+              </div>
             </div>
           </div>
         </div>
@@ -96,7 +94,12 @@
       <lifeboard-network v-if="lifeView === true"></lifeboard-network>
       <experiment-network v-if="nxpView === true"></experiment-network>
     </div>
-    <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png"> HOP
+    <div class="network-protocol">
+      <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png">
+      <div id="health-oracle-protocol">
+        HOP
+      </div>
+    </div>
   </div>
 </template>
 
@@ -168,12 +171,9 @@ export default {
       this.$store.dispatch('actionTextquery', this.searchText)
     },
     newType () {
-      console.log('show what type of new?')
       this.newtypeShow = !this.newtypeShow
     },
     saveLifeboard () {
-      console.log('save new lifeboard')
-      console.log(this.lifeboardName)
       this.$store.dispatch('actionSaveLifeboard', this.lifeboardName)
     },
     newExperiment (type) {
@@ -182,7 +182,6 @@ export default {
         // create a set of modules and save if contributed
         this.$store.dispatch('actionMakeModuleRefContract')
       } else if (type === 'lifeboard') {
-        console.log('new lifeboard flow')
         this.isModalNewLifeboard = true
       }
       this.newtypeShow = !this.newtypeShow
@@ -197,7 +196,6 @@ export default {
       this.isModalNewNetworkExperiment = false
     },
     contributeNXP () {
-      console.log('contribute NXP to world')
       this.nxpState = 'public'
       // start building NXP refcontract
       this.$store.dispatch('actionNewNXPrefcontract')
@@ -209,6 +207,8 @@ export default {
 
 <style>
 .home {
+  display: grid;
+  grid-template-columns: 1fr;
   border-right: 1px solid lightgrey;
   border-left: 1px solid lightgrey;
 }
@@ -234,9 +234,6 @@ export default {
 
 /* Clear floats after the columns */
 .diy-settings:after {
-  content: "";
-  display: table;
-  clear: both;
 }
 
 .network-info {
@@ -247,8 +244,14 @@ export default {
   border: 1px solid grey;
 }
 
+.live-network-header {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+}
+
 .network-experiments {
-  border: 0px solid orange;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 #toolkit-boards {
@@ -313,7 +316,7 @@ img {
   text-align: center;
 }
 
-#flow-menu {
+.flow-menu {
   padding-top: 1em;
 }
 
@@ -327,6 +330,8 @@ img {
 }
 
 #view-flows {
+  display: grid;
+  grid-template-columns: 1fr;
   margin-left: 2em;
 }
 
@@ -349,7 +354,8 @@ img {
   padding: 6px 14px;
   margin-right: 2em;
   margin-left: 2em;
-  text-align: left;
+  min-width: 10em;
+  text-align: center;
 }
 
 .btn-new:hover {
@@ -360,6 +366,18 @@ img {
   padding: 6px 14px;
   margin-right: 2em;
   margin-left: 2em;
+  min-width: 10em;
   text-align: center;
+}
+
+.network-protocol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-self: center;
+  justify-self: center;
+}
+
+#health-oracle-protocol {
+  align-self: center;
 }
 </style>

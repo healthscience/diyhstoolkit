@@ -2,20 +2,19 @@
   <div id="app">
     <div id="peer-being">
       <div id="peer-welcome">
-        <ul>
-          <li class="toolbar-top">
-            {{ $t('welcome') }} Peer
-          </li>
-          <li class="toolkit-settings" id="select-language">
-            <button v-for="entry in languages" :key="entry.title" @click="changeLocale(entry.language)">
-              {{ entry.title }}
-            </button>
-          </li>
-        </ul>
+        <div class="toolbar-top">
+          {{ $t('welcome') }} Peer
+        </div>
+        <div class="toolkit-settings" id="select-language">
+          <button v-for="entry in languages" :key="entry.title" @click="changeLocale(entry.language)">
+            {{ entry.title }}
+          </button>
+        </div>
       </div>
       <div id="peer-pages">
-        <router-link class="nav-item" to="/">{{ $t('home') }}</router-link> |
-        <router-link class="nav-item" to="/about">{{ $t('about') }}</router-link>
+        <router-link class="nav-item-route" to="/">{{ $t('home') }}</router-link>
+        |
+        <router-link class="nav-item-route" to="/about">{{ $t('about') }}</router-link>
       </div>
       <div id="peer-settings">
         <div class="toolkit-settings">
@@ -34,7 +33,6 @@
         </div>
       </div>
     </div>
-    <div class="clear"></div>
     <NetworkStatus class="toolbar-top" msg="not connected"></NetworkStatus>
     <help-ai></help-ai>
     <router-view/>
@@ -110,9 +108,13 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 #peer-being  {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -122,9 +124,9 @@ export default {
 }
 
 #peer-welcome {
-  border: 0px solid blue;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   display: inline;
-  float: left;
   margin-left: 2em;
 }
 
@@ -146,7 +148,6 @@ export default {
 
 #nav {
   display: inline;
-  border: 2px solid blue;
   padding: 0px;
   a {
     font-weight: bold;
@@ -159,18 +160,21 @@ export default {
 }
 
 #peer-pages {
-  border: 0px solid red;
-  display: inline;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-self: center;
+  justify-self: center;
 }
 
-.nav-item {
-  display: inline;
+.nav-item-route {
+  font-size: 1.2em;
 }
 
 #peer-settings {
-  border: 0px solid pink;
-  display: inline;
-  float: right;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: end;
+  align-items: center;
 }
 
 .toolkit-settings {
@@ -182,6 +186,7 @@ export default {
   margin-left: 3em;
   margin-right: 3em;
   font-size: 1.2em;
+  min-width: 10em;
 }
 
 .networklive {
