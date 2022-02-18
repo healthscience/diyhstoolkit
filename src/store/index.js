@@ -17,6 +17,7 @@ const store = new Vuex.Store({
     authorised: false,
     connectStatus: false,
     peerauthStatus: false,
+    jwttoken: '',
     connectContext: {},
     networkConnection: {
       active: false,
@@ -197,12 +198,15 @@ const store = new Vuex.Store({
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.action = 'disconnect'
+      message.jwt = state.jwttoken
       safeFlowMessage = JSON.stringify(message)
       // clear peer data
       state.joinedNXPlist = []
       // clear peeers and data list
       state.publickeys = []
       state.warmNetwork = []
+      state.moduleGrid = {}
+      state.NXPexperimentData = {}
       state.networkConnection.active = false
       state.networkConnection.text = 'connect'
       state.networkConnection.type = 'self-verify'
@@ -445,8 +449,8 @@ const store = new Vuex.Store({
     },
     SET_DASHBOARD_REMOVE (state, inVerified) {
       // remove NXP from peer list
-      console.log('remove NXP')
-      console.log(inVerified)
+      // console.log('remove NXP')
+      // console.log(inVerified)
       // state.liveDashList = state.liveDashList.filter(item => item !== inVerified)
     },
     SET_VIEWFLOW_START (state, inVerified) {
@@ -493,8 +497,6 @@ const store = new Vuex.Store({
       Vue.set(this.state.visProgress[inVerified.moduleCNRL], modG, setProgress)
     },
     SET_LIFE_VIEW (state, inVerified) {
-      console.log('set view')
-      console.log(inVerified)
       if (inVerified === 'lifestyleflow') {
         state.viewLifeboards = !state.viewLifeboards
         state.viewNXP = false
@@ -538,6 +540,7 @@ const store = new Vuex.Store({
       message.action = 'dataAPIauth'
       message.network = update.network
       message.settings = update.settings
+      message.jwt = this.state.jwttoken
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },
@@ -601,6 +604,7 @@ const store = new Vuex.Store({
       displayLibUtil.reftype = 'ignore'
       displayLibUtil.action = 'extractexperimentmodules'
       displayLibUtil.data = joinNXP
+      displayLibUtil.jwt = this.state.jwttoken
       const displayMessage = JSON.stringify(displayLibUtil)
       Vue.prototype.$socket.send(displayMessage)
     },
@@ -686,8 +690,6 @@ const store = new Vuex.Store({
           matchExp = nxp
         }
       }
-      console.log('match nxp contract')
-      console.log(matchExp)
       // prepare ECS inputs- lookup peer selected module options
       let peerOptions = []
       for (let pmod of matchExp.modules) {
@@ -746,8 +748,9 @@ const store = new Vuex.Store({
         message.reftype = 'ignore'
         message.action = 'networkexperiment'
         message.data = ECSbundle
-        console.log('OUTmesssage+++++++++OUT+FIRST++++++')
-        console.log(message)
+        message.jwt = this.state.jwttoken
+        // console.log('OUTmesssage+++++++++OUT+FIRST++++++')
+        // console.log(message)
         const safeFlowMessage = JSON.stringify(message)
         Vue.prototype.$socket.send(safeFlowMessage)
       } else {
@@ -755,8 +758,8 @@ const store = new Vuex.Store({
       }
     },
     async actionVisUpdate (context, update) {
-      console.log('vistoolbar++++++UPdateAction')
-      console.log(update)
+      // console.log('vistoolbar++++++UPdateAction')
+      // console.log(update)
       this.state.ecsMessageLive = ''
       // perform checks for missing input data to form ECS-out bundle
       // TODO
@@ -868,29 +871,29 @@ const store = new Vuex.Store({
       }
       message.type = 'safeflow'
       message.reftype = 'ignore'
-      console.log('NXPMessage+++++UPDATE++++OUT')
-      console.log(message)
+      message.jwt = this.state.jwttoken
+      // console.log('NXPMessage+++++UPDATE++++OUT')
+      // console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
       context.commit('setVisProgressUpdate', progressContext)
     },
     actionFutureOLD (context, update) {
-      console.log('action future')
-      console.log(update)
+      // console.log('action future')
+      // console.log(update)
       let chartData = this.state.NXPexperimentData[update.refs.shellCNRL][update.refs.moduleCNRL].data
       // pick out data Chart object and add to dataset
       // what basis for future data for next day?
       if (update.future === 'CALE') {
-        console.log('pass to CALE')
+        // console.log('pass to CALE')
         let caleMessage = {}
         caleMessage.type = 'cale'
         caleMessage.reftype = 'future'
         caleMessage.data = update.refs
-        console.log('CALE message out')
-        console.log(caleMessage)
-        const caleOUT = JSON.stringify(caleMessage)
-        console.log(caleOUT)
+        caleMessage.jwt = this.state.jwttoken
+        // console.log(caleMessage)
+        // const caleOUT = JSON.stringify(caleMessage)
         // Vue.prototype.$socket.send(caleOUT)
       } else if (update.future === 'month') {
         let dataKeys = Object.keys(chartData)

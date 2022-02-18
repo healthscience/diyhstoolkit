@@ -35,7 +35,6 @@ export default {
       return this.$store.state.lifeBoard.lifeboardtListshow
     },
     peerLifeflowListlive: function () {
-      console.log(this.$store.state.joinedLifeboard)
       return this.$store.state.joinedLifeboard[0]
     },
     searchQuery: function () {
@@ -51,7 +50,6 @@ export default {
   },
   methods: {
     statusLifeboard (type) {
-      console.log(type)
       this.lifeboardState = type
     },
     statusLifeboardshow () {

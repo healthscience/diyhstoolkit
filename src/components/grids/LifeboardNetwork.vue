@@ -101,7 +101,6 @@ export default {
       return this.$store.state.ecsMessageLive
     },
     filteredLBList: function () {
-      console.log(this.$store.state.selectLBlist)
       return this.$store.state.selectLBlist
     },
     zoomscaleStatus: function () {
@@ -111,8 +110,6 @@ export default {
       return this.$store.state.activeScalevalue
     },
     activeDrag: function () {
-      console.log('active drag')
-      console.log(this.filteredLBList)
       if (this.filteredLBList !== undefined) {
         let activeBarStatus = {}
         for (let lnxp of this.filteredLBList) {
@@ -214,7 +211,8 @@ export default {
 
 <style>
 #live-network-grid {
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 #ecs-message {

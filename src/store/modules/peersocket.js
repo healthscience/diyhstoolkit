@@ -48,7 +48,7 @@ export default {
       // console.log('message')
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      console.log(backJSON)
+      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -70,6 +70,7 @@ export default {
             prepareNXPrefcont.reftype = 'joinexperiment'
             prepareNXPrefcont.action = 'joinexperiment'
             prepareNXPrefcont.data = this.state.moduleGenesisList
+            prepareNXPrefcont.jwt = this.state.jwttoken
             const referenceContractReady = JSON.stringify(prepareNXPrefcont)
             Vue.prototype.$socket.send(referenceContractReady)
           }
@@ -155,6 +156,7 @@ export default {
           prepareNXPrefcont.reftype = 'genesisexperiment'
           prepareNXPrefcont.action = 'genesisexperiment'
           prepareNXPrefcont.data = this.state.moduleGenesisList
+          prepareNXPrefcont.jwt = this.state.jwttoken
           const referenceContractReady = JSON.stringify(prepareNXPrefcont)
           Vue.prototype.$socket.send(referenceContractReady)
         }
@@ -165,43 +167,54 @@ export default {
       } else if (backJSON.safeflow === true) {
         // safeFLOW inflow
         if (backJSON.type === 'auth') {
-          // set remove welcome message
-          this.state.peerauthStatus = true
-          // get starting experiments
-          const refContractp = {}
-          refContractp.type = 'library'
-          refContractp.reftype = 'publiclibrary'
-          refContractp.action = 'GET'
-          const refCJSONp = JSON.stringify(refContractp)
-          Vue.prototype.$socket.send(refCJSONp)
-          // network library updates?
-          const refContract = {}
-          refContract.type = 'library'
-          refContract.reftype = 'privatelibrary'
-          refContract.action = 'GET'
-          const refCJSON = JSON.stringify(refContract)
-          Vue.prototype.$socket.send(refCJSON)
-          // ask for datastore public keys
-          //  need call, added manualy for now  SET_ASK_KEYMANAGEMENT(state)
-          this.state.publickeys = []
-          const pubkeyGet = {}
-          pubkeyGet.type = 'library'
-          pubkeyGet.reftype = 'keymanagement'
-          Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
-          // get datastore
-          let getWarmPeers = {}
-          getWarmPeers.type = 'library'
-          getWarmPeers.reftype = 'warm-peers'
-          Vue.prototype.$socket.send(JSON.stringify(getWarmPeers))
-          // get the peer start lifeboard
-          let getLifeboard = {}
-          getLifeboard.type = 'library'
-          getLifeboard.reftype = 'peerLifeboard'
-          Vue.prototype.$socket.send(JSON.stringify(getLifeboard))
+          if (backJSON.auth !== false) {
+            // set remove welcome message
+            this.state.peerauthStatus = true
+            // set the JWT for this session
+            this.state.jwttoken = backJSON.jwt
+            // get starting experiments
+            const refContractp = {}
+            refContractp.type = 'library'
+            refContractp.reftype = 'publiclibrary'
+            refContractp.action = 'GET'
+            refContractp.jwt = this.state.jwttoken
+            const refCJSONp = JSON.stringify(refContractp)
+            Vue.prototype.$socket.send(refCJSONp)
+            // network library updates?
+            const refContract = {}
+            refContract.type = 'library'
+            refContract.reftype = 'privatelibrary'
+            refContract.action = 'GET'
+            refContract.jwt = this.state.jwttoken
+            const refCJSON = JSON.stringify(refContract)
+            Vue.prototype.$socket.send(refCJSON)
+            // ask for datastore public keys
+            //  need call, added manualy for now  SET_ASK_KEYMANAGEMENT(state)
+            this.state.publickeys = []
+            const pubkeyGet = {}
+            pubkeyGet.type = 'library'
+            pubkeyGet.reftype = 'keymanagement'
+            pubkeyGet.jwt = this.state.jwttoken
+            Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
+            // get datastore
+            let getWarmPeers = {}
+            getWarmPeers.type = 'library'
+            getWarmPeers.reftype = 'warm-peers'
+            getWarmPeers.jwt = this.state.jwttoken
+            Vue.prototype.$socket.send(JSON.stringify(getWarmPeers))
+            // get the peer start lifeboard
+            let getLifeboard = {}
+            getLifeboard.type = 'library'
+            getLifeboard.reftype = 'peerLifeboard'
+            getLifeboard.jwt = this.state.jwttoken
+            Vue.prototype.$socket.send(JSON.stringify(getLifeboard))
+          }
+        } else {
+          console.log('failed login')
         }
       } else if (backJSON.type === 'ecssummary') {
-        console.log('SUMMAERY==========================')
-        console.log(backJSON)
+        // console.log('SUMMAERY==========================')
+        // console.log(backJSON)
         // update the NXP contract list held in toolkit
         let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[this.state.liveNXP], this.state.networkPeerExpModules)
         // this.state.networkPeerExpModules = updateListContracts
@@ -227,12 +240,12 @@ export default {
           Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('SECOND------DATA RETURNED-----')
-        console.log(backJSON)
+        // console.log('SECOND------DATA RETURNED-----')
+        // console.log(backJSON)
         // is the data for the Lifeboard or NXP space?
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {
-          console.log('NO DATA RETURNED')
+          // console.log('NO DATA RETURNED')
           // switch off progress message and inform toolkit
           let setnxpProgress = { text: 'Experiment in progress', active: false }
           Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -306,7 +319,7 @@ export default {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
               } else {
-                console.log('no data available')
+                // console.log('no data available')
                 this.state.ecsMessageLive = 'no data available'
                 // set experiment progress message off
                 let setnxpProgress = { text: 'Experiment in progress', active: false }
@@ -319,7 +332,7 @@ export default {
             }
           }
         } else {
-          console.log('NEW data safeFLOW++++++')
+          // console.log('NEW data safeFLOW++++++')
           // switch off nxp Progress message
           let setnxpProgress = { text: 'Experiment in progress', active: true }
           Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -381,9 +394,9 @@ export default {
                   Vue.set(this.state.visProgress[displayDataUpdate.module], modG.i, setProgress)
                 }
               }
-              console.log('========FINISHED===========')
+              // console.log('========FINISHED===========')
             } else {
-              console.log('NO grid update but new data time change')
+              // console.log('NO grid update but new data time change')
               // switch off the update message for update
               let setProgress = {}
               setProgress = { text: 'Updating visualisation', active: false }
@@ -398,7 +411,7 @@ export default {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, backJSON.data.context.triplet.device, backJSON.data)
               }
             }
-            console.log('updated COMPLETE--------------------')
+            // console.log('updated COMPLETE--------------------')
           } else {
             // set experiment progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
@@ -454,7 +467,7 @@ export default {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
               } else {
-                console.log('no data available')
+                // console.log('no data available')
                 this.state.ecsMessageLive = 'no data available'
                 // set experiment progress message off
                 let setnxpProgress = { text: 'Experiment in progress', active: false }
@@ -516,6 +529,7 @@ export default {
       const pubkeyGet = {}
       pubkeyGet.type = 'library'
       pubkeyGet.reftype = 'keymanagement'
+      pubkeyGet.jwt = this.state.jwttoken
       Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
     },
     CLEAR_CONTRIB_REFCONTRACTS (state, inVerified) {
@@ -725,6 +739,7 @@ export default {
       } else if (message.reftype === 'new-visualise') {
         prepareRefContract = this.state.livesafeFLOW.refcontComposerLive.visualiseRefLive.visualisePrepare(this.state.newVisualiseForm)
       }
+      prepareRefContract.jwt = this.state.jwttoken
       const referenceContractReady = JSON.stringify(prepareRefContract)
       Vue.prototype.$socket.send(referenceContractReady)
     },
@@ -733,21 +748,25 @@ export default {
       openLibrary.type = 'library'
       openLibrary.reftype = 'openlibrary'
       openLibrary.data = data
+      openLibrary.jwt = this.state.jwttoken
       Vue.prototype.$socket.send(JSON.stringify(openLibrary))
     },
     actionWarmPeers (context, message) {
       let getWarmPeers = {}
       getWarmPeers.type = 'library'
       getWarmPeers.reftype = 'warm-peers'
+      getWarmPeers.jwt = this.state.jwttoken
       Vue.prototype.$socket.send(JSON.stringify(getWarmPeers))
     },
     actionGetRefContract (context, message) {
+      message.jwt = this.state.jwttoken
       Vue.prototype.$socket.send(message)
     },
     actionLibraryPublickey (context, message) {
       const pubkeyGet = {}
       pubkeyGet.type = 'library'
       pubkeyGet.reftype = 'viewpublickey'
+      pubkeyGet.jwt = this.state.jwttoken
       Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
     },
     actionPeersyncLibrary (context, message) {
@@ -755,10 +774,12 @@ export default {
       peerSync.type = 'library'
       peerSync.reftype = 'replicatekey'
       peerSync.publickey = message
+      peerSync.jwt = this.state.jwttoken
       const peerSyncJSON = JSON.stringify(peerSync)
       Vue.prototype.$socket.send(peerSyncJSON)
     },
     actionAddwarmPeer (context, message) {
+      message.jwt = this.state.jwttoken
       Vue.prototype.$socket.send(message)
     },
     actionMakeVisualiseRefContract (context, message) {
@@ -879,6 +900,7 @@ export default {
       tempModules.reftype = 'moduletemp'
       tempModules.action = 'moduletemp'
       tempModules.data = moduleContracts
+      tempModules.jwt = this.state.jwttoken
       // send to Library to create new temp modules
       const newTempModules = JSON.stringify(tempModules)
       Vue.prototype.$socket.send(newTempModules)
@@ -911,6 +933,7 @@ export default {
     },
     actionMakeKBIDentry (context, message) {
       let prepareKBIDentry = this.state.livesafeFLOW.kbidComposerLive.kbidEntry(message)
+      prepareKBIDentry.jwt = this.state.jwttoken
       const kbidEntryReady = JSON.stringify(prepareKBIDentry)
       Vue.prototype.$socket.send(kbidEntryReady)
     },
@@ -1006,6 +1029,7 @@ export default {
       setNewNXPplusModules.reftype = 'newexperimentmodule'
       setNewNXPplusModules.action = 'newexperimentmodule'
       setNewNXPplusModules.data = this.state.moduleHolder
+      setNewNXPplusModules.jwt = this.state.jwttoken
       const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
       Vue.prototype.$socket.send(genesisNXPjson)
       // clear the new NXP forms
@@ -1038,6 +1062,7 @@ export default {
         newJoinExperiment.reftype = 'joinexperiment'
         newJoinExperiment.action = 'joinexperiment'
         newJoinExperiment.data = dataChoices
+        newJoinExperiment.jwt = this.state.jwttoken
         let ExpmoduleRefContract = JSON.stringify(newJoinExperiment)
         Vue.prototype.$socket.send(ExpmoduleRefContract)
       } else {
@@ -1054,6 +1079,17 @@ export default {
     },
     actionExperimentListDefault (context, update) {
       context.commit('SET_NXPLIST_DEFAULT', update)
+    },
+    actionCloudSignin (context, update) {
+      let cloudInfo = {}
+      cloudInfo.type = 'safeflow'
+      cloudInfo.reftype = 'ignore'
+      cloudInfo.action = 'cloudauth'
+      cloudInfo.network = null // update.network
+      cloudInfo.settings = null // update.settings
+      cloudInfo.data = update
+      let cloudAuth = JSON.stringify(cloudInfo)
+      Vue.prototype.$socket.send(cloudAuth)
     }
   }
 }

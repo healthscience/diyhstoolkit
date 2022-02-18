@@ -60,6 +60,7 @@ export default {
       aiMessageout.reftype = 'ignore'
       aiMessageout.action = 'question'
       aiMessageout.data = state.helpchatAsk
+      aiMessageout.jwt = this.state.jwttoken
       const caleMessage = JSON.stringify(aiMessageout)
       Vue.prototype.$socket.send(caleMessage)
     },
@@ -67,7 +68,6 @@ export default {
       console.log('GET future data CALE')
       let fstate = !state.liveFutureCollection.active
       Vue.set(state.liveFutureCollection, 'active', fstate)
-      console.log(state.liveFutureCollection)
       // data nxp context ref contracts
       let refBundle = {}
       refBundle.future = true
@@ -77,6 +77,7 @@ export default {
       aiMessageout.reftype = 'ignore'
       aiMessageout.action = 'future'
       aiMessageout.data = refBundle
+      aiMessageout.jwt = this.state.jwttoken
       // const caleMessage = JSON.stringify(aiMessageout)
       // Vue.prototype.$socket.send(caleMessage)
     }

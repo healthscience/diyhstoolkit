@@ -47,8 +47,6 @@ export default {
   },
   computed: {
     filteredLifeboards: function () {
-      console.log('filter')
-      console.log(this.lifeboards)
       var sortKey = this.sortKey
       var filterKey = this.filterKey && this.filterKey.toLowerCase()
       var order = this.sortOrders[sortKey] || 1

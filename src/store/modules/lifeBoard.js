@@ -31,7 +31,7 @@ export default {
   mutations: {
     SET_LIFEBOAD_HOLD: (state, inVerified) => {
       // Vue.set(state.lifeboardHolder, 'name', inVerified)
-      console.log(state.lifeboardHolder)
+      // console.log(state.lifeboardHolder)
       let lifeboardRC = {}
       lifeboardRC.name = inVerified
       lifeboardRC.story = []
@@ -42,6 +42,7 @@ export default {
       prepareLifeboard.reftype = 'newlifeboard'
       prepareLifeboard.action = 'newlifeboard'
       prepareLifeboard.data = lifeboardRC
+      prepareLifeboard.jwt = this.state.jwttoken
       const referenceContractReady = JSON.stringify(prepareLifeboard)
       Vue.prototype.$socket.send(referenceContractReady)
       // when refcontract uuid add to list
@@ -49,48 +50,51 @@ export default {
       // console.log(state.peerLifeboards)
     },
     SET_LIFEBOAD_ADD: (state, inVerified) => {
-      console.log('add life board nxp and dvice decatioa??')
-      console.log(inVerified)
+      // console.log('add life board nxp and dvice decatioa??')
+      // console.log(inVerified)
       const addLifeboard = {}
       addLifeboard.type = 'library'
       addLifeboard.reftype = 'addlifeboard'
       addLifeboard.action = 'addlifeboard'
       addLifeboard.data = inVerified
+      addLifeboard.jwt = this.state.jwttoken
       const referenceContractReady = JSON.stringify(addLifeboard)
       Vue.prototype.$socket.send(referenceContractReady)
     },
     SET_SOCAILGRAPH_GET: (state, inVerified) => {
-      console.log('add to lifeboard')
+      // console.log('add to lifeboard')
       state.liveSocialGraph = [1, 2, 3]
       /* const addLifeboard = {}
       addLifeboard.type = 'socialgraph'
       addLifeboard.reftype = 'socialgraph'
       addLifeboard.action = 'socialgraph'
       addLifeboard.data = inVerified
+      addLifeboard.jwt = this.state.jwttoken
       const referenceContractReady = JSON.stringify(addLifeboard)
       Vue.prototype.$socket.send(referenceContractReady) */
     },
     SET_MAP_GETNETWORK: (state, inVerified) => {
-      console.log('GET geojson')
+      // console.log('GET geojson')
       state.liveMapNetwork = ['a', 'b', 'c']
       /* const addLifeboard = {}
       addLifeboard.type = 'map'
       addLifeboard.reftype = 'agg-network'
       addLifeboard.action = 'agg-netwokr'
       addLifeboard.data = inVerified
+      addLifeboard.jwt = this.state.jwttoken
       const referenceContractReady = JSON.stringify(addLifeboard)
       Vue.prototype.$socket.send(referenceContractReady) */
     },
     SET_PAST_GRAPH: (state, inVerified) => {
-      console.log('GET past network data')
+      // console.log('GET past network data')
       state.liveNetworkcollection.active = !state.liveNetworkcollection.active
     },
     SET_FUTURE_GRAPH: (state, inVerified) => {
-      console.log('GET FUTURE social graph')
+      // console.log('GET FUTURE social graph')
       state.liveFutureNetworkcollection.active = !state.liveFutureNetworkcollection.active
     },
     SET_LBLIST_SHOW: (state, inVerified) => {
-      console.log(inVerified)
+      // console.log(inVerified)
       let updateText = ''
       if (state.lifeboardtListshow.text === 'hide') {
         updateText = 'show'
@@ -123,22 +127,23 @@ export default {
       state.storyStages = []
     },
     SET_LIFEBOARD_MEMBERS: (state, inVerified) => {
-      console.log('lifeboard bundles prpep an send')
-      console.log(inVerified)
+      // console.log('lifeboard bundles prpep an send')
+      // console.log(inVerified)
       // send message to PeerLink for safeFLOW
       let message = {}
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.action = 'networkexperiment'
       message.data = inVerified
-      console.log('OUTmesssage++++LIFEBOARD++++++')
-      console.log(message)
+      message.jwt = this.state.jwttoken
+      // console.log('OUTmesssage++++LIFEBOARD++++++')
+      // console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },
     SET_LIFEBOARD_ACTIVE: (state, inVerified) => {
-      console.log('active lifeboard')
-      console.log(inVerified)
+      // console.log('active lifeboard')
+      // console.log(inVerified)
       state.selectLBlist = inVerified
     },
     SET_LIVE_LB: (state, inVerified) => {
@@ -184,8 +189,8 @@ export default {
       context.commit('SET_EMPTY_STAGES', update)
     },
     actionLBState: async (context, update) => {
-      console.log('action life board selected')
-      console.log(update)
+      // console.log('action life board selected')
+      // console.log(update)
       context.rootState.liveNXP = update
       // need to loop through nxp ref contracts and ask HOP to preprae visualisation data
       let matchLBtoNXPs = []

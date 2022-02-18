@@ -1,4 +1,4 @@
-<template>
+gi<template>
   <transition name="modal-fade">
     <div class="modal-backdrop">
       <div class="modal"
@@ -27,9 +27,10 @@
           <slot name="body">
             Network Library - DaMaHub Project - <img  alt="DaMaHub Network Library" src="../../.././assets/logo-damahub.png">
             <iframe
-              :src="`./xlibrary-test.html`"
+              :src="`./xlibrary-test.html?` + jwttoken"
               width="90%"
               height="1200px"
+              name="networklibrarylive"
               frameborder="0" >
             </iframe>
           </slot>
@@ -52,9 +53,16 @@
 </template>
 
 <script>
+function findIframeByName (name) {
+  return find(window.frames, frame => frame.name === name)
+}
+
 export default {
   name: 'modal-nl',
   computed: {
+    jwttoken: function () {
+      return this.$store.state.jwttoken
+    }
   },
   mounted () {
   },
@@ -63,6 +71,13 @@ export default {
     }
   },
   methods: {
+    onLoadIframe (event) {
+      const iframe = findIframeByName(event.currentTarget.name)
+      iframe.doSomething({
+        appID: '123',
+        apiKey: '123'
+      })
+    },
     closeNL () {
       this.$emit('closenl')
     },
