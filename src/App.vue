@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <newtwork-status class="toolbar-top" msg="not connected"></network-status>
+    <network-status class="toolbar-top" msg="not connected"></network-status>
     <help-ai></help-ai>
     <router-view/>
   </div>
