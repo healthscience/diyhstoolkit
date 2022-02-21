@@ -179,7 +179,6 @@ export default {
       feedbackTime.active = false
       this.$store.dispatch('actionFeeback', feedbackTime)
       if (this.calendarToolMulti.active !== true && this.rangeActive !== true) {
-        console.log('timeLogic1')
         // convert to correct time format and update KBundle and build new visStyle
         let bTime = {}
         bTime.selectDate = this.calendarvalue
@@ -194,7 +193,6 @@ export default {
         this.$store.dispatch('actionSetTimerange', timeContext)
       } else if (this.rangeActive === true) {
         // reset the timeholder
-        console.log('timeLogic2')
         this.calendarListMS = []
         let rangeSelected = moment.range(this.calendarvalue[0], this.calendarvalue[1])
         let segText = 'days'
@@ -209,7 +207,6 @@ export default {
         timeContext.timerange = this.calendarListMS
         this.$store.dispatch('actionSetTimerange', timeContext)
       } else if (this.calendarToolMulti.active === true) {
-        console.log('timeLogic3')
         let formatTimeDisplay = moment(this.calendarvalue).format('LLll')
         this.calendarList.push(formatTimeDisplay)
         this.calendarListMS.push(moment(this.calendarvalue).valueOf())
