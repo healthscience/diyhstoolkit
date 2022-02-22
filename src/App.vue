@@ -24,7 +24,7 @@
           </button>
         </div>
         <div class="toolkit-settings">
-          <button type="button" class="toolbar-top" @click="showHelpModal">
+          <button type="button" class="toolbar-top" id="help-live" @click="showHelpModal">
             {{ $t('help') }}
           </button>
         </div>
@@ -110,6 +110,7 @@ export default {
   color: #2c3e50;
   display: grid;
   grid-template-columns: 1fr;
+  width: 1280;
 }
 
 #peer-being  {
