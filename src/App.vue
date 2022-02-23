@@ -18,10 +18,12 @@
       </div>
       <div id="peer-settings">
         <div class="toolkit-settings">
-          CALE:
-          <button class="toolbar-top"  v-bind:class="{ active: caleAIStatus.active === true}" type="button" @click="caleAIset">
-            {{ caleAIStatus.text }}
-          </button>
+          <div class="cale-space">
+            <div class="cale-name">CALE:</div>
+            <button class="toolbar-top"  v-bind:class="{ active: caleAIStatus.active === true}" type="button" @click="caleAIset">
+              {{ caleAIStatus.text }}
+            </button>
+          </div>
         </div>
         <div class="toolkit-settings">
           <button type="button" class="toolbar-top" id="help-live" @click="showHelpModal">
@@ -178,6 +180,15 @@ export default {
 .toolkit-settings {
   display: inline;
   border: 0px solid green;
+}
+
+.cale-space {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.cale-name {
+  align-self: center;
 }
 
 .connect-network {

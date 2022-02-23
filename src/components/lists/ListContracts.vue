@@ -1,30 +1,30 @@
 <template>
   <div id="grid-contracts" v-if="showExperimentList.state === true">
-    <table>
-      <thead>
-        <tr>
-          <th v-for="key in columns" :key="key.id"
+    <div class="list-table">
+      <div class="table-header">
+        <div class="row-header">
+          <div class="header-items" v-for="key in columns" :key="key.id"
             @click="sortBy(key)"
             :class="{ active: sortKey == key }">
             {{ key | capitalize }}
             <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
             </span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="alternate-bk" v-for="entry in filteredExperiments" :key="entry.id">
-          <td v-for="key in columns" :key="key.id">
+          </div>
+        </div>
+      </div>
+      <div class="table-rows">
+        <div class="alternate-bk" v-for="entry in filteredExperiments" :key="entry.id">
+          <div class="table-row-columns" v-for="key in columns" :key="key.id">
             <div v-if="key !== 'action'">
             {{entry[key]}}
             </div>
             <div v-else>
               <button type="button" class="btn" @click="actionExperiment(entry.id, entry)">{{ entry[key] }}</button>
             </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -144,69 +144,47 @@ export default {
 }
 </script>
 
-<style>
-#grid-template {
-  position: relative;
-  border: 0px solid blue;
-  text-align: center;
+<style scoped>
+#grid-contracts {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 96%;
 }
 
-table {
-  border: 1px solid #42b4b9;
-  border-radius: 3px;
-  background-color: #fff;
+.list-table {
 }
 
-th {
-  background-color: #42b4b9;
-  color: rgba(255,255,255,0.66);
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.row-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  border: 1px solid lightgrey;
+  height: 40px;
 }
 
-td {
-  /* background-color: #f9f9f9; */
+.header-items {
+  align-self: center;
+  background-color: lightgrey;
+  padding: .4em;
 }
 
-th, td {
-  min-width: 120px;
-  padding: 10px 20px;
+.table-rows {
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
-th.active {
-  color: #fff;
+.alternate-bk {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  height: 50px;
+  justify-content: bottom;
 }
 
-th.active .arrow {
-  opacity: 1;
+.table-row-columns {
+  align-self: center;
 }
 
 .alternate-bk:nth-child(even) {
   background-color: #ffefd5;
-}
-
-.arrow {
-  display: inline-block;
-  vertical-align: middle;
-  width: 0;
-  height: 0;
-  margin-left: 5px;
-  opacity: 0.66;
-}
-
-.arrow.asc {
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-bottom: 4px solid #fff;
-}
-
-.arrow.dsc {
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid #fff;
 }
 
 .scale-space.active {

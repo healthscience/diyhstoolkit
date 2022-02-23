@@ -119,7 +119,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #grid-template {
   position: relative;
   border: 0px solid blue;

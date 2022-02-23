@@ -215,7 +215,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #live-network-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -233,7 +233,7 @@ export default {
 }
 
 #dashboard-placeholder {
-  height: 500%;
+  height: 8000px;
   width: 500%;
   padding-top: 20px;
   margin: auto;
@@ -287,10 +287,6 @@ export default {
 .remove-controls {
   float: right;
   margin-right: 2em;
-}
-
-.clear {
-  clear: both;
 }
 
 </style>

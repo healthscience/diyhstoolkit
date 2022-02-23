@@ -1,64 +1,66 @@
 <template>
   <div id="live-lifeboard-grid">
     <grid-toolbar></grid-toolbar>
-    <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
-      <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '10%', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0"  drag-handle=".drag-handle">
-        <div id="single-space">
-          <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{active: activeDrag[dashi].active === true }">
-            --- Activation Bar ---
-          </div>
-          <div class="dashboard-space">
-            <div class="vis-spaceitem">
-              <!-- <div id="test-content">
-                Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
-                X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}
-              </div> -->
-              <div id="spaceitem-controls">
-                <ul>
-                  <li>
-                    Left
-                  </li>
-                  <li>
-                    <header>Dashboard</header>
-                  </li>
-                  <li class="remove-controls">
-                    <div id="dashboard-controls">
-                      <ul>
-                        <li>
-                          <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
-                        <li>
-                        <li>
-                          <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
-                        </li>
-                      </ul>
-                    </div>
-                    <div id="remove-message" v-if="messageRemove === true">
-                      Are you sure you want to remove Lifeboard item? {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Y</a>  N
-                    </div>
-                  </li>
-                </ul>
-              </div>
+    <div id="dragwheel-space" v-dragscroll.noleft.noright="true">
+      <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
+        <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '10%', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0"  drag-handle=".drag-handle">
+          <div id="single-space">
+            <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{active: activeDrag[dashi].active === true }">
+              --- Activation Bar ---
             </div>
-            <div class="vis-spaceitem">
-              feedback:
-              <div v-if="ecsMessage" id="ecs-message">
-                {{ ecsMessage }}
-              </div>
-            </div>
-            <div class="vis-spaceitem">
-              <!-- view the dashboard per network experiment -->
-              <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
-                <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
-                <div id="module-ready" v-if="NXPstatusData[dashi]">
-                  <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
-                    <dash-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></dash-board>
+            <div class="dashboard-space">
+              <div class="vis-spaceitem">
+                <!-- <div id="test-content">
+                  Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
+                  X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}
+                </div> -->
+                <div id="spaceitem-controls">
+                  <ul>
+                    <li>
+                      Left
+                    </li>
+                    <li>
+                      <header>Dashboard</header>
+                    </li>
+                    <li class="remove-controls">
+                      <div id="dashboard-controls">
+                        <ul>
+                          <li>
+                            <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
+                          <li>
+                          <li>
+                            <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div id="remove-message" v-if="messageRemove === true">
+                        Are you sure you want to remove Lifeboard item? {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Y</a>  N
+                      </div>
+                    </li>
                   </ul>
+                </div>
+              </div>
+              <div class="vis-spaceitem">
+                feedback:
+                <div v-if="ecsMessage" id="ecs-message">
+                  {{ ecsMessage }}
+                </div>
+              </div>
+              <div class="vis-spaceitem">
+                <!-- view the dashboard per network experiment -->
+                <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
+                  <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
+                  <div id="module-ready" v-if="NXPstatusData[dashi]">
+                    <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
+                      <dash-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></dash-board>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </vue-draggable-resizable>
+        </vue-draggable-resizable>
+      </div>
     </div>
   </div>
 </template>
@@ -209,8 +211,8 @@ export default {
 }
 </script>
 
-<style>
-#live-network-grid {
+<style scoped>
+#live-lifeboard-grid {
   display: grid;
   grid-template-columns: 1fr;
 }
@@ -220,8 +222,14 @@ export default {
   margin-top: 10px;
 }
 
+#dragwheel-space {
+  width: 99%;
+  height: 99%;
+  overflow:hidden;
+}
+
 #dashboard-placeholder {
-  min-height: 4000px;
+  height: 8000px;
   width: 500%;
   padding-top: 20px;
   margin: auto;
@@ -275,10 +283,6 @@ export default {
 .remove-controls {
   float: right;
   margin-right: 2em;
-}
-
-.clear {
-  clear: both;
 }
 
 </style>
