@@ -337,7 +337,7 @@ img {
 
 #new-type {
   position: absolute;
-  margin-left: -70px;
+  margin-left: -134px;
 }
 
 .btn {

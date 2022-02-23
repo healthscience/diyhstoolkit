@@ -167,6 +167,10 @@ export default {
   padding: .4em;
 }
 
+.header-items:nth-child(1) {
+  width: 21em;
+}
+
 .table-rows {
   display: grid;
   grid-template-columns: 1fr;
