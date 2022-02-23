@@ -43,8 +43,6 @@ export default {
       Vue.set(state.helpModal, 'active', true)
     },
     SET_ASKCALE_CHAT: (state, inVerified) => {
-      console.log('ash cale chat')
-      console.log(inVerified)
       // set context
       Vue.set(state.helpchatAsk, 'text', inVerified)
       let date = new Date()
@@ -53,16 +51,26 @@ export default {
       Vue.set(state.helpchatAsk, 'time', time)
     },
     SET_ASKCALE_ENTRY: (state, inVerified) => {
-      console.log('complete question')
-      Vue.set(state.helpchatAsk, 'active', true)
-      let aiMessageout = {}
-      aiMessageout.type = 'caleai'
-      aiMessageout.reftype = 'ignore'
-      aiMessageout.action = 'question'
-      aiMessageout.data = state.helpchatAsk
-      aiMessageout.jwt = this.state.jwttoken
-      const caleMessage = JSON.stringify(aiMessageout)
-      Vue.prototype.$socket.send(caleMessage)
+      // need to check if access to AI or local?
+      if (inVerified.token.length !== 0) {
+        Vue.set(state.helpchatAsk, 'active', true)
+        let aiMessageout = {}
+        aiMessageout.type = 'caleai'
+        aiMessageout.reftype = 'ignore'
+        aiMessageout.action = 'question'
+        aiMessageout.data = state.helpchatAsk
+        aiMessageout.jwt = inVerified.token
+        const caleMessage = JSON.stringify(aiMessageout)
+        Vue.prototype.$socket.send(caleMessage)
+      } else {
+        // local AI
+        let date = new Date()
+        // get the time as a string
+        let time = date.toLocaleTimeString()
+        Vue.set(state.caleaiReply, 'text', 'CALE is not connected')
+        Vue.set(state.caleaiReply, 'time', time)
+        Vue.set(state.caleaiReply, 'active', false)
+      }
     },
     SET_FUTURE_DATA: (state, inVerified) => {
       console.log('GET future data CALE')
@@ -71,13 +79,13 @@ export default {
       // data nxp context ref contracts
       let refBundle = {}
       refBundle.future = true
-      refBundle.contracts = inVerified.contracts
+      refBundle.contracts = inVerified.update.contracts
       let aiMessageout = {}
       aiMessageout.type = 'caleai'
       aiMessageout.reftype = 'ignore'
       aiMessageout.action = 'future'
       aiMessageout.data = refBundle
-      aiMessageout.jwt = this.state.jwttoken
+      aiMessageout.jwt = inVerified.token
       // const caleMessage = JSON.stringify(aiMessageout)
       // Vue.prototype.$socket.send(caleMessage)
     }
@@ -96,10 +104,16 @@ export default {
       context.commit('SET_ASKCALE_CHAT', update)
     },
     actionHelpaskentry: (context, update) => {
-      context.commit('SET_ASKCALE_ENTRY', update)
+      let dataAI = {}
+      dataAI.token = context.rootState.jwttoken
+      dataAI.update = update
+      context.commit('SET_ASKCALE_ENTRY', dataAI)
     },
     actionFuture: (context, update) => {
-      context.commit('SET_FUTURE_DATA', update)
+      let dataAI = {}
+      dataAI.token = context.rootState.jwttoken
+      dataAI.update = update
+      context.commit('SET_FUTURE_DATA', dataAI)
     }
   }
 }

@@ -113,13 +113,10 @@ export default {
       this.$store.dispatch('actionShowhelp')
     },
     askeCalesave () {
-      console.log('ask tigger')
       let chatASKCALE = this.askInput
-      console.log(chatASKCALE)
       this.$store.dispatch('actionHelpAsk', chatASKCALE)
     },
     submitAsk () {
-      console.log('sumbin question to CALE')
       this.$store.dispatch('actionHelpaskentry', true)
     }
   }
