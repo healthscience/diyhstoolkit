@@ -108,7 +108,6 @@ export default {
       cloudConnect: 'signin-cloud', // 'signin-cloud',
       cloudsigninInput: '',
       cloudpwInput: ''
-
     }
   },
   methods: {

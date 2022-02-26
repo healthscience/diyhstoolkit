@@ -1090,6 +1090,15 @@ export default {
       cloudInfo.data = update
       let cloudAuth = JSON.stringify(cloudInfo)
       Vue.prototype.$socket.send(cloudAuth)
+    },
+    actionRrefreshRefContracts (context, update) {
+      const refContractp = {}
+      refContractp.type = 'library'
+      refContractp.reftype = 'publiclibrary'
+      refContractp.action = 'GET'
+      refContractp.jwt = this.state.jwttoken
+      const refCJSONp = JSON.stringify(refContractp)
+      Vue.prototype.$socket.send(refCJSONp)
     }
   }
 }

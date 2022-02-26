@@ -62,6 +62,8 @@ export default {
     },
     closeModalNLib () {
       this.isModalNLib = false
+      // refresh the networklibrary contract to access new contracts
+      this.$store.dispatch('actionRrefreshRefContracts')
     }
   }
 }
