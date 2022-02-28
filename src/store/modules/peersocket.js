@@ -48,6 +48,7 @@ export default {
       // console.log('message')
       let backJSON = {}
       backJSON = JSON.parse(message.data)
+      // console.log('****====INPUUTTT=====******')
       // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
@@ -240,12 +241,12 @@ export default {
           Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        // console.log('SECOND------DATA RETURNED-----')
+        console.log('SECOND------DATA RETURNED-----')
         // console.log(backJSON)
         // is the data for the Lifeboard or NXP space?
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {
-          // console.log('NO DATA RETURNED')
+          console.log('NO DATA RETURNED')
           // switch off progress message and inform toolkit
           let setnxpProgress = { text: 'Experiment in progress', active: false }
           Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -332,7 +333,7 @@ export default {
             }
           }
         } else {
-          // console.log('NEW data safeFLOW++++++')
+          console.log('NEW data safeFLOW++++++')
           // switch off nxp Progress message
           let setnxpProgress = { text: 'Experiment in progress', active: true }
           Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -396,7 +397,7 @@ export default {
               }
               // console.log('========FINISHED===========')
             } else {
-              // console.log('NO grid update but new data time change')
+              console.log('NO grid update but new data time change')
               // switch off the update message for update
               let setProgress = {}
               setProgress = { text: 'Updating visualisation', active: false }
@@ -413,6 +414,7 @@ export default {
             }
             // console.log('updated COMPLETE--------------------')
           } else {
+            console.log('data FOUT=====')
             // set experiment progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
             Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -482,6 +484,7 @@ export default {
         }
         backJSON = {}
       } else if (backJSON.type === 'displayEmpty') {
+        console.log('mepyt display')
         this.state.ecsMessageLive = 'no data available'
       } else if (backJSON.type === 'peerlifeboard') {
         // prepare PEER JOINED LIST
@@ -724,9 +727,39 @@ export default {
     SET_NXPLIST_DEFAULT (state, inVerified) {
       Vue.set(this.state.experimentListshow, 'text', 'show')
       Vue.set(this.state.experimentListshow, 'state', false)
+    },
+    SET_DISCONNECT_NETWORK: (state, inVerified) => {
+      let safeFlowMessage = {}
+      let message = {}
+      message.type = 'safeflow'
+      message.reftype = 'ignore'
+      message.action = 'disconnect'
+      message.jwt = inVerified.token
+      safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage)
     }
   },
   actions: {
+    actionDisconnect (context, update) {
+      // set auth to not auth
+      this.state.peerauthStatus = false
+      // clear peer data
+      this.state.joinedNXPlist = []
+      // clear peeers and data list
+      this.state.warmNetwork = []
+      this.state.publickeys = []
+      this.state.moduleGrid = {}
+      this.state.NXPexperimentData = {}
+      Vue.set(this.state.networkConnection, 'active', false)
+      Vue.set(this.state.networkConnection, 'text', 'connect')
+      Vue.set(this.state.networkConnection, 'type', 'self-verify')
+
+      let dataEnd = {}
+      dataEnd.token = context.rootState.jwttoken
+      dataEnd.update = update
+      context.commit('SET_DISCONNECT_NETWORK', dataEnd)
+      // context.commit('SOCKET_ONCLOSE')
+    },
     sendMessage (context, message) {
       let prepareRefContract = {}
       if (message.reftype === 'new-datatype') {

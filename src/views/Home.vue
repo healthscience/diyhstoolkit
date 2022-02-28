@@ -97,7 +97,7 @@
     <div class="network-protocol">
       <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png">
       <div id="health-oracle-protocol">
-        HOP
+        HOP v0.7.3.1
       </div>
     </div>
   </div>
@@ -153,7 +153,7 @@ export default {
   },
   data () {
     return {
-      viewFlowtype: 'lifestyleflow',
+      viewFlowtype: 'nxp-view', // 'lifestyleflow',
       isModalNewLifeboard: false,
       isModalNewNetworkExperiment: false,
       searchText: '',

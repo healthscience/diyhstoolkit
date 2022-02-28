@@ -181,8 +181,6 @@ export default {
       console.log('chart select type bar line mixed')
     },
     setNetworkgraph (nv) {
-      console.log('is a network visualisation available?')
-      console.log(nv)
       this.socialState = !this.socialState
       /* let spaceContext = {}
       spaceContext.nxpCNRL = this.shellID
@@ -192,7 +190,6 @@ export default {
       this.$store.dispatch('actionSocialgraph', spaceContext) */
     },
     setPastNetwork () {
-      console.log('past of socail graph agg')
       let pastContext = {}
       pastContext.shellCNRL = this.shellID
       pastContext.moduleCNRL = this.moduleCNRL
@@ -202,7 +199,6 @@ export default {
       this.$store.dispatch('actionPastGraph', pastContext)
     },
     setFutureNetwork () {
-      console.log('future of socail graph agg')
       let futureContext = {}
       futureContext.shellCNRL = this.shellID
       futureContext.moduleCNRL = this.moduleCNRL
@@ -212,8 +208,6 @@ export default {
       this.$store.dispatch('actionFutureGraph', futureContext)
     },
     setNetworkmap (m) {
-      console.log('map')
-      console.log(m)
       this.mapState = !this.mapState
       let spaceContext = {}
       spaceContext.nxpCNRL = this.shellID

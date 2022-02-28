@@ -112,10 +112,10 @@ export default {
   },
   methods: {
     disconnectNetwork () {
-      // close peerLINK
+      console.log('discoutnn start')
       this.$store.dispatch('actionDisconnect')
       // close electron / webapp
-      this.w.close()
+      // this.w.close()
     },
     closeModal () {
       this.$store.dispatch('actionCloseNetworkModal')

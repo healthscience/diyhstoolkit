@@ -39,8 +39,8 @@ const store = new Vuex.Store({
       state: true,
       text: 'hide'
     },
-    viewLifeboards: true,
-    viewNXP: false,
+    viewLifeboards: false,
+    viewNXP: true,
     viewTimeline: false,
     publickeys: [],
     warmNetwork: [],
@@ -189,28 +189,6 @@ const store = new Vuex.Store({
         updateState = false
       }
       Vue.set(state.networkConnection, 'active', updateState)
-    },
-    SET_DISCONNECT_NETWORK: (state, inVerifed) => {
-      let safeFlowMessage = {}
-      // set auth to not auth
-      state.peerauthStatus = false
-      let message = {}
-      message.type = 'safeflow'
-      message.reftype = 'ignore'
-      message.action = 'disconnect'
-      message.jwt = state.jwttoken
-      safeFlowMessage = JSON.stringify(message)
-      // clear peer data
-      state.joinedNXPlist = []
-      // clear peeers and data list
-      state.publickeys = []
-      state.warmNetwork = []
-      state.moduleGrid = {}
-      state.NXPexperimentData = {}
-      state.networkConnection.active = false
-      state.networkConnection.text = 'connect'
-      state.networkConnection.type = 'self-verify'
-      Vue.prototype.$socket.send(safeFlowMessage)
     },
     SET_LIVE_NXP: (state, inVerified) => {
       state.liveNXP = inVerified
@@ -544,9 +522,6 @@ const store = new Vuex.Store({
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
     },
-    actionDisconnect (context, update) {
-      context.commit('SET_DISCONNECT_NETWORK', update)
-    },
     actionCheckConnect (context, update) {
       context.commit('SET_CONNECTION_STATUS', update)
     },
@@ -872,8 +847,8 @@ const store = new Vuex.Store({
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.jwt = this.state.jwttoken
-      // console.log('NXPMessage+++++UPDATE++++OUT')
-      // console.log(message)
+      console.log('NXPMessage+++++UPDATE++++OUT')
+      console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
