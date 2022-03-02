@@ -1,11 +1,6 @@
 <template>
   <div class="lifestyle" id="live=lifestyle">
-    <div class="lifeflow-spacelist">
-      <a class="flowlist-space" v-bind:class="{ active: lifeboardState === 'private' }" href="" @click.prevent="statusLifeboard('private')" >Private</a>
-      <a class="flowlist-space" v-bind:class="{ active: lifeboardState === 'public' }" href="" @click.prevent="statusLifeboard('public')" >Public</a>
-      <a class="flowlist-showspace" v-bind:class="{ active: showLifeboardList.text === 'listshow' }" href="" @click.prevent="statusLifeboardshow()" > {{ showLifeboardList.text }}</a>
-    </div>
-    <list-contracts v-if="lifeboardState === 'private' && peerLifeflowListlive !== undefined"
+    <list-contracts v-if="spaceType === 'Lifeboards' && spaceStateShow === true && peerLifeflowListlive !== undefined"
       class="lifeboard-info"
       :lifeboards="peerLifeflowListlive.data"
       :columns="peerLifeflowListlive.columns"
@@ -39,6 +34,15 @@ export default {
     },
     searchQuery: function () {
       return this.$store.state.searchQuery
+    },
+    spaceType: function () {
+      return this.$store.state.spaceType
+    },
+    spaceState: function () {
+      return this.$store.state.spaceState
+    },
+    spaceStateShow: function () {
+      return this.$store.state.spaceStateShow.state
     }
   },
   data () {

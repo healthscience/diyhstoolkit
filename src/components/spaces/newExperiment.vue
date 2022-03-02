@@ -1,0 +1,105 @@
+<template>
+  <div id="new-experimentmenu">
+    <button type="button" class="btn" @click="newType()">new</button>
+    <div id="new-type" v-if="newtypeShow === true">
+      <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button>
+      <button type="button" class="btn-new" @click="newExperiment('experiment')">experiment</button>
+    </div>
+    <new-lifeboard v-show="isModalNewLifeboard" @close="closeModalNewLB">
+      <template v-slot:header>
+      <!-- The code below goes into the header slot -->
+        NEW LIFEBOARD
+      </template>
+      <template v-slot:body>
+        <div class="scale-item">
+        New <input name="query" v-model="lifeboardName">
+      <button class="new-lifeboard" @click.prevent="saveLifeboard()">save</button>
+  </div>
+      </template>
+    </new-lifeboard>
+    <new-networkexperiment v-show="isModalNewNetworkExperiment" @closeNnxp="closeModalNewN1">
+      <template v-slot:header>
+      <!-- The code below goes into the header slot -->
+        NEW N=1 Network Experiment
+      </template>
+      <template v-slot:body>
+      <!-- The code below goes into the header slot -->
+        <header>Build Network Experiment</header>
+      </template>
+      <template v-slot:dashboard>
+        <module-builder></module-builder>
+      </template>
+      <template v-slot:submit-join>
+        <button @click="contributeNXP" >Contribute experiment to network</button>
+      </template>
+    </new-networkexperiment>
+  </div>
+</template>
+
+<script>
+import NewLifeboard from '@/components/lifeboard/NewLifeboard.vue'
+import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
+import ModuleBuilder from '@/components/grids/moduleBuilder.vue'
+
+export default {
+  name: 'new-experiment',
+  components: {
+    NewLifeboard,
+    NewNetworkexperiment,
+    ModuleBuilder
+  },
+  computed: {
+  },
+  data () {
+    return {
+      viewFlowtype: 'Experiment', // 'lifestyleflow',
+      isModalNewLifeboard: false,
+      isModalNewNetworkExperiment: false,
+      searchText: '',
+      newtypeShow: false,
+      lifeboardName: '',
+      flowMenu: false,
+      lifeboardState: 'private'
+    }
+  },
+  methods: {
+    newType () {
+      this.newtypeShow = !this.newtypeShow
+    },
+    newExperiment (type) {
+      if (type === 'experiment') {
+        this.isModalNewNetworkExperiment = true
+        // create a set of modules and save if contributed
+        this.$store.dispatch('actionMakeModuleRefContract')
+      } else if (type === 'lifeboard') {
+        this.isModalNewLifeboard = true
+      }
+      this.newtypeShow = !this.newtypeShow
+    },
+    saveLifeboard () {
+      this.$store.dispatch('actionSaveLifeboard', this.lifeboardName)
+    },
+    closeModalNewLB () {
+      // this.$store.dispatch('actionClear')
+      this.isModalNewLifeboard = false
+    },
+    closeModalNewN1 () {
+      // clear the form
+      this.$store.dispatch('actionClearContributeNXP')
+      this.isModalNewNetworkExperiment = false
+    },
+    contributeNXP () {
+      this.nxpState = 'public'
+      // start building NXP refcontract
+      this.$store.dispatch('actionNewNXPrefcontract')
+      this.closeModalNewN1()
+    }
+  }
+}
+</script>
+
+<style scoped>
+#new-type {
+  z-index: 30;
+}
+</style>

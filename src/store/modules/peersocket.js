@@ -211,7 +211,7 @@ export default {
             Vue.prototype.$socket.send(JSON.stringify(getLifeboard))
           }
         } else {
-          console.log('failed login')
+          console.log('---')
         }
       } else if (backJSON.type === 'ecssummary') {
         // console.log('SUMMAERY==========================')
@@ -241,12 +241,12 @@ export default {
           Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('SECOND------DATA RETURNED-----')
+        // console.log('SECOND------DATA RETURNED-----')
         // console.log(backJSON)
         // is the data for the Lifeboard or NXP space?
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {
-          console.log('NO DATA RETURNED')
+          // console.log('NO DATA RETURNED')
           // switch off progress message and inform toolkit
           let setnxpProgress = { text: 'Experiment in progress', active: false }
           Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -333,7 +333,7 @@ export default {
             }
           }
         } else {
-          console.log('NEW data safeFLOW++++++')
+          // console.log('NEW data safeFLOW++++++')
           // switch off nxp Progress message
           let setnxpProgress = { text: 'Experiment in progress', active: true }
           Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -397,7 +397,7 @@ export default {
               }
               // console.log('========FINISHED===========')
             } else {
-              console.log('NO grid update but new data time change')
+              // console.log('NO grid update but new data time change')
               // switch off the update message for update
               let setProgress = {}
               setProgress = { text: 'Updating visualisation', active: false }
@@ -414,7 +414,7 @@ export default {
             }
             // console.log('updated COMPLETE--------------------')
           } else {
-            console.log('data FOUT=====')
+            // console.log('data FOUT=====')
             // set experiment progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
             Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -484,7 +484,7 @@ export default {
         }
         backJSON = {}
       } else if (backJSON.type === 'displayEmpty') {
-        console.log('mepyt display')
+        // console.log('mepyt display')
         this.state.ecsMessageLive = 'no data available'
       } else if (backJSON.type === 'peerlifeboard') {
         // prepare PEER JOINED LIST
@@ -745,11 +745,15 @@ export default {
       this.state.peerauthStatus = false
       // clear peer data
       this.state.joinedNXPlist = []
+      // clear list of dashboards
+      this.state.liveDashList = []
       // clear peeers and data list
       this.state.warmNetwork = []
       this.state.publickeys = []
       this.state.moduleGrid = {}
       this.state.NXPexperimentData = {}
+      Vue.set(this.state.spaceStateShow, 'state', true)
+      Vue.set(this.state.spaceStateShow, 'text', 'hide')
       Vue.set(this.state.networkConnection, 'active', false)
       Vue.set(this.state.networkConnection, 'text', 'connect')
       Vue.set(this.state.networkConnection, 'type', 'self-verify')

@@ -39,6 +39,13 @@ const store = new Vuex.Store({
       state: true,
       text: 'hide'
     },
+    nxpState: 'private',
+    spaceState: 'private',
+    spaceStateShow: {
+      state: true,
+      text: 'hide'
+    },
+    spaceType: 'Experiments',
     viewLifeboards: false,
     viewNXP: true,
     viewTimeline: false,
@@ -475,25 +482,25 @@ const store = new Vuex.Store({
       Vue.set(this.state.visProgress[inVerified.moduleCNRL], modG, setProgress)
     },
     SET_LIFE_VIEW (state, inVerified) {
-      if (inVerified === 'lifestyleflow') {
-        state.viewLifeboards = !state.viewLifeboards
-        state.viewNXP = false
-        state.viewTimeline = false
-      } else if (inVerified === 'nxp-view') {
-        state.viewNXP = !state.viewNXP
-        state.viewTimeline = false
-        state.viewLifeboards = false
-        // set list view to true
-      } else if (inVerified === 'timeline') {
-        state.viewTimeline = !state.viewTimeline
-        state.viewNXP = false
-        state.viewLifeboards = false
+      state.spaceType = inVerified
+    },
+    SET_SPACE_VIEW (state, inVerified) {
+      state.spaceState = inVerified
+    },
+    SET_SPACE_SHOW (state, inVerified) {
+      Vue.set(state.spaceStateShow, 'state', !state.spaceStateShow.state)
+      let textSpace = ''
+      if (state.spaceStateShow.state === true) {
+        textSpace = 'hide'
+      } else {
+        textSpace = 'show'
       }
+      Vue.set(state.spaceStateShow, 'text', textSpace)
     }
   },
   actions: {
     async startconnectNSnetwork (context, update) {
-      // send a auth requrst to peerlink if not already authorsed
+      // send a auth requrst to peerlink if not already  authorsed
       if (this.state.connectStatus === true && this.state.peerauthStatus !== true) {
         let message = {}
         message.type = 'safeflow'
@@ -647,7 +654,8 @@ const store = new Vuex.Store({
       // console.log('clicked VIEW NXP------------')
       // console.log(update)
       // remove lists
-      context.commit('SET_NXPLIST_SHOW')
+      // context.commit('SET_NXPLIST_SHOW')
+      context.commit('SET_SPACE_SHOW')
       let futureTimeCheck = false
       context.commit('SET_LIVE_NXP', update)
       context.commit('SET_NXP_MODULED', update)
@@ -847,8 +855,8 @@ const store = new Vuex.Store({
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.jwt = this.state.jwttoken
-      console.log('NXPMessage+++++UPDATE++++OUT')
-      console.log(message)
+      // console.log('NXPMessage+++++UPDATE++++OUT')
+      // console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
@@ -915,6 +923,12 @@ const store = new Vuex.Store({
     },
     actionLifeview (context, update) {
       context.commit('SET_LIFE_VIEW', update)
+    },
+    actionSpaceList (context, update) {
+      context.commit('SET_SPACE_VIEW', update)
+    },
+    actionSpaceListShow (context, update) {
+      context.commit('SET_SPACE_SHOW', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

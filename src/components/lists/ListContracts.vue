@@ -1,5 +1,5 @@
 <template>
-  <div id="grid-contracts" v-if="showExperimentList.state === true">
+  <div id="grid-contracts">
     <div class="list-table">
       <div class="table-header">
         <div class="row-header">
@@ -47,6 +47,7 @@ export default {
   },
   computed: {
     showExperimentList: function () {
+      console.log(this.$store.state.experimentListshow)
       return this.$store.state.experimentListshow
     },
     peerExperimentListlive: function () {

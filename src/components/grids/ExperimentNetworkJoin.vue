@@ -1,5 +1,5 @@
 <template>
-  <div id="live-network-grid-join" v-if="showExperimentList.state === true">
+  <div id="live-network-grid-join">
     <!-- peer network experiment added -->
     <div id="grid-template-join">
       <table>
