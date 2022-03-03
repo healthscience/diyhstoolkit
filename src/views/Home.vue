@@ -158,7 +158,7 @@ img {
 
 .btn {
   font-size: 1.2em;
-  border: none;
+  border: 2px solid white;
   padding: 6px 14px;
 }
 

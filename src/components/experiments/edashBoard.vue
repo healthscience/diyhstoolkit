@@ -1,6 +1,6 @@
 <template>
   <div id="dashboard-holder" v-if="moduleContent">
-    <div id="dash-modules"> <!-- @wheel.prevent="wheelItBetter($event)"> -->
+    <div id="dash-modules">
       <module-board @close="closeModule">
         <template v-slot:header>
         <!-- The code below goes into the header slot -->

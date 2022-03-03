@@ -48,7 +48,7 @@ export default {
       // console.log('message')
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      // console.log('****====INPUUTTT=====******')
+      // console.log('****INPUUTTT******')
       // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
@@ -246,7 +246,6 @@ export default {
         // is the data for the Lifeboard or NXP space?
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {
-          // console.log('NO DATA RETURNED')
           // switch off progress message and inform toolkit
           let setnxpProgress = { text: 'Experiment in progress', active: false }
           Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -320,7 +319,6 @@ export default {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
               } else {
-                // console.log('no data available')
                 this.state.ecsMessageLive = 'no data available'
                 // set experiment progress message off
                 let setnxpProgress = { text: 'Experiment in progress', active: false }
@@ -333,7 +331,6 @@ export default {
             }
           }
         } else {
-          // console.log('NEW data safeFLOW++++++')
           // switch off nxp Progress message
           let setnxpProgress = { text: 'Experiment in progress', active: true }
           Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -395,9 +392,7 @@ export default {
                   Vue.set(this.state.visProgress[displayDataUpdate.module], modG.i, setProgress)
                 }
               }
-              // console.log('========FINISHED===========')
             } else {
-              // console.log('NO grid update but new data time change')
               // switch off the update message for update
               let setProgress = {}
               setProgress = { text: 'Updating visualisation', active: false }
@@ -412,9 +407,7 @@ export default {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, backJSON.data.context.triplet.device, backJSON.data)
               }
             }
-            // console.log('updated COMPLETE--------------------')
           } else {
-            // console.log('data FOUT=====')
             // set experiment progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
             Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
@@ -469,7 +462,6 @@ export default {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
               } else {
-                // console.log('no data available')
                 this.state.ecsMessageLive = 'no data available'
                 // set experiment progress message off
                 let setnxpProgress = { text: 'Experiment in progress', active: false }
@@ -484,7 +476,6 @@ export default {
         }
         backJSON = {}
       } else if (backJSON.type === 'displayEmpty') {
-        // console.log('mepyt display')
         this.state.ecsMessageLive = 'no data available'
       } else if (backJSON.type === 'peerlifeboard') {
         // prepare PEER JOINED LIST

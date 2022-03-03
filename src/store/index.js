@@ -267,6 +267,8 @@ const store = new Vuex.Store({
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
     },
     setDashboardNXP: (state, inVerified) => {
+      // console.log('set dashboard')
+      // console.log(inVerified)
       // set live dashboard list
       state.liveDashList.push(inVerified)
       let dStatus = state.experimentStatus[inVerified].active
@@ -361,7 +363,7 @@ const store = new Vuex.Store({
       let setProgress = { text: 'Experiment in progress', active: false }
       Vue.set(state.nxpProgress, inVerified, setProgress)
     },
-    setVisProgressStart: (state, inVerified) => {
+    /* setVisProgressStart: (state, inVerified) => {
       let setVisProg = {}
       let moduleKeys = Object.keys(inVerified.grid)
       for (let mod of moduleKeys) {
@@ -371,7 +373,7 @@ const store = new Vuex.Store({
         Vue.set(state.visProgress, mod, setVisProg)
         setVisProg = {}
       }
-    },
+    }, */
     setVisProgressUpdate: (state, inVerified) => {
       let setProgress = {}
       setProgress = { text: 'Updating visualisation', active: true }
@@ -654,7 +656,6 @@ const store = new Vuex.Store({
       // console.log('clicked VIEW NXP------------')
       // console.log(update)
       // remove lists
-      // context.commit('SET_NXPLIST_SHOW')
       context.commit('SET_SPACE_SHOW')
       let futureTimeCheck = false
       context.commit('SET_LIVE_NXP', update)
