@@ -17,6 +17,7 @@ const store = new Vuex.Store({
     authorised: false,
     connectStatus: false,
     peerauthStatus: false,
+    socketClosed: false,
     jwttoken: '',
     connectContext: {},
     networkConnection: {

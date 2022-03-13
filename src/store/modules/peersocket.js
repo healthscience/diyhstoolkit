@@ -22,18 +22,25 @@ export default {
     SOCKET_ONOPEN (state, event) {
       this.$socket = event.currentTarget
       state.socket.isConnected = true
+      this.state.socketClosed = false
       this.state.connectStatus = true
     },
     SOCKET_ONCLOSE (state, event) {
+      console.log('onclose')
       state.socket.isConnected = false
       this.state.connectStatus = false
       this.state.peerauthStatus = false
+      this.state.socketClosed = true
+      this.dispatch('actionDisconnect')
     },
     SOCKET_ONERROR (state, event) {
+      console.log('on erroror')
+      this.state.socketClosed = true
       this.state.connectStatus = false
       this.state.peerauthStatus = false
       // remote.getCurrentWindow().close()
       // inform Peer connection to network lost
+      this.dispatch('actionDisconnect')
     },
     // mutations for reconnect methods
     SOCKET_RECONNECT (state, count) {
@@ -45,11 +52,10 @@ export default {
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message) {
-      // console.log('message')
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      // console.log('****INPUUTTT******')
-      // console.log(backJSON)
+      console.log('****INPUUTTT******')
+      console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?

@@ -23,6 +23,9 @@
         </div>
       </div>
     </div>
+    <div id="connection-message" v-if="socketClosed ===  true">
+      Connection to the network has been broken.
+    </div>
     <network-activespaces></network-activespaces>
     <div class="network-protocol">
       <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png">
@@ -51,6 +54,9 @@ export default {
     peerauth: function () {
       return this.$store.state.peerauthStatus
     },
+    socketClosed: function () {
+      return this.$store.state.socketClosed
+    },
     caleAIStatus: function () {
       return this.$store.state.aiInterface.statusCALE
     },
@@ -74,6 +80,12 @@ export default {
   border-right: 1px solid lightgrey;
   border-left: 1px solid lightgrey;
 }
+
+#connection-message {
+  font-size: 2em;
+  background-color: #ffcccb;
+}
+
 .help-info {
   border: 1px solid orange;
 }
