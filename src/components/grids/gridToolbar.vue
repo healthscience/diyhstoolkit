@@ -10,10 +10,10 @@
         {{ (scale * 100) }} %
       </div>
       <div id="story-life">
-          <a @click.prevent="viewStorytools" href="" id="story-button">Story</a>
+          <!-- <a @click.prevent="viewStorytools" href="" id="story-button">Story</a> -->
       </div>
       <div id="routine-life">
-          <a @click.prevent="viewRoutines" href="" id="routine-button">Routines</a>
+          <!-- <a @click.prevent="viewRoutines" href="" id="routine-button">Routines</a> -->
       </div>
     </div>
     <div v-if="liveStorytools === true" id="story-board">
