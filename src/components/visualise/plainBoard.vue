@@ -1,6 +1,6 @@
 <template>
   <div id="plain-nxp">
-    <b> Question: {{ liveData[1].content }} </b>
+    {{ liveData[1].content }}
   </div>
 </template>
 
@@ -38,8 +38,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #plain-nxp {
-  font-size: 1.4em;
+  display: grid;
+  grid-template-columns: 1fr;
+  font-size: 2em;
 }
 </style>

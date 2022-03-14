@@ -49,7 +49,9 @@ export default {
 
 <style>
 #compute-controlpanel {
-
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 0px solid green;
 }
 
 #controls-holder {

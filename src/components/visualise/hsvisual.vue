@@ -3,18 +3,18 @@
     <div id="grid-visual">
       <div class="visual-item" id="bentobox-space">
         <div id="grid-bentobox">
-          <div class="grid-item" v-if="networkcollection !== undefined && networkcollection.active !== false">
+          <div class="grid-item-chart" v-if="networkcollection !== undefined && networkcollection.active !== false">
             <reactive :chartData="networkcollection" :options="options"></reactive>
           </div>
-          <div class="grid-item" v-if="futurenetworkcollection !== undefined && futurenetworkcollection.active !== false">
+          <div class="grid-item-chart" v-if="futurenetworkcollection !== undefined && futurenetworkcollection.active !== false">
             <reactive :chartData="futurenetworkcollection" :options="options"></reactive>
           </div>
         </div>
         <div id="grid-bentobox">
-          <div class="grid-item" v-if="datacollection !== undefined">
+          <div class="grid-item-chart" v-if="datacollection !== undefined">
             <reactive :chartData="datacollection" :options="options"></reactive>
           </div>
-          <div class="grid-item" v-if="futurecollection !== undefined && futurecollection.active !== false">
+          <div class="grid-item-chart" v-if="futurecollection !== undefined && futurecollection.active !== false">
             <reactive :chartData="futurecollection" :options="options"></reactive>
           </div>
         </div>
@@ -138,7 +138,6 @@ export default {
       console.log(this.lifeboardRef)
     },
     setChartSpace () {
-      console.log('set up a new vis chart space')
       let spaceContext = {}
       spaceContext.nxpCNRL = this.shellID
       spaceContext.moduleCNRL = this.moduleCNRL
@@ -147,7 +146,6 @@ export default {
       this.$store.dispatch('actionVisSpaceAdd', spaceContext)
     },
     addLifeboard () {
-      console.log('add to lifeboard button')
       let lifeBoardHolder = {}
       lifeBoardHolder.type = 'add'
       lifeBoardHolder.lifeboard = this.lifeboardRef
@@ -169,10 +167,8 @@ export default {
       this.$store.dispatch('actionFuture', buildContext)
     },
     setCombine () {
-      console.log('combine two or more chart???')
       // switch on and off button
       this.combineSetting.active = !this.combineSetting.active
-      console.log(this.combineSetting.active)
       let combineContext = {}
       combineContext.shellCNRL = this.shellID
       combineContext.moduleCNRL = this.moduleCNRL
@@ -187,20 +183,16 @@ export default {
 
 <style scoped>
 #visual-view {
-  height: 90%;
-  width: 99%;
-  border: 0px solid orange;
+  border: 0px solid blue;
 }
 
 #grid-visual {
   display: grid;
   grid-template-columns: 5fr 1fr;
-  width: 100%;
-  border: 0px solid green;
+  border: 0px solid red;
 }
 
 .visual-item {
-  width: 100%;
   border: 0px solid pink;
 }
 
@@ -211,7 +203,7 @@ export default {
   width: 100%;
 }
 
-.grid-item {
+.grid-item-chart {
   border: 0px solid red;
 }
 

@@ -1,7 +1,6 @@
 <template>
   <div id="compute-nxp">
-    <header>Compute</header>
-    <!-- v-if="toolbarStatusLive.active"> -->
+    <header>Computed</header>
     <compute-controls></compute-controls>
   </div>
 </template>
@@ -46,7 +45,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #compute-nxp {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 0px solid red;
 }
 </style>

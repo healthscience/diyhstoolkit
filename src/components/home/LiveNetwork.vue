@@ -19,7 +19,7 @@
 
 <script>
 import ListContracts from '@/components/lists/ListContracts.vue'
-import ExperimentnetworkJoin from '@/components/grids/ExperimentNetworkJoin.vue'
+import ExperimentnetworkJoin from '@/components/spaces/grids/ExperimentNetworkJoin.vue'
 
 export default {
   name: 'LiveNetwork',

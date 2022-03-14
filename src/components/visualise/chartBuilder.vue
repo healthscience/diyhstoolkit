@@ -252,9 +252,7 @@ export default {
 
 <style scoped>
 #vis-toolkit {
-  height: inherit;
-  width: inherit;
-  border: 0px solid green;
+  border: 0px solid purple;
 }
 
 #diy-tools {

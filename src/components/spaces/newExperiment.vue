@@ -39,7 +39,7 @@
 <script>
 import NewLifeboard from '@/components/lifeboard/NewLifeboard.vue'
 import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
-import ModuleBuilder from '@/components/grids/moduleBuilder.vue'
+import ModuleBuilder from '@/components/spaces/grids/moduleBuilder.vue'
 
 export default {
   name: 'new-experiment',

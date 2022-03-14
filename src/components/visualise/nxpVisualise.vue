@@ -133,10 +133,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #visualise-nxp {
-  height: inherit;
-  width: inherit;
+  display: grid;
+  grid-template-columns: 1fr;
   border: 0px solid pink;
 }
 
@@ -145,13 +145,12 @@ export default {
 }
 
 #vis-chartbuilder {
-  height: inherit;
-  width: inherit;
-  border: 0px solid grey;
+  border: 0px solid black;
 }
 
 #prime-visualise {
-  height: inherit;
-  width: inherit;
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 0px solid blue;
 }
 </style>

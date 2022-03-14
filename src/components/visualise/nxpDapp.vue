@@ -1,10 +1,10 @@
 <template>
   <div id="dapp-nxp">Dapp
-    <ul>
-      <li>
+    <div>
+      <div>
         {{ liveData.content }}
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -37,5 +37,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+#dapp-nxp {
+  display: grid;
+  grid-template-columns: 1fr;
+}
 </style>

@@ -61,8 +61,8 @@ import NewExperiment from '@/components/spaces/newExperiment.vue'
 import LiveLifestyle from '@/components/home/LiveLifeboard.vue'
 import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
 import LiveTimeline from '@/components/home/LiveTimeline.vue'
-import LifeboardNetwork from '@/components/grids/LifeboardNetwork.vue'
-import ExperimentNetwork from '@/components/grids/ExperimentNetwork.vue'
+import LifeboardNetwork from '@/components/spaces/grids/LifeboardNetwork.vue'
+import ExperimentNetwork from '@/components/spaces/grids/ExperimentNetwork.vue'
 
 export default {
   name: 'Network-Spaces',

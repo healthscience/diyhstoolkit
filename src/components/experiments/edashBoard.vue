@@ -63,7 +63,6 @@ import nxpDapp from '@/components/visualise/nxpDapp.vue'
 import nxpPlain from '@/components/visualise/plainBoard.vue'
 import nxpCompute from '@/components/visualise/nxpCompute.vue'
 import nxpVisualise from '@/components/visualise/nxpVisualise.vue'
-// import ProgressVismessage from '@/components/visualise/tools/inProgress.vue'
 // import learnReport from '@/components/reports/LearnReport'
 // import learnAction from '@/components/reports/LearnAction'
 
@@ -73,7 +72,6 @@ export default {
     // learnReport,
     // learnAction
     ModuleBoard,
-    // ProgressVismessage,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
     nxpDevice,
@@ -152,13 +150,11 @@ export default {
     },
     wheelItBetter (event) {
       // use mouse wheel to zoom in out
-      console.log('mouse zooming')
       if (event.deltaY < 0) {
         this.zoomdata += 1
       } else {
         this.zoomdata -= 1
       }
-      console.log(this.zoomdata)
     },
     itemTitle (item) {
       var result = item.i
@@ -199,7 +195,7 @@ export default {
   border: 0px solid red;
 }
 #dash-modules {
-  border: 0px solid grey;
+  border: 1px solid grey;
   list-style: none;
 }
 #zoom-holder {
@@ -212,7 +208,8 @@ export default {
   display: inline;
 }
 .grid-section {
-  border: 0px solid orange;
+  border: 0px solid grey;
+  min-height: 200px;
 }
 .module-placer {
   border: 0px solid blue;
@@ -249,9 +246,27 @@ transform: scale(0.25)
  */
 .vue-grid-item {
   background: white;
-  border: 0px solid blue;
-  overflow: auto;
+  opacity: 0.99;
+  transition-duration: 100ms;
+  z-index: 2;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  border: 1px solid grey;
+  width: 98% !important;
 }
+/*
+.vue-grid-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  background: white;
+  border: 10px solid red;
+  width: 100%;
+  overflow: scroll;
+}
+*/
 .vue-grid-item.resizing {
   opacity: 1;
 }

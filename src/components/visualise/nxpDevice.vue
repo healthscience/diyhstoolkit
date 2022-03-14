@@ -1,13 +1,13 @@
 <template>
   <div id="device-nxp">Device
-    <ul v-if="liveDevice">
-      <li>
+    <div v-if="liveDevice">
+      <div>
         {{ liveDevice.device_name }}
-      </li>
-      <li>
+      </div>
+      <div>
         {{ liveDevice.device_mac }}
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -39,5 +39,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+#device-nxp {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 0px solid green;
+}
 </style>
