@@ -487,6 +487,9 @@ export default {
         // prepare PEER JOINED LIST
         let lbPeer = ToolUtility.prepareLifeboardList(backJSON.lifeboard)
         this.state.joinedLifeboard.push(lbPeer)
+      } else if (backJSON.type === 'peerprivatedelete') {
+        console.log('remove ref contr confirmed')
+        console.log(backJSON)
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
         this.state.livePeerRefContIndex = backJSON.referenceContracts
@@ -534,6 +537,7 @@ export default {
     },
     CLEAR_CONTRIB_REFCONTRACTS (state, inVerified) {
       // reset the contract holders
+      this.state.isModalNewNetworkExperiment = false
       this.state.nxpMakeList = []
       this.state.moduleHolder = []
       let qOptions = {}
@@ -820,6 +824,8 @@ export default {
       // Vue.prototype.$socket.send(message)
     },
     actionMakeModuleRefContract (context, update) {
+      // open the modal
+      this.state.isModalNewNetworkExperiment = true
       // reset the module forms
       context.commit('SET_MODULE_HOLDER')
       const moduleContracts = []
@@ -1044,32 +1050,58 @@ export default {
     },
     actionNewNXPrefcontract (context, update) {
       // add the question module
-      context.commit('SET_QUESTION_MODULE')
-      // prepare the genesis modules please
-      // loop over and set compute settings selected via toolbar
-      let newAddsettingHolder = []
-      for (let newMod of this.state.moduleHolder) {
-        if (newMod.moduleinfo.name === 'visualise') {
-          let addSettings = newMod
-          addSettings.option['settings'] = this.state.newSetupHolder
-          newAddsettingHolder.push(addSettings)
-        } else {
-          newAddsettingHolder.push(newMod)
-        }
+      // need form validation must question, data, compute and vis modules complete inputs
+      let moduleCheck = true
+      if (this.state.newNXPfeedbackActive === false) {
+        context.commit('SET_QUESTION_MODULE')
       }
-      // bring together genesis experiment ref contracts & defaults
-      let setNewNXPplusModules = {}
-      setNewNXPplusModules.type = 'library'
-      setNewNXPplusModules.reftype = 'newexperimentmodule'
-      setNewNXPplusModules.action = 'newexperimentmodule'
-      setNewNXPplusModules.data = this.state.moduleHolder
-      setNewNXPplusModules.jwt = this.state.jwttoken
-      const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
-      Vue.prototype.$socket.send(genesisNXPjson)
-      // clear the new NXP forms
-      this.state.moduleHolder = []
-      this.state.refcontractQuestion = {}
-      this.state.refcontractCompute = []
+      // loop over modues to ensure they prepared correctly
+      console.log('new module checklist')
+      if (this.state.moduleHolder.length < 4) {
+        moduleCheck = false
+        // which modules are missing, give peer prompt
+      }
+      if (moduleCheck === false) {
+        this.state.newNXPfeedback = 'please add four contracts and try again'
+        this.state.newNXPfeedbackActive = true
+      } else {
+        // prepare the genesis modules please
+        // close the modal
+        this.state.isModalNewNetworkExperiment = false
+        this.state.newNXPfeedbackActive = false
+        // loop over and set compute settings selected via toolbar
+        let newAddsettingHolder = []
+        for (let newMod of this.state.moduleHolder) {
+          if (newMod.moduleinfo.name === 'visualise') {
+            let addSettings = newMod
+            addSettings.option['settings'] = this.state.newSetupHolder
+            newAddsettingHolder.push(addSettings)
+          } else {
+            newAddsettingHolder.push(newMod)
+          }
+        }
+        // bring together genesis experiment ref contracts & defaults
+        let setNewNXPplusModules = {}
+        setNewNXPplusModules.type = 'library'
+        setNewNXPplusModules.reftype = 'newexperimentmodule'
+        setNewNXPplusModules.action = 'newexperimentmodule'
+        setNewNXPplusModules.data = this.state.moduleHolder
+        setNewNXPplusModules.jwt = this.state.jwttoken
+        const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
+        Vue.prototype.$socket.send(genesisNXPjson)
+        // clear the new NXP forms
+        this.state.moduleHolder = []
+        this.state.refcontractQuestion = {}
+        this.state.refcontractCompute = []
+        // clear the forms and inputs ref contrat modules
+        this.state.nxpMakeList = []
+        this.state.moduleHolder = []
+        let qOptions = {}
+        qOptions.text = ''
+        qOptions.forum = ''
+        this.state.refcontractQuestion.question = qOptions
+        this.state.refcontractCompute = []
+      }
     },
     actionJoinExperiment (context, update) {
       // map experiment refcont to genesis contract

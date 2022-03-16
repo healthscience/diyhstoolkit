@@ -31,7 +31,7 @@
                       </div>
                     </div>
                     <div id="remove-message" v-if="messageRemove === true">
-                      Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Y</a>  N
+                      Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Yes</a>  No
                     </div>
                   </div>
                 </div>
@@ -201,7 +201,6 @@ export default {
     removeDashboard (dc) {
       this.messageRemove = !this.messageRemove
       this.removeNXPid = dc
-      // this.$store.dispatch('actionRemoveDashboard', dc)
     },
     removeConfirmDashboard (dc) {
       this.$store.dispatch('actionRemoveDashboard', this.removeNXPid)

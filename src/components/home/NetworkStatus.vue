@@ -24,6 +24,9 @@
           <div class="status-info">
             Warm peers connected: {{ warmPeers.length }}
           </div>
+          <div class="status-info">
+            <button class="buttonspaces" @click="closeModal">go to bento spaces</button>
+          </div>
         </div>
       </template>
       <template v-slot:input-form>
@@ -229,6 +232,10 @@ export default {
 
 .btn {
   font-size: 1.2em;
+}
+
+.buttonspaces {
+  font-size: 1.4em;
 }
 
 #disconnect-network {

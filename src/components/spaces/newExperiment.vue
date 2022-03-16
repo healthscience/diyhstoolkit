@@ -30,7 +30,10 @@
         <module-builder></module-builder>
       </template>
       <template v-slot:submit-join>
-        <button @click="contributeNXP" >Contribute experiment to network</button>
+        <div id="nxp-feedback" v-if="newNXPfeedbackActive === true">
+          {{ newxnpFeedback }}
+        </div>
+        <button class="contribute-nxp-button" @click="contributeNXP" >Contribute experiment to network</button>
       </template>
     </new-networkexperiment>
   </div>
@@ -49,12 +52,20 @@ export default {
     ModuleBuilder
   },
   computed: {
+    newxnpFeedback: function () {
+      return this.$store.state.newNXPfeedback
+    },
+    newNXPfeedbackActive: function () {
+      return this.$store.state.newNXPfeedbackActive
+    },
+    isModalNewNetworkExperiment: function () {
+      return this.$store.state.isModalNewNetworkExperiment
+    }
   },
   data () {
     return {
       viewFlowtype: 'Experiment', // 'lifestyleflow',
       isModalNewLifeboard: false,
-      isModalNewNetworkExperiment: false,
       searchText: '',
       newtypeShow: false,
       lifeboardName: '',
@@ -68,7 +79,6 @@ export default {
     },
     newExperiment (type) {
       if (type === 'experiment') {
-        this.isModalNewNetworkExperiment = true
         // create a set of modules and save if contributed
         this.$store.dispatch('actionMakeModuleRefContract')
       } else if (type === 'lifeboard') {
@@ -84,15 +94,12 @@ export default {
       this.isModalNewLifeboard = false
     },
     closeModalNewN1 () {
-      // clear the form
       this.$store.dispatch('actionClearContributeNXP')
-      this.isModalNewNetworkExperiment = false
     },
     contributeNXP () {
       this.nxpState = 'public'
       // start building NXP refcontract
       this.$store.dispatch('actionNewNXPrefcontract')
-      this.closeModalNewN1()
     }
   }
 }
@@ -101,5 +108,14 @@ export default {
 <style scoped>
 #new-type {
   z-index: 30;
+}
+
+.contribute-nxp-button {
+  font-size: 1.4em;
+}
+
+#nxp-feedback {
+  font-size: 2em;
+  background-color: #ffcccb;
 }
 </style>

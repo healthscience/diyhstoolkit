@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import ListContracts from '@/components/lists/ListLifeboards.vue'
+import ListContracts from '@/components/spaces/lists/ListLifeboards.vue'
 
 export default {
   name: 'LiveLifestyle',

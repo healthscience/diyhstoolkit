@@ -93,6 +93,9 @@ const store = new Vuex.Store({
       setTimeFormat: null
     },
     visModuleHolder: {},
+    newNXPfeedback: '',
+    newNXPfeedbackActive: false,
+    isModalNewNetworkExperiment: false,
     setTimeFormat: 'timeseries',
     setTimerange: {},
     dashboardNXP: {},
@@ -437,9 +440,27 @@ const store = new Vuex.Store({
     },
     SET_DASHBOARD_REMOVE (state, inVerified) {
       // remove NXP from peer list
-      // console.log('remove NXP')
-      // console.log(inVerified)
-      // state.liveDashList = state.liveDashList.filter(item => item !== inVerified)
+      let newDashList = this.state.liveDashList.filter(function (value, index, arr) {
+        return value !== inVerified
+      })
+      state.liveDashList = newDashList
+      // also remove from lists view
+      let newPeerlist = state.joinedNXPlist.data.filter(function (value, index, arr) {
+        return value.id !== inVerified
+      })
+      state.joinedNXPlist.data = newPeerlist
+      // Vue.set(state.joinedNXPlist, 'data', newPeerlist)
+      // send message to PeerLink to remove from peer library
+      let message = {}
+      message.type = 'library'
+      message.reftype = 'removepeer'
+      message.action = 'removepeer'
+      message.data = inVerified
+      message.jwt = this.state.jwttoken
+      // console.log('remove from peer library')
+      // console.log(message)
+      const libraryMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(libraryMessage)
     },
     SET_VIEWFLOW_START (state, inVerified) {
       state.flowviews = true
@@ -552,6 +573,8 @@ const store = new Vuex.Store({
     },
     actionJOINViewexperiment (context, update) {
       context.commit('SET_RESET_MODULEHOLDER', null)
+      // set the packing array
+      this.state.refcontractPackaging = []
       let joinNXP = {}
       for (const ep of this.state.networkExpModules) {
         if (ep.exp.key === update.shellID) {

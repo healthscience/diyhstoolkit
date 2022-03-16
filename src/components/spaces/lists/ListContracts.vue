@@ -47,7 +47,6 @@ export default {
   },
   computed: {
     showExperimentList: function () {
-      console.log(this.$store.state.experimentListshow)
       return this.$store.state.experimentListshow
     },
     peerExperimentListlive: function () {

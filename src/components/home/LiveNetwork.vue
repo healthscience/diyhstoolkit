@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ListContracts from '@/components/lists/ListContracts.vue'
+import ListContracts from '@/components/spaces/lists/ListContracts.vue'
 import ExperimentnetworkJoin from '@/components/spaces/grids/ExperimentNetworkJoin.vue'
 
 export default {
