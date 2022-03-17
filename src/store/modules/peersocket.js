@@ -489,7 +489,7 @@ export default {
         this.state.joinedLifeboard.push(lbPeer)
       } else if (backJSON.type === 'peerprivatedelete') {
         console.log('remove ref contr confirmed')
-        console.log(backJSON)
+        // console.log(backJSON)
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
         this.state.livePeerRefContIndex = backJSON.referenceContracts
@@ -1056,7 +1056,6 @@ export default {
         context.commit('SET_QUESTION_MODULE')
       }
       // loop over modues to ensure they prepared correctly
-      console.log('new module checklist')
       if (this.state.moduleHolder.length < 4) {
         moduleCheck = false
         // which modules are missing, give peer prompt
@@ -1104,6 +1103,8 @@ export default {
       }
     },
     actionJoinExperiment (context, update) {
+      // perform validation checks
+
       // map experiment refcont to genesis contract
       // make first module contracts for this peer to record start and other module refs with new computations
       const genesisExpRefCont = this.state.joinNXPlive.experiment
@@ -1111,7 +1112,7 @@ export default {
       let validJoinInput = false
       let computeValid = ValidateUtility.validateComputeSettings(this.state.joinNXPselected)
       let visValid = ValidateUtility.validateVisSettings(this.state.joinNXPselected)
-      if (computeValid === true && visValid === true) {
+      if (computeValid.pass === true && visValid === true) {
         validJoinInput = true
       }
       if (validJoinInput === true) {
@@ -1131,9 +1132,13 @@ export default {
         newJoinExperiment.jwt = this.state.jwttoken
         let ExpmoduleRefContract = JSON.stringify(newJoinExperiment)
         Vue.prototype.$socket.send(ExpmoduleRefContract)
+        this.state.isModalJoinNetworkExperiment = false
+        this.state.joineNXPFeedbackActive = true
       } else {
         // provide feedback to Peer on what is missing from joining the NXP
-        // this.joinFeedback()
+        this.state.joineNXPFeedback = 'Please select a date . .. .'
+        this.state.joineNXPFeedbackActive = true
+        // this.state.isModalJoinNetworkExperiment = true
       }
     },
     actionCombineSpace (context, update) {

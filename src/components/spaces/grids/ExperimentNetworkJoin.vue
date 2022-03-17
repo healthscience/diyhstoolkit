@@ -82,6 +82,9 @@
         </template>
         <template v-slot:submit-join>
           <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
+          <div id="join-feedback" v-if="joinFeedbackActive === true">
+            {{ joinFeedback }} --
+          </div>
         </template>
       </join-experiment>
     </div>
@@ -111,6 +114,15 @@ export default {
     filterKey: String
   },
   computed: {
+    isModalJoinVisible: function () {
+      return this.$store.state.isModalJoinNetworkExperiment
+    },
+    joinFeedback: function () {
+      return this.$store.state.joineNXPFeedback
+    },
+    joinFeedbackActive: function () {
+      return this.$store.state.joineNXPFeedbackActive
+    },
     showExperimentList: function () {
       return this.$store.state.experimentListshow
     },
@@ -199,7 +211,6 @@ export default {
       sortKey: '',
       sortOrders: sortOrders,
       isModalDashboardVisible: false,
-      isModalJoinVisible: false,
       actionKBundle: {},
       previewSeen: false,
       selectJoin:
@@ -243,11 +254,12 @@ export default {
         joinContext.moduleCNRL = 'cnrl-001234543458'
         joinContext.mData = '1'
         this.$store.dispatch('actionJOINViewexperiment', joinContext)
-        this.isModalJoinVisible = true
+        // this.isModalJoinVisible = true
       }
     },
     closeModalJoin () {
-      this.isModalJoinVisible = false
+      // this.isModalJoinVisible = false
+      this.$store.dispatch('actionCloseJoinexperiment', 'join')
     },
     viewDashboard () {
       this.previewSeen = true
@@ -273,7 +285,7 @@ export default {
       peerChoices.genesis = this.actionKBundle.id
       peerChoices.question = this.actionKBundle.name
       this.$store.dispatch('actionJoinExperiment', peerChoices)
-      this.closeModalJoin()
+      // this.closeModalJoin()
     },
     closeDashboard (dc) {
       this.$store.dispatch('actionCloseDashboard', dc)
@@ -352,6 +364,10 @@ th.active .arrow {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid #fff;
+}
+
+#joinsaveNetworkExperiment {
+  font-size: 1.4em;
 }
 
 .clear {

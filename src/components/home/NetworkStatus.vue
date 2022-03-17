@@ -115,7 +115,6 @@ export default {
   },
   methods: {
     disconnectNetwork () {
-      console.log('discoutnn start')
       this.$store.dispatch('actionDisconnect')
       // close electron / webapp
       // this.w.close()

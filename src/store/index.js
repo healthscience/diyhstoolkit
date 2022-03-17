@@ -96,6 +96,9 @@ const store = new Vuex.Store({
     newNXPfeedback: '',
     newNXPfeedbackActive: false,
     isModalNewNetworkExperiment: false,
+    joineNXPFeedback: '',
+    joineNXPFeedbackActive: false,
+    isModalJoinNetworkExperiment: false,
     setTimeFormat: 'timeseries',
     setTimerange: {},
     dashboardNXP: {},
@@ -271,8 +274,6 @@ const store = new Vuex.Store({
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
     },
     setDashboardNXP: (state, inVerified) => {
-      // console.log('set dashboard')
-      // console.log(inVerified)
       // set live dashboard list
       state.liveDashList.push(inVerified)
       let dStatus = state.experimentStatus[inVerified].active
@@ -457,8 +458,6 @@ const store = new Vuex.Store({
       message.action = 'removepeer'
       message.data = inVerified
       message.jwt = this.state.jwttoken
-      // console.log('remove from peer library')
-      // console.log(message)
       const libraryMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(libraryMessage)
     },
@@ -520,6 +519,9 @@ const store = new Vuex.Store({
         textSpace = 'show'
       }
       Vue.set(state.spaceStateShow, 'text', textSpace)
+    },
+    SET_CLOSE_JOINMODAL (state, inVerified) {
+      state.isModalJoinNetworkExperiment = false
     }
   },
   actions: {
@@ -572,6 +574,8 @@ const store = new Vuex.Store({
       context.commit('SET_NXP_LIVELIST', update)
     },
     actionJOINViewexperiment (context, update) {
+      // open the modal
+      this.state.isModalJoinNetworkExperiment = true
       context.commit('SET_RESET_MODULEHOLDER', null)
       // set the packing array
       this.state.refcontractPackaging = []
@@ -894,20 +898,14 @@ const store = new Vuex.Store({
       // pick out data Chart object and add to dataset
       // what basis for future data for next day?
       if (update.future === 'CALE') {
-        // console.log('pass to CALE')
         let caleMessage = {}
         caleMessage.type = 'cale'
         caleMessage.reftype = 'future'
         caleMessage.data = update.refs
         caleMessage.jwt = this.state.jwttoken
-        // console.log(caleMessage)
-        // const caleOUT = JSON.stringify(caleMessage)
-        // Vue.prototype.$socket.send(caleOUT)
       } else if (update.future === 'month') {
         let dataKeys = Object.keys(chartData)
         for (let dItem of dataKeys) {
-          // console.log('chart item')
-          // console.log(chartData[dItem].chartPackage)
           let futureHR = [147, 177, 170, 130, 90, 80, 79, 77, 76, 90, 80, 79, 77, 76, 90, 80, 79, 77, 76]
           let prepareFutuerTime = [1593644400000, 1593817200000, 1593990000000, 1593991000000, 1593992000000, 1593993000000, 1593994000000, 1593995000000, 1593996000000, 1593997000000, 1593998000000, 1593999000000, 159400000000, 159410000000, 159420000000, 159430000000, 159440000000, 159450000000, 159460000000]
           let futureLabel = []
@@ -954,6 +952,9 @@ const store = new Vuex.Store({
     },
     actionSpaceListShow (context, update) {
       context.commit('SET_SPACE_SHOW', update)
+    },
+    actionCloseJoinexperiment (context, update) {
+      context.commit('SET_CLOSE_JOINMODAL', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

@@ -65,7 +65,19 @@ contextUtility.prototype.prepareSettings = function (module, time, update, toolb
 */
 contextUtility.prototype.validateComputeSettings = function (peerChoices) {
   // compute controls
-  return true
+  let validReport = {}
+  if (!peerChoices.compute.date) {
+    validReport.pass = false
+  } else {
+    if (peerChoices.compute.date.length > 0 && peerChoices.compute.rangedate.length) {
+      // check dates are valid and if in future inform peers
+      validReport.date = 'dates not valid'
+      validReport.pass = false
+    } else {
+      validReport.pass = true
+    }
+  }
+  return validReport
 }
 
 /**
