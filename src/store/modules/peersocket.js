@@ -1104,7 +1104,6 @@ export default {
     },
     actionJoinExperiment (context, update) {
       // perform validation checks
-
       // map experiment refcont to genesis contract
       // make first module contracts for this peer to record start and other module refs with new computations
       const genesisExpRefCont = this.state.joinNXPlive.experiment
@@ -1134,6 +1133,8 @@ export default {
         Vue.prototype.$socket.send(ExpmoduleRefContract)
         this.state.isModalJoinNetworkExperiment = false
         this.state.joineNXPFeedbackActive = true
+        // switch to private spaces menu
+        this.state.spaceState = 'private'
       } else {
         // provide feedback to Peer on what is missing from joining the NXP
         this.state.joineNXPFeedback = 'Please select a date . .. .'

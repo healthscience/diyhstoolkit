@@ -25,7 +25,7 @@
             Warm peers connected: {{ warmPeers.length }}
           </div>
           <div class="status-info">
-            <button class="buttonspaces" @click="closeModal">go to bento spaces</button>
+            <button class="buttonspaces" @click.prevent="closeModal">go to bento spaces</button>
           </div>
         </div>
       </template>
