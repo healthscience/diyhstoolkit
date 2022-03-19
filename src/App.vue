@@ -51,6 +51,9 @@ export default {
     NetworkStatus,
     HelpAi
   },
+  mounted () {
+    window.onbeforeunload = function () { return 'Backbutton is not supported' }
+  },
   computed: {
     connectBut: function () {
       return this.$store.state.networkConnection
