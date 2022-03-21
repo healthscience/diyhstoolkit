@@ -3,12 +3,14 @@
     <header>COMPUTE used to produce results:</header>
     <div id="prime-compute">
       <form id="compute_form" name="compute_form" method="post" action="#">
-        <ul>
-          <li class="device-item">
-            Network Library Reference Contract:<input v-model="computeRefCont" placeholder="Reference Contract">
-            <button type="button" class="btn" @click="refContractLookup()">Lookup</button>
-          </li>
-          <li v-for="cs of computesource" :key="cs.id">
+        <div id="add-newref-compute">
+          <div class="compute-item">
+            <div class="computeref-add" id="newref-compute" >
+              Network Library Reference Contract:<input v-model="computeRefCont" placeholder="Reference Contract">
+            </div>
+            <button type="button" class="computeref-add" id="compute-btn" @click="refContractLookup()">Lookup</button>
+          </div>
+          <div v-for="cs of computesource" :key="cs.id">
             <ul class="compute-refspace" v-if="refContractCompute[cs]">
               <li class="compute-refcontract">
                 {{ refContractCompute[cs].option.key }} -
@@ -23,8 +25,8 @@
                 {{ refContractCompute[cs].option.value.computational.code }} -
               </li>
             </ul>
-          </li>
-        </ul>
+          </div>
+        </div>
       </form>
       <div id="view-controls-compute">
       </div>
@@ -89,7 +91,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #compute-nxp-build {
   margin: 1em;
   border: 1px solid grey;
@@ -115,5 +117,32 @@ export default {
 .compute-refcontract {
   font-size: 1.2em;
   padding: 10px;
+}
+
+.add-newref-compute {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.compute-item {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  justify-content: center;
+}
+
+.computeref-add {
+}
+
+#newref-compute {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-self: end;
+  justify-self: end;
+}
+
+#compute-btn {
+  display: grid;
+  align-self: start;
+  justify-self: start;
 }
 </style>

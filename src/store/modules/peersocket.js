@@ -467,6 +467,8 @@ export default {
               if (backJSON.data !== 'none') {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
+                let setnxpProgress = { text: 'Experiment in progress', active: false }
+                Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
               } else {
                 this.state.ecsMessageLive = 'no data available'
                 // set experiment progress message off
