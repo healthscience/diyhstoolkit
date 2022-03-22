@@ -1,8 +1,12 @@
 <template>
   <div id="live-network-grid">
     <grid-toolbar></grid-toolbar>
-    <div id="dragwheel-space" v-dragscroll.noleft.noright="true">
-      <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }"> <!-- @wheel.prevent="wheelScale($event)"> , transform: 'scale(' + scale + ')' -->
+    <div id="dragwheel-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
+      <div id="space-map">
+        Nav MAP
+          <canvas id="minimap"></canvas>
+      </div>
+      <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
         <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '18%', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0"  drag-handle=".drag-handle">
           <div id="single-space">
             <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{active: activeDrag[dashi].active === true }">
@@ -82,6 +86,8 @@ export default {
   created () {
   },
   mounted () {
+    this.setMinmapcanvas()
+    this.minmapDraw()
   },
   props: {
   },
@@ -134,12 +140,41 @@ export default {
       zoomCalibrate: 1,
       width: 0,
       height: 0,
-      x: 800,
+      x: 0,
       y: 0,
-      dragLocal: {}
+      dragLocal: {},
+      mouseLive:
+      {
+        x: 10,
+        y: 10
+      },
+      c: {},
+      ctx: {},
+      firstClick: true
     }
   },
   methods: {
+    setMinmapcanvas () {
+      this.c = document.getElementById('minimap')
+      this.ctx = this.c.getContext('2d')
+    },
+    minmapDraw: function () {
+      if (this.firstClick !== true) {
+        this.ctx.clearRect(0, 0, 200, 200)
+      } else {
+        this.firstClick = false
+      }
+      let xStart = this.mouseLive.x / 42
+      let yStart = this.mouseLive.y / 42
+      this.ctx.beginPath()
+      this.ctx.rect(xStart, yStart, 30, 30)
+      this.ctx.stroke()
+    },
+    whereMinmap (mo) {
+      this.mouseLive.x = mo.offsetX
+      this.mouseLive.y = mo.offsetY
+      this.minmapDraw()
+    },
     onResize: function (x, y, width, height) {
       this.x = x
       this.y = y
@@ -213,33 +248,19 @@ export default {
 <style scoped>
 #live-network-grid {
   display: grid;
-  grid-template-columns: 1fr;
-}
-
-#ecs-message {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-#spaceitem-controls {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
-#dashboard-controls {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template: 1fr;
 }
 
 #dragwheel-space {
-  width: 99%;
-  height: 99%;
-  overflow:hidden;
+  height: 1200px;
+  width: 100%;
+  border: 0px solid red;
+  overflow: hidden;
 }
 
 #dashboard-placeholder {
   height: 8000px;
-  width: 500%;
+  width: 8000px;
   padding-top: 20px;
   margin: auto;
   transform-origin: left top;
@@ -251,11 +272,22 @@ export default {
 }
 
 #single-space {
-  display: block;
-  width: 98%;
-  height: 96%;
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 99%;
+  height: 99%;
   /* min-width: 1200px; */
-  border: 0px solid black;
+  border: 1px solid grey;
+}
+
+#spaceitem-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+#dashboard-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .dashboard-space {
@@ -274,17 +306,23 @@ export default {
   height: 100%;
 }
 
+#ecs-message {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
 .vis-spaceitem {
   border: 0px solid red;
 }
 
 .drag-handle {
-  display: block;
+  display: grid;
   background-color: lightgrey;
   height: 50px;
 }
 
 .drag-handle.active {
+  display: grid;
   background-color: #4CAF50; /* Green */
   height: 50px;
 }
@@ -292,6 +330,16 @@ export default {
 .remove-controls {
   float: right;
   margin-right: 2em;
+}
+
+#space-map {
+  right: 20px;
+  position: absolute;
+  z-index: 30;
+  opacity: 60%;
+  background-color: lightgrey;
+  width: 200px;
+  height: 200px;
 }
 
 </style>

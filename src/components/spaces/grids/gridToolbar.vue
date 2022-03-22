@@ -6,8 +6,8 @@
       </div>
       <div class="scale-item">
         <label>Scale</label>
-        <input type="range" min="0.1" max="2" step="0.1" v-model.number="scale" @change="zoomScale">
-        {{ (scale * 100) }} %
+        <input type="range" min="0.1" max="2" step="0.1" v-model.number="scalelocal" @change="setzoomScale">
+          {{ scalespace }} %
       </div>
       <div id="story-life">
           <!-- <a @click.prevent="viewStorytools" href="" id="story-button">Story</a> -->
@@ -15,6 +15,10 @@
       <div id="routine-life">
           <!-- <a @click.prevent="viewRoutines" href="" id="routine-button">Routines</a> -->
       </div>
+      <!-- <div id="space-map">
+        Nav MAP
+          <canvas id="minimap"></canvas>
+      </div> -->
     </div>
     <div v-if="liveStorytools === true" id="story-board">
       <story-tools></story-tools>
@@ -37,16 +41,22 @@ export default {
   props: {
   },
   computed: {
+    scalespace: function () {
+      let roundNumber = this.$store.state.activeScalevalue.toFixed(2)
+      let scalePercent = roundNumber * 100
+      return scalePercent.toFixed(0)
+    }
   },
   data: function () {
     return {
+      scalelocal: 1,
       scaleSetting:
       {
         text: 'mouse scale off',
         active: false
       },
       zoomscaleStatus: false,
-      scale: 1,
+      // scale: 1,
       liveStorytools: false
     }
   },
@@ -64,8 +74,8 @@ export default {
         this.$store.dispatch('actionZoomscale', false)
       }
     },
-    zoomScale () {
-      this.$store.dispatch('actionScalevalue', this.scale)
+    setzoomScale () {
+      this.$store.dispatch('actionScalevalue', this.scalelocal)
     },
     viewStorytools (ev) {
       this.liveStorytools = !this.liveStorytools
@@ -77,7 +87,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #toolbar-master {
   display: grid;
   position: sticky;
@@ -100,7 +110,7 @@ export default {
   border-bottom: 1px solid orange;
   background-color: white;
   padding: .1em;
-  z-index: 14;
+  z-index: 54;
 }
 
 .scale-space.active {
@@ -112,4 +122,13 @@ export default {
   border: 0px solid red;
 }
 
+#space-map {
+  right: 20px;
+  position: absolute;
+  z-index: 30;
+  opacity: 60%;
+  background-color: lightgrey;
+  width: 200px;
+  height: 200px;
+}
 </style>
