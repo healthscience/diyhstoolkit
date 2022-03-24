@@ -7,7 +7,7 @@
           <canvas id="minimap"></canvas>
       </div>
       <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
-        <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '18%', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x="0" :y="0"  drag-handle=".drag-handle">
+        <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '18%', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x=spaceCoord[dashi].x :y=spaceCoord[dashi].y  drag-handle=".drag-handle">
           <div id="single-space">
             <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{active: activeDrag[dashi].active === true }">
               --- Activation Bar ---
@@ -87,16 +87,21 @@ export default {
   },
   mounted () {
     this.setMinmapcanvas()
-    this.minmapDraw()
   },
   props: {
   },
   computed: {
+    peerauth: function () {
+      return this.$store.state.peerauthStatus
+    },
     NXPstatusData: function () {
       return this.$store.state.nxpModulelist
     },
     dashLive: function () {
       return this.$store.state.liveDashList
+    },
+    spaceCoord: function () {
+      return this.$store.state.liveSpaceCoord
     },
     NXPprogress: function () {
       return this.$store.state.nxpProgress
@@ -155,25 +160,14 @@ export default {
   },
   methods: {
     setMinmapcanvas () {
-      this.c = document.getElementById('minimap')
-      this.ctx = this.c.getContext('2d')
-    },
-    minmapDraw: function () {
-      if (this.firstClick !== true) {
-        this.ctx.clearRect(0, 0, 200, 200)
-      } else {
-        this.firstClick = false
-      }
-      let xStart = this.mouseLive.x / 42
-      let yStart = this.mouseLive.y / 42
-      this.ctx.beginPath()
-      this.ctx.rect(xStart, yStart, 30, 30)
-      this.ctx.stroke()
+      let c = document.getElementById('minimap')
+      this.$store.dispatch('actionSetminmap', c)
     },
     whereMinmap (mo) {
       this.mouseLive.x = mo.offsetX
       this.mouseLive.y = mo.offsetY
-      this.minmapDraw()
+      // this.minmapDraw()
+      this.$store.dispatch('actionPostionCoordMouse', this.mouseLive)
     },
     onResize: function (x, y, width, height) {
       this.x = x
@@ -335,7 +329,7 @@ export default {
 #space-map {
   right: 20px;
   position: absolute;
-  z-index: 30;
+  z-index: 10;
   opacity: 60%;
   background-color: lightgrey;
   width: 200px;

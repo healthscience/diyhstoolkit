@@ -37,7 +37,6 @@ export default {
       }
     },
     SET_ASKCALE_HELP: (state, inVerified) => {
-      console.log('active help with CALE chat bot')
       // set context for help ie where orginiated
       state.liveHelpcontext = 'cale'
       Vue.set(state.helpModal, 'active', true)

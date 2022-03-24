@@ -4,10 +4,12 @@ import modules from './modules'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
 import VisToolsUtility from '@/mixins/visualUtility.js'
+import VisPositionUtility from '@/mixins/positionUtility.js'
 const moment = require('moment')
 const ToolUtility = new ToolkitUtility()
 const ContextOut = new ContextUtility()
 const VisualUtility = new VisToolsUtility()
+const PostionUtility = new VisPositionUtility()
 
 Vue.use(Vuex)
 
@@ -68,6 +70,7 @@ const store = new Vuex.Store({
     devicesLive: {},
     nxpModulesLive: [],
     liveDashList: [],
+    liveSpaceCoord: {},
     combineSpaceList: [],
     joinNXPlive: {},
     lengthMholder: 0,
@@ -276,6 +279,9 @@ const store = new Vuex.Store({
     setDashboardNXP: (state, inVerified) => {
       // set live dashboard list
       state.liveDashList.push(inVerified)
+      // keep track of position in bento space
+      let positionTrack = PostionUtility.startPosition(inVerified, state.liveSpaceCoord)
+      Vue.set(state.liveSpaceCoord, inVerified, positionTrack)
       let dStatus = state.experimentStatus[inVerified].active
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
@@ -690,6 +696,8 @@ const store = new Vuex.Store({
       context.commit('SET_NXP_MODULED', update)
       context.commit('setDashboardNXP', update)
       context.commit('setNXPprogressUpdate', update)
+      // set the minimap in position store module
+      context.dispatch('actionPostionCoord', 'bbox', { root: true })
       // clear the time range for new NXP view
       let timeContext = {}
       timeContext.device = update.mData
