@@ -86,6 +86,10 @@ export default {
   created () {
   },
   mounted () {
+    // let c = document.getElementById('minimap')
+    // let ctx = c.getContext('2d')
+    // this.vueCanvas = ctx
+    // console.log(this.vueCanava)
     this.setMinmapcanvas()
   },
   props: {
@@ -129,6 +133,7 @@ export default {
   },
   data: function () {
     return {
+      vueCanvas: {},
       isModalDashboardVisible: true,
       newCompute: {
         automation: false,
@@ -161,7 +166,8 @@ export default {
   methods: {
     setMinmapcanvas () {
       let c = document.getElementById('minimap')
-      this.$store.dispatch('actionSetminmap', c)
+      let ctx = c.getContext('2d')
+      this.$store.dispatch('actionSetminmap', ctx)
     },
     whereMinmap (mo) {
       this.mouseLive.x = mo.offsetX
@@ -327,11 +333,18 @@ export default {
 }
 
 #space-map {
+  display: block;
   right: 20px;
   position: absolute;
   z-index: 10;
-  opacity: 60%;
+  opacity: .6;
   background-color: lightgrey;
+  width: 200px;
+  height: 200px;
+}
+
+#minimap {
+  display: block;
   width: 200px;
   height: 200px;
 }

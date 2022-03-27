@@ -286,6 +286,14 @@ const store = new Vuex.Store({
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
     },
+    SET_CLEAR_POSITION: (state, inVerified) => {
+      let coordKeys = Object.keys(state.liveSpaceCoord)
+      const clearCoord = { ...state.liveSpaceCoord }
+      for (let ck of coordKeys) {
+        delete clearCoord[ck]
+      }
+      state.liveSpaceCoord = clearCoord
+    },
     setLiveDisplayNXPModules: (state, inVerified) => {
       state.moduleGrid = inVerified.grid
       Vue.set(state.NXPexperimentData, state.liveNXP, inVerified.data)
@@ -963,6 +971,9 @@ const store = new Vuex.Store({
     },
     actionCloseJoinexperiment (context, update) {
       context.commit('SET_CLOSE_JOINMODAL', update)
+    },
+    actionClearPosition (context, update) {
+      context.commit('SET_CLEAR_POSITION', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

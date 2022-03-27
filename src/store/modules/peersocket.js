@@ -760,7 +760,9 @@ export default {
       Vue.set(this.state.networkConnection, 'active', false)
       Vue.set(this.state.networkConnection, 'text', 'connect')
       Vue.set(this.state.networkConnection, 'type', 'self-verify')
-
+      // clear the minimap
+      context.dispatch('actionResetMmap', 'clear', { root: true })
+      context.dispatch('actionClearPosition', 'clear', { root: true })
       let dataEnd = {}
       dataEnd.token = context.rootState.jwttoken
       dataEnd.update = update

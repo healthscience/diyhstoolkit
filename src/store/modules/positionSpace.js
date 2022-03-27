@@ -12,8 +12,11 @@ export default {
   },
   mutations: {
     SET_CANVAS_SPACE: (state, inVerified) => {
-      state.c = inVerified
-      state.ctx = state.c.getContext('2d')
+      state.ctx = inVerified
+    },
+    SET_RESET_MMAP: (state, inVerified) => {
+      console.log(inVerified)
+      state.ctx.clearRect(0, 0, 200, 200)
     },
     SET_POSITION_MOUSE: (state, inVerified) => {
       if (state.firstClick !== true) {
@@ -55,6 +58,9 @@ export default {
   actions: {
     actionSetminmap: (context, update) => {
       context.commit('SET_CANVAS_SPACE', update)
+    },
+    actionResetMmap: (context, update) => {
+      context.commit('SET_RESET_MMAP', update)
     },
     actionPostionCoordMouse: (context, update) => {
       context.commit('SET_POSITION_MOUSE', update)
