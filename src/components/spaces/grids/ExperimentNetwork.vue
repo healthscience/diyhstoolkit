@@ -52,7 +52,7 @@
                   <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
                   <div id="module-ready" v-if="NXPstatusData[dashi]">
                     <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
-                      <dash-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></dash-board>
+                      <nxp-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></nxp-board>
                     </ul>
                   </div>
                 </div>
@@ -69,14 +69,14 @@
 import GridToolbar from './gridToolbar'
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
-import DashBoard from '@/components/experiments/edashBoard.vue'
+import NxpBoard from '@/components/experiments/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
 
 export default {
   name: 'ExperimentNetwork',
   components: {
     GridToolbar,
-    DashBoard,
+    NxpBoard,
     ProgressMessage,
     VueDraggableResizable
   },
@@ -99,6 +99,7 @@ export default {
       return this.$store.state.peerauthStatus
     },
     NXPstatusData: function () {
+      console.log(this.$store.state.nxpModulelist)
       return this.$store.state.nxpModulelist
     },
     dashLive: function () {

@@ -124,8 +124,8 @@ export default {
     },
     submitCloudin () {
       let peerConnect = {}
-      peerConnect.peer = this.cloudsigninInput
-      peerConnect.password = this.cloudpwInput
+      peerConnect.peer = this.cloudsigninInput.trim()
+      peerConnect.password = this.cloudpwInput.trim()
       this.$store.dispatch('actionCloudSignin', peerConnect)
       this.cloudsigninInput = ''
       this.cloudpwInput = ''

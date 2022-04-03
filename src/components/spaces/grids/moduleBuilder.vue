@@ -14,7 +14,15 @@
         </draggable>
       </div>
       <div class="col-4">
-        <h3>Experiment - drag modules across</h3>
+        <h3>Experiment - drag modules across <a href="" id="network-library-damahub" @click.prevent="networLibrary()">Network Library</a></h3>
+        <networklibrary-modal v-show="isModalNLib" @closenl="closeModalNLib">
+          <template v-slot:header>
+          <!-- The code below goes into the header slot -->
+            Network Library
+          </template>
+          <template v-slot:body>
+          </template>
+        </networklibrary-modal>
         <draggable class="list-group" :list="nxpMakeList" group="people" @change="log">
           <div
             class="list-group-item"
@@ -30,6 +38,7 @@
 </template>
 
 <script>
+import NetworklibraryModal from '@/components/experiments/networklibrary/networklibraryModal.vue'
 import draggable from 'vuedraggable'
 import NxpQuestion from '@/components/experiments/nxpQuestion.vue'
 import NxpDevice from '@/components/experiments/nxpDevice.vue'
@@ -46,6 +55,7 @@ import NxpEvolve from '@/components/experiments/nxpEvolve.vue'
 export default {
   name: 'ModuleBuilder',
   components: {
+    NetworklibraryModal,
     draggable,
     NxpQuestion,
     NxpDevice,
@@ -77,6 +87,7 @@ export default {
   },
   data () {
     return {
+      isModalNLib: false
     }
   },
   methods: {
@@ -93,6 +104,15 @@ export default {
     },
     log: function (evt) {
       // window.console.log(evt)
+    },
+    networLibrary () {
+      // open modal
+      this.isModalNLib = true
+    },
+    closeModalNLib () {
+      this.isModalNLib = false
+      // refresh the networklibrary contract to access new contracts
+      this.$store.dispatch('actionRrefreshRefContracts')
     }
   }
 }

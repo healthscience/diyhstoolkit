@@ -2,7 +2,7 @@
   <div id="k-toolkit">
     <div id="diy-tools">
       <div id="chart-type">
-        <ul>
+        <!-- <ul>
           <li>
             <div class="chart-style-tools">
               <li>
@@ -21,7 +21,7 @@
           <li v-if="openDataLive[mData] !== undefined">
             <a href="#" id="opendata" @click.prevent="openData()">{{ openDataLive[mData].text }}</a>
           </li>
-        </ul>
+        </ul> -->
       </div>
       <div v-if="openDataLive[mData] !== undefined" id="open-knowledge">
         <opendata-tool v-if="openDataLive[mData].active === true" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" :toolInfo="visToolbarStatusLive"></opendata-tool>
@@ -31,13 +31,13 @@
 </template>
 
 <script>
-import CalendarTool from '@/components/experiments/setCalendarTool'
+// import CalendarTool from '@/components/experiments/setCalendarTool'
 import OpendataTool from '@/components/experiments/setKnowledgeLive'
 
 export default {
   name: 'module-chartbuilder',
   components: {
-    CalendarTool,
+    // CalendarTool,
     OpendataTool
   },
   created () {

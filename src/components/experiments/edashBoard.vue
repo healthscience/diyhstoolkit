@@ -120,6 +120,7 @@ export default {
   watch: {
     storeGrid (newValue) {
       this.localGrid = newValue
+      console.log(this.localGrid)
     }
   },
   data () {

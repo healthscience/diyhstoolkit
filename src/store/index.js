@@ -900,8 +900,8 @@ const store = new Vuex.Store({
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.jwt = this.state.jwttoken
-      // console.log('NXPMessage+++++UPDATE++++OUT')
-      // console.log(message)
+      console.log('NXPMessage+++++UPDATE++++OUT')
+      console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
