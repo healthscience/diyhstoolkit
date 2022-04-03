@@ -99,7 +99,6 @@ export default {
       return this.$store.state.peerauthStatus
     },
     NXPstatusData: function () {
-      console.log(this.$store.state.nxpModulelist)
       return this.$store.state.nxpModulelist
     },
     dashLive: function () {
