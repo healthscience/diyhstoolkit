@@ -2,12 +2,9 @@
   <div id="live-network-grid">
     <grid-toolbar></grid-toolbar>
     <div id="dragwheel-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
-      <div id="space-map">
-        Nav MAP
-          <canvas id="minimap"></canvas>
-      </div>
+      <mininav-map></mininav-map>
       <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
-        <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '18%', height: 'auto'}" :key="dashi.id" :parent="true" @dragging="onDrag" @resizing="onResize" :grid="[60,60]" :x=spaceCoord[dashi].x :y=spaceCoord[dashi].y  drag-handle=".drag-handle">
+        <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '18%', height: 'auto'}" :key="dashi.id" :parent="true" @activated="onDragStartCallback(dashi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :x=spaceCoord[dashi].x :y=spaceCoord[dashi].y  drag-handle=".drag-handle">
           <div id="single-space">
             <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{active: activeDrag[dashi].active === true }">
               --- Activation Bar ---
@@ -69,6 +66,7 @@
 import GridToolbar from './gridToolbar'
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
+import MininavMap from './minimap/mininavMap.vue'
 import NxpBoard from '@/components/experiments/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
 
@@ -76,27 +74,29 @@ export default {
   name: 'ExperimentNetwork',
   components: {
     GridToolbar,
+    MininavMap,
     NxpBoard,
     ProgressMessage,
     VueDraggableResizable
   },
   beforeMount () {
-    this.dragLocal = this.activeDrag
   },
   created () {
   },
   mounted () {
-    // let c = document.getElementById('minimap')
-    // let ctx = c.getContext('2d')
-    // this.vueCanvas = ctx
-    // console.log(this.vueCanava)
-    this.setMinmapcanvas()
   },
   props: {
   },
   computed: {
     peerauth: function () {
       return this.$store.state.peerauthStatus
+    },
+    liveDashNXP: function () {
+      if (this.$store.state.liveNXP === undefined) {
+        return ''
+      } else {
+        return this.$store.state.liveNXP
+      }
     },
     NXPstatusData: function () {
       return this.$store.state.nxpModulelist
@@ -105,7 +105,12 @@ export default {
       return this.$store.state.liveDashList
     },
     spaceCoord: function () {
-      return this.$store.state.liveSpaceCoord
+      if (this.$store.state.positionSpace.liveSpaceCoord === undefined) {
+        console.log('not est')
+        return {}
+      } else {
+        return this.$store.state.positionSpace.liveSpaceCoord
+      }
     },
     NXPprogress: function () {
       return this.$store.state.nxpProgress
@@ -123,17 +128,11 @@ export default {
       return this.$store.state.activeScalevalue
     },
     activeDrag: function () {
-      let activeBarStatus = {}
-      for (let lnxp of this.filteredExperimentsList) {
-        activeBarStatus[lnxp.id] = {}
-        activeBarStatus[lnxp.id].active = false
-      }
-      return activeBarStatus
+      return this.$store.state.activeDragList
     }
   },
   data: function () {
     return {
-      vueCanvas: {},
       isModalDashboardVisible: true,
       newCompute: {
         automation: false,
@@ -152,7 +151,6 @@ export default {
       height: 0,
       x: 0,
       y: 0,
-      dragLocal: {},
       mouseLive:
       {
         x: 10,
@@ -164,11 +162,6 @@ export default {
     }
   },
   methods: {
-    setMinmapcanvas () {
-      let c = document.getElementById('minimap')
-      let ctx = c.getContext('2d')
-      this.$store.dispatch('actionSetminmap', ctx)
-    },
     whereMinmap (mo) {
       this.mouseLive.x = mo.offsetX
       this.mouseLive.y = mo.offsetY
@@ -181,12 +174,19 @@ export default {
       this.width = width
       this.height = height
     },
+    onDragStartCallback (ev) {
+      this.$store.dispatch('actionActiveNXP', ev)
+    },
     onDrag: function (x, y) {
       this.x = x * (1 / this.zoomCalibrate)
       this.y = y
     },
     onDragStop: function (x, y) {
-      // this.dragging = false
+      let dbmove = {}
+      dbmove.x = x
+      dbmove.y = y
+      dbmove.nxp = this.liveDashNXP
+      this.$store.dispatch('actionDashBmove', dbmove)
     },
     wheelItBetter (event) {
       // use mouse wheel to zoom in out
@@ -213,22 +213,10 @@ export default {
     },
     setActiveSpace (nxpID) {
       // only one active at a time
-      let activeListKeys = Object.keys(this.activeDrag)
-      for (let ak of activeListKeys) {
-        this.activeDrag[ak].active = false
-      }
-      // set the active one clicked
-      this.activeDrag[nxpID].active = !this.activeDrag[nxpID].active
+      this.$store.dispatch('actionActiveDashSelect', nxpID)
+      this.dragDashmove = nxpID
       // set this NXP as live
       this.$store.dispatch('actionActiveNXP', nxpID)
-    },
-    refContractLookup () {
-      // create new temp shellID
-      this.shellID = '7654321'
-      this.mData = '8855332211'
-    },
-    datastartLookup () {
-      this.newCompute.startperiod = 12345123451
     },
     closeDashboard (dc) {
       this.$store.dispatch('actionCloseDashboard', dc)

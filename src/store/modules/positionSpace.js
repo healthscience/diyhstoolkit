@@ -1,58 +1,42 @@
-// import Vue from 'vue'
-// const PostionUtility = new VisPositionUtility()
+import Vue from 'vue'
+import VisPositionUtility from '@/mixins/positionUtility.js'
+const PositionUtility = new VisPositionUtility()
 
 export default {
   state: {
+    liveSpaceCoord: {},
     c: {},
-    ctx: {},
-    firstClick: false,
-    mouseHistory: {}
+    ctx: PositionUtility
   },
   getters: {
   },
   mutations: {
     SET_CANVAS_SPACE: (state, inVerified) => {
-      state.ctx = inVerified
+      state.ctx.setCanvas(inVerified)
     },
     SET_RESET_MMAP: (state, inVerified) => {
       console.log(inVerified)
-      state.ctx.clearRect(0, 0, 200, 200)
+      // state.ctx.clearRect(0, 0, 200, 200)
     },
     SET_POSITION_MOUSE: (state, inVerified) => {
-      if (state.firstClick !== true) {
-        // state.ctx.clearRect(0, 0, 200, 200)
-        state.ctx.beginPath()
-        state.ctx.strokeStyle = 'lightgrey'
-        state.ctx.lineWidth = '3'
-        state.ctx.rect(state.mouseHistory.x, state.mouseHistory.y, 10, 10)
-        state.ctx.stroke()
-      } else {
-        state.firstClick = false
-      }
-      let xStart = inVerified.x / 42
-      let yStart = inVerified.y / 42
-      let mousePair = {}
-      mousePair.x = xStart
-      mousePair.y = yStart
-      state.mouseHistory = mousePair
-      state.ctx.beginPath()
-      state.ctx.strokeStyle = '#FF0000'
-      state.ctx.lineWidth = '1'
-      state.ctx.rect(xStart, yStart, 10, 10)
-      state.ctx.stroke()
+      state.ctx.mousePointer(inVerified)
     },
-    SET_POSITION_STATE: (state, inVerified) => {
-      function placeBBox (box) {
-        let xStart = box.x / 42
-        let yStart = box.y / 42
-        state.ctx.beginPath()
-        state.ctx.strokeStyle = '#000000'
-        state.ctx.rect(xStart, yStart, 15, 30)
-        state.ctx.stroke()
+    SET_SPACEPOSITION_STATE: (state, inVerified) => {
+      let positionTrack = state.ctx.startPositionSpace(inVerified, state.liveSpaceCoord)
+      Vue.set(state.liveSpaceCoord, inVerified, positionTrack)
+      // update the minimap
+      state.ctx.miniMapLocations()
+    },
+    SET_UPDATEMMAP_POSITION: (state, inVerified) => {
+      state.ctx.updateMMapSpace(inVerified)
+    },
+    SET_CLEAR_POSITION: (state, inVerified) => {
+      let coordKeys = Object.keys(state.liveSpaceCoord)
+      const clearCoord = { ...state.liveSpaceCoord }
+      for (let ck of coordKeys) {
+        delete clearCoord[ck]
       }
-      let liveBBox = Object.keys(inVerified.position)
-      liveBBox.forEach(
-        element => placeBBox(inVerified.position[element]))
+      state.liveSpaceCoord = clearCoord
     }
   },
   actions: {
@@ -66,10 +50,17 @@ export default {
       context.commit('SET_POSITION_MOUSE', update)
     },
     actionPostionCoord: (context, update) => {
-      let updatePosition = {}
-      updatePosition.bbox = update
-      updatePosition.position = context.rootState.liveSpaceCoord
-      context.commit('SET_POSITION_STATE', updatePosition)
+      // keep track of position in bento space
+      context.commit('SET_SPACEPOSITION_STATE', update)
+    },
+    actionClearPosition: (context, update) => {
+      context.commit('SET_CLEAR_POSITION', update)
+    },
+    actionMMapMove: (context, update) => {
+      console.log(update)
+    },
+    actionDashBmove: (context, update) => {
+      context.commit('SET_UPDATEMMAP_POSITION', update)
     }
   }
 }

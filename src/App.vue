@@ -113,6 +113,9 @@ export default {
   display: grid;
   grid-template-columns: 1fr;
   width: 1280;
+  height: 100vh;
+  overflow: hidden;
+  border: 0px solid red;
 }
 
 #peer-being  {

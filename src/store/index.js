@@ -4,12 +4,10 @@ import modules from './modules'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
 import VisToolsUtility from '@/mixins/visualUtility.js'
-import VisPositionUtility from '@/mixins/positionUtility.js'
 const moment = require('moment')
 const ToolUtility = new ToolkitUtility()
 const ContextOut = new ContextUtility()
 const VisualUtility = new VisToolsUtility()
-const PostionUtility = new VisPositionUtility()
 
 Vue.use(Vuex)
 
@@ -61,6 +59,7 @@ const store = new Vuex.Store({
     livePeerRefContIndex: {},
     activeLBFilterlist: [],
     activeXNPFilterlist: [],
+    activeDragList: {},
     activeZoomscale: false,
     activeScalevalue: 1,
     liveNXP: '',
@@ -70,7 +69,6 @@ const store = new Vuex.Store({
     devicesLive: {},
     nxpModulesLive: [],
     liveDashList: [],
-    liveSpaceCoord: {},
     combineSpaceList: [],
     joinNXPlive: {},
     lengthMholder: 0,
@@ -263,6 +261,23 @@ const store = new Vuex.Store({
     },
     SET_NXP_LIVELIST: (state, inVerified) => {
       state.activeXNPFilterlist = inVerified
+      let dragState = {}
+      dragState.active = false
+      for (let dashi of inVerified) {
+        Vue.set(state.activeDragList, dashi.id, dragState)
+      }
+    },
+    SET_ACTIVE_DASHI: (state, inVerified) => {
+      // loopover and set active true and rest as false
+      for (let acti of state.activeXNPFilterlist) {
+        let dragState = {}
+        if (acti.id === inVerified) {
+          dragState.active = true
+        } else {
+          dragState.active = false
+        }
+        Vue.set(state.activeDragList, acti.id, dragState)
+      }
     },
     SET_ACTIVE_ZOOM: (state, inVerified) => {
       state.activeZoomscale = inVerified
@@ -276,23 +291,13 @@ const store = new Vuex.Store({
     setOutflowWatch: (state, inVerified) => {
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
     },
-    setDashboardNXP: (state, inVerified) => {
+    SET_Dashboard_NXP: (state, inVerified) => {
       // set live dashboard list
       state.liveDashList.push(inVerified)
-      // keep track of position in bento space
-      let positionTrack = PostionUtility.startPosition(inVerified, state.liveSpaceCoord)
-      Vue.set(state.liveSpaceCoord, inVerified, positionTrack)
+      // move minimpa code
       let dStatus = state.experimentStatus[inVerified].active
       dStatus = !dStatus
       Vue.set(state.experimentStatus[inVerified], 'active', dStatus)
-    },
-    SET_CLEAR_POSITION: (state, inVerified) => {
-      let coordKeys = Object.keys(state.liveSpaceCoord)
-      const clearCoord = { ...state.liveSpaceCoord }
-      for (let ck of coordKeys) {
-        delete clearCoord[ck]
-      }
-      state.liveSpaceCoord = clearCoord
     },
     setLiveDisplayNXPModules: (state, inVerified) => {
       state.moduleGrid = inVerified.grid
@@ -587,6 +592,9 @@ const store = new Vuex.Store({
     actionLiveNXPlist (context, update) {
       context.commit('SET_NXP_LIVELIST', update)
     },
+    actionActiveDashSelect (context, update) {
+      context.commit('SET_ACTIVE_DASHI', update)
+    },
     actionJOINViewexperiment (context, update) {
       // open the modal
       this.state.isModalJoinNetworkExperiment = true
@@ -702,10 +710,10 @@ const store = new Vuex.Store({
       let futureTimeCheck = false
       context.commit('SET_LIVE_NXP', update)
       context.commit('SET_NXP_MODULED', update)
-      context.commit('setDashboardNXP', update)
+      context.commit('SET_Dashboard_NXP', update)
       context.commit('setNXPprogressUpdate', update)
       // set the minimap in position store module
-      context.dispatch('actionPostionCoord', 'bbox', { root: true })
+      context.dispatch('actionPostionCoord', update, { root: true })
       // clear the time range for new NXP view
       let timeContext = {}
       timeContext.device = update.mData
@@ -900,8 +908,8 @@ const store = new Vuex.Store({
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.jwt = this.state.jwttoken
-      console.log('NXPMessage+++++UPDATE++++OUT')
-      console.log(message)
+      // console.log('NXPMessage+++++UPDATE++++OUT')
+      // console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
@@ -971,9 +979,6 @@ const store = new Vuex.Store({
     },
     actionCloseJoinexperiment (context, update) {
       context.commit('SET_CLOSE_JOINMODAL', update)
-    },
-    actionClearPosition (context, update) {
-      context.commit('SET_CLEAR_POSITION', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'
