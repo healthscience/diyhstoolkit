@@ -1,64 +1,68 @@
 <template>
   <div id="live-network-grid">
     <grid-toolbar></grid-toolbar>
-    <div id="dragwheel-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
-      <mininav-map></mininav-map>
-      <div id="dashboard-placeholder" @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
-        <vue-draggable-resizable v-for="dashi of dashLive" v-bind:style="{ minWidth: '18%', height: 'auto'}" :key="dashi.id" :parent="true" @activated="onDragStartCallback(dashi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :x=spaceCoord[dashi].x :y=spaceCoord[dashi].y  drag-handle=".drag-handle">
-          <div id="single-space">
-            <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{active: activeDrag[dashi].active === true }">
-              --- Activation Bar ---
-            </div>
-            <div class="dashboard-space">
-              <div class="vis-spaceitem">
-                <!-- <div id="test-content">
-                  Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
-                  X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}
-                </div> -->
-                <div id="spaceitem-controls">
-                  <div class="dash-top-master">
-                    -
-                  </div>
-                  <div class="dash-top-master">
-                    <header>-</header>
-                  </div>
-                  <div class="remove-controls">
-                    <div id="dashboard-controls">
-                      <div class="dash-controls-master">
-                        <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
+    <mininav-map></mininav-map>
+    <div id="space-shaper">
+      <div id="dragwheel-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
+        <div id="dashboard-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }"> <!--  v-bind:style="{ width: '100%', height: '100%'}" -->
+          <!--loop over live dashboards -->
+          <vue-draggable-resizable v-for="dashi of dashLive" :key="dashi.id" id="dashispace" data-no-dragscroll  v-bind:style="{ minWidth: '900', height: 'auto'}" :parent="true" @activated="onDragStartCallback(dashi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :x=spaceCoord[dashi].x :y=spaceCoord[dashi].y  drag-handle=".drag-handle">
+            <div id="single-space">
+              <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{active: activeDrag[dashi].active === true }">
+                --- Activation Bar ---
+              </div>
+              <div class="dashboard-space">
+                <div class="vis-spaceitem">
+                  <!-- <div id="test-content">
+                    Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
+                    X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}
+                  </div> -->
+                  <div id="spaceitem-controls">
+                    <div class="dash-top-master">
+                      -
+                    </div>
+                    <div class="dash-top-master">
+                      <header>-</header>
+                    </div>
+                    <div class="remove-controls">
+                      <div id="dashboard-controls">
+                        <div class="dash-controls-master">
+                          <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
+                        </div>
+                        <div class="dash-controls-master">
+                          <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
+                        </div>
                       </div>
-                      <div class="dash-controls-master">
-                        <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
+                      <div id="remove-message" v-if="messageRemove === true">
+                        Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Yes</a>  No
                       </div>
                     </div>
-                    <div id="remove-message" v-if="messageRemove === true">
-                      Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Yes</a>  No
+                  </div>
+                </div>
+                <div class="vis-spaceitem">
+                  feedback:
+                  <div v-if="ecsMessage" id="ecs-message">
+                    {{ ecsMessage }}
+                  </div>
+                </div>
+                <div class="vis-spaceitem">
+                  <!-- view the dashboard per network experiment -->
+                  <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
+                    <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
+                    <div id="module-ready" v-if="NXPstatusData[dashi]">
+                      <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
+                        <nxp-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></nxp-board>
+                      </ul>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="vis-spaceitem">
-                feedback:
-                <div v-if="ecsMessage" id="ecs-message">
-                  {{ ecsMessage }}
-                </div>
-              </div>
-              <div class="vis-spaceitem">
-                <!-- view the dashboard per network experiment -->
-                <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
-                  <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
-                  <div id="module-ready" v-if="NXPstatusData[dashi]">
-                    <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
-                      <nxp-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></nxp-board>
-                    </ul>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
-        </vue-draggable-resizable>
+          </vue-draggable-resizable>
+        </div>
       </div>
     </div>
+      bentospace END END
   </div>
 </template>
 
@@ -162,11 +166,16 @@ export default {
     }
   },
   methods: {
+    navMover: function () {
+      console.log('scholl in space0000000')
+    },
     whereMinmap (mo) {
       this.mouseLive.x = mo.offsetX
       this.mouseLive.y = mo.offsetY
-      // this.minmapDraw()
-      this.$store.dispatch('actionPostionCoordMouse', this.mouseLive)
+      // if click on minimap do not send
+      if (mo.target.id !== 'minimap') {
+        this.$store.dispatch('actionPostionCoordMouse', this.mouseLive)
+      }
     },
     onResize: function (x, y, width, height) {
       this.x = x
@@ -236,27 +245,36 @@ export default {
 <style scoped>
 #live-network-grid {
   display: grid;
-  grid-template: 1fr;
+  grid-template-columns: 1fr;
+  border: 6px dashed black;
+  height: 100%;
+}
+
+#space-shaper {
+  border: 0px dashed red;
 }
 
 #dragwheel-space {
-  height: 1200px;
-  width: 100%;
-  border: 0px solid red;
-  overflow: hidden;
+  height: 10000px;
+  width: 1000%;
+  overflow: scroll;
+  border: 8px solid blue;
 }
 
 #dashboard-placeholder {
-  height: 8000px;
-  width: 8000px;
+  height: 10000px;
+  width: 1000%;
   padding-top: 20px;
   margin: auto;
   transform-origin: left top;
   border: 1px solid orange;
-  position: relative;
   background-color: #fff4f4;
   background: linear-gradient(-90deg, rgba(0, 0, 0, .1) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, .1) 1px, transparent 1px);
   background-size: 60px 60px, 60px 60px;
+}
+
+#dashispace {
+  border: 0px solid red;
 }
 
 #single-space {
@@ -283,6 +301,12 @@ export default {
   height: auto;
   border: 0px solid blue;
 }
+
+/* .dash-holder {
+  border: 3px solid red;
+  height: auto;
+  min-width: 1200px;
+} */
 
 #module-list {
   width: 100%;

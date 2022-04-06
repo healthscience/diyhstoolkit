@@ -35,9 +35,9 @@
         </div>
       </div>
     </div>
+    <router-view/>
     <network-status class="toolbar-top" msg="not connected"></network-status>
     <help-ai></help-ai>
-    <router-view/>
   </div>
 </template>
 
@@ -104,6 +104,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+body {
+  height: 100%;
+  width: 100vw;
+  /* overflow: hidden; */
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -112,10 +118,8 @@ export default {
   color: #2c3e50;
   display: grid;
   grid-template-columns: 1fr;
-  width: 1280;
-  height: 100vh;
-  overflow: hidden;
-  border: 0px solid red;
+  border: 4px solid purple;
+  height: inherit;
 }
 
 #peer-being  {
@@ -123,7 +127,7 @@ export default {
   grid-template-columns: 1fr 1fr 1fr;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 12;
   background-color: white;
   border-bottom: 1px solid grey;
   height: 3em;
@@ -215,7 +219,4 @@ export default {
   text-align: center;
 }
 
-.clear {
-  clear: both;
-}
 </style>

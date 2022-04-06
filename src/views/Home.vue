@@ -22,9 +22,9 @@
           </div>
         </div>
       </div>
-    </div>
-    <div id="connection-message" v-if="socketClosed ===  true">
-      Connection to the network has been broken.
+      <div id="connection-message" v-if="socketClosed ===  true">
+        Connection to the network has been broken.
+      </div>
     </div>
     <network-activespaces></network-activespaces>
     <div class="network-protocol">
@@ -73,25 +73,25 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .home {
   display: grid;
   grid-template-columns: 1fr;
   border-right: 1px solid lightgrey;
   border-left: 1px solid lightgrey;
-}
-
-#connection-message {
-  font-size: 2em;
-  background-color: #ffcccb;
-}
-
-.help-info {
-  border: 1px solid orange;
+  height: 100%;
+  width: 96vw;
+  /* overflow: visible; */
+  border: 4px dashed red;
 }
 
 .diy-settings {
+  height: 100%;
   margin: 2px;
+  position: sticky;
+  top: 3em;
+  z-index: 11;
+  border: 0px dashed black;
 }
 
 #diy-summary {
@@ -106,10 +106,6 @@ export default {
   font-weight: bold;
 }
 
-/* Clear floats after the columns */
-.diy-settings:after {
-}
-
 .live-network-header {
   display: grid;
   grid-template-columns: 4fr 1fr;
@@ -119,20 +115,8 @@ img {
   width: 60px;
 }
 
-.toolkit-logo {
-  margin-left: 1em;
-}
-
-.small-logo {
-}
-
-#interface {
-  display: grid;
-  grid-template-columns: auto 1fr;
-}
-
 .medium-start {
-  width: 300px;
+  width: 160px;
 }
 
 .medium-start-cale {
@@ -152,50 +136,20 @@ img {
   width: 20em;
 }
 
+#interface {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
 #cale-interface {
   display: grid;
   grid-template-columns: 1fr 1fr 3fr;
 }
 
-#view-flows {
-  display: grid;
-  grid-template-columns: 1fr;
-  margin-left: 2em;
-}
-
-#new-type {
-  position: absolute;
-  margin-left: -134px;
-}
-
-.btn {
-  font-size: 1.2em;
-  border: 2px solid white;
-  padding: 6px 14px;
-}
-
-.btn-new {
-  font-size: 1.2em;
-  background-color: white; /*#4CAF50; /* Green */
-  border: 1px solid lightgrey;
-  color: black;
-  padding: 6px 14px;
-  margin-right: 2em;
-  margin-left: 2em;
-  min-width: 10em;
-  text-align: center;
-}
-
-.btn-new:hover {
-  font-size: 1.2em;
-  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  padding: 6px 14px;
-  margin-right: 2em;
-  margin-left: 2em;
-  min-width: 10em;
-  text-align: center;
+#connection-message {
+  font-size: 2em;
+  background-color: #ffcccb;
+  height: 2em;
 }
 
 .network-protocol {

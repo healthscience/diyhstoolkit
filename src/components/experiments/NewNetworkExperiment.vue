@@ -93,17 +93,19 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 14;
+    height: 100%;
+    z-index: 65;
   }
 
   .modal {
-    height: 100%;
     background: #FFFFFF;
     box-shadow: 2px 2px 20px 1px;
     overflow-x: auto;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
-    width: 98%;
+    width: 99%;
+    margin-top: 1px;
   }
 
   .modal-header,

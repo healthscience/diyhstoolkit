@@ -120,6 +120,7 @@ export default {
 
 <style>
 #module-builder {
+  height: 100%;
 }
 
 .nxp-builder {

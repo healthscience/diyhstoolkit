@@ -15,10 +15,13 @@ const events = require('events')
 var PositionUtility = function () {
   events.EventEmitter.call(this)
   this.ctx = {}
+  this.scale = 42
   this.liveSpaceCoord = {}
   this.liveMinimapCoord = {}
   this.mouseHistory = {}
   this.firstClick = false
+  this.spaceClick = false
+  this.minimClick = false
 }
 
 /**
@@ -67,18 +70,50 @@ PositionUtility.prototype.startPositionSpace = function (nxpID, spaceCoord) {
 */
 PositionUtility.prototype.miniMapLocations = function () {
   const localthis = this
-  function placeBBox (box) {
-    let xStart = box.x / 42
-    let yStart = box.y / 42
+  function placeBBox (box, scale) {
+    let xStart = box.x / scale
+    let yStart = box.y / scale
     localthis.ctx.beginPath()
     localthis.ctx.strokeStyle = '#000000'
     localthis.ctx.rect(xStart, yStart, 15, 30)
     localthis.ctx.stroke()
   }
   let liveBBox = Object.keys(this.liveSpaceCoord)
-  console.log(liveBBox)
   liveBBox.forEach(
-    element => placeBBox(this.liveSpaceCoord[element]))
+    element => placeBBox(this.liveSpaceCoord[element], this.scale))
+}
+
+/**
+* mouse minidash collition ie closest to minimouse click
+* @method collisionMiniDash
+*
+*/
+PositionUtility.prototype.collisionMiniDash = function (miniMouse) {
+  let dashMatch = {}
+  let distanceList = []
+  function collitionMatch (mdash, mmouse, scale) {
+    let xSq = ((mdash.x / scale) - mmouse.x) * ((mdash.x / scale) - mmouse.x)
+    let ySq = ((mdash.y / scale) - mmouse.y) * ((mdash.y / scale) - mmouse.y)
+    let zDist = Math.sqrt((xSq + ySq))
+    let trackCoord = {}
+    trackCoord.dist = zDist
+    trackCoord.dash = mdash
+    distanceList.push(trackCoord)
+  }
+
+  let liveBBox = Object.keys(this.liveSpaceCoord)
+  if (liveBBox.length > 0) {
+    liveBBox.forEach(
+      element => collitionMatch(this.liveSpaceCoord[element], miniMouse, this.scale))
+    let lowest = distanceList.sort(function (a, b) {
+      return a.dist - b.dist
+    })
+    // whick is closest?  Return coordion of that dashboard
+    dashMatch = lowest[0].dash
+  } else {
+    console.log('no dashboard on space')
+  }
+  return dashMatch
 }
 
 /**
@@ -87,7 +122,6 @@ PositionUtility.prototype.miniMapLocations = function () {
 *
 */
 PositionUtility.prototype.clearMMap = function (newCoord) {
-  console.log('clear')
   this.ctx.clearRect(0, 0, 200, 200)
 }
 
@@ -97,7 +131,29 @@ PositionUtility.prototype.clearMMap = function (newCoord) {
 *
 */
 PositionUtility.prototype.drawmMMap = function () {
-  console.log('clear mmMap and update locations and mouse pointer')
+  console.log('in annimation mode draw updates to minimap')
+}
+
+/**
+* scroll to selected miniMap dashboard rectangle
+* @method scrollTODashboard
+*
+*/
+PositionUtility.prototype.scrollTODashboard = function (miniMouse) {
+  let mMouse = {}
+  mMouse.x = miniMouse.offsetX
+  mMouse.y = miniMouse.offsetY
+  // identify click minidash closest to mouse click on minimap
+  let scrollMatch = this.collisionMiniDash(mMouse)
+  console.log(scrollMatch)
+  // executue scrollTO  dashboard-space
+  // window.scrollTo(scrollMatch.x, scrollMatch.y)
+  // document.getElementById('dashboard-placeholder').scrollIntoView()
+  // document.getElementById('single-space').scrollIntoView(false) // { behavior: 'smooth', block: 'end', inline: 'nearest' })
+  // window.scrollBy(-1600, 1600)
+  // document.getElementById('dashboard-placeholder').scroll = true
+  window.scroll(scrollMatch.x, scrollMatch.y)
+  // window.scroll(5000, 5000)
 }
 
 /**
@@ -106,7 +162,6 @@ PositionUtility.prototype.drawmMMap = function () {
 *
 */
 PositionUtility.prototype.updateMMapSpace = function (newCoord) {
-  console.log('update the locations mmap location')
   this.clearMMap()
   // update mini coords  update nxp key
   this.liveSpaceCoord[newCoord.nxp] = newCoord
@@ -131,8 +186,8 @@ PositionUtility.prototype.mousePointer = function (update) {
   } else {
     this.firstClick = false
   }
-  let xStart = update.x / 42
-  let yStart = update.y / 42
+  let xStart = update.x / this.scale
+  let yStart = update.y / this.scale
   let mousePair = {}
   mousePair.x = xStart
   mousePair.y = yStart

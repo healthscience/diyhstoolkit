@@ -92,7 +92,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 12;
+    height: 100%;
+    z-index: 25;
     overflow: scroll;
   }
 

@@ -2,6 +2,9 @@
   <div id="toolbar-master">
     <div id="scale-tools">
       <div class="scale-item">
+        BentoSpace
+      </div>
+      <div class="scale-item">
        <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
       </div>
       <div class="scale-item">
@@ -9,10 +12,10 @@
         <input type="range" min="0.1" max="2" step="0.1" v-model.number="scalelocal" @change="setzoomScale">
           {{ scalespace }} %
       </div>
-      <div id="story-life">
+      <div id="story-life">-
           <!-- <a @click.prevent="viewStorytools" href="" id="story-button">Story</a> -->
       </div>
-      <div id="routine-life">
+      <div id="routine-life"> -
           <!-- <a @click.prevent="viewRoutines" href="" id="routine-button">Routines</a> -->
       </div>
       <!-- <div id="space-map">
@@ -90,27 +93,26 @@ export default {
 <style scoped>
 #toolbar-master {
   display: grid;
+  grid-template-columns: 1fr;
+  border: 0px dashed purple;
+  height: 100%;
+  width: 100%;
   position: sticky;
-  border: 0pmpx solid red;
-  top: 45px;
-  z-index: 11;
+  top: 8em;
+  z-index: 16;
 }
 
 #scale-tools {
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto auto;
   justify-content: center;
   align-content: center;
   gap: 10px;
-  /* grid-auto-flow: column; */
-  position: sticky;
-  top: 400px;
   width: 100%;
   height: 60px;
-  border-bottom: 1px solid orange;
+  border-bottom: 2px solid orange;
   background-color: white;
   padding: .1em;
-  z-index: 54;
 }
 
 .scale-space.active {
@@ -121,14 +123,14 @@ export default {
   display: inline-block;
   border: 0px solid red;
 }
-
+/*
 #space-map {
   right: 20px;
   position: absolute;
-  z-index: 30;
+  z-index: 16;
   opacity: 60%;
   background-color: lightgrey;
   width: 200px;
   height: 200px;
-}
+} */
 </style>

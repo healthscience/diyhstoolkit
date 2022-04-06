@@ -99,7 +99,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 18;
+    z-index: 45;
   }
 
   .modal {

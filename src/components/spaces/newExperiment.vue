@@ -1,6 +1,6 @@
 <template>
   <div id="new-experimentmenu">
-    <button type="button" class="btn" @click="newType()">new</button>
+    <button type="button" class="btn-newnxp" @click="newType()">new</button>
     <div id="new-type" v-if="newtypeShow === true">
       <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button>
       <button type="button" class="btn-new" @click="newExperiment('experiment')">experiment</button>
@@ -12,9 +12,9 @@
       </template>
       <template v-slot:body>
         <div class="scale-item">
-        New <input name="query" v-model="lifeboardName">
-      <button class="new-lifeboard" @click.prevent="saveLifeboard()">save</button>
-  </div>
+          New <input name="query" v-model="lifeboardName">
+          <button class="new-lifeboard" @click.prevent="saveLifeboard()">save</button>
+        </div>
       </template>
     </new-lifeboard>
     <new-networkexperiment v-show="isModalNewNetworkExperiment" @closeNnxp="closeModalNewN1">
@@ -107,7 +107,7 @@ export default {
 
 <style scoped>
 #new-type {
-  z-index: 30;
+  z-index: 25;
 }
 
 .contribute-nxp-button {
@@ -117,5 +117,14 @@ export default {
 #nxp-feedback {
   font-size: 2em;
   background-color: #ffcccb;
+}
+
+.btn-newnxp, .btn-new {
+  font-size: 1.4em;
+}
+
+.btn-newnxp:hover, .btn-new:hover {
+  font-size: 1.4em;
+  background-color: #4CAF50;
 }
 </style>

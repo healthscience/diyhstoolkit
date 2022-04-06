@@ -104,6 +104,14 @@ export default {
   width: 90%;
 }
 
+.left-chat-peer {
+  width: 50px;
+}
+
+.right-chat-cale {
+  width: 50px;
+}
+
 #peer-chat-left {
   display: grid;
   grid-template-columns: 1fr 4fr 1fr;

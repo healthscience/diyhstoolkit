@@ -6,7 +6,10 @@ export default {
   state: {
     liveSpaceCoord: {},
     c: {},
-    ctx: PositionUtility
+    ctx: PositionUtility,
+    spaceClick: true,
+    minmapClick: false,
+    mouseClickCount: 0
   },
   getters: {
   },
@@ -19,6 +22,7 @@ export default {
       // state.ctx.clearRect(0, 0, 200, 200)
     },
     SET_POSITION_MOUSE: (state, inVerified) => {
+      // has the minimouse area been clicked?
       state.ctx.mousePointer(inVerified)
     },
     SET_SPACEPOSITION_STATE: (state, inVerified) => {
@@ -29,6 +33,9 @@ export default {
     },
     SET_UPDATEMMAP_POSITION: (state, inVerified) => {
       state.ctx.updateMMapSpace(inVerified)
+    },
+    SET_SCROLLTO_POSITION: (state, inVerified) => {
+      state.ctx.scrollTODashboard(inVerified)
     },
     SET_CLEAR_POSITION: (state, inVerified) => {
       let coordKeys = Object.keys(state.liveSpaceCoord)
@@ -57,7 +64,7 @@ export default {
       context.commit('SET_CLEAR_POSITION', update)
     },
     actionMMapMove: (context, update) => {
-      console.log(update)
+      context.commit('SET_SCROLLTO_POSITION', update)
     },
     actionDashBmove: (context, update) => {
       context.commit('SET_UPDATEMMAP_POSITION', update)

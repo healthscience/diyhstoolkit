@@ -46,11 +46,11 @@
       </div>
     </div>
     <div id="view-flows" v-if="peerauth === true">
-      <live-lifestyle v-if="spaceType === 'Lifeboards'"></live-lifestyle>
+      <!-- <live-lifestyle v-if="spaceType === 'Lifeboards'"></live-lifestyle>-->
       <live-networknxp v-if="spaceType === 'Experiments'"></live-networknxp>
-      <live-timeline v-if="spaceType === 'timeline'"></live-timeline>
+      <!-- <live-timeline v-if="spaceType === 'timeline'"></live-timeline> -->
     </div>
-    <lifeboard-network v-if="lifeView === true"></lifeboard-network>
+    <!-- <lifeboard-network v-if="lifeView === true"></lifeboard-network> -->
     <experiment-network v-if="nxpView === true"></experiment-network>
   </div>
 </template>
@@ -58,10 +58,10 @@
 <script>
 import SpaceMenu from '@/components/spaces/menues/spaceMenu.vue'
 import NewExperiment from '@/components/spaces/newExperiment.vue'
-import LiveLifestyle from '@/components/home/LiveLifeboard.vue'
+// import LiveLifestyle from '@/components/home/LiveLifeboard.vue'
 import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
-import LiveTimeline from '@/components/home/LiveTimeline.vue'
-import LifeboardNetwork from '@/components/spaces/grids/LifeboardNetwork.vue'
+// import LiveTimeline from '@/components/home/LiveTimeline.vue'
+// import LifeboardNetwork from '@/components/spaces/grids/LifeboardNetwork.vue'
 import ExperimentNetwork from '@/components/spaces/grids/ExperimentNetwork.vue'
 
 export default {
@@ -69,10 +69,10 @@ export default {
   components: {
     SpaceMenu,
     NewExperiment,
-    LiveLifestyle,
+    // LiveLifestyle,
     LiveNetworknxp,
-    LiveTimeline,
-    LifeboardNetwork,
+    // LiveTimeline,
+    // LifeboardNetwork,
     ExperimentNetwork
   },
   computed: {
@@ -131,17 +131,29 @@ export default {
 .network-experiments {
   display: grid;
   grid-template-columns: 1fr;
+  width: 100%;
+  height: 100%;
+  border: 8px dashed green;
 }
 
 #toolkit-boards {
   display: grid;
   grid-template-columns: 1fr 10fr;
   background-color: lightgrey;
+  position: sticky;
+  top: 3em;
+  z-index: 25;
+  border: 0px dashed blue;
+}
+
+.small-logo {
+  width: 60px;
 }
 
 #peer-views {
   display: grid;
   grid-template-columns: 1fr 2fr;
+  border: 0px solid red;
 }
 
 #flow-type {
@@ -192,12 +204,34 @@ export default {
   position: absolute;
   margin-top: -30px;
   margin-left: 70px;
-  z-index: 30;
+  z-index: 25;
+}
+
+.flow-query-new {
+}
+
+.live-network-header {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  border: 0px solid blue;
+}
+
+.network-toolbar {
+  border: 0px solid red;
 }
 
 #sub-flow-menu {
   display: grid;
   align-self: start;
   width: 240px;
+}
+
+#view-flows {
+  border: 0px solid red;
+  height: inherit;
+  position: sticky;
+  top: 6em;
+  z-index: 20;
+  border: 1px dashed blue;
 }
 </style>
