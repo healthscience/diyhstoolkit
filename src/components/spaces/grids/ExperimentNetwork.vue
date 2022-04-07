@@ -251,14 +251,14 @@ export default {
 }
 
 #space-shaper {
-  border: 0px dashed red;
+  position: static;
 }
 
 #dragwheel-space {
   height: 10000px;
   width: 1000%;
   overflow: scroll;
-  border: 8px solid blue;
+  border: 8px dashed blue;
 }
 
 #dashboard-placeholder {
@@ -343,22 +343,4 @@ export default {
   float: right;
   margin-right: 2em;
 }
-
-#space-map {
-  display: block;
-  right: 20px;
-  position: absolute;
-  z-index: 10;
-  opacity: .6;
-  background-color: lightgrey;
-  width: 200px;
-  height: 200px;
-}
-
-#minimap {
-  display: block;
-  width: 200px;
-  height: 200px;
-}
-
 </style>

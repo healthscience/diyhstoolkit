@@ -1,6 +1,5 @@
 <template>
   <div id="space-map">
-    Nav MAP
     <canvas id="minimap" @click="mouseMiniSelect"></canvas>
   </div>
 </template>
@@ -58,16 +57,8 @@ export default {
 
 <style scoped>
 #space-map {
-  position: fixed;
-  display: block;
-  top: 400px;
-  left: 900px;
-  right: 20px;
-  z-index: 10;
-  opacity: .6;
-  background-color: lightgrey;
-  width: 200px;
-  height: 200px;
+  height: 100px;
+  background-color: none;
   /*position: fixed;
   top: 50vh;
   left: 90vw;
@@ -75,7 +66,13 @@ export default {
 }
 
 #minimap {
+  position: fixed;
   display: block;
+  bottom: 10px;
+  right: 20px;
+  z-index: 30;
+  opacity: .6;
+  background-color: lightgrey;
   width: 200px;
   height: 200px;
 }

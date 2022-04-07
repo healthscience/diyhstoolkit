@@ -105,7 +105,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 body {
-  height: 100%;
+  height: 100vh;
   width: 100vw;
   /* overflow: hidden; */
 }
@@ -125,7 +125,7 @@ body {
 #peer-being  {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 12;
   background-color: white;

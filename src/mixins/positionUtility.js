@@ -15,7 +15,7 @@ const events = require('events')
 var PositionUtility = function () {
   events.EventEmitter.call(this)
   this.ctx = {}
-  this.scale = 42
+  this.scale = 50
   this.liveSpaceCoord = {}
   this.liveMinimapCoord = {}
   this.mouseHistory = {}

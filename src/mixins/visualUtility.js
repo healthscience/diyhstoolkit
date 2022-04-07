@@ -69,10 +69,19 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
       mod.grid = []
       let makeGrid = []
       let newGriditem = {}
+      console.log(entityData.data)
       if (entityData.data !== 'none') {
         newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': entityData.data.context.triplet.device, static: false }
       } else {
-        newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': 'none', static: false }
+        console.log('none but device info???')
+        // but does a device exist? entityData.devices[0].device_mac
+        if (entityData.devices.length > 0) {
+          console.log('deices')
+          newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': 'none', static: false }
+          console.log(newGriditem)
+        } else {
+          newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': 'none', static: false }
+        }
       }
       makeGrid.push(newGriditem)
       let visDataHold = {}

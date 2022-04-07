@@ -1,5 +1,5 @@
 <template>
-  <div id="toolbar-master">
+  <div id="toolbar-master" v-if="peerauth === true">
     <div id="scale-tools">
       <div class="scale-item">
         BentoSpace
@@ -44,6 +44,9 @@ export default {
   props: {
   },
   computed: {
+    peerauth: function () {
+      return this.$store.state.peerauthStatus
+    },
     scalespace: function () {
       let roundNumber = this.$store.state.activeScalevalue.toFixed(2)
       let scalePercent = roundNumber * 100
@@ -103,6 +106,8 @@ export default {
 }
 
 #scale-tools {
+  position: fixed;
+  top: 100px;
   display: grid;
   grid-template-columns: auto auto auto auto auto auto;
   justify-content: center;

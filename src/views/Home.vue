@@ -88,7 +88,7 @@ export default {
 .diy-settings {
   height: 100%;
   margin: 2px;
-  position: sticky;
+  position: fixed;
   top: 3em;
   z-index: 11;
   border: 0px dashed black;

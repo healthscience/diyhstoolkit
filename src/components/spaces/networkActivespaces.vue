@@ -140,7 +140,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 10fr;
   background-color: lightgrey;
-  position: sticky;
+  position: fixed;
   top: 3em;
   z-index: 25;
   border: 0px dashed blue;
@@ -229,9 +229,10 @@ export default {
 #view-flows {
   border: 0px solid red;
   height: inherit;
-  position: sticky;
-  top: 6em;
+  position: fixed;
+  top: 8em;
+  margin-left: 10px;
   z-index: 20;
-  border: 1px dashed blue;
+  border: 0px dashed blue;
 }
 </style>
