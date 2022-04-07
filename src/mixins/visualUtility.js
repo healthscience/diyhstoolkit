@@ -77,7 +77,7 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
         // but does a device exist? entityData.devices[0].device_mac
         if (entityData.devices.length > 0) {
           console.log('deices')
-          newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': 'none', static: false }
+          newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': entityData.devices[0].device_mac, static: false }
           console.log(newGriditem)
         } else {
           newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': 'none', static: false }
@@ -90,7 +90,8 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
         gridPerModule[mod.key] = makeGrid
         testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': visDataHold }
       } else {
-        visDataHold['none'] = {}
+        visDataHold = {}
+        visDataHold[entityData.devices[0].device_mac] = {}
         gridPerModule[mod.key] = makeGrid
         testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': makeGrid, 'data': visDataHold }
       }

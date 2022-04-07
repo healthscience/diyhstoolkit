@@ -82,7 +82,7 @@ export default {
   height: 100%;
   width: 96vw;
   /* overflow: visible; */
-  border: 4px dashed red;
+  border: 0px dashed red;
 }
 
 .diy-settings {

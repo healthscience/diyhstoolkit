@@ -246,7 +246,7 @@ export default {
 #live-network-grid {
   display: grid;
   grid-template-columns: 1fr;
-  border: 6px dashed black;
+  border: 0px dashed black;
   height: 100%;
 }
 
@@ -258,7 +258,7 @@ export default {
   height: 10000px;
   width: 1000%;
   overflow: scroll;
-  border: 8px dashed blue;
+  border: 0px dashed blue;
 }
 
 #dashboard-placeholder {

@@ -118,7 +118,7 @@ body {
   color: #2c3e50;
   display: grid;
   grid-template-columns: 1fr;
-  border: 4px solid purple;
+  border: 0px solid purple;
   height: inherit;
 }
 
