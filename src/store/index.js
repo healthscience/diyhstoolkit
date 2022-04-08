@@ -650,6 +650,7 @@ const store = new Vuex.Store({
     },
     actionScalevalue (context, update) {
       context.commit('SET_ACTIVE_SCALE', update)
+      context.dispatch('actionZoomset', update, { root: true })
     },
     actionScalewheel (context, update) {
       context.commit('SET_WHEEL_SCALE', update)

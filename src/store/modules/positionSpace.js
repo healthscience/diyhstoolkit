@@ -37,6 +37,9 @@ export default {
     SET_SCROLLTO_POSITION: (state, inVerified) => {
       state.ctx.scrollTODashboard(inVerified)
     },
+    SET_ZOOM_MAP: (state, inVerified) => {
+      state.ctx.setZoom(inVerified)
+    },
     SET_CLEAR_POSITION: (state, inVerified) => {
       let coordKeys = Object.keys(state.liveSpaceCoord)
       const clearCoord = { ...state.liveSpaceCoord }
@@ -68,6 +71,10 @@ export default {
     },
     actionDashBmove: (context, update) => {
       context.commit('SET_UPDATEMMAP_POSITION', update)
+    },
+    actionZoomset: (context, update) => {
+      context.commit('SET_ZOOM_MAP', update)
     }
+
   }
 }

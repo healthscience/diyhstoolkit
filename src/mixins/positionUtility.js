@@ -16,6 +16,7 @@ var PositionUtility = function () {
   events.EventEmitter.call(this)
   this.ctx = {}
   this.scale = 50
+  this.zoom = 1
   this.liveSpaceCoord = {}
   this.liveMinimapCoord = {}
   this.mouseHistory = {}
@@ -37,6 +38,15 @@ util.inherits(PositionUtility, events.EventEmitter)
 */
 PositionUtility.prototype.setCanvas = function (canvascontext) {
   this.ctx = canvascontext
+}
+
+/**
+* set the minimap canvas context
+* @method setCanvas
+*
+*/
+PositionUtility.prototype.setZoom = function (zoom) {
+  this.zoom = zoom
 }
 
 /**
@@ -70,9 +80,9 @@ PositionUtility.prototype.startPositionSpace = function (nxpID, spaceCoord) {
 */
 PositionUtility.prototype.miniMapLocations = function () {
   const localthis = this
-  function placeBBox (box, scale) {
-    let xStart = box.x / scale
-    let yStart = box.y / scale
+  function placeBBox (box, scale, zoom) {
+    let xStart = box.x / (scale * zoom)
+    let yStart = box.y / (scale * zoom)
     localthis.ctx.beginPath()
     localthis.ctx.strokeStyle = '#000000'
     localthis.ctx.rect(xStart, yStart, 15, 30)
@@ -80,7 +90,7 @@ PositionUtility.prototype.miniMapLocations = function () {
   }
   let liveBBox = Object.keys(this.liveSpaceCoord)
   liveBBox.forEach(
-    element => placeBBox(this.liveSpaceCoord[element], this.scale))
+    element => placeBBox(this.liveSpaceCoord[element], this.scale, this.zoom))
 }
 
 /**
@@ -91,9 +101,9 @@ PositionUtility.prototype.miniMapLocations = function () {
 PositionUtility.prototype.collisionMiniDash = function (miniMouse) {
   let dashMatch = {}
   let distanceList = []
-  function collitionMatch (mdash, mmouse, scale) {
-    let xSq = ((mdash.x / scale) - mmouse.x) * ((mdash.x / scale) - mmouse.x)
-    let ySq = ((mdash.y / scale) - mmouse.y) * ((mdash.y / scale) - mmouse.y)
+  function collitionMatch (mdash, mmouse, scale, zoom) {
+    let xSq = ((mdash.x / (scale * zoom)) - mmouse.x) * ((mdash.x / (scale * zoom)) - mmouse.x)
+    let ySq = ((mdash.y / (scale * zoom)) - mmouse.y) * ((mdash.y / (scale * zoom)) - mmouse.y)
     let zDist = Math.sqrt((xSq + ySq))
     let trackCoord = {}
     trackCoord.dist = zDist
@@ -104,7 +114,7 @@ PositionUtility.prototype.collisionMiniDash = function (miniMouse) {
   let liveBBox = Object.keys(this.liveSpaceCoord)
   if (liveBBox.length > 0) {
     liveBBox.forEach(
-      element => collitionMatch(this.liveSpaceCoord[element], miniMouse, this.scale))
+      element => collitionMatch(this.liveSpaceCoord[element], miniMouse, this.scale, this.zoom))
     let lowest = distanceList.sort(function (a, b) {
       return a.dist - b.dist
     })

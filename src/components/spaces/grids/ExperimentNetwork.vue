@@ -6,7 +6,7 @@
       <div id="dragwheel-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
         <div id="dashboard-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }"> <!--  v-bind:style="{ width: '100%', height: '100%'}" -->
           <!--loop over live dashboards -->
-          <vue-draggable-resizable v-for="dashi of dashLive" :key="dashi.id" id="dashispace" data-no-dragscroll  v-bind:style="{ minWidth: '900', height: 'auto'}" :parent="true" @activated="onDragStartCallback(dashi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :x=spaceCoord[dashi].x :y=spaceCoord[dashi].y  drag-handle=".drag-handle">
+          <vue-draggable-resizable v-for="dashi of dashLive" :key="dashi.id" id="dashispace" data-no-dragscroll  v-bind:style="{ minWidth: '1100px', height: 'auto'}" :parent="true" @activated="onDragStartCallback(dashi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :x=spaceCoord[dashi].x :y=spaceCoord[dashi].y  drag-handle=".drag-handle">
             <div id="single-space">
               <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{active: activeDrag[dashi].active === true }">
                 --- Activation Bar ---
