@@ -87,8 +87,6 @@ contextUtility.prototype.validateComputeSettings = function (peerChoices) {
 */
 contextUtility.prototype.prepareSettingsDevices = function (module, device) {
   // selected device
-  console.log('context deives')
-  console.log(device)
   module.value.info.controls.device = []
   module.value.info.controls.device.push(device)
   return module

@@ -145,13 +145,10 @@ export default {
     },
     liveData: function () {
       if (!this.$store.state.NXPexperimentData[this.shellID]) {
-        console.log(this.$store.state.NXPexperimentData[this.shellID])
         return {}
       } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]) {
-        console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData])
         return {}
       } else {
-        console.log(this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData])
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
       }
     },

@@ -59,10 +59,6 @@ export default {
 #space-map {
   height: 100px;
   background-color: none;
-  /*position: fixed;
-  top: 50vh;
-  left: 90vw;
-  transform: translate(-50%, -50%); */
 }
 
 #minimap {

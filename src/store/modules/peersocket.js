@@ -769,7 +769,7 @@ export default {
       context.commit('SET_DISCONNECT_NETWORK', dataEnd)
       // context.commit('SOCKET_ONCLOSE')
     },
-    sendMessage (context, message) {
+    /* sendMessage (context, message) {
       let prepareRefContract = {}
       if (message.reftype === 'new-datatype') {
         const localData = this.state.newRefcontractForm
@@ -784,7 +784,7 @@ export default {
       prepareRefContract.jwt = this.state.jwttoken
       const referenceContractReady = JSON.stringify(prepareRefContract)
       Vue.prototype.$socket.send(referenceContractReady)
-    },
+    }, */
     actionOpenLibrary (context, data) {
       let openLibrary = {}
       openLibrary.type = 'library'
@@ -975,12 +975,12 @@ export default {
       context.commit('SET_VISTOOLS_TEMP', update)
       context.commit('SETOPEN_DATABAR_TEMP', update)
     },
-    actionMakeKBIDentry (context, message) {
+    /* actionMakeKBIDentry (context, message) {
       let prepareKBIDentry = this.state.livesafeFLOW.kbidComposerLive.kbidEntry(message)
       prepareKBIDentry.jwt = this.state.jwttoken
       const kbidEntryReady = JSON.stringify(prepareKBIDentry)
       Vue.prototype.$socket.send(kbidEntryReady)
-    },
+    }, */
     sourceDataExperiment (context, update) {
       context.commit('SET_JOIN_NXP_SOURCE', update)
     },
