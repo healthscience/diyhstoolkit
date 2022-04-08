@@ -76,7 +76,7 @@ export default {
 <style scoped>
 .home {
   display: grid;
-  grid-template-columns: 1fr;
+  /* grid-template-columns: 1fr; */
   border-right: 1px solid lightgrey;
   border-left: 1px solid lightgrey;
   height: 100%;
@@ -86,8 +86,11 @@ export default {
 }
 
 .diy-settings {
+  display: grid;
+  grid-template-columns: 1fr;
   height: 100%;
-  margin: 2px;
+  margin-top: 20px;
+  margin-left: 10em;
   position: fixed;
   top: 3em;
   z-index: 11;

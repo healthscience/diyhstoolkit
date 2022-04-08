@@ -255,7 +255,7 @@ export default {
 }
 
 #dragwheel-space {
-  height: 10000px;
+  height: 5000px;
   width: 1000%;
   overflow: scroll;
   border: 0px dashed blue;
@@ -264,7 +264,7 @@ export default {
 #dashboard-placeholder {
   height: 10000px;
   width: 1000%;
-  padding-top: 20px;
+  padding-top: 50px;
   margin: auto;
   transform-origin: left top;
   border: 1px solid orange;
