@@ -187,7 +187,14 @@ export default {
       this.$store.dispatch('actionActiveNXP', ev)
     },
     onDrag: function (x, y) {
-      this.x = x * (1 / this.zoomCalibrate)
+      let dragScale = 1
+      let smallz = 0.2
+      if (this.zoomscaleValue <= smallz) {
+        dragScale = (1 / (this.zoomscaleValue * 0.001))
+      } else {
+        dragScale = (1 / this.zoomscaleValue)
+      }
+      this.x = x * (dragScale)
       this.y = y
     },
     onDragStop: function (x, y) {
@@ -196,19 +203,6 @@ export default {
       dbmove.y = y
       dbmove.nxp = this.liveDashNXP
       this.$store.dispatch('actionDashBmove', dbmove)
-    },
-    wheelItBetter (event) {
-      // use mouse wheel to zoom in out
-      if (this.zoomscaleStatus === true) {
-        if (event.deltaY < 0) {
-          this.zoomdashdata += 1
-          this.zoomCalibrate = this.zoomCalibrate + 0.1
-        } else {
-          this.zoomdashdata -= 1
-          this.zoomCalibrate = this.zoomCalibrate - 0.1
-        }
-        this.scaleZoom = 'scale(' + this.zoomCalibrate + ')'
-      }
     },
     wheelScale (event) {
       // use mouse wheel to zoom in out
@@ -257,14 +251,14 @@ export default {
 #dragwheel-space {
   height: 5000px;
   width: 1000%;
-  overflow: scroll;
+  overflow: hidden;
   border: 0px dashed blue;
 }
 
 #dashboard-placeholder {
   height: 10000px;
   width: 1000%;
-  padding-top: 50px;
+  padding-top: 60px;
   margin: auto;
   transform-origin: left top;
   border: 1px solid orange;

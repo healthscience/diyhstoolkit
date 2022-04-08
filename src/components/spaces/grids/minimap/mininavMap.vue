@@ -44,12 +44,6 @@ export default {
     },
     mouseMiniSelect (e) {
       this.$store.dispatch('actionMMapMove', e)
-      console.log('scorll sett')
-      console.log(e)
-      // window.scrollTo(0, 4000)
-      // window.scrollTo(2000, 2000)
-      // document.getElementById('spaceitem-controls').scrollIntoView()
-      // document.getElementsByClassName('drag-handle').scrollIntoView()
     }
   }
 }

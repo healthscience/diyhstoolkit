@@ -18,8 +18,7 @@ export default {
       state.ctx.setCanvas(inVerified)
     },
     SET_RESET_MMAP: (state, inVerified) => {
-      console.log(inVerified)
-      // state.ctx.clearRect(0, 0, 200, 200)
+      state.ctx.clearMMap()
     },
     SET_POSITION_MOUSE: (state, inVerified) => {
       // has the minimouse area been clicked?
@@ -53,8 +52,8 @@ export default {
     actionSetminmap: (context, update) => {
       context.commit('SET_CANVAS_SPACE', update)
     },
-    actionResetMmap: (context, update) => {
-      context.commit('SET_RESET_MMAP', update)
+    actionResetMmap: (context) => {
+      context.commit('SET_RESET_MMAP')
     },
     actionPostionCoordMouse: (context, update) => {
       context.commit('SET_POSITION_MOUSE', update)

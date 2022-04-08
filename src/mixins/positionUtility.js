@@ -155,15 +155,21 @@ PositionUtility.prototype.scrollTODashboard = function (miniMouse) {
   mMouse.y = miniMouse.offsetY
   // identify click minidash closest to mouse click on minimap
   let scrollMatch = this.collisionMiniDash(mMouse)
-  console.log(scrollMatch)
   // executue scrollTO  dashboard-space
   // window.scrollTo(scrollMatch.x, scrollMatch.y)
   // document.getElementById('dashboard-placeholder').scrollIntoView()
   // document.getElementById('single-space').scrollIntoView(false) // { behavior: 'smooth', block: 'end', inline: 'nearest' })
   // window.scrollBy(-1600, 1600)
   // document.getElementById('dashboard-placeholder').scroll = true
-  window.scroll(scrollMatch.x, scrollMatch.y)
+  window.scroll((scrollMatch.x), scrollMatch.y)
   // window.scroll(5000, 5000)
+  const element = document.getElementById('dragwheel-space')
+  let x = element.scrollLeft
+  let y = element.scrollTop
+  console.log(x, y)
+  const elementm = document.getElementById('dragwheel-space')
+  elementm.scrollLeft = 0
+  elementm.scrollTop = 0
 }
 
 /**

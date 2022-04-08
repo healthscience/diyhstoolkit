@@ -768,23 +768,9 @@ export default {
       dataEnd.update = update
       context.commit('SET_DISCONNECT_NETWORK', dataEnd)
       // context.commit('SOCKET_ONCLOSE')
+      // empty miniMap
+      context.dispatch('actionResetMmap', { root: true })
     },
-    /* sendMessage (context, message) {
-      let prepareRefContract = {}
-      if (message.reftype === 'new-datatype') {
-        const localData = this.state.newRefcontractForm
-        prepareRefContract = this.state.livesafeFLOW.refcontComposerLive.datatypeRefLive.dataTypePrepare(localData)
-      } else if (message.reftype === 'new-packaging') {
-        prepareRefContract = this.state.livesafeFLOW.refcontComposerLive.packagingRefLive.packagingPrepare(this.state.newPackingForm)
-      } else if (message.reftype === 'new-compute') {
-        prepareRefContract = this.state.livesafeFLOW.refcontComposerLive.computeRefLive.computePrepare(this.state.newComputeForm)
-      } else if (message.reftype === 'new-visualise') {
-        prepareRefContract = this.state.livesafeFLOW.refcontComposerLive.visualiseRefLive.visualisePrepare(this.state.newVisualiseForm)
-      }
-      prepareRefContract.jwt = this.state.jwttoken
-      const referenceContractReady = JSON.stringify(prepareRefContract)
-      Vue.prototype.$socket.send(referenceContractReady)
-    }, */
     actionOpenLibrary (context, data) {
       let openLibrary = {}
       openLibrary.type = 'library'

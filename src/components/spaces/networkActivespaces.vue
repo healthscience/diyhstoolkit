@@ -142,6 +142,7 @@ export default {
   background-color: lightgrey;
   position: fixed;
   top: 3em;
+  padding-top: 1em;
   z-index: 25;
   border: 0px dashed blue;
 }
@@ -230,7 +231,7 @@ export default {
   border: 0px solid red;
   height: inherit;
   position: fixed;
-  top: 8em;
+  top: 8.2em;
   margin-left: 10px;
   z-index: 20;
   border: 0px dashed blue;
