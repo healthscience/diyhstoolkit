@@ -1,6 +1,9 @@
 <template>
-  <div id="space-map">
-    <canvas id="minimap" @click="mouseMiniSelect"></canvas>
+  <div id="space-map"> <!-- v-bind:style="{ translate: '(' + offRight + ')' }"   -->
+    <div id="minimap" class="minmove-right" v-bind:style="{ right: offRight }">
+      <canvas v-if="openminib === true" id="minimap-canvas" @click="mouseMiniSelect" ></canvas>
+    </div>
+    <button id="open-mini" @click.prevent="setMiniMapShow">map</button>
   </div>
 </template>
 
@@ -26,24 +29,29 @@ export default {
   },
   data: function () {
     return {
-      mouseLive:
-      {
-        x: 10,
-        y: 10
-      },
       c: {},
       ctx: {},
-      firstClick: true
+      openminib: true,
+      openmini: false,
+      offRight: '0px'
     }
   },
   methods: {
     setMinmapcanvas () {
-      let c = document.getElementById('minimap')
+      let c = document.getElementById('minimap-canvas')
       let ctx = c.getContext('2d')
       this.$store.dispatch('actionSetminmap', ctx)
     },
     mouseMiniSelect (e) {
       this.$store.dispatch('actionMMapMove', e)
+    },
+    setMiniMapShow () {
+      this.openmini = !this.openmini
+      if (this.openmini === true) {
+        this.offRight = '-400px'
+      } else {
+        this.offRight = '0px'
+      }
     }
   }
 }
@@ -57,14 +65,43 @@ export default {
 
 #minimap {
   position: fixed;
-  display: block;
-  bottom: 10px;
-  right: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  bottom: 12px;
+  right: 0px;
   z-index: 30;
+  opacity: .6;
+  /* background-color: lightgrey; */
+  width: 240px;
+  height: 240px;
+}
+
+.minmove-right {
+  border: 2px black;
+  right: 0px;
+}
+
+#minimap-canvas {
+  display: block;
   opacity: .6;
   background-color: lightgrey;
   width: 200px;
   height: 200px;
+  border: 1px solid red;
+}
+
+#open-mini {
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 31;
+  display: grid;
+  justify-content: center;
+  place-self: start;
+  align-self: start;
+  height: 2em;
+  width: 5em;
+  background-color: white;
 }
 
 </style>

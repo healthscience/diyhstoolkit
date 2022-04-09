@@ -30,6 +30,9 @@ export default {
       // update the minimap
       state.ctx.miniMapLocations()
     },
+    SET_SPACEPOSITION_REFRESH: (state, inVerified) => {
+      console.log(inVerified)
+    },
     SET_UPDATEMMAP_POSITION: (state, inVerified) => {
       state.ctx.updateMMapSpace(inVerified)
     },
@@ -66,6 +69,7 @@ export default {
       context.commit('SET_CLEAR_POSITION', update)
     },
     actionMMapMove: (context, update) => {
+      context.rootState.activeScalevalue = 1
       context.commit('SET_SCROLLTO_POSITION', update)
     },
     actionDashBmove: (context, update) => {
@@ -73,7 +77,9 @@ export default {
     },
     actionZoomset: (context, update) => {
       context.commit('SET_ZOOM_MAP', update)
+    },
+    actionRefreshminimap: (context, update) => {
+      context.commit('SET_SPACEPOSITION_REFRESH', update)
     }
-
   }
 }
