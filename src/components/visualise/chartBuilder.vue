@@ -2,41 +2,36 @@
   <div id="vis-toolkit"> Device: {{ mData }}
     <div id="diy-tools">
       <div id="chart-type">
-        <ul>
-          <li class="network-tools">
-            <ul>
-              <li class="context-network">
-                <button @click.prevent="setNetworkgraph('networkview')">{{ network.text }}</button>
-              </li>
-              <li class="context-network">
-                <button @click.prevent="setNetworkmap('mapview')">{{ mapButton.text }}</button>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <div class="chart-style-tools">
-              <ul>
-                <!-- <li>
-                  <button @click.prevent="chartSelect()">Bar</button>
-                </li>
-                <li>
-                  <button @click.prevent="chartSelect()">Line</button>
-                </li>
-                <li>
-                  <button @click.prevent="chartSelect()">Mixed</button>
-                </li> -->
-                <li>
-                  <button @click.prevent="labelsSelect()">Labels</button>
-                </li>
-              </ul>
+        <div class="network-tools">
+          <div class="context-network">
+            <button @click.prevent="setNetworkgraph('networkview')">{{ network.text }}</button>
+          </div>
+          <div class="context-network">
+            <button @click.prevent="setNetworkmap('mapview')">{{ mapButton.text }}</button>
+          </div>
+        </div>
+        <div class="network-tools">
+          <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
+        </div>
+        <!-- <div class="network-tools">
+          <div class="chart-style-tools">
+            <li>
+              <button @click.prevent="chartSelect()">Bar</button>
+            </li>
+            <li>
+              <button @click.prevent="chartSelect()">Line</button>
+            </li>
+            <li>
+              <button @click.prevent="chartSelect()">Mixed</button>
+            </li>
+            <div>
+              <button @click.prevent="labelsSelect()">Labels</button>
             </div>
-          <li>
-            <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
-          </li>
-          <li v-if="openDataLive[mData] !== undefined">
-            <a href="#" id="opendata-space" @click.prevent="openDataToolbar()">{{ openDataLive[mData].text }}</a>
-          </li>
-        </ul>
+          </div>
+        </div> -->
+        <div class="network-tools" v-if="openDataLive[mData] !== undefined">
+          <a href="#" id="opendata-space" @click.prevent="openDataToolbar()">{{ openDataLive[mData].text }}</a>
+        </div>
       </div>
       <div v-if="openDataLive[mData] !== undefined" id="open-knowledge">
         <opendata-tool v-if="openDataLive[mData].active === true" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" :toolInfo="visToolbarStatusLive"></opendata-tool>
@@ -72,7 +67,8 @@
     <div id="feedback-time" v-if="feedbackmessage !== 'clear'" v-bind:class="{ active: feedbackActive }">
       {{ feedbackmessage }}
     </div>
-    <hsvisual v-if="liveData.data" :datacollection="liveData.data.chartPackage" :options="liveData.data.chartOptions" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></hsvisual>
+    <hsvisual v-if="liveData.data" :datacollection="liveData.data.chartPackage" :options="liveData.data.chartOptions" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData">
+    </hsvisual>
   </div>
 </template>
 
@@ -223,7 +219,7 @@ export default {
         this.feedbackActive = false
       }
     },
-    labelsSelect () {
+    /* labelsSelect () {
       // this.liveData.data.chartOptions.legend.display = !this.liveData.data.chartOptions.legend.display
       let legendContext = {}
       legendContext.shellID = this.shellID
@@ -231,7 +227,7 @@ export default {
       legendContext.moduleType = this.moduleType
       legendContext.mData = this.mData
       this.$store.dispatch('actionLegendStatus', legendContext)
-    },
+    }, */
     visToolbarUpdate () {
       let updateVisTools = {}
       updateVisTools.state = this.visToolbarStatusLive.active
@@ -252,41 +248,39 @@ export default {
 
 <style scoped>
 #vis-toolkit {
+  display: grid;
+  grid-template-columns: 1fr;
   border: 0px solid purple;
 }
 
 #diy-tools {
-  border: 2px solid #E9EDF0;
+  border: 0px solid blue; /* #E9EDF0; */
   background-color: #f0ece9; /*#E9EDF0;*/
 }
 
-.chart-style-tools {
-  border-right: 3px solid white;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-#feedback-time {
-  font-size: 1.4em;
-  background-color: yellow;
+#chart-type {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  border: 0px solid red;
 }
 
 .network-tools {
-  display: inline-block;
+  border: 0px dashed red;
 }
 
 .context-network {
   display: block;
   padding: .4em;
   border: 0px solid pink;
+}
+
+.chart-style-tools {
+  border-right: 3px solid white;
+}
+
+#feedback-time {
+  font-size: 1.4em;
+  background-color: yellow;
 }
 
 #network-graph-container header {

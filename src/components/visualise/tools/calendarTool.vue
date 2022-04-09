@@ -1,55 +1,52 @@
 <template>
   <div id="time-context">
-    <div id="calendar-selector">
-      <date-picker v-model="calendarvalue" @change="calendarSelect()" :lang="lang" :range="rangeActive === true" ></date-picker>
-      <div id="time-calendar-tools">
-        <ul>
-          <li>
-            <select v-model="selectedTimeBundle" @change.prevent="setTimeBundle()">
-              <option v-for="tb in optionTimeBundle" :key='tb.id' v-bind:value="tb.value" :selected="tb.value == selectedTimeBundle">
-              {{ tb.text }}
+    <div id="time-control-update">
+      <div id="time-options" class="series-style">
+        <div id="calendar-selector">
+          <date-picker v-model="calendarvalue" @change="calendarSelect()" :lang="lang" :range="rangeActive === true" ></date-picker>
+          <div id="time-calendar-tools">
+            <div class="time-tools" id="select-range-type">
+              <select v-model="selectedTimeBundle" @change.prevent="setTimeBundle()">
+                <option v-for="tb in optionTimeBundle" :key='tb.id' v-bind:value="tb.value" :selected="tb.value == selectedTimeBundle">
+                {{ tb.text }}
+                </option>
+              </select>
+            </div>
+            <div class="time-tools">
+              <button id="multi-day-clear" @click.prevent="clearMultidays($event)">Clear</button>
+            </div>
+            <div class="time-tools">
+              <div id="select-time">
+                <div v-for="tv in navTime" :key='tv.id' class="context-time">
+                  <button class="button is-primary" @click.prevent="setShiftTimeData(tv)">{{ tv.text.word }}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="calendar-list-view" >
+          <div class="time-m-list" v-for="datesl in calendarList" :key='datesl.id' >
+            {{ datesl }}
+          </div>
+        </div>
+      </div>
+      <div class="series-style">
+        <div id="chart-options">
+          <div class="chart-update">
+            <select v-model="selectedTimeFormat" @change.prevent="setTimeFormat()">
+              <option v-for="tfoption in timeformatoptions" v-bind:value="tfoption.value" :key='tfoption.id' :selected="tfoption.value == selectedChartnumber">
+              {{ tfoption.text }}
               </option>
             </select>
-          </li>
-          <li>
-            <button id="multi-day-clear" @click.prevent="clearMultidays($event)">Clear</button>
-          </li>
-          <li>
-            <div id="select-time">
-              <ul>
-                <li v-for="tv in navTime" :key='tv.id' class="context-time">
-                  <button class="button is-primary" @click.prevent="setShiftTimeData(tv)">{{ tv.text.word }}</button>
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul>
+          </div>
+          <div>
+            <button @click.prevent="labelsSelect()">Labels</button>
+          </div>
+        </div>
       </div>
-      <div id="calendar-list-view" >
-        <ul>
-          <li class="time-m-list" v-for="datesl in calendarList" :key='datesl.id' >
-            {{ datesl }}
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div id="chart-options">
-      <ul class="chart-update">
-        <li>
-          <select v-model="selectedTimeFormat" @change.prevent="setTimeFormat()">
-            <option v-for="tfoption in timeformatoptions" v-bind:value="tfoption.value" :key='tfoption.id' :selected="tfoption.value == selectedChartnumber">
-            {{ tfoption.text }}
-            </option>
-          </select>
-        </li>
-      </ul>
     </div>
     <div id="calendar-tools">
-      <ul>
-        <li>
-          <button id="update-chart" @click.prevent="updateKbundle($event)">Update</button>
-        </li>
-      </ul>
+      <button id="update-chart" @click.prevent="updateKbundle($event)">Update</button>
     </div>
   </div>
 </template>
@@ -271,6 +268,15 @@ export default {
         this.$store.dispatch('actionVisUpdate', contextK)
       }
     },
+    labelsSelect () {
+      // this.liveData.data.chartOptions.legend.display = !this.liveData.data.chartOptions.legend.display
+      let legendContext = {}
+      legendContext.shellID = this.shellID
+      legendContext.moduleCNRL = this.moduleCNRL
+      legendContext.moduleType = this.moduleType
+      legendContext.mData = this.mData
+      this.$store.dispatch('actionLegendStatus', legendContext)
+    },
     updateKbundle (cm) {
       // prepare update for safeFLOW
       let contextK = {}
@@ -306,15 +312,38 @@ export default {
 </script>
 
 <style>
+#time-context {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  border: 0px solid pink;
+}
+
+#time-control-update {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  border: 0px solid black;
+}
+
 #calendar-selector {
-  display: inline-block;
-  height: auto;
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr;
   border: 0px solid red;
 }
 
-#time-context {
-  text-align: center;
-  border: 0px solid pink;
+.time-tools {
+  border: 0px solid blue;
+}
+
+#select-range-type {
+  margin-top: .2em;
+  margin-left: .5em;
+  margin-right: .5em;
+  margin-bottom: 0.5em;
+}
+
+.context-time {
+  display: inline-block;
+  margin: 0em;
 }
 
 #view-time {
@@ -329,7 +358,8 @@ export default {
 }
 
 #time-calendar-tools {
-  display: inline-block;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 #select-time {
@@ -352,8 +382,8 @@ export default {
 }
 
 .chart-update {
-  display: inline;
-  margin: 1.2em;
+  margin-top: .1em;
+  margin-bottom: .5em;
 }
 
 #calendar-list-view {
@@ -361,6 +391,6 @@ export default {
 }
 
 #chart-options {
-  display: inline;
+  border: 0px solid green;
 }
 </style>
