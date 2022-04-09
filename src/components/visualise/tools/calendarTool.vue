@@ -326,7 +326,7 @@ export default {
 
 #calendar-selector {
   display: grid;
-  grid-template-columns: 3fr 1fr 1fr;
+  grid-template-columns: 4fr 2fr 1fr;
   border: 0px solid red;
 }
 
