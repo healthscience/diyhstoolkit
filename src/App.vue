@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import NetworkStatus from '@/components/home/NetworkStatus.vue'
+import NetworkStatus from '@/components/connect/NetworkStatus.vue'
 import HelpAi from '@/components/help/helpAI.vue'
 
 export default {

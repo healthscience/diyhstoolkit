@@ -38,8 +38,6 @@ util.inherits(PositionUtility, events.EventEmitter)
 */
 PositionUtility.prototype.setCanvas = function (canvascontext) {
   this.ctx = canvascontext
-  console.log('start canvas')
-  console.log(this.ctx)
 }
 
 /**
@@ -49,10 +47,6 @@ PositionUtility.prototype.setCanvas = function (canvascontext) {
 */
 PositionUtility.prototype.hideShowMinimap = function (status) {
   this.ctx.canvas.hidden = status
-  // this.ctx.canvas.width  = window.innerWidth;
-  // this.ctx.canvas.height = window.innerHeight;
-  console.log('hider xtx')
-  console.log(this.ctx)
 }
 
 /**
