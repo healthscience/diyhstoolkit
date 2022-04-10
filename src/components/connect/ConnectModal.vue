@@ -39,11 +39,9 @@
           </form>
         </div>
         <div id="peers-networks">
-          <div id="warm-peers">
-            <slot name="peers-warm">
-              Peers or Groups Connected
-            </slot>
-          </div>
+          <slot name="peers-tabs">
+            Peers Tab Info
+          </slot>
         </div>
         <footer class="modal-footer">
           <slot name="footer">
@@ -91,21 +89,19 @@ export default {
     background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100%;
+    /*align-items: center; */
     z-index: 25;
-    overflow: scroll;
+    height: auto;
+    width: 100%;
   }
 
   .modal {
     background: #FFFFFF;
     box-shadow: 2px 2px 20px 1px;
-    overflow-x: auto;
-    overflow-y: scroll;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     width: 80%;
-    margin-top: 200px;
   }
 
   .modal-header,
@@ -148,11 +144,14 @@ export default {
   }
 
 #network-status-space {
+  display: block;
+  height: auto;
+  border: 0px solid green;
 }
 
 #form-input {
   display: block;
-  margin: 1em;
+  border: 0px dashed blue;
 }
 
 #form-submit {
@@ -162,31 +161,13 @@ export default {
 
 #connect-peerlink {
   display: block;
-  min-height: 200px;
+  height: auto;
+  border: 0px solid black;
 }
 
 #peers-networks {
   display: block;
-  /* min-height: 200px;
-  margin-top: 2em;
-  padding-bottom: 2em; */
-}
-
-#warm-peers {
-  display: block;
-  min-height: 20px;
-}
-
-#cold-peers {
-  display: block;
-  min-height: 20px;
-}
-
-#key-management {
-  display: block;
-}
-
-#replicate-library {
-  display: block;
+  height: auto;
+  border: 0px dashed orange;
 }
 </style>

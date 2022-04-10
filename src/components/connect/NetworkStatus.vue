@@ -16,6 +16,23 @@
       <template v-slot:title-form>
         <header class="connect-info">Health Oracle Network</header>
       </template>
+      <template v-slot:submit-cloud v-if="cloudConnect === 'signin-cloud' && peerauth === false">
+        <form id="cloud-signin-form" >
+          <div class="cloud-inputs">
+            <label class="form-couple-type" for="signin-cloud">username</label>
+            <input class="form-couple" type="text" id="usernamecloud" name="username" v-model="cloudsigninInput">
+          </div>
+          <div class="cloud-inputs">
+            <label class="form-couple-type" for="password-cloud">password</label>
+            <input class="form-couple" type="password" id="passwordcloud" name="password" v-model="cloudpwInput">
+          </div>
+          <div class="cloud-confirm">
+            <button id="cloud-submit" @click.prevent="submitCloudin">
+              Sign-in
+            </button>
+          </div>
+        </form>
+      </template>
       <template v-slot:connect-network>
         <div id="network-status">
           <div class="status-info">
@@ -46,24 +63,7 @@
           </div>
         </div>
       </template>
-      <template v-slot:submit-cloud v-if="cloudConnect === 'signin-cloud' && peerauth === false">
-        <form id="cloud-signin-form" >
-          <div class="cloud-inputs">
-            <label class="form-couple-type" for="signin-cloud">username</label>
-            <input class="form-couple" type="text" id="usernamecloud" name="username" v-model="cloudsigninInput">
-          </div>
-          <div class="cloud-inputs">
-            <label class="form-couple-type" for="password-cloud">password</label>
-            <input class="form-couple" type="password" id="passwordcloud" name="password" v-model="cloudpwInput">
-          </div>
-          <div class="cloud-confirm">
-            <button id="cloud-submit" @click.prevent="submitCloudin">
-              Sign-in
-            </button>
-          </div>
-        </form>
-      </template>
-      <template v-slot:peers-warm>
+      <template v-slot:peers-tabs>
         <connection-lists v-if="peerauth === true"></connection-lists>
       </template>
     </connect-modal>
@@ -145,6 +145,7 @@ export default {
   padding: .5em;
   font-size: 1.4em;
   padding-bottom: 2em;
+  height: 100%;
 }
 
 .status-info {
@@ -172,7 +173,7 @@ export default {
 #cloud-signin-form {
   display: grid;
   grid-template-columns: 1fr;
-  border: 1px solid red
+  height: 100%
 }
 
 .cloud-inputs {
@@ -202,6 +203,7 @@ export default {
 #external-datastores {
   display: block;
   border-bottom: 1px solid grey;
+  height: auto;
 }
 
 .external-token-status {

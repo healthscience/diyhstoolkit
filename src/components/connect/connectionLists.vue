@@ -168,9 +168,14 @@ export default {
 </script>
 
 <style scoped>
+#connection-lists {
+  display: block;
+  height: auto;
+}
 #tabs-component {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+  height: auto;
 }
 
 .grid-component-tab {
@@ -196,9 +201,12 @@ export default {
   min-height: 240px;
   background-color: lightgrey;
   font-size: 1.2em;
+  height: auto;
 }
 
 .list-space {
+  display: block;
+  height: auto;
   padding-top: 2em;
 }
 #peer-social-network {
