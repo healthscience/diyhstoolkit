@@ -92,20 +92,18 @@ export default {
     background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100%;
+    height: auto;
     z-index: 65;
   }
 
   .modal {
     background: #FFFFFF;
     box-shadow: 2px 2px 20px 1px;
-    overflow-x: auto;
-    overflow-y: scroll;
+    overflow: scroll;
     display: flex;
     flex-direction: column;
-    width: 99%;
-    margin-top: 1px;
+    width: 92%;
+    height: auto;
   }
 
   .modal-header,
