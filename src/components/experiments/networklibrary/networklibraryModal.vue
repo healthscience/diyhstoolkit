@@ -98,18 +98,26 @@ export default {
     background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
-    align-items: center;
     z-index: 45;
+    overflow: auto;
+    resize: both;
+  }
+
+  ::-webkit-resizer {
+    border: 2px solid black;
+    background: grey;
+    box-shadow: 0 0 8px 8px lightgrey;
+    outline: 8px solid white;
   }
 
   .modal {
-    height: 1000px;
     background: #FFFFFF;
     box-shadow: 2px 2px 20px 1px;
-    overflow-x: auto;
+    overflow: auto;
     display: flex;
     flex-direction: column;
-    width: 99%;
+    width: 92%;
+    height: auto;
   }
 
   .modal-header,
@@ -133,7 +141,7 @@ export default {
     position: relative;
     padding: 20px 10px;
     min-height: 1000px;
-    border: 1px solid red;
+    border: 1px solid lightgrey;
   }
 
   .btn-close {
