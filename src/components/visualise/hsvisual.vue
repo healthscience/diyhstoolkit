@@ -20,12 +20,11 @@
         </div>
       </div>
       <div class="visual-item" id="future-tools">
-        <ul>
-          <li class="context-future">
-            <div class="scale-item">
+          <div class="context-future">
+            <!-- <div class="lifeboard-item">
               Lifeboard:
             </div>
-            <div class="scale-item">
+            <div class="lifeboard-item">
               <form id="lifeboard_form" name="lifeboard_addform" method="post" action="#">
                 <label for="lifeboard-select"></label>
                 <select class="select-lifeboard-id" id="lifeboard-list" @change="lifeboardSelect" v-model="lifeboardRef">
@@ -35,17 +34,17 @@
                 </select>
               </form>
             </div>
-            <button id="add-lifeboard" @click.prevent="addLifeboard()">add to lifeBoard</button>
-          </li>
-          <li class="context-future">
+            <button id="add-lifeboard" @click.prevent="addLifeboard()">add to lifeBoard</button> -->
+          </div>
+          <div class="context-future">
             <button id="new-visspace" @click.prevent="setChartSpace()">copy BBox</button>
             <!-- <select v-model="selectedChartnumber" @change.prevent="setChartNumber()">
               <option v-for="cnoption in numbechartoptions" v-bind:value="cnoption.value" :key='cnoption.id' :selected="cnoption.id === selectedChartnumber">
               {{ cnoption.text }}
               </option>
             </select> -->
-          </li>
-          <li class="context-future">
+          </div>
+          <div class="context-future">
             <select v-model="selectedFuture" @change.prevent="setFuture()">
               <option disabled value="">make future</option>
               <option v-for="foption in futureoptions" :key='foption.value' v-bind:value="foption.value">
@@ -53,11 +52,10 @@
                 </option>
             </select>
             <div id="future-selected">Selected: {{ selectedFuture }}</div>
-          </li>
-          <li class="context-future">
+          </div>
+          <div class="context-future">
             <button class="new-viscombine" v-bind:class="{ active: combineSetting.active }" @click.prevent="setCombine()">{{ combineSetting.text }}</button>
-          </li>
-        </ul>
+          </div>
       </div>
       <div class="clear"></div>
     </div>
@@ -208,6 +206,8 @@ export default {
 }
 
 #future-tools {
+  display: grid;
+  grid-template-columns: 1fr;
   padding-top: 50px;
   flex-grow: 1; /* Set the middle element to grow and stretch */
   border-left: 1px solid orange;
