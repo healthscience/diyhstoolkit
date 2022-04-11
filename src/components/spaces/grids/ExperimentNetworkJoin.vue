@@ -2,92 +2,92 @@
   <div id="live-network-grid-join">
     <!-- peer network experiment added -->
     <div id="grid-template-join">
-      <table>
-        <thead>
-          <tr>
-            <th v-for="key in columns" :key="key.id"
+      <div class="list-table">
+        <div class="table-header">
+          <div class="row-header">
+            <div class="header-items" v-for="key in columns" :key="key.id"
               @click="sortBy(key)"
               :class="{ active: sortKey == key }">
               {{ key | capitalize }}
               <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
               </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="alternate-bk" v-for="entry in filteredExperiments" :key="entry.id">
-            <td v-for="key in columns" :key="key.id">
+            </div>
+          </div>
+        </div>
+        <div class="table-rows">
+          <div class="alternate-bk" v-for="entry in filteredExperiments" :key="entry.id">
+            <div v-for="key in columns" :key="key.id">
               <div v-if="key !== 'action'">
               {{entry[key]}}
               </div>
               <div v-else>
                 <button type="button" class="btn" @click="actionExperiment(entry.id, entry)">{{ entry[key] }}</button>
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- join network experiment modal -->
-      <join-experiment v-show="isModalJoinVisible && NXPJoinModuleData.length !== 0" @close="closeModalJoin">
-        <template v-slot:header>
-        <!-- The code below goes into the header slot -->
-          N=1 Network Experiment {{ actionKBundle.name }}
-        </template>
-        <template v-slot:body>
-        <!-- The code below goes into the header slot -->
-          <header>Experiment Question:</header>
-          {{ actionKBundle.name }}
-        </template>
-        <template v-slot:connect>
-          <!-- mobile apps suggested-->
-        </template>
-        <template v-slot:packaging>
-          <!-- select data source -->
-          <header>Datastore packaging</header>
-          <div class="compute-select-datasource" v-if="NXPJoinModuleData.length !== 0">
-            <label for="data-select-source">Select data source:</label>
-            <select class="data-data-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
-              <option v-for="ds in NXPJoinModuleData" :key="ds.key" v-bind:value="ds.option.key">
-                {{ ds.option.value.concept.name }}
-              </option>
-            </select>
+            </div>
           </div>
-        </template>
-        <template v-slot:compute>
-          <header>Compute</header>
-          <div id="compute-selected" v-if="NXPJoinModuleCompute !== undefined">
-            Computaton selected: {{ NXPJoinModuleCompute[0].option.value.computational.name }}
-          </div>
-          <li class="compute-form-item">
-            Select start date of data:
-            <calendar-select></calendar-select>
-            <label for="compute-add-source">Controls</label>
-            <select class="select-compute-source" @change="controlsSave" v-model="newCompute.controls" id="">Please select
-              <option value=true>YES</option>
-              <option value=false>NO</option>
-            </select>
-            <label for="compute-add-source">Automation</label>
-            <select class="select-compute-automation" @change="automationSave" v-model="newCompute.automation" id="">Please select
-              <option value=true>YES</option>
-              <option value=false>NO</option>
-            </select>
-          </li>
-          <!-- preview visualisation -->
-        </template>
-        <template v-slot:dashboard-visualisation>
-          <header>Visualisation</header>
-          <li>
-            <chart-builder v-if="NXPJoinModuleVisualise" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" ></chart-builder>
-          </li>
-        </template>
-        <template v-slot:submit-join>
-          <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
-          <div id="join-feedback" v-if="joinFeedbackActive === true">
-            {{ joinFeedback }} --
-          </div>
-        </template>
-      </join-experiment>
+        </div>
+      </div>
     </div>
+    <!-- join network experiment modal -->
+    <join-experiment v-show="isModalJoinVisible && NXPJoinModuleData.length !== 0" @close="closeModalJoin">
+      <template v-slot:header>
+      <!-- The code below goes into the header slot -->
+        N=1 Network Experiment {{ actionKBundle.name }}
+      </template>
+      <template v-slot:body>
+      <!-- The code below goes into the header slot -->
+        <header>Experiment Question:</header>
+        {{ actionKBundle.name }}
+      </template>
+      <template v-slot:connect>
+        <!-- mobile apps suggested-->
+      </template>
+      <template v-slot:packaging>
+        <!-- select data source -->
+        <header>Datastore packaging</header>
+        <div class="compute-select-datasource" v-if="NXPJoinModuleData.length !== 0">
+          <label for="data-select-source">Select data source:</label>
+          <select class="data-data-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
+            <option v-for="ds in NXPJoinModuleData" :key="ds.key" v-bind:value="ds.option.key">
+              {{ ds.option.value.concept.name }}
+            </option>
+          </select>
+        </div>
+      </template>
+      <template v-slot:compute>
+        <header>Compute</header>
+        <div id="compute-selected" v-if="NXPJoinModuleCompute !== undefined">
+          Computaton selected: {{ NXPJoinModuleCompute[0].option.value.computational.name }}
+        </div>
+        <li class="compute-form-item">
+          Select start date of data:
+          <calendar-select></calendar-select>
+          <label for="compute-add-source">Controls</label>
+          <select class="select-compute-source" @change="controlsSave" v-model="newCompute.controls" id="">Please select
+            <option value=true>YES</option>
+            <option value=false>NO</option>
+          </select>
+          <label for="compute-add-source">Automation</label>
+          <select class="select-compute-automation" @change="automationSave" v-model="newCompute.automation" id="">Please select
+            <option value=true>YES</option>
+            <option value=false>NO</option>
+          </select>
+        </li>
+        <!-- preview visualisation -->
+      </template>
+      <template v-slot:dashboard-visualisation>
+        <header>Visualisation</header>
+        <li>
+          <chart-builder v-if="NXPJoinModuleVisualise" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" ></chart-builder>
+        </li>
+      </template>
+      <template v-slot:submit-join>
+        <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
+        <div id="join-feedback" v-if="joinFeedbackActive === true">
+          {{ joinFeedback }} --
+        </div>
+      </template>
+    </join-experiment>
   </div>
 </template>
 
@@ -294,51 +294,53 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
 #live-network-grid-join {
   border: 0px solid blue;
   margin: auto;
   text-align: center;
+  z-index: 40;
 }
 
-body {
-  font-family: Helvetica Neue, Arial, sans-serif;
-  font-size: 14px;
-  color: #444;
+#grid-template-join {
+  border: 0px dashed red;
 }
 
-table {
-  border: 1px solid #42b4b9;
-  border-radius: 3px;
-  background-color: #fff;
+.list-table {
 }
 
-th {
-  background-color: #42b4b9;
-  color: rgba(255,255,255,0.66);
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.row-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  border: 1px solid lightgrey;
+  height: 40px;
 }
 
-td {
-  /* background-color: #f9f9f9; */
+.header-items {
+  align-self: center;
+  background-color: lightgrey;
+  padding: .4em;
 }
 
-th, td {
-  min-width: 120px;
-  padding: 10px 20px;
+.header-items:nth-child(1) {
+  width: 21em;
 }
 
-th.active {
-  color: #fff;
+.table-rows {
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
-th.active .arrow {
-  opacity: 1;
+.alternate-bk {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  height: 50px;
+  justify-content: bottom;
+  background-color: white;
+}
+
+.table-row-columns {
+  align-self: center;
 }
 
 .alternate-bk:nth-child(even) {
@@ -369,9 +371,4 @@ th.active .arrow {
 #joinsaveNetworkExperiment {
   font-size: 1.4em;
 }
-
-.clear {
-  clear: both;
-}
-
 </style>

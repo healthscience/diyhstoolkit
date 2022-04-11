@@ -93,7 +93,7 @@ export default {
     display: flex;
     justify-content: center;
     height: auto;
-    z-index: 65;
+    z-index: 32;
   }
 
   .modal {

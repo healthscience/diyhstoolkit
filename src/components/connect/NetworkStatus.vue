@@ -47,7 +47,7 @@
         </div>
       </template>
       <template v-slot:input-form>
-        <div id="external-datastores">
+        <div id="external-datastores" v-if="cloudConnect === 'signin-cloud' && peerauth === true">
           <header class="connect-info">External data source connections</header>
           <div class="external-token-status">
             <header>REST</header>

@@ -105,15 +105,15 @@ export default {
   background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
-  align-items: center;
-  z-index: 14;
+  z-index: 29;
 }
 
 .modal {
-  height: 100%;
+  margin-top: 3em;
+  height: auto;
   background: #FFFFFF;
   box-shadow: 2px 2px 20px 1px;
-  overflow-x: auto;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   width: 90%;
@@ -139,6 +139,7 @@ export default {
 .modal-body {
   position: relative;
   padding: 20px 10px;
+  z-index: 30;
 }
 
 .btn-close {

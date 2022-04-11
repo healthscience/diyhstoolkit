@@ -90,7 +90,7 @@ export default {
     display: flex;
     justify-content: center;
     /*align-items: center; */
-    z-index: 25;
+    z-index: 50;
     height: auto;
     width: 100%;
   }

@@ -2,8 +2,8 @@
   <div id="space-menu-area">
     <div class="lifeflow-spacelist">
       <a class="flowlist-space" v-bind:class="{ active: spaceState === 'private' }" href="" @click.prevent="statusSpace('private')" >Private</a>
-      <a class="flowlist-space" v-bind:class="{ active: spaceState === 'public' }" href="" @click.prevent="statusSpace('public')" >Public</a>
-      <a class="flowlist-showspace" v-bind:class="{ active: spaceStateShow.text === 'show' }" href="" @click.prevent="statusSpaceshow()" > {{ spaceStateShow.text }}</a>
+      <a class="flowlist-space" v-bind:class="{ active: spaceState === 'public' }" href="" @click.prevent="statusSpace('public')" >Public </a>
+      <a href="" class="flowlist-space-plain" v-bind:class="{ active: spaceStateShow.text === 'show' }" @click.prevent="statusSpaceshow()" > {{ spaceStateShow.text }}</a>
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
 <style scoped>
 .lifeflow-spacelist {
   display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .flowlist-showspace {
@@ -48,7 +48,8 @@ export default {
 }
 
 .flowlist-space {
-  align-self: start;
+  margin-left: 0.5em;
+  border: 0px solid red;
 }
 
 .flowlist-space.active {
@@ -57,8 +58,8 @@ export default {
   border: none;
   color: white;
   padding: 6px 14px;
-  margin-right: 2em;
-  margin-left: 2em;
+  margin-right: 1em;
+  margin-left: 1em;
   text-align: center;
 }
 </style>

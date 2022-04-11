@@ -70,7 +70,8 @@ export default {
 <style scoped lang="scss">
 #live-network-experiment {
   width: 100%;
-  border: 0px solid red;
+  z-index: 23;
+  border: 0px dashed blue;
 }
 
 .nxplist-showspace {

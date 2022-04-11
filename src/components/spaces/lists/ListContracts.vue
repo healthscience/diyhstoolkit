@@ -149,7 +149,6 @@ export default {
   display: grid;
   grid-template-columns: 1fr;
   width: 96%;
-  z-index: 40;
 }
 
 .list-table {

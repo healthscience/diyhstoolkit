@@ -106,8 +106,12 @@ export default {
 </script>
 
 <style scoped>
+#new-experimentmenu {
+  z-index: 31;
+}
+
 #new-type {
-  z-index: 25;
+
 }
 
 .contribute-nxp-button {

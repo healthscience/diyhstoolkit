@@ -1,6 +1,6 @@
 <template>
   <div class="network-experiments">
-    <div id="toolkit-boards" v-if="peerauth === true">
+    <div id="toolkit-boards" v-if="peerauth === true"> <!--z18 -->
       <div class="toolkit-logo">
         <img class="small-logo" alt="logo" src="../.././assets/logo.png">
       </div>
@@ -15,7 +15,7 @@
             </div>
             <div id="active-space-selected" v-else>
             </div>
-            <div id="flow-styles" v-if="flowMenu === true">
+            <div id="flow-styles" v-if="flowMenu === true"><!--z26 -->
               <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Lifeboards' }" id="Lifeboards" @click.prevent="setView($event)">
                 Lifeboards
               </button>
@@ -38,14 +38,14 @@
                 Search <input name="query" @keyup="textQuery" v-model="searchText">
               </form>
             </div>
-            <div class="network-toolbar">
+            <div class="network-toolbar" id="new-button-top">
               <new-experiment></new-experiment>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div id="view-flows" v-if="peerauth === true">
+    <div id="list-flows" v-if="peerauth === true"> <!--z25 -->
       <!-- <live-lifestyle v-if="spaceType === 'Lifeboards'"></live-lifestyle>-->
       <live-networknxp v-if="spaceType === 'Experiments'"></live-networknxp>
       <!-- <live-timeline v-if="spaceType === 'timeline'"></live-timeline> -->
@@ -142,19 +142,21 @@ export default {
   background-color: lightgrey;
   position: fixed;
   top: 3em;
-  padding-top: 1em;
-  z-index: 25;
+  padding-top: 0em;
   border: 0px dashed blue;
+  z-index: 32;
 }
 
 .small-logo {
-  width: 60px;
+  width: 50px;
+  height: 50px;
 }
 
 #peer-views {
   display: grid;
   grid-template-columns: 1fr 2fr;
   border: 0px solid red;
+  align-items: center;
 }
 
 #flow-type {
@@ -205,10 +207,7 @@ export default {
   position: absolute;
   margin-top: -30px;
   margin-left: 70px;
-  z-index: 25;
-}
-
-.flow-query-new {
+  z-index: 26;
 }
 
 .live-network-header {
@@ -217,23 +216,23 @@ export default {
   border: 0px solid blue;
 }
 
-.network-toolbar {
-  border: 0px solid red;
-}
-
 #sub-flow-menu {
   display: grid;
   align-self: start;
   width: 240px;
 }
 
-#view-flows {
+#new-button-top {
+  z-index: 32;
+}
+
+#list-flows {
   border: 0px solid red;
   height: inherit;
   position: fixed;
-  top: 8.2em;
+  top: 7.2em;
   margin-left: 10px;
-  z-index: 20;
+  z-index: 29;
   border: 0px dashed blue;
 }
 </style>
