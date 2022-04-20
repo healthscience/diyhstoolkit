@@ -53,6 +53,10 @@ const store = new Vuex.Store({
     publickeys: [],
     warmNetwork: [],
     swarmStatus: false,
+    replicatePubliclibrary:
+    {
+      data: { replicate: false }
+    },
     datasourceCount: 0,
     devices: [],
     liveRefContIndex: {},
@@ -107,6 +111,7 @@ const store = new Vuex.Store({
     referenceContract: {},
     experimentList: {},
     NXPexperimentList: {},
+    replicateNXPexperimentList: {},
     joinedLifeboard: [],
     joinedNXPlist: [],
     experimentStatus: {},

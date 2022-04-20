@@ -54,8 +54,8 @@ export default {
     SOCKET_ONMESSAGE (state, message) {
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      // console.log('****INPUUTTT******')
-      // console.log(backJSON)
+      console.log('****INPUUTTT******')
+      console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -147,6 +147,11 @@ export default {
         this.state.publickeys.push(backJSON.pubkey)
       } else if (backJSON.type === 'open-library') {
         this.state.swarmStatus = true
+      } else if (backJSON.type === 'replicate-publiclibrary') {
+        Vue.set(this.state.replicatePubliclibrary, 'data', backJSON.data)
+      } else if (backJSON.type === 'replicatedata-publiclibrary') {
+        let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)
+        this.state.replicateNXPexperimentList = gridAnnon
       } else if (backJSON.type === 'new-peer') {
         this.state.warmNetwork.push(backJSON.data.value)
       } else if (backJSON.type === 'warm-peers') {
@@ -805,6 +810,15 @@ export default {
       peerSync.jwt = this.state.jwttoken
       const peerSyncJSON = JSON.stringify(peerSync)
       Vue.prototype.$socket.send(peerSyncJSON)
+    },
+    actionViewSyncLibrary (context, message) {
+      const viewSyncLibrary = {}
+      viewSyncLibrary.type = 'library'
+      viewSyncLibrary.reftype = 'view-replicatelibrary'
+      viewSyncLibrary.publickey = ''
+      viewSyncLibrary.jwt = this.state.jwttoken
+      const replicateJSON = JSON.stringify(viewSyncLibrary)
+      Vue.prototype.$socket.send(replicateJSON)
     },
     actionAddwarmPeer (context, message) {
       message.jwt = this.state.jwttoken

@@ -56,23 +56,7 @@
           <div id="ai-peers">
           </div>
         </div>
-        <div class="list-space" id="datastore-list" v-if="listContext === 'datastores'">
-          <div id="peers-listkeys">
-              <div v-if="swarmState === true" id="open-connect">Public Library OPEN for replication
-              </div>
-              <ul class="peer-ledgers" v-for='pk in publicKeysList' :key='pk.id'>
-                <li>{{ pk.keyname }} pubkey- {{ pk.pubkey }}
-                <!-- <button type="button" class="btn" @click="openReplication(pk)">sync</button> -->
-                </li>
-              </ul>
-            </div>
-            <div id="replicate-librarydatastore">
-              <header>Network Library</header>
-              Replicate library:
-              <input v-model="peerSynckey" placeholder="public key">
-              <button type="button" class="btn" @click="peerSyncLibrary()">Sync Library</button>
-            </div>
-        </div>
+        <datastore-list v-if="listContext === 'datastores'"></datastore-list>
         <div class="list-space" id="wallet-list" v-if="listContext === 'wallets'">
         </div>
       </div>
@@ -81,10 +65,12 @@
 </template>
 
 <script>
+import DatastoreList from '@/components/connect/datastores/listStores.vue'
 
 export default {
   name: 'list-connections',
   components: {
+    DatastoreList
   },
   props: {
   },
@@ -153,15 +139,6 @@ export default {
       this.newPeer = ''
       this.peerDStore = ''
       this.addWarm = false
-    },
-    openReplication (info) {
-      console.log('open close replication for data store')
-      console.log(info)
-      this.$store.dispatch('actionOpenLibrary', info)
-    },
-    peerSyncLibrary (pubkey) {
-      // pass on public key to peerlink and sync datastore for this peer
-      this.$store.dispatch('actionPeersyncLibrary', pubkey)
     }
   }
 }
@@ -238,17 +215,6 @@ export default {
 }
 
 #ai-peers header {
-  font-size: 1.4em;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-#replicate-librarydatastore {
-  display: block;
-  border-bottom: 1px solid grey;
-}
-
-#replicate-librarydatastore header {
   font-size: 1.4em;
   margin-top: 20px;
   margin-bottom: 20px;
