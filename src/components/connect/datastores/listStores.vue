@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import ExperimentnetworkJoin from '@/components/spaces/grids/ExperimentNetworkJoin.vue'
+import ExperimentnetworkJoin from '@/components/spaces/grids/ExperimentNetworkReplicate.vue'
 
 export default {
   name: 'list-datastores',
