@@ -29,21 +29,21 @@
       </div>
     </div>
     <!-- join network experiment modal -->
-    <join-experiment v-show="isModalJoinVisible && NXPJoinModuleData.length !== 0" @close="closeModalJoin">
+    <!-- <join-experiment v-show="isModalJoinVisible && NXPJoinModuleData.length !== 0" @close="closeModalJoin">
       <template v-slot:header>
-      <!-- The code below goes into the header slot -->
+      <!/-/- The code below goes into the header slot -/->
         N=1 Network Experiment {{ actionKBundle.name }}
       </template>
       <template v-slot:body>
-      <!-- The code below goes into the header slot -->
+      <!-/- The code below goes into the header slot -/->
         <header>Experiment Question:</header>
         {{ actionKBundle.name }}
       </template>
       <template v-slot:connect>
-        <!-- mobile apps suggested-->
+        <!-/- mobile apps suggested-/->
       </template>
       <template v-slot:packaging>
-        <!-- select data source -->
+        <!-/- select data source -/->
         <header>Datastore packaging</header>
         <div class="compute-select-datasource" v-if="NXPJoinModuleData.length !== 0">
           <label for="data-select-source">Select data source:</label>
@@ -73,7 +73,7 @@
             <option value=false>NO</option>
           </select>
         </li>
-        <!-- preview visualisation -->
+        <!-/- preview visualisation -/->
       </template>
       <template v-slot:dashboard-visualisation>
         <header>Visualisation</header>
@@ -84,25 +84,25 @@
       <template v-slot:submit-join>
         <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
         <div id="join-feedback" v-if="joinFeedbackActive === true">
-          {{ joinFeedback }} --
+          {{ joinFeedback }} -
         </div>
       </template>
-    </join-experiment>
+    </join-experiment> -->
   </div>
 </template>
 
 <script>
-import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
+/* import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
 import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
-import ChartBuilder from '@/components/experiments/setChartBuilder'
+import ChartBuilder from '@/components/experiments/setChartBuilder' */
 
 export default {
   name: 'ExperimentNetwork',
   components: {
     // DashBoard,
-    JoinExperiment,
+    /* JoinExperiment,
     CalendarSelect,
-    ChartBuilder
+    ChartBuilder */
   },
   created () {
   },
@@ -242,7 +242,11 @@ export default {
     actionAddtoLibrary (expCNRL, NXPcontract) {
       this.shellContract = expCNRL
       this.actionKBundle = NXPcontract
-      // this.$store.dispatch('actionAddPubliclibrary', 'addPlibrary')
+      let libraryAdd = {}
+      libraryAdd.type = 'addPlibrary'
+      libraryAdd.nxpID = this.shellContract
+      libraryAdd.nxpContract = this.actionKBundle
+      this.$store.dispatch('actionAddPubliclibrary', libraryAdd)
     },
     closeModalJoin () {
       // this.isModalJoinVisible = false

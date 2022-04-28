@@ -1175,6 +1175,16 @@ export default {
       refContractp.jwt = this.state.jwttoken
       const refCJSONp = JSON.stringify(refContractp)
       Vue.prototype.$socket.send(refCJSONp)
+    },
+    actionAddPubliclibrary (context, update) {
+      const refContractp = {}
+      refContractp.type = 'library'
+      refContractp.reftype = 'addpubliclibraryentry'
+      refContractp.action = 'add'
+      refContractp.data = update
+      refContractp.jwt = this.state.jwttoken
+      const refCJSONp = JSON.stringify(refContractp)
+      Vue.prototype.$socket.send(refCJSONp)
     }
   }
 }
