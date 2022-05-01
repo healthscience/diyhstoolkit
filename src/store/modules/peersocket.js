@@ -1182,6 +1182,17 @@ export default {
       console.log('selected to add to peer network library')
       console.log(update)
       console.log(this.state.tempNetworkLibrary)
+      console.log('match nxp to its modules')
+      let connectModules = []
+      for (let modref of this.state.tempNetworkLibrary.networkExpModules) {
+        if (udpate.nxpID === modref.exp.key) {
+          connectModules = modref
+        }
+      }
+      console.log('match modules to module conctracts')
+      for (let mod of connectModules) {
+        console.log(mod)
+      }
       const refContractp = {}
       refContractp.type = 'library'
       refContractp.reftype = 'addpubliclibraryentry'
