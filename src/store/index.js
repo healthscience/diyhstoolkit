@@ -112,6 +112,7 @@ const store = new Vuex.Store({
     experimentList: {},
     NXPexperimentList: {},
     replicateNXPexperimentList: {},
+    tempNetworkLibrary: {},
     joinedLifeboard: [],
     joinedNXPlist: [],
     experimentStatus: {},

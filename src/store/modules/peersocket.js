@@ -150,6 +150,7 @@ export default {
       } else if (backJSON.type === 'replicate-publiclibrary') {
         Vue.set(this.state.replicatePubliclibrary, 'data', backJSON.data)
       } else if (backJSON.type === 'replicatedata-publiclibrary') {
+        this.state.tempNetworkLibrary = backJSON
         let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)
         this.state.replicateNXPexperimentList = gridAnnon
       } else if (backJSON.type === 'new-peer') {
@@ -760,6 +761,7 @@ export default {
       this.state.publickeys = []
       this.state.moduleGrid = {}
       this.state.NXPexperimentData = {}
+      this.state.replicateNXPexperimentList = {}
       Vue.set(this.state.spaceStateShow, 'state', true)
       Vue.set(this.state.spaceStateShow, 'text', 'hide')
       Vue.set(this.state.networkConnection, 'active', false)
@@ -1177,6 +1179,9 @@ export default {
       Vue.prototype.$socket.send(refCJSONp)
     },
     actionAddPubliclibrary (context, update) {
+      console.log('selected to add to peer network library')
+      console.log(update)
+      console.log(this.state.tempNetworkLibrary)
       const refContractp = {}
       refContractp.type = 'library'
       refContractp.reftype = 'addpubliclibraryentry'
