@@ -1185,7 +1185,7 @@ export default {
       console.log('match nxp to its modules')
       let connectModules = []
       for (let modref of this.state.tempNetworkLibrary.networkExpModules) {
-        if (udpate.nxpID === modref.exp.key) {
+        if (update.nxpID === modref.exp.key) {
           connectModules = modref
         }
       }
