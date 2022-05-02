@@ -1190,9 +1190,16 @@ export default {
         }
       }
       console.log('match modules to module conctracts')
-      for (let mod of connectModules) {
+      console.log(connectModules)
+      let matchModules = []
+      for (let mod of connectModules.modules) {
         console.log(mod)
+
+        let dtMatch = this.state.tempNetworkLibrary.referenceContracts.module.find(elem => elem.key === mod.key)
+        matchModules.push(dtMatch)
       }
+      console.log('module key match mod ref contract')
+      console.log(matchModules)
       const refContractp = {}
       refContractp.type = 'library'
       refContractp.reftype = 'addpubliclibraryentry'
