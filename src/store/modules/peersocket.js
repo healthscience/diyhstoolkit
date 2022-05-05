@@ -149,6 +149,17 @@ export default {
         this.state.swarmStatus = true
       } else if (backJSON.type === 'replicate-publiclibrary') {
         Vue.set(this.state.replicatePubliclibrary, 'data', backJSON.data)
+      } else if (backJSON.type === 'publiclibraryaddcomplete') {
+        console.log('add to public library')
+        // Vue.set(this.state., '', backJSON.data)
+        // now call the peers public library to refresh contracts lists
+        const refContractp = {}
+        refContractp.type = 'library'
+        refContractp.reftype = 'publiclibrary'
+        refContractp.action = 'GET'
+        refContractp.jwt = this.state.jwttoken
+        const refCJSONp = JSON.stringify(refContractp)
+        Vue.prototype.$socket.send(refCJSONp)
       } else if (backJSON.type === 'replicatedata-publiclibrary') {
         this.state.tempNetworkLibrary = backJSON
         let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)
@@ -1179,27 +1190,17 @@ export default {
       Vue.prototype.$socket.send(refCJSONp)
     },
     actionAddPubliclibrary (context, update) {
-      console.log('selected to add to peer network library')
-      console.log(update)
-      console.log(this.state.tempNetworkLibrary)
-      console.log('match nxp to its modules')
       let connectModules = []
       for (let modref of this.state.tempNetworkLibrary.networkExpModules) {
         if (update.nxpID === modref.exp.key) {
           connectModules = modref
         }
       }
-      console.log('match modules to module conctracts')
-      console.log(connectModules)
       let matchModules = []
       for (let mod of connectModules.modules) {
-        console.log(mod)
-
         let dtMatch = this.state.tempNetworkLibrary.referenceContracts.module.find(elem => elem.key === mod.key)
         matchModules.push(dtMatch)
       }
-      console.log('module key match mod ref contract')
-      console.log(matchModules)
       const refContractp = {}
       refContractp.type = 'library'
       refContractp.reftype = 'addpubliclibraryentry'
