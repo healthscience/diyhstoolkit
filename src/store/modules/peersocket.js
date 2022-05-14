@@ -150,7 +150,12 @@ export default {
         if (backJSON.data[0]) {
           let nxpList = Object.keys(backJSON.data[0].value)
           for (let nxp of nxpList) {
-            this.dispatch('actionDashboardState', nxp, { root: true })
+            let positionStartInfo = {}
+            positionStartInfo.nxp = nxp
+            positionStartInfo.coord = backJSON.data[0].value[nxp]
+            positionStartInfo.type = 'saved'
+            this.dispatch('actionPostionCoord', positionStartInfo, { root: true })
+            this.dispatch('actionDashboardState', positionStartInfo, { root: true })
           }
         }
       } else if (backJSON.type === 'publickey') {

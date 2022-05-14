@@ -712,6 +712,18 @@ const store = new Vuex.Store({
     async actionDashboardState (context, update) {
       console.log('clicked VIEW NXP------------')
       console.log(update)
+      // is the update an object if yes  saved bentospace
+      console.log(typeof update)
+      // set the minimap in position store module
+      if (typeof update !== 'object') {
+        let positionStartInfo = {}
+        positionStartInfo.nxp = update
+        positionStartInfo.coord = {}
+        positionStartInfo.type = 'new'
+        context.dispatch('actionPostionCoord', positionStartInfo, { root: true })
+      } else {
+        update = update.nxp
+      }
       // remove lists
       context.commit('SET_SPACE_SHOW')
       let futureTimeCheck = false
@@ -719,8 +731,6 @@ const store = new Vuex.Store({
       context.commit('SET_NXP_MODULED', update)
       context.commit('SET_Dashboard_NXP', update)
       context.commit('setNXPprogressUpdate', update)
-      // set the minimap in position store module
-      context.dispatch('actionPostionCoord', update, { root: true })
       // clear the time range for new NXP view
       let timeContext = {}
       timeContext.device = update.mData

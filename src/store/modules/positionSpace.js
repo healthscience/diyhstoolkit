@@ -25,8 +25,8 @@ export default {
       state.ctx.mousePointer(inVerified)
     },
     SET_SPACEPOSITION_STATE: (state, inVerified) => {
-      let positionTrack = state.ctx.startPositionSpace(inVerified, state.liveSpaceCoord)
-      Vue.set(state.liveSpaceCoord, inVerified, positionTrack)
+      let positionTrack = state.ctx.startPositionSpace(inVerified.nxp, inVerified.coord, inVerified.type)
+      Vue.set(state.liveSpaceCoord, inVerified.nxp, positionTrack)
       // update the minimap
       state.ctx.miniMapLocations()
     },
@@ -34,15 +34,11 @@ export default {
       console.log(inVerified)
     },
     SET_UPDATEMMAP_POSITION: (state, inVerified) => {
-      console.log('start update position')
-      console.log(inVerified)
       let updateCOORD = state.ctx.updateMMapSpace(inVerified)
       let updateXY = {}
       updateXY.x = updateCOORD.x
       updateXY.y = updateCOORD.y
       Vue.set(state.liveSpaceCoord, inVerified.nxp, updateXY)
-      console.log('latest coord on bento space')
-      console.log(state.liveSpaceCoord)
     },
     SET_SCROLLTO_POSITION: (state, inVerified) => {
       state.ctx.scrollTODashboard(inVerified)

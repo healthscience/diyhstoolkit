@@ -63,19 +63,25 @@ PositionUtility.prototype.setZoom = function (zoom) {
 * @method displayPrepareModules
 *
 */
-PositionUtility.prototype.startPositionSpace = function (nxpID, spaceCoord) {
+PositionUtility.prototype.startPositionSpace = function (nxpID, spaceCoord, setupType) {
   let coord = {}
-  // loop over existing coordination and avoid clash
-  let spaceItems = Object.keys(spaceCoord)
-  let coordList = []
-  if (spaceItems.length !== 0) {
-    spaceItems.forEach(
-      element => coordList.push(spaceCoord[element])
-    )
-    coord.x = 20 + (spaceItems.length * 1600) + 20
-    coord.y = 20
+  // are setting up coords for first time or from save bentospace?
+  if (setupType !== 'saved') {
+    // loop over existing coordination and avoid clash
+    let spaceItems = Object.keys(spaceCoord)
+    let coordList = []
+    if (spaceItems.length !== 0) {
+      spaceItems.forEach(
+        element => coordList.push(spaceCoord[element])
+      )
+      coord.x = 20 + (spaceItems.length * 1600) + 20
+      coord.y = 20
+    } else {
+      coord = { x: 20, y: 20 }
+    }
   } else {
-    coord = { x: 20, y: 20 }
+    // set coord direct from bentospace saved info
+    coord = spaceCoord
   }
   // need to both add and remove and change position
   this.liveSpaceCoord[nxpID] = coord
