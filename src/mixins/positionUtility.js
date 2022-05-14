@@ -192,6 +192,7 @@ PositionUtility.prototype.updateMMapSpace = function (newCoord) {
   this.liveSpaceCoord[newCoord.nxp] = newCoord
   // redraw the dashboards and mouse pointer
   this.miniMapLocations()
+  return this.liveSpaceCoord[newCoord.nxp]
 }
 
 /**

@@ -20,7 +20,7 @@
                 Lifeboards
               </button>
               <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Experiment' }" id="Experiments" @click.prevent="setView($event)">
-                Experiments
+                Experiment
               </button>
               <button class="peer-medium" id="timeline" v-bind:class="{ active: viewFlowtype === 'timeline' }"  @click.prevent="setView($event)">
                 Timeline

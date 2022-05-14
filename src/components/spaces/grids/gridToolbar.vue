@@ -18,10 +18,9 @@
       <div id="routine-life"> -
           <!-- <a @click.prevent="viewRoutines" href="" id="routine-button">Routines</a> -->
       </div>
-      <!-- <div id="space-map">
-        Nav MAP
-          <canvas id="minimap"></canvas>
-      </div> -->
+      <div id="space-save">
+        <button class="save-space" @click.prevent="saveSpaceLayout()">save layout</button>
+      </div>
     </div>
     <div v-if="liveStorytools === true" id="story-board">
       <story-tools></story-tools>
@@ -88,6 +87,10 @@ export default {
     },
     viewRoutines () {
       console.log('rounte patterns / reminders')
+    },
+    saveSpaceLayout () {
+      console.log('save spaces layout')
+      this.$store.dispatch('actionSaveSpaceNXP', 'nxp')
     }
   }
 }

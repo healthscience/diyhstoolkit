@@ -3,7 +3,7 @@
     <button type="button" class="btn-newnxp" @click="newType()">new</button>
     <div id="new-type" v-if="newtypeShow === true">
       <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button>
-      <button type="button" class="btn-new" @click="newExperiment('experiment')">experiment</button>
+      <button type="button" class="btn-new" @click="newExperiment('experiment')">data</button>
     </div>
     <new-lifeboard v-show="isModalNewLifeboard" @close="closeModalNewLB">
       <template v-slot:header>

@@ -143,6 +143,16 @@ export default {
         } else if (backJSON.contract.concept.state === 'add') {
 
         }
+      } else if (backJSON.type === 'bentospaces-list') {
+        console.log('bentospaces at start')
+        console.log(backJSON.data)
+        // now need to ask for data for the active bentospace NXP's
+        if (backJSON.data[0]) {
+          let nxpList = Object.keys(backJSON.data[0].value)
+          for (let nxp of nxpList) {
+            this.dispatch('actionDashboardState', nxp, { root: true })
+          }
+        }
       } else if (backJSON.type === 'publickey') {
         this.state.publickeys.push(backJSON.pubkey)
       } else if (backJSON.type === 'open-library') {
@@ -232,6 +242,13 @@ export default {
             getLifeboard.reftype = 'peerLifeboard'
             getLifeboard.jwt = this.state.jwttoken
             Vue.prototype.$socket.send(JSON.stringify(getLifeboard))
+            // get bentospaces layout
+            let getBentospaces = {}
+            getBentospaces.type = 'bentospace'
+            getBentospaces.reftype = 'bentospace'
+            getBentospaces.action = 'list-position'
+            getBentospaces.jwt = this.state.jwttoken
+            Vue.prototype.$socket.send(JSON.stringify(getBentospaces))
           }
         } else {
           console.log('---')
@@ -1209,6 +1226,30 @@ export default {
       refContractp.jwt = this.state.jwttoken
       const refCJSONp = JSON.stringify(refContractp)
       Vue.prototype.$socket.send(refCJSONp)
+    },
+    actionRemoveTempNLibrary (context, update) {
+      console.log('remove temp library')
+      const refContractp = {}
+      refContractp.type = 'library'
+      refContractp.reftype = 'removetemppubliclibrary'
+      refContractp.action = 'remove-templibrary'
+      refContractp.data = update
+      refContractp.jwt = this.state.jwttoken
+      const refCJSONp = JSON.stringify(refContractp)
+      Vue.prototype.$socket.send(refCJSONp)
+    },
+    actionSaveSpaceNXP (context, update) {
+      console.log('save or update nxp bentospace')
+      // console.log(this.state.liveDashList)
+      console.log(this.state.positionSpace.liveSpaceCoord)
+      const saveSpacePosition = {}
+      saveSpacePosition.type = 'bentospace'
+      saveSpacePosition.reftype = 'bentospace'
+      saveSpacePosition.action = 'save-position'
+      saveSpacePosition.data = this.state.positionSpace.liveSpaceCoord
+      saveSpacePosition.jwt = this.state.jwttoken
+      const saveJSONp = JSON.stringify(saveSpacePosition)
+      Vue.prototype.$socket.send(saveJSONp)
     }
   }
 }

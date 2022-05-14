@@ -34,7 +34,15 @@ export default {
       console.log(inVerified)
     },
     SET_UPDATEMMAP_POSITION: (state, inVerified) => {
-      state.ctx.updateMMapSpace(inVerified)
+      console.log('start update position')
+      console.log(inVerified)
+      let updateCOORD = state.ctx.updateMMapSpace(inVerified)
+      let updateXY = {}
+      updateXY.x = updateCOORD.x
+      updateXY.y = updateCOORD.y
+      Vue.set(state.liveSpaceCoord, inVerified.nxp, updateXY)
+      console.log('latest coord on bento space')
+      console.log(state.liveSpaceCoord)
     },
     SET_SCROLLTO_POSITION: (state, inVerified) => {
       state.ctx.scrollTODashboard(inVerified)
@@ -48,7 +56,7 @@ export default {
       for (let ck of coordKeys) {
         delete clearCoord[ck]
       }
-      state.liveSpaceCoord = clearCoord
+      // state.liveSpaceCoord = clearCoord
     }
   },
   actions: {

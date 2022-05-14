@@ -22,6 +22,7 @@
     </div>
     <div id="listpeer-publiclibrary" v-if="networkNXPListlive">
       Peers friends public library
+      <button type="button" class="btn" @click="removePublicLibrary()">Remove</button>
       <experimentnetwork-join
         class="experiment-info" v-if="networkNXPListlive.data"
         :experiments="networkNXPListlive.data"
@@ -87,6 +88,9 @@ export default {
     },
     viewReplicatePubLib () {
       this.$store.dispatch('actionViewSyncLibrary', 'replicate-publiclibrary')
+    },
+    removePublicLibrary () {
+      this.$store.dispatch('actionRemoveTempNLibrary', 'remove-temppubliclibrary')
     }
   }
 }

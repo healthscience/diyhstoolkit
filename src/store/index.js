@@ -710,8 +710,8 @@ const store = new Vuex.Store({
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionDashboardState (context, update) {
-      // console.log('clicked VIEW NXP------------')
-      // console.log(update)
+      console.log('clicked VIEW NXP------------')
+      console.log(update)
       // remove lists
       context.commit('SET_SPACE_SHOW')
       let futureTimeCheck = false
