@@ -254,31 +254,32 @@ export default {
           console.log('---')
         }
       } else if (backJSON.type === 'ecssummary') {
-        // console.log('SUMMAERY==========================')
-        // console.log(backJSON)
+        console.log('SUMMAERY==========================')
+        console.log(backJSON)
+        let nxpUUID = Object.keys(backJSON.data)
         // update the NXP contract list held in toolkit
-        let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[this.state.liveNXP], this.state.networkPeerExpModules)
+        let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[nxpUUID[0]], this.state.networkPeerExpModules)
         // this.state.networkPeerExpModules = updateListContracts
         Vue.set(this.state.networkPeerExpModules, updateListContracts)
         // context.commit('SET_ENTITY_RETURN', entityReturn)
-        this.state.entityUUIDReturn = backJSON.data[this.state.liveNXP].shellID
+        this.state.entityUUIDReturn = backJSON.data[nxpUUID[0]].shellID
         // keep copy of latest returne nxp state
-        if (this.state.entityUUIDsummary[this.state.liveNXP] === undefined) {
-          this.state.entityUUIDsummary[this.state.liveNXP] = {}
+        if (this.state.entityUUIDsummary[nxpUUID[0]] === undefined) {
+          this.state.entityUUIDsummary[nxpUUID[0]] = {}
         }
-        this.state.entityUUIDsummary[this.state.liveNXP] = backJSON
+        this.state.entityUUIDsummary[nxpUUID[0]] = backJSON
         // set the grid base for the experiment
-        for (let mod of backJSON.data[this.state.liveNXP].modules) {
+        for (let mod of backJSON.data[nxpUUID[0]].modules) {
           Vue.set(this.state.moduleGrid, mod.key, [])
         }
         // set the data placer for per module
-        Vue.set(this.state.NXPexperimentData, this.state.liveNXP, {})
+        Vue.set(this.state.NXPexperimentData, nxpUUID[0], {})
         // being placer of modules
-        let extractModuleOrder = VisualUtility.orderModules(backJSON.data[this.state.liveNXP].modules, 'private')
+        let extractModuleOrder = VisualUtility.orderModules(backJSON.data[nxpUUID[0]].modules, 'private')
         for (let modd of extractModuleOrder) { // backJSON.data[this.state.liveNXP].modules) {
-          Vue.set(this.state.NXPexperimentData[this.state.liveNXP], modd.key, {}) // now set the data elements
-          Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'data', [])
-          Vue.set(this.state.NXPexperimentData[this.state.liveNXP][modd.key], 'prime', {})
+          Vue.set(this.state.NXPexperimentData[nxpUUID[0]], modd.key, {}) // now set the data elements
+          Vue.set(this.state.NXPexperimentData[nxpUUID[0]][modd.key], 'data', [])
+          Vue.set(this.state.NXPexperimentData[nxpUUID[0]][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
         // console.log('SECOND------DATA RETURNED-----')
@@ -292,12 +293,12 @@ export default {
           this.state.ecsMessageLive = 'no data available'
           // need to make toolbar appear so date can be selected
           // set devices for this NXP
-          if (this.state.devicesLive[this.state.liveNXP] === undefined) {
-            Vue.set(this.state.devicesLive, this.state.liveNXP, [])
+          if (this.state.devicesLive[backJSON.context.input.key] === undefined) {
+            Vue.set(this.state.devicesLive, backJSON.context.input.key, [])
           }
-          if (this.state.devicesLive[this.state.liveNXP].length === 0) {
+          if (this.state.devicesLive[backJSON.context.input.key].length === 0) {
             // need to set devices per network experiment id
-            Vue.set(this.state.devicesLive, this.state.liveNXP, backJSON.devices)
+            Vue.set(this.state.devicesLive, backJSON.context.input.key, backJSON.devices)
           }
           let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.input.key, this.state.networkPeerExpModules)
           // has data for the visual module already been setup?
@@ -307,7 +308,7 @@ export default {
           } else {
             // set experiment progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
-            Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
+            Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
             // prepare the module grid and data extract
             displayModulesReady = VisualUtility.displayPrepareModules(matchExpRefContract.modules, backJSON)
             // set the module GRID items
@@ -362,7 +363,7 @@ export default {
                 this.state.ecsMessageLive = 'no data available'
                 // set experiment progress message off
                 let setnxpProgress = { text: 'Experiment in progress', active: false }
-                Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
+                Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
                 // still setup module content to fix or add info try again?
                 // let matchContrastStart = ToolUtility.matchModuleRefcontractID(modID, this.state.experimentStatus[backJSON.context.input.key].modules)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
@@ -373,14 +374,14 @@ export default {
         } else {
           // switch off nxp Progress message
           let setnxpProgress = { text: 'Experiment in progress', active: true }
-          Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
+          Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
           // set devices for this NXP
-          if (this.state.devicesLive[this.state.liveNXP] === undefined) {
-            Vue.set(this.state.devicesLive, this.state.liveNXP, [])
+          if (this.state.devicesLive[backJSON.context.input.key] === undefined) {
+            Vue.set(this.state.devicesLive, backJSON.context.input.key, [])
           }
-          if (this.state.devicesLive[this.state.liveNXP].length === 0) {
+          if (this.state.devicesLive[backJSON.context.input.key].length === 0) {
             // need to set devices per network experiment id
-            Vue.set(this.state.devicesLive, this.state.liveNXP, backJSON.devices)
+            Vue.set(this.state.devicesLive, backJSON.context.input.key, backJSON.devices)
           }
           let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.input.key, this.state.networkPeerExpModules)
           // has data for the visual module already been setup?
@@ -389,7 +390,7 @@ export default {
           if (gridBefore.length > 0) {
             // move network experment prorgress message
             let setnxpProgressOff = { text: 'Experiment in progress', active: false }
-            Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgressOff)
+            Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgressOff)
             let matchVisModuleType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
             // need to add data to vis module placer
             let displayDataUpdate = VisualUtility.addVisData(matchVisModuleType, this.state.moduleGrid[backJSON.context.moduleorder.visualise.key], this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], backJSON)
@@ -450,7 +451,7 @@ export default {
           } else {
             // set experiment progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
-            Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
+            Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
             // prepare the module grid and data extract
             displayModulesReady = VisualUtility.displayPrepareModules(matchExpRefContract.modules, backJSON)
             // set the module GRID items
@@ -502,12 +503,12 @@ export default {
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
                 let setnxpProgress = { text: 'Experiment in progress', active: false }
-                Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
+                Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
               } else {
                 this.state.ecsMessageLive = 'no data available'
                 // set experiment progress message off
                 let setnxpProgress = { text: 'Experiment in progress', active: false }
-                Vue.set(this.state.nxpProgress, this.state.liveNXP, setnxpProgress)
+                Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
                 // still setup module content to fix or add info try again?
                 // let matchContrastStart = ToolUtility.matchModuleRefcontractID(modID, this.state.experimentStatus[backJSON.context.input.key].modules)
                 Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
