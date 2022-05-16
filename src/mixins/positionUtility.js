@@ -68,7 +68,8 @@ PositionUtility.prototype.startPositionSpace = function (nxpID, spaceCoord, setu
   // are setting up coords for first time or from save bentospace?
   if (setupType !== 'saved') {
     // loop over existing coordination and avoid clash
-    let spaceItems = Object.keys(spaceCoord)
+    let spaceItems = Object.keys(this.liveSpaceCoord)
+    // need to extract farthest right x coord and add right of it
     let coordList = []
     if (spaceItems.length !== 0) {
       spaceItems.forEach(
