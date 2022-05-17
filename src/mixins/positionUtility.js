@@ -148,6 +148,11 @@ PositionUtility.prototype.collisionMiniDash = function (miniMouse) {
 *
 */
 PositionUtility.prototype.clearMMap = function (newCoord) {
+  console.log('clear map')
+  let liveBBox = Object.keys(this.liveSpaceCoord)
+  for (let mmkey of liveBBox) {
+    delete this.liveSpaceCoord[mmkey]
+  }
   this.ctx.clearRect(0, 0, 200, 200)
 }
 

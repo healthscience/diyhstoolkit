@@ -62,7 +62,7 @@
         </div>
       </div>
     </div>
-      bentospace END END
+      bentospace END
   </div>
 </template>
 
@@ -249,14 +249,14 @@ export default {
 }
 
 #dragwheel-space {
-  height: 5000px;
+  height: 16000px;
   width: 1000%;
   overflow: hidden;
   border: 0px dashed blue;
 }
 
 #dashboard-placeholder {
-  height: 10000px;
+  height: 16000px;
   width: 1000%;
   padding-top: 60px;
   margin: auto;
