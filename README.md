@@ -1,10 +1,10 @@
 # diy-toolkit
 
-The Do-it-yourself HealthScience toolkit gives the ability to sense make by using data science through a graphical interface.  This includes charting data and performing computations on data. An aspiring decentraised collective intelligence tool. See video <a href="https://www.youtube.com/channel/UCoCgnBkZpB2oMn1Qa2nXKeg/playlists">DIY Toolkit</a>
+BentoBox - DS  a peer to peer data science toolkit that gives the ability to sense make by using data science through a graphical interface.  This includes charting data and performing computations on data. An aspiring decentraised collective intelligence tool. See video <a href="https://www.youtube.com/channel/UCoCgnBkZpB2oMn1Qa2nXKeg/playlists">DIY Toolkit</a>
 
 ## Project setup
 
-The DIY Toolkit operates on a peer to peer protocol and uses a <a href="https://github.com/DaMaHub/networklibrary">network library</a> to guranteed data interoperabilty between peers.  The Toolkit needs to connect to the network via PeerLink.  This is not currently included in the installation process.  Install instructions here: <a href="https://github.com/DaMaHub/peerlink">Peer Link Install</a>
+The Toolkie operates on a peer to peer protocol and uses a <a href="https://github.com/DaMaHub/networklibrary">network library</a> to guranteed data interoperabilty between peers.  The Toolkit needs to connect to the network via PeerLink.  This is not currently included in the installation process.  Install instructions here: <a href="https://github.com/DaMaHub/peerlink">Peer Link Install</a>
 
 DIY Toolkit setup: for web or desktop
 ```
