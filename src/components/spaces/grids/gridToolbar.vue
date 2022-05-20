@@ -21,6 +21,9 @@
       <div id="space-save">
         <button class="save-space" @click.prevent="saveSpaceLayout()">save layout</button>
       </div>
+      <div id="combine-list">
+        <!--<button class="save-space" @click.prevent="combineSelected()">combine</button>-->
+      </div>
     </div>
     <div v-if="liveStorytools === true" id="story-board">
       <story-tools></story-tools>
@@ -50,6 +53,9 @@ export default {
       let roundNumber = this.$store.state.activeScalevalue.toFixed(2)
       let scalePercent = roundNumber * 100
       return scalePercent.toFixed(0)
+    },
+    combinedList: function () {
+      return this.$store.state.combineSpaceList
     }
   },
   data: function () {
@@ -91,6 +97,10 @@ export default {
     saveSpaceLayout () {
       console.log('save spaces layout')
       this.$store.dispatch('actionSaveSpaceNXP', 'nxp')
+    },
+    combineSelected () {
+      console.log('look at combine list and merage to one chart')
+      console.log(this.combinedList)
     }
   }
 }
