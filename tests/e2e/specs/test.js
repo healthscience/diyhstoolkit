@@ -33,6 +33,6 @@ describe('status component check', () => {
     cy.get('div[id=]').should('be.visible')
     cy.get('div[class=]').should('be.visible')
     cy.get('div[id=]').should('not.be.visible')
-    cy.get('div[id=]').should('not.be.visible')*/
+    cy.get('div[id=]').should('not.be.visible') */
   })
 })

@@ -277,6 +277,7 @@ export default {
       this.newCompute.startperiod = 12345123451
     },
     joinNetworkExperiment () {
+      console.log('join')
       this.shellID = null
       this.moduleCNRL = 'cnrl-001234543458'
       this.moduleType = 'vis'

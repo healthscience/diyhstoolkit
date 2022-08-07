@@ -9,10 +9,10 @@ module.exports = {
     hotOnly: false
   },
   publicPath: process.env.NODE_ENV === 'production'
-     ? '/'
-     : '/',
-    // ? '/hop/code/diyhstoolkit/dist/'
-    // : '/hop/code/diyhstoolkit/dist/',
+    ? '/'
+    : '/',
+  // ? '/hop/code/diyhstoolkit/dist/'
+  // : '/hop/code/diyhstoolkit/dist/',
   pluginOptions: {
     i18n: {
       locale: 'en',

@@ -74,7 +74,6 @@
 import ConnectModal from '@/components/connect/ConnectModal.vue'
 import TokenReader from '@/components/connect/token-reader.vue'
 import ConnectionLists from '@/components/connect/connectionLists.vue'
-// const remote = require('electron').remote
 
 export default {
   name: 'Network-Connect',
@@ -105,7 +104,6 @@ export default {
   },
   data () {
     return {
-      // w: remote.getCurrentWindow(),
       isModalVisible: false,
       buttonName: 'verify token',
       cloudConnect: 'signin-cloud', // 'signin-cloud',
@@ -116,8 +114,7 @@ export default {
   methods: {
     disconnectNetwork () {
       this.$store.dispatch('actionDisconnect')
-      // close electron / webapp
-      // this.w.close()
+      window.quit()
     },
     closeModal () {
       this.$store.dispatch('actionCloseNetworkModal')

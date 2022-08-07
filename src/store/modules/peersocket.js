@@ -1169,6 +1169,8 @@ export default {
         newJoinExperiment.action = 'joinexperiment'
         newJoinExperiment.data = dataChoices
         newJoinExperiment.jwt = this.state.jwttoken
+        console.log('newJoinExperiment')
+        console.log(newJoinExperiment)
         let ExpmoduleRefContract = JSON.stringify(newJoinExperiment)
         Vue.prototype.$socket.send(ExpmoduleRefContract)
         this.state.isModalJoinNetworkExperiment = false

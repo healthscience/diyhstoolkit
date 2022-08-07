@@ -52,7 +52,7 @@ export default {
     HelpAi
   },
   mounted () {
-    window.onbeforeunload = function () { return 'Backbutton is not supported' }
+    // window.onbeforeunload = function () { return 'Backbutton is not supported' }
   },
   computed: {
     connectBut: function () {
