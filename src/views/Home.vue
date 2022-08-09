@@ -4,10 +4,10 @@
       <div v-if="peerauth === false" id="diy-summary">
         <header>BentoBox - DS</header>
         <ul>
-          <li>1. Interacive visualisations</li>
-          <li>2. Join network experiments</li>
-          <li>3. Share with peers & communities</li>
-          <li>4. Personal AI - CALE</li>
+          <li>1. Peer to Peer Data Science</li>
+          <li>2. Charting & Analysis</li>
+          <li>3. Private & Network</li>
+          <li>4. Personal AI - AGENT</li>
         </ul>
         <div id="interface">
           <div id="cale-ai">

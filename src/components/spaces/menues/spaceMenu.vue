@@ -1,9 +1,7 @@
 <template>
   <div id="space-menu-area">
     <div class="lifeflow-spacelist">
-      <a class="flowlist-space" v-bind:class="{ active: spaceState === 'private' }" href="" @click.prevent="statusSpace('private')" >Private</a>
-      <a class="flowlist-space" v-bind:class="{ active: spaceState === 'public' }" href="" @click.prevent="statusSpace('public')" >Public </a>
-      <a href="" class="flowlist-space-plain" v-bind:class="{ active: spaceStateShow.text === 'show' }" @click.prevent="statusSpaceshow()" > {{ spaceStateShow.text }}</a>
+      <button class="flowlist-space" v-bind:class="{ active: spaceState === 'private' && spaceStateShow.state === true }" href="" @click.prevent="statusSpace('private')" >List</button>
     </div>
   </div>
 </template>
@@ -29,8 +27,6 @@ export default {
   methods: {
     statusSpace (sp) {
       this.$store.dispatch('actionSpaceList', sp)
-    },
-    statusSpaceshow () {
       this.$store.dispatch('actionSpaceListShow')
     }
   }
@@ -48,8 +44,11 @@ export default {
 }
 
 .flowlist-space {
+  font-size: 1.2em;
   margin-left: 0.5em;
-  border: 0px solid red;
+  padding: 6px 14px;
+  margin-right: 1em;
+  margin-left: 1em;
 }
 
 .flowlist-space.active {

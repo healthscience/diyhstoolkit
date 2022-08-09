@@ -24,7 +24,7 @@ gi<template>
         </button>
         </header>
         <section class="modal-body">
-          <!-- <slot name="body">
+          <slot name="body">
             Network Library - DaMaHub Project - <img  alt="DaMaHub Network Library" src="../../.././assets/logo-damahub.png">
             <iframe
               :src="`./xlibrary-test.html?` + jwttoken"
@@ -33,7 +33,7 @@ gi<template>
               name="networklibrarylive"
               frameborder="0" >
             </iframe>
-          </slot> -->
+          </slot>
         </section>
         <footer class="modal-footer">
           <slot name="footer">

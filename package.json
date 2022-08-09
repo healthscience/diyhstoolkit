@@ -4,6 +4,7 @@
   "private": true,
   "description": "BentoBox - DS toolkit",
   "author": "aboynejames",
+  "main": "background.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

@@ -16,15 +16,15 @@
             <div id="active-space-selected" v-else>
             </div>
             <div id="flow-styles" v-if="flowMenu === true"><!--z26 -->
-              <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Lifeboards' }" id="Lifeboards" @click.prevent="setView($event)">
+              <!-- <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Lifeboards' }" id="Lifeboards" @click.prevent="setView($event)">
                 Lifeboards
-              </button>
+              </button> -->
               <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Experiment' }" id="Experiments" @click.prevent="setView($event)">
                 Experiment
               </button>
-              <button class="peer-medium" id="timeline" v-bind:class="{ active: viewFlowtype === 'timeline' }"  @click.prevent="setView($event)">
+              <!-- <button class="peer-medium" id="timeline" v-bind:class="{ active: viewFlowtype === 'timeline' }"  @click.prevent="setView($event)">
                 Timeline
-              </button>
+              </button> -->
             </div>
           </div>
           <div id="sub-flow-menu">
@@ -139,11 +139,12 @@ export default {
 #toolkit-boards {
   display: grid;
   grid-template-columns: 1fr 10fr;
-  background-color: lightgrey;
+  background-color: white;
   position: fixed;
   top: 3em;
+  border-top: 2px solid lightgrey;
+  border-bottom: 2px solid lightgrey;
   padding-top: 0em;
-  border: 0px dashed blue;
   z-index: 32;
 }
 
