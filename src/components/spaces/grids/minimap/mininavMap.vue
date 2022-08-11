@@ -33,7 +33,7 @@ export default {
       ctx: {},
       openminib: true,
       openmini: false,
-      offRight: '0px'
+      offRight: '-400px'
     }
   },
   methods: {
@@ -47,7 +47,7 @@ export default {
     },
     setMiniMapShow () {
       this.openmini = !this.openmini
-      if (this.openmini === true) {
+      if (this.openmini === false) {
         this.offRight = '-400px'
       } else {
         this.offRight = '0px'
