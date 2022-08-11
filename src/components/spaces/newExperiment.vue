@@ -2,7 +2,8 @@
   <div id="new-experimentmenu">
     <button type="button" class="btn-newnxp" @click="newType()">new</button>
     <div id="new-type" v-if="newtypeShow === true">
-      <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button>
+      <!-- <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button> -->
+      <button type="button" class="btn-new" @click="newExperiment('join')">Join</button>
       <button type="button" class="btn-new" @click="newExperiment('experiment')">data</button>
     </div>
     <new-lifeboard v-show="isModalNewLifeboard" @close="closeModalNewLB">
@@ -83,6 +84,9 @@ export default {
         this.$store.dispatch('actionMakeModuleRefContract')
       } else if (type === 'lifeboard') {
         this.isModalNewLifeboard = true
+      } else if (type === 'join') {
+        this.$store.dispatch('actionSpaceList', 'public')
+        this.$store.dispatch('actionSpaceListShow')
       }
       this.newtypeShow = !this.newtypeShow
     },

@@ -54,8 +54,8 @@ export default {
     SOCKET_ONMESSAGE (state, message) {
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      console.log('****INPUUTTT******')
-      console.log(backJSON)
+      // console.log('****INPUUTTT******')
+      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?

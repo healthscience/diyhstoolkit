@@ -23,7 +23,7 @@ function createWindow () {
       nodeIntegration: true,
       webSecurity: false,
       allowRunningInsecureContent: true,
-      devTools: false
+      devTools: true
     }
   })
 

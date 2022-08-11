@@ -34,8 +34,8 @@
         <div class="flow-menu">
           <div class="live-network-header">
             <div class="network-toolbar">
-              <form id="search">
-                Search <input name="query" @keyup="textQuery" v-model="searchText">
+              <form id="search-form">
+                Search <input id="query-input" name="query" @keyup="textQuery" v-model="searchText">
               </form>
             </div>
             <div class="network-toolbar" id="new-button-top">
@@ -211,10 +211,8 @@ export default {
   z-index: 26;
 }
 
-.live-network-header {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  border: 0px solid blue;
+.flow-menu {
+  border: 0px solid red;
 }
 
 #sub-flow-menu {
@@ -223,12 +221,31 @@ export default {
   width: 240px;
 }
 
+.network-toolbar {
+  display: grid;
+}
+
+.live-network-header {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+}
+
+#search-form {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  align-items: start;
+  align-self: start;
+}
+
+#query-input {
+  font-size: 1.2em;
+}
+
 #new-button-top {
   z-index: 32;
 }
 
 #list-flows {
-  border: 0px solid red;
   height: inherit;
   position: fixed;
   top: 7.2em;

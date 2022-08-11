@@ -1,6 +1,12 @@
 <template>
   <div id="live-network-grid-join">
-    <!-- peer network experiment added -->
+    <!-- join a network experiment-->
+    <div id="join-toolbar">
+       <div class="join-tools">Join dashboard</div>
+       <div class="join-tools">
+          <button id="close-join" @click="closeJoinList">Close</button>
+       </div>
+    </div>
     <div id="grid-template-join">
       <div class="list-table">
         <div class="table-header">
@@ -257,6 +263,11 @@ export default {
         // this.isModalJoinVisible = true
       }
     },
+    closeJoinList () {
+      console.log('close')
+      this.$store.dispatch('actionSpaceList', 'public')
+      this.$store.dispatch('actionSpaceListShow')
+    },
     closeModalJoin () {
       // this.isModalJoinVisible = false
       this.$store.dispatch('actionCloseJoinexperiment', 'join')
@@ -296,6 +307,15 @@ export default {
 </script>
 
 <style scoped>
+#join-toolbar {
+  font-size: 1.2em;
+  background-color: white;
+}
+
+.join-tools {
+  display: inline;
+}
+
 #live-network-grid-join {
   border: 0px solid blue;
   margin: auto;
