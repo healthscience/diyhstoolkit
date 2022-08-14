@@ -198,7 +198,7 @@ const store = new Vuex.Store({
       } else {
         // yes socket connection
         Vue.set(state.networkConnection, 'active', true)
-        Vue.set(state.networkConnection, 'text', 'edit-connection')
+        Vue.set(state.networkConnection, 'text', 'peer-settings')
         Vue.set(state.networkConnection, 'type', 'check-connection')
       }
     },

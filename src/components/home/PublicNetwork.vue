@@ -1,26 +1,21 @@
 <template>
-  <div id="live-network-experiment">
-    <div id="show-nxplists" v-if="spaceType === 'Experiments' && spaceStateShow === true">
-      <list-contracts v-if="spaceState === 'private' && peerExperimentListlive.data?.length > 0"
-        class="experiment-info"
-        :experiments="peerExperimentListlive.data"
-        :columns="peerExperimentListlive.columns"
-        :filter-key="searchQuery">
-      </list-contracts>
-      <start-experience id="start-demo-nxp" v-else></start-experience>
-    </div>
+  <div id="public-network-experiment">
+    <experimentnetwork-join
+      class="experiment-info" v-if="spaceState === 'public' && spaceStateShow === true && networkNXPListlive.data"
+      :experiments="networkNXPListlive.data"
+      :columns="networkNXPListlive.columns"
+      :filter-key="searchQuery">
+    </experimentnetwork-join>
   </div>
 </template>
 
 <script>
-import StartExperience from '@/components/spaces/lists/StartExperience.vue'
-import ListContracts from '@/components/spaces/lists/ListContracts.vue'
+import ExperimentnetworkJoin from '@/components/spaces/grids/ExperimentNetworkJoin.vue'
 
 export default {
-  name: 'LiveNetwork',
+  name: 'PublicNetwork',
   components: {
-    StartExperience,
-    ListContracts
+    ExperimentnetworkJoin
   },
   computed: {
     showExperimentList: function () {
@@ -63,7 +58,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-#live-network-experiment {
+#public-network-experiment {
   width: 100%;
   z-index: 23;
   border: 0px dashed blue;

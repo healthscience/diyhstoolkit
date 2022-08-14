@@ -16,7 +16,7 @@
         </header>
         <div id="connect-peerlink">
           <div id="form-submit">
-            <slot name="submit-cloud">
+            <slot name="submit-self">
               <!-- no default button -->
             </slot>
           </div>
@@ -40,7 +40,7 @@
         </div>
         <div id="peers-networks">
           <slot name="peers-tabs">
-            Peers Tab Info
+            ----------------
           </slot>
         </div>
         <footer class="modal-footer">

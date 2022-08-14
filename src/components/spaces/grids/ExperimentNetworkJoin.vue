@@ -50,7 +50,7 @@
       </template>
       <template v-slot:packaging>
         <!-- select data source -->
-        <header>Datastore packaging</header>
+        <header>Datastore packaging</header> {{ NXPJoinModuleData }}
         <div class="compute-select-datasource" v-if="NXPJoinModuleData.length !== 0">
           <label for="data-select-source">Select data source:</label>
           <select class="data-data-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select

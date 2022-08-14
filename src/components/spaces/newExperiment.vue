@@ -85,6 +85,7 @@ export default {
       } else if (type === 'lifeboard') {
         this.isModalNewLifeboard = true
       } else if (type === 'join') {
+        this.$store.dispatch('actionLifeview', 'publicexperiments')
         this.$store.dispatch('actionSpaceList', 'public')
         this.$store.dispatch('actionSpaceListShow')
       }

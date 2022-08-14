@@ -16,22 +16,32 @@
       <template v-slot:title-form>
         <header class="connect-info">Health Oracle Network</header>
       </template>
-      <template v-slot:submit-cloud v-if="cloudConnect === 'signin-cloud' && peerauth === false">
-        <form id="cloud-signin-form" >
-          <div class="cloud-inputs">
-            <label class="form-couple-type" for="signin-cloud">username</label>
-            <input class="form-couple" type="text" id="usernamecloud" name="username" v-model="cloudsigninInput">
+      <template v-slot:submit-self v-if="selfConnect === 'self-sign' && peerauth === false">
+        <div id="connect-wallet">
+          <div id="create-wallet">
+            <button id="create-new-wallet" @click=createWallet>create +</button>
           </div>
-          <div class="cloud-inputs">
-            <label class="form-couple-type" for="password-cloud">password</label>
-            <input class="form-couple" type="password" id="passwordcloud" name="password" v-model="cloudpwInput">
+          <div id="self-verify">
+            <form id="self-signin-form" >
+              <div class="self-inputs">
+                <label class="form-couple-type" for="signin-self">Peer name</label>
+                <input class="form-couple" type="text" id="usernameself" name="username" v-model="selfsigninInput">
+              </div>
+              <!-- <div class="self-inputs">
+                <label class="form-couple-type" for="password-cloud">password</label>
+                <input class="form-couple" type="password" id="passwordcloud" name="password" v-model="selfpwInput">
+              </div> -->
+              <div class="self-confirm">
+                <button id="self-submit" @click.prevent="submitLaunch">
+                  Launch
+                </button>
+              </div>
+            </form>
           </div>
-          <div class="cloud-confirm">
-            <button id="cloud-submit" @click.prevent="submitCloudin">
-              Sign-in
-            </button>
-          </div>
-        </form>
+        </div>
+        <div id="self-build-wallet" v-if="selfWallet === 'new-wallet-start'">
+          Start new wallet
+        </div>
       </template>
       <template v-slot:connect-network>
         <div id="network-status">
@@ -47,21 +57,21 @@
         </div>
       </template>
       <template v-slot:input-form>
-        <div id="external-datastores" v-if="cloudConnect === 'signin-cloud' && peerauth === true">
+        <!-- <div id="external-datastores" v-if="selfConnect === 'signin-self' && peerauth === true">
           <header class="connect-info">External data source connections</header>
           <div class="external-token-status">
             <header>REST</header>
             <token-reader v-if="peerauth === true" @closeTreader="closeModal"></token-reader>
             <div id="self-in" v-if="peerauth === true">
-              <!-- <input v-model="secretPeer" placeholder="public key">
-              <input v-model="passwordPeer" placeholder="token"> -->
+              <input v-model="secretPeer" placeholder="public key">
+              <input v-model="passwordPeer" placeholder="token">
             </div>
           </div>
           <div class="external-token-status">
             <header>-</header>
               <p>-</p>
           </div>
-        </div>
+        </div> -->
       </template>
       <template v-slot:peers-tabs>
         <connection-lists v-if="peerauth === true"></connection-lists>
@@ -72,14 +82,14 @@
 
 <script>
 import ConnectModal from '@/components/connect/ConnectModal.vue'
-import TokenReader from '@/components/connect/token-reader.vue'
+// import TokenReader from '@/components/connect/token-reader.vue'
 import ConnectionLists from '@/components/connect/connectionLists.vue'
 
 export default {
   name: 'Network-Connect',
   components: {
     ConnectModal,
-    TokenReader,
+    // TokenReader,
     ConnectionLists
   },
   computed: {
@@ -106,9 +116,10 @@ export default {
     return {
       isModalVisible: false,
       buttonName: 'verify token',
-      cloudConnect: 'signin-cloud', // 'signin-cloud',
-      cloudsigninInput: '',
-      cloudpwInput: ''
+      selfConnect: 'self-sign',
+      selfWallet: '',
+      selfsigninInput: 'peerspace',
+      selfpwInput: ''
     }
   },
   methods: {
@@ -119,13 +130,16 @@ export default {
     closeModal () {
       this.$store.dispatch('actionCloseNetworkModal')
     },
-    submitCloudin () {
+    createWallet () {
+      this.selfWallet = 'new-wallet-start'
+    },
+    submitLaunch () {
       let peerConnect = {}
-      peerConnect.peer = this.cloudsigninInput.trim()
-      peerConnect.password = this.cloudpwInput.trim()
-      this.$store.dispatch('actionCloudSignin', peerConnect)
-      this.cloudsigninInput = ''
-      this.cloudpwInput = ''
+      peerConnect.peer = this.selfsigninInput.trim()
+      peerConnect.password = this.selfpwInput.trim()
+      this.$store.dispatch('actionSelfSignin', peerConnect)
+      this.selfsigninInput = ''
+      this.selfpwInput = ''
     }
   }
 }
@@ -167,13 +181,18 @@ export default {
   background-color: green;
 }
 
-#cloud-signin-form {
+#connect-wallet {
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+}
+
+#self-signin-form {
   display: grid;
   grid-template-columns: 1fr;
   height: 100%
 }
 
-.cloud-inputs {
+.self-inputs {
   display: grid;
   grid-template-columns: 200px 400px;
   grid-gap: 16px;
@@ -183,16 +202,22 @@ export default {
   font-size: 1.2em;
 }
 
+.self-inputs input {
+  font-size: 1.2em;
+}
+
 .form-couple-type {
+  font-size: 1.2em;
   justify-self: end;
 }
-.cloud-confirm {
+.self-confirm {
   display: grid;
   align-items: center;
   justify-content: center;
 }
 
-#cloud-submit {
+#self-submit {
+  font-size: 1.1em;
   width: 200px;
   padding: 1em;
 }

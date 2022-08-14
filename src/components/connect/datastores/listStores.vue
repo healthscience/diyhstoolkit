@@ -84,6 +84,7 @@ export default {
     },
     peerSyncPublicLibrary () {
       // pass on public key to peerlink and sync datastore for this peer
+      console.log(this.peerSynckey)
       this.$store.dispatch('actionPeersyncLibrary', this.peerSynckey)
     },
     viewReplicatePubLib () {

@@ -6,7 +6,6 @@ import moment from 'moment'
 const ToolUtility = new ToolkitUtility()
 const VisualUtility = new VisToolsUtility()
 const ValidateUtility = new ContextUtility()
-// const remote = require('electron').remote
 
 export default {
   state: {
@@ -205,6 +204,7 @@ export default {
         Vue.set(this.state.joinNXPlive, 'visualise', backJSON.visualise)
       } else if (backJSON.safeflow === true) {
         // safeFLOW inflow
+        console.log('auth passed and now get library info')
         if (backJSON.type === 'auth') {
           if (backJSON.auth !== false) {
             // set remove welcome message
@@ -550,6 +550,7 @@ export default {
         let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.networkPeerExpModules)
         this.state.joinedNXPlist = gridPeer
       } else if (backJSON.type === 'publiclibrary') {
+        // console.log('public library returned')
         // save copy of ref contract indexes
         this.state.liveRefContIndex = backJSON.referenceContracts
         // prepare NPXs in NETWORK
@@ -811,6 +812,7 @@ export default {
       // context.commit('SOCKET_ONCLOSE')
       // empty miniMap
       context.dispatch('actionResetMmap', { root: true })
+      window.close()
     },
     actionOpenLibrary (context, data) {
       let openLibrary = {}
@@ -845,6 +847,7 @@ export default {
       peerSync.publickey = message
       peerSync.jwt = this.state.jwttoken
       const peerSyncJSON = JSON.stringify(peerSync)
+      console.log(peerSyncJSON)
       Vue.prototype.$socket.send(peerSyncJSON)
     },
     actionViewSyncLibrary (context, message) {
@@ -1194,11 +1197,11 @@ export default {
     actionExperimentListDefault (context, update) {
       context.commit('SET_NXPLIST_DEFAULT', update)
     },
-    actionCloudSignin (context, update) {
+    actionSelfSignin (context, update) {
       let cloudInfo = {}
       cloudInfo.type = 'safeflow'
       cloudInfo.reftype = 'ignore'
-      cloudInfo.action = 'cloudauth'
+      cloudInfo.action = 'selfauth'
       cloudInfo.network = null // update.network
       cloudInfo.settings = null // update.settings
       cloudInfo.data = update

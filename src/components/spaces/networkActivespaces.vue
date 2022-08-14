@@ -47,7 +47,8 @@
     </div>
     <div id="list-flows" v-if="peerauth === true"> <!--z25 -->
       <!-- <live-lifestyle v-if="spaceType === 'Lifeboards'"></live-lifestyle>-->
-      <live-networknxp v-if="spaceType === 'Experiments'"></live-networknxp>
+      <live-networknxp v-if="spaceType === 'Experiments' && spaceState === 'private'"></live-networknxp>
+      <public-networknxp v-if="spaceType === 'publicexperiments' && spaceState === 'public'"></public-networknxp>
       <!-- <live-timeline v-if="spaceType === 'timeline'"></live-timeline> -->
     </div>
     <!-- <lifeboard-network v-if="lifeView === true"></lifeboard-network> -->
@@ -60,6 +61,7 @@ import SpaceMenu from '@/components/spaces/menues/spaceMenu.vue'
 import NewExperiment from '@/components/spaces/newExperiment.vue'
 // import LiveLifestyle from '@/components/home/LiveLifeboard.vue'
 import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
+import PublicNetworknxp from '@/components/home/PublicNetwork.vue'
 // import LiveTimeline from '@/components/home/LiveTimeline.vue'
 // import LifeboardNetwork from '@/components/spaces/grids/LifeboardNetwork.vue'
 import ExperimentNetwork from '@/components/spaces/grids/ExperimentNetwork.vue'
@@ -71,6 +73,7 @@ export default {
     NewExperiment,
     // LiveLifestyle,
     LiveNetworknxp,
+    PublicNetworknxp,
     // LiveTimeline,
     // LifeboardNetwork,
     ExperimentNetwork
