@@ -43,7 +43,7 @@ const store = new Vuex.Store({
     nxpState: 'private',
     spaceState: 'private',
     spaceStateShow: {
-      state: true,
+      state: false,
       text: 'hide'
     },
     spaceType: 'Experiments',
