@@ -38,37 +38,75 @@
     <join-experiment v-show="isModalJoinVisible && NXPJoinModuleData.length !== 0" @close="closeModalJoin">
       <template v-slot:header>
       <!-- The code below goes into the header slot -->
-        N=1 Network Experiment {{ actionKBundle.name }}
+        <div class="nxp-header">
+          Experiment: {{ actionKBundle.name }}
+        </div>
       </template>
       <template v-slot:body>
       <!-- The code below goes into the header slot -->
-        <header>Experiment Question:</header>
+        <div class="nxp-header">
+          Experiment Name:
         {{ actionKBundle.name }}
+        </div>
       </template>
       <template v-slot:connect>
         <!-- mobile apps suggested-->
       </template>
       <template v-slot:packaging>
         <!-- select data source -->
-        <header>Datastore packaging</header> {{ NXPJoinModuleData }}
-        <div class="compute-select-datasource" v-if="NXPJoinModuleData.length !== 0">
-          <label for="data-select-source">Select data source:</label>
-          <select class="data-data-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
-            <option v-for="ds in NXPJoinModuleData" :key="ds.key" v-bind:value="ds.option.key">
-              {{ ds.option.value.concept.name }}
-            </option>
-          </select>
+        <header class="module-header">Data</header>
+        <div class="data-select-datasource" v-if="NXPJoinModuleData.length !== 0">
+          <div class="data-select-item right">
+            <label for="data-select-source">Select Data Contract</label>
+          </div>
+          <div class="data-select-item peerinput">
+            <select class="data-data-source" @change="sourceSelect" v-model="selectJoin.source" id="">Please select
+              <option v-for="ds in NXPJoinModuleData" :key="ds.key" v-bind:value="ds.option.key">
+                {{ ds.option.value.concept.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div id="data-source-options" v-if="selectJoin.source.length > 1">
+          <div class="data-select-item peerinput">1
+            <label class="data-button">Select file to upload</label>
+            <input class="data-button" type="file" @change="loadTextFromFile">
+          </div>
+          <div class="data-select-item peerinput">2
+            <button class="data-button" id="networkdata" @click="askHOPDataNXP">Sync data</button>
+          </div>
+          <div class="data-select-item peerinput">3
+            <div id="file-upload-interface" v-if="filebutton === true">
+            <button class="data-button" id="uploadfile" @click="uploadFileNXP">Yes, add this file</button>
+            </div>
+          </div>
+          <div class="data-select-item peerinput">4
+            <div id="sync-progress-interface" v-if="askDataNXP === true">
+              The data will be saved to this accounts datastore. Progress bar
+            </div>
+          </div>
         </div>
       </template>
       <template v-slot:compute>
-        <header>Compute</header>
-        <div id="compute-selected" v-if="NXPJoinModuleCompute !== undefined">
-          Computaton selected: {{ NXPJoinModuleCompute[0].option.value.computational.name }}
+        <header class="module-header">Compute</header>
+        <div class="compute-selection" id="compute-selected" v-if="NXPJoinModuleCompute !== undefined">
+          <div class="compute-type" id="compute-type-right">
+            Computaton selected:
+          </div>
+          <div class="compute-type peerinput">
+            {{ NXPJoinModuleCompute[0].option.value.computational.name }}
+          </div>
         </div>
-        <li class="compute-form-item">
-          Select start date of data:
-          <calendar-select></calendar-select>
-          <label for="compute-add-source">Controls</label>
+        <div class="compute-form-item peerinput">
+          <div class="date-data-select">
+            <div id="data-text-label">
+              Select start date of data:
+           </div>
+          </div>
+          <div class="date-data-select peerinput">
+            <calendar-select></calendar-select>
+          </div>
+          <!--<label for="compute-add-source">Controls</label>
           <select class="select-compute-source" @change="controlsSave" v-model="newCompute.controls" id="">Please select
             <option value=true>YES</option>
             <option value=false>NO</option>
@@ -77,17 +115,20 @@
           <select class="select-compute-automation" @change="automationSave" v-model="newCompute.automation" id="">Please select
             <option value=true>YES</option>
             <option value=false>NO</option>
-          </select>
-        </li>
+          </select> -->
+        </div>
         <!-- preview visualisation -->
       </template>
       <template v-slot:dashboard-visualisation>
-        <header>Visualisation</header>
-        <li>
-          <chart-builder v-if="NXPJoinModuleVisualise" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" ></chart-builder>
-        </li>
+        <header class="module-header">Visualisation</header>
+        <div id="vis-builder">
+          <chart-builder class="vis-area" v-if="NXPJoinModuleVisualise" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" ></chart-builder>
+        </div>
       </template>
       <template v-slot:submit-join>
+        <div id="termsofjoin">
+          Terms: a private and autonomous set of contracts will be setup. This makes it possible to be compatible with others in the next work. To connect with peers in the next work needs further setup.
+        </div>
         <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
         <div id="join-feedback" v-if="joinFeedbackActive === true">
           {{ joinFeedback }} --
@@ -101,6 +142,7 @@
 import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
 import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
 import ChartBuilder from '@/components/experiments/setChartBuilder'
+import axios from 'axios'
 
 export default {
   name: 'ExperimentNetwork',
@@ -237,13 +279,90 @@ export default {
       moduleCNRL: 'cnrl-001234543458',
       moduleType: 'chart.js',
       mData: '1',
-      visualRefCont: ''
+      visualRefCont: '',
+      filebutton: false,
+      askDataNXP: false,
+      fileinputSeen: true,
+      fileData: {},
+      fileName: '',
+      filepath: '',
+      fileType: '',
+      fileSummary: ''
     }
   },
   methods: {
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
+    },
+    uploadFileNXP () {
+      // upload the file displath to peerlink, defautl ptop storage assumed
+      // let nxpFilebundle = {}
+      // nxpFilebundle.filename = this.
+      // nxpFilebundle.contract = this.
+      // this.$store.dispatch('actionFileupload', nxpFilebundle)
+    },
+    askHOPDataNXP () {
+      this.askDataNXP = !this.askDataNXP
+    },
+    loadTextFromFile (ev) {
+      // prompt for Password
+      this.sourceLocation = 'local'
+      const localthis = this
+      this.fileData = ev.target.files[0]
+      this.fileName = this.fileData.name
+      this.filepath = this.fileData.path
+      this.fileType = this.fileData.type
+      const reader = new FileReader()
+      reader.onloadend = function () {
+        // const fileData = reader.result
+        const lines = reader.result.split(/\r\n|\n/)
+        localthis.linesLimit = lines.slice(0, 40)
+        /* function limit (string = '', limit = 0) {
+          return string.substring(0, limit)
+        }
+        const shortText = limit(fileData, 3000)
+        localthis.fileSummary = shortText */
+        localthis.filebutton = !localthis.filebutton
+      }
+      reader.readAsText(this.fileData)
+      const reader2 = new FileReader()
+      reader2.readAsDataURL(this.fileData)
+      reader2.onload = function (e) {
+        localthis.filepath = e.target.result
+      }
+    },
+    convertJSON () {
+      // need to do this via peer peerLink
+      const fileBund = {}
+      fileBund.name = this.fileName
+      fileBund.source = this.sourceLocation
+      fileBund.websource = this.readRemotefile
+      fileBund.web = 'weblocal'
+      fileBund.path = this.filepath
+      fileBund.type = this.fileType
+      fileBund.info = this.lineBundle
+      this.$store.dispatch('actionFileconvert', fileBund)
+    },
+    getRemotefile () {
+      this.sourceLocation = 'web'
+      const localthis = this
+      axios.get(this.readRemotefile)
+        .then(function (response) {
+          // handle success
+          // console.log(Object.keys(response))
+          // console.log(response.data)
+          const dataSource = response.data
+          const lines = dataSource.split(/\r\n|\n/)
+          localthis.linesLimit = lines.slice(0, 40)
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error)
+        })
+        .then(function () {
+          // always executed
+        })
     },
     actionExperiment (expCNRL, NXPcontract) {
       this.shellContract = expCNRL
@@ -265,6 +384,7 @@ export default {
     },
     closeJoinList () {
       console.log('close')
+      // this.$store.dispatch('actionLifeview', 'publicexperiments')
       this.$store.dispatch('actionSpaceList', 'public')
       this.$store.dispatch('actionSpaceListShow')
     },
@@ -325,6 +445,15 @@ export default {
 
 #grid-template-join {
   border: 0px dashed red;
+}
+
+.data-select-item {
+  width: 90%;
+}
+
+.data-select-datasource {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .list-table {
@@ -391,5 +520,89 @@ export default {
 
 #joinsaveNetworkExperiment {
   font-size: 1.4em;
+}
+
+.data-button {
+  font-size: 1.2em;
+  margin-right: 1em;
+}
+
+.module-header {
+  font-size: 1.4em;
+}
+
+.compute-form-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#compute-selected {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-size: 1.2em;
+}
+
+.compute-type {
+  font-size: 1.2em;
+  font-style: bold;
+}
+
+.right {
+  display: grid;
+  justify-content: end;
+  font-size: 1.2em;
+}
+
+.peerinput {
+  background-color: white;
+}
+
+.date-data-select {
+  font-size: 1.2em;
+  align-self: start;
+  margin-top: 1em;
+}
+
+#data-text-label {
+  display: grid;
+  justify-content: end;
+  margin-right: 1em;
+  font-size: 1.2em;
+}
+
+#compute-type-right {
+  display: grid;
+  justify-content: end;
+}
+
+#vis-builder {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.vis-area {
+  display: grid;
+  justify-self: center;
+  width: 60%;
+}
+
+.data-data-source {
+  font-size: 1.2em;
+}
+
+#data-source-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 1em;
+}
+
+#termsofjoin {
+  display: grid;
+  justify-content: center;
+  width: 80%;
+}
+
+.nxp-header {
+  font-size: 1.6em;
 }
 </style>

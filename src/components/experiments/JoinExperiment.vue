@@ -11,17 +11,16 @@
           id="modalTitle"
         >
           <slot name="header">
-            This is the default tile!
-
-            <button
-              type="button"
-              class="btn-close"
-              @click="close"
-              aria-label="Close modal"
-            >
-              x
-            </button>
+            Experiment context
           </slot>
+          <button
+            type="button"
+            class="btn-close"
+            @click="close"
+            aria-label="Close modal"
+          >
+            x
+          </button>
         </header>
         <section
           class="modal-body"
@@ -60,7 +59,6 @@
         </section>
         <footer class="modal-footer">
           <slot name="footer">
-
             <button
               type="button"
               class="btn-green"
@@ -121,6 +119,7 @@ export default {
 
 .modal-header,
 .modal-footer {
+  margin-top: 4em;
   padding: 15px;
   display: flex;
 }
