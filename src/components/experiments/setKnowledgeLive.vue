@@ -140,14 +140,14 @@ export default {
       }
       let datatypeMatcher = {}
       datatypeMatcher.xaxisSet = []
-      datatypeMatcher.xaxisSet = [ { column: 'timestamp', refcontract: '2d11318841f43034df41de9b38ab5e77b6b01bcf' } ]
-      // observation or computation require in compute contract?
+      datatypeMatcher.xaxisSet = [ { column: 'timestamp', refcontract: 'f3d388ebd946007626ee1d6ce0642710d550eb6d' } ] // '2d11318841f43034df41de9b38ab5e77b6b01bcf' } ]
+      // observation or computation require in compute contract? // f3d388ebd946007626ee1d6ce0642710d550eb6d
       // need to create new units based on compute and source datatype
       let newDatatypes = []
       let activeContractStage = {}
       let liveComputeRefcontractID = ''
       if (this.refContractComputeLive[0] === undefined) {
-        liveComputeRefcontractID = '9a23c342893348879e71a75c45e48914787445f6'
+        liveComputeRefcontractID = 'f020a98b100ac40c109a1488220e9874cfa3f43a' // 9a23c342893348879e71a75c45e48914787445f6
       } else {
         if (this.refContractComputeLive[0].option === undefined) {
           liveComputeRefcontractID = this.refContractComputeLive[0].key
@@ -157,7 +157,7 @@ export default {
           activeContractStage = this.refContractComputeLive[0].option
         }
       }
-      if (liveComputeRefcontractID !== '9a23c342893348879e71a75c45e48914787445f6') {
+      if (liveComputeRefcontractID !== 'f020a98b100ac40c109a1488220e9874cfa3f43a') {
         let computeDTprefix = {}
         for (let dt of setupDataPackage.value.concept.tablestructure) {
           let combinComputeDT = dt
@@ -271,8 +271,8 @@ export default {
       visualsettings: {
         device: null,
         compute: null,
-        xaxis: null,
-        yaxis: [],
+        xaxis: '2d11318841f43034df41de9b38ab5e77b6b01bcf', // null,
+        yaxis: [], // ['c4369332b824d237ba65303af949c7b2a79c8603'], // [],
         category: [],
         time: 'cnrl-t1',
         resolution: 'cnrl-t11'
@@ -324,6 +324,7 @@ export default {
     },
     yaxisSelect () {
       // set default y-axis chart setting
+      console.log(this.visualsettings.yaxis)
       this.$store.dispatch('actionSetVisYaxis', this.visualsettings.yaxis)
     },
     categorySelect () {

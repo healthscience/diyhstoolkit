@@ -297,13 +297,18 @@ export default {
     },
     uploadFileNXP () {
       // upload the file displath to peerlink, defautl ptop storage assumed
-      // let nxpFilebundle = {}
+      let nxpFilebundle = {}
       // nxpFilebundle.filename = this.
       // nxpFilebundle.contract = this.
-      // this.$store.dispatch('actionFileupload', nxpFilebundle)
+      this.$store.dispatch('actionFileupload', nxpFilebundle)
     },
     askHOPDataNXP () {
       this.askDataNXP = !this.askDataNXP
+      let nxpSyncbundle = {}
+      nxpSyncbundle.type = 'sync-data'
+      nxpSyncbundle.contract = this.selectJoin.source
+      console.log(nxpSyncbundle)
+      this.$store.dispatch('actionSyncRequest', nxpSyncbundle)
     },
     loadTextFromFile (ev) {
       // prompt for Password
@@ -416,6 +421,8 @@ export default {
       const peerChoices = {}
       peerChoices.genesis = this.actionKBundle.id
       peerChoices.question = this.actionKBundle.name
+      console.log('join info ')
+      console.log(peerChoices)
       this.$store.dispatch('actionJoinExperiment', peerChoices)
       // this.closeModalJoin()
     },

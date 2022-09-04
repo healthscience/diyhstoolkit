@@ -246,7 +246,7 @@ export default {
   display: inline-block;
 }
 
-.peer-list-set {
+.peer-set {
   font-size: 1.4em;
 }
 

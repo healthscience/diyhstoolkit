@@ -53,8 +53,8 @@ export default {
     SOCKET_ONMESSAGE (state, message) {
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      // console.log('****INPUUTTT******')
-      // console.log(backJSON)
+      console.log('****INPUUTTT******')
+      console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -1261,6 +1261,30 @@ export default {
       saveSpacePosition.jwt = this.state.jwttoken
       const saveJSONp = JSON.stringify(saveSpacePosition)
       Vue.prototype.$socket.send(saveJSONp)
+    },
+    actionSyncRequest (context, update) {
+      console.log('sync requiest')
+      console.log(update)
+      const syncDataBundle = {}
+      syncDataBundle.type = 'library'
+      syncDataBundle.reftype = 'sync-nxp-data'
+      syncDataBundle.action = 'replicate'
+      syncDataBundle.data = update
+      syncDataBundle.jwt = this.state.jwttoken
+      const syncJSON = JSON.stringify(syncDataBundle)
+      Vue.prototype.$socket.send(syncJSON)
+    },
+    actionFileupload (context, update) {
+      console.log('update file requiest FIRST TIME')
+      console.log(update)
+      const fileLocalBundle = {}
+      fileLocalBundle.type = 'library'
+      fileLocalBundle.reftype = 'convert-csv-json'
+      fileLocalBundle.action = 'localfile'
+      fileLocalBundle.data = update
+      fileLocalBundle.jwt = this.state.jwttoken
+      const fileJSON = JSON.stringify(fileLocalBundle)
+      Vue.prototype.$socket.send(fileJSON)
     }
   }
 }
