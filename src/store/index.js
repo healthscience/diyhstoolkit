@@ -117,6 +117,8 @@ const store = new Vuex.Store({
     joinedNXPlist: [],
     experimentStatus: {},
     experimentPeerStatus: {},
+    startPubRefContracts: [],
+    startPeerRefContracts: [],
     NXPexperimentData: {},
     entityUUIDReturn: {},
     entityUUIDsummary: {},
@@ -244,6 +246,10 @@ const store = new Vuex.Store({
       }
       Vue.set(state.nxpModulelist, inVerified, modulesRefKey)
     },
+    SET_NXPWATCH_MODULED: (state, inVerified) => {
+      // from watcher
+      Vue.set(state.nxpModulelist, inVerified, inVerified)
+    },
     SET_DATASOURCECOUNT: (state, inVerified) => {
       state.datasourceCount = inVerified
     },
@@ -298,6 +304,8 @@ const store = new Vuex.Store({
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
     },
     SET_Dashboard_NXP: (state, inVerified) => {
+      // console.log('set dash')
+      // console.log(inVerified)
       // set live dashboard list
       state.liveDashList.push(inVerified)
       // move minimpa code
@@ -710,10 +718,10 @@ const store = new Vuex.Store({
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionDashboardState (context, update) {
-      console.log('clicked VIEW NXP------------')
-      console.log(update)
+      // console.log('clicked VIEW NXP------------')
+      // console.log(update)
       // is the update an object if yes  saved bentospace
-      console.log(typeof update)
+      // console.log(typeof update)
       // set the minimap in position store module
       if (typeof update !== 'object') {
         let positionStartInfo = {}
@@ -725,7 +733,7 @@ const store = new Vuex.Store({
         update = update.nxp
       }
       // remove lists
-      context.commit('SET_SPACE_SHOW')
+      context.commit('SET_SPACE_SHOW', true)
       let futureTimeCheck = false
       context.commit('SET_LIVE_NXP', update)
       context.commit('SET_NXP_MODULED', update)
@@ -977,7 +985,7 @@ const store = new Vuex.Store({
       context.commit('SET_DATASOURCECOUNT', update)
     },
     actionCloseDashboard (context, update) {
-      context.commit('SET_DASHBOARD_CLOSE', update)
+      // context.commit('SET_DASHBOARD_CLOSE', update)
     },
     actionRemoveDashboard (context, update) {
       context.commit('SET_DASHBOARD_REMOVE', update)
@@ -996,6 +1004,9 @@ const store = new Vuex.Store({
     },
     actionCloseJoinexperiment (context, update) {
       context.commit('SET_CLOSE_JOINMODAL', update)
+    },
+    actionSetwatchnxpMod (context, update) {
+      context.commit('SET_NXPWATCH_MODULED', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

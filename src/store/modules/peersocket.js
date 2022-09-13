@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { watch } from 'vue'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import VisToolsUtility from '@/mixins/visualUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
@@ -143,20 +144,61 @@ export default {
 
         }
       } else if (backJSON.type === 'bentospaces-list') {
-        console.log('bentospaces at start')
-        console.log(backJSON.data)
         // now need to ask for data for the active bentospace NXP's
-        if (backJSON.data[0]) {
-          let nxpList = Object.keys(backJSON.data[0].value)
-          for (let nxp of nxpList) {
-            let positionStartInfo = {}
-            positionStartInfo.nxp = nxp
-            positionStartInfo.coord = backJSON.data[0].value[nxp]
-            positionStartInfo.type = 'saved'
-            this.dispatch('actionPostionCoord', positionStartInfo, { root: true })
-            this.dispatch('actionDashboardState', positionStartInfo, { root: true })
+        const localthis = this
+        watch(this.state.startPubRefContracts, function (newValue, oldValue) {
+          // both pubilc and peer library arrived?
+          console.log('public watch')
+          if (localthis.state.startPubRefContracts.length > 1 && localthis.state.startPeerRefContracts.length > 1) {
+            // now need to ask for data for the active bentospace NXP's
+            let saveDash = Object.keys(backJSON.data.value)
+            if (saveDash.length > 0) {
+              console.log('yes start dash')
+              let nxpList = Object.keys(backJSON.data.value)
+              for (let nxp of nxpList) {
+                console.log(nxp)
+                let positionStartInfo = {}
+                positionStartInfo.nxp = nxp
+                positionStartInfo.coord = backJSON.data.value[nxp]
+                positionStartInfo.type = 'saved'
+                // set state of space
+                // localthis.dispatch('actionLifeview', 'Experiments')
+                // localthis.dispatch('actionSpaceList', 'private')
+                // localthis.dispatch('actionSpaceListShow', true)
+                // set active space
+                localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
+                localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
+                localthis.dispatch('actionDashboardState', positionStartInfo, { root: true })
+              }
+            }
           }
-        }
+        })
+        watch(this.state.startPeerRefContracts, function (newValue, oldValue) {
+          console.log('peer watch')
+          // now need to ask for data for the active bentospace NXP's
+          // both pubilc and peer library arrived?
+          if (localthis.state.startPubRefContracts.length > 1 && localthis.state.startPeerRefContracts.length > 1) {
+            let saveDash = Object.keys(backJSON.data.value)
+            if (saveDash.length > 0) {
+              console.log('yes start dash')
+              let nxpList = Object.keys(backJSON.data.value)
+              for (let nxp of nxpList) {
+                let positionStartInfo = {}
+                positionStartInfo.nxp = nxp
+                positionStartInfo.coord = backJSON.data.value[nxp]
+                positionStartInfo.type = 'saved'
+                // set state of space
+                // localthis.dispatch('actionLifeview', 'Experiments')
+                // localthis.dispatch('actionSpaceList', 'private')
+                // localthis.dispatch('actionSpaceListShow', true)
+                // set the active dash list
+                localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
+                localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
+                localthis.dispatch('actionDashboardState', positionStartInfo, { root: true })
+              }
+            }
+          }
+        })
       } else if (backJSON.type === 'publickey') {
         this.state.publickeys.push(backJSON.pubkey)
       } else if (backJSON.type === 'open-library') {
@@ -205,7 +247,7 @@ export default {
       } else if (backJSON.safeflow === true) {
         // safeFLOW inflow
         console.log('auth passed and now get library info')
-        if (backJSON.type === 'auth') {
+        if (backJSON.type === 'auth-hop') {
           if (backJSON.auth !== false) {
             // set remove welcome message
             this.state.peerauthStatus = true
@@ -544,6 +586,8 @@ export default {
           experBundle.contract = exl.exp
           experBundle.modules = VisualUtility.orderModules(exl.modules, 'private')
           let objectPropC = exl.exp.key
+          // tell toolkit ref contracts are active
+          this.state.startPeerRefContracts.push('peeref')
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }
         // prepare PEER JOINED LIST
@@ -565,6 +609,8 @@ export default {
           experBundle.active = false
           experBundle.contract = exl.exp
           experBundle.modules = VisualUtility.orderModules(exl.modules, 'public') // exl.modules
+          // inform toolkit contract are active
+          this.state.startPubRefContracts.push('pubref')
           let objectPropC = exl.exp.key
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }

@@ -140,6 +140,7 @@ export default {
       this.$store.dispatch('actionSelfSignin', peerConnect)
       this.selfsigninInput = ''
       this.selfpwInput = ''
+      this.$store.dispatch('actionCloseNetworkModal')
     }
   }
 }

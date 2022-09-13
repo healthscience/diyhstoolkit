@@ -7,7 +7,7 @@
         <div id="dashboard-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }"> <!-- v-bind:style="{ minWidth: '1100px', height: 'auto'}"   v-bind:style="{ width: '100%', height: '100%'}" drag-handle=".drag-handle" -->
           <!--loop over live dashboards -->
           <vue-draggable-resizable v-for="dashi of dashLive" :key="dashi.id" id="dashispace" data-no-dragscroll :min-width="900" :w="1000" h="auto" :parent="true" @activated="onDragStartCallback(dashi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handle'" :x=spaceCoord[dashi].x :y=spaceCoord[dashi].y  >
-            <div id="single-space">
+            <div id="single-space" v-if="activeDrag[dashi]">
               <div class="drag-handle" @click.prevent="setActiveSpace(dashi)" v-bind:class="{active: activeDrag[dashi].active === true }">
                 --- Activation Bar ---
               </div>
@@ -73,6 +73,7 @@ import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 import MininavMap from './minimap/mininavMap.vue'
 import NxpBoard from '@/components/experiments/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
+// import NewLifeboardVue from '../../lifeboard/NewLifeboard.vue'
 
 export default {
   name: 'ExperimentNetwork',
@@ -103,14 +104,23 @@ export default {
       }
     },
     NXPstatusData: function () {
-      return this.$store.state.nxpModulelist
+      if (this.$store.state.nxpModulelist === undefined) {
+        return {}
+      } else {
+        return this.$store.state.nxpModulelist
+      }
+      // return this.$store.state.nxpModulelist
     },
     dashLive: function () {
-      return this.$store.state.liveDashList
+      if (this.$store.state.liveDashList === undefined) {
+        return {}
+      } else {
+        return this.$store.state.liveDashList
+      }
+      // return this.$store.state.liveDashList
     },
     spaceCoord: function () {
       if (this.$store.state.positionSpace.liveSpaceCoord === undefined) {
-        console.log('not est')
         return {}
       } else {
         return this.$store.state.positionSpace.liveSpaceCoord
@@ -165,9 +175,17 @@ export default {
       firstClick: true
     }
   },
+  watch: {
+    // whenever question changes, this function will run
+    NXPstatusData (newQuestion, oldQuestion) {
+      console.log('listender component called')
+      // this.$store.dispatch('actionSetwatchnxpMod', newQuestion)
+    },
+    deep: true
+  },
   methods: {
     navMover: function () {
-      console.log('scholl in space0000000')
+      console.log('scroll in space')
     },
     whereMinmap (mo) {
       this.mouseLive.x = mo.offsetX
