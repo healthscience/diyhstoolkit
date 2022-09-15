@@ -474,6 +474,7 @@ const store = new Vuex.Store({
     },
     SET_DASHBOARD_REMOVE (state, inVerified) {
       // remove NXP from peer list
+      console.log('remove nxpm from cashboard')
       let newDashList = this.state.liveDashList.filter(function (value, index, arr) {
         return value !== inVerified
       })

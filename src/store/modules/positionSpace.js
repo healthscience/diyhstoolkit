@@ -40,6 +40,13 @@ export default {
       updateXY.y = updateCOORD.y
       Vue.set(state.liveSpaceCoord, inVerified.nxp, updateXY)
     },
+    SET_REMOVEMMAP_POSITION: (state, inVerified) => {
+      let updateCOORD = state.ctx.removeMMapSpace(inVerified)
+      let updateXY = {}
+      updateXY.x = updateCOORD.x
+      updateXY.y = updateCOORD.y
+      Vue.set(state.liveSpaceCoord, inVerified.nxp, updateXY)
+    },
     SET_SCROLLTO_POSITION: (state, inVerified) => {
       state.ctx.scrollTODashboard(inVerified)
     },
@@ -52,7 +59,6 @@ export default {
       for (let ck of coordKeys) {
         delete clearCoord[ck]
       }
-      // state.liveSpaceCoord = clearCoord
     }
   },
   actions: {
@@ -78,6 +84,9 @@ export default {
     },
     actionDashBmove: (context, update) => {
       context.commit('SET_UPDATEMMAP_POSITION', update)
+    },
+    actionDashBRemove: (context, update) => {
+      context.commit('SET_REMOVEMMAP_POSITION', update)
     },
     actionZoomset: (context, update) => {
       context.commit('SET_ZOOM_MAP', update)

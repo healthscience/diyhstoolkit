@@ -573,7 +573,12 @@ export default {
         this.state.joinedLifeboard.push(lbPeer)
       } else if (backJSON.type === 'peerprivatedelete') {
         console.log('remove ref contr confirmed')
-        // console.log(backJSON)
+        console.log(backJSON)
+        // need to update space coord dash/minmap list ie remove id just removed
+        this.state.context.commit('positionSpace/SET_REMOVEMMAP_POSITION', backJSON.data, { root: true })
+        // this.state.positionSpace.liveSpaceCoord
+        // save state of bentospace dashboard
+        this.$store.dispatch('actionSaveSpaceNXP', 'nxp')
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
         this.state.livePeerRefContIndex = backJSON.referenceContracts

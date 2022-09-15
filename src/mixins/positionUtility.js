@@ -194,14 +194,30 @@ PositionUtility.prototype.scrollTODashboard = function (miniMouse) {
 }
 
 /**
-* update locations of Dashboards and mouse
-* @method updateMmap
+* update locations of Dashboards and minimap
+* @method updateMMapSpace
 *
 */
 PositionUtility.prototype.updateMMapSpace = function (newCoord) {
   this.clearMMap()
   // update mini coords  update nxp key
   this.liveSpaceCoord[newCoord.nxp] = newCoord
+  // redraw the dashboards and mouse pointer
+  this.miniMapLocations()
+  return this.liveSpaceCoord[newCoord.nxp]
+}
+
+/**
+* remove location of Dashboards and minimap
+* @method removeMMapSpace
+*
+*/
+PositionUtility.prototype.removeMMapSpace = function (newCoord) {
+  console.log('remove utilty')
+  console.log(newCoord)
+  this.clearMMap()
+  // update mini coords  remove nxp key
+  delete this.liveSpaceCoord[newCoord.nxp]
   // redraw the dashboards and mouse pointer
   this.miniMapLocations()
   return this.liveSpaceCoord[newCoord.nxp]
