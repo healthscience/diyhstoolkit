@@ -474,22 +474,22 @@ const store = new Vuex.Store({
     },
     SET_DASHBOARD_REMOVE (state, inVerified) {
       // remove NXP from peer list
-      console.log('remove nxpm from cashboard')
+      console.log('remove nxpm from dashboard')
       let newDashList = this.state.liveDashList.filter(function (value, index, arr) {
         return value !== inVerified
       })
       state.liveDashList = newDashList
+      // update minipmap?? or do when remove confirmed??
       // also remove from lists view
       let newPeerlist = state.joinedNXPlist.data.filter(function (value, index, arr) {
         return value.id !== inVerified
       })
       state.joinedNXPlist.data = newPeerlist
-      // Vue.set(state.joinedNXPlist, 'data', newPeerlist)
       // send message to PeerLink to remove from peer library
       let message = {}
       message.type = 'library'
-      message.reftype = 'removepeer'
-      message.action = 'removepeer'
+      message.reftype = 'remove-nxp'
+      message.action = 'remove-nxp'
       message.data = inVerified
       message.jwt = this.state.jwttoken
       const libraryMessage = JSON.stringify(message)
@@ -721,8 +721,6 @@ const store = new Vuex.Store({
     async actionDashboardState (context, update) {
       // console.log('clicked VIEW NXP------------')
       // console.log(update)
-      // is the update an object if yes  saved bentospace
-      // console.log(typeof update)
       // set the minimap in position store module
       if (typeof update !== 'object') {
         let positionStartInfo = {}

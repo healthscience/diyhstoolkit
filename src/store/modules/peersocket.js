@@ -149,7 +149,10 @@ export default {
         watch(this.state.startPubRefContracts, function (newValue, oldValue) {
           // both pubilc and peer library arrived?
           console.log('public watch')
-          if (localthis.state.startPubRefContracts.length > 1 && localthis.state.startPeerRefContracts.length > 1) {
+          console.log(localthis.state.startPubRefContracts.length)
+          console.log(localthis.state.startPeerRefContracts.length)
+          if (localthis.state.startPubRefContracts.length > 0 && localthis.state.startPeerRefContracts.length > 0) {
+            console.log('pub both')
             // now need to ask for data for the active bentospace NXP's
             let saveDash = Object.keys(backJSON.data.value)
             if (saveDash.length > 0) {
@@ -177,7 +180,7 @@ export default {
           console.log('peer watch')
           // now need to ask for data for the active bentospace NXP's
           // both pubilc and peer library arrived?
-          if (localthis.state.startPubRefContracts.length > 1 && localthis.state.startPeerRefContracts.length > 1) {
+          if (localthis.state.startPubRefContracts.length > 0 && localthis.state.startPeerRefContracts.length > 0) {
             let saveDash = Object.keys(backJSON.data.value)
             if (saveDash.length > 0) {
               console.log('yes start dash')
@@ -575,10 +578,10 @@ export default {
         console.log('remove ref contr confirmed')
         console.log(backJSON)
         // need to update space coord dash/minmap list ie remove id just removed
-        this.state.context.commit('positionSpace/SET_REMOVEMMAP_POSITION', backJSON.data, { root: true })
+        this.dispatch('actionDashBRemove', backJSON.data.nxp)
         // this.state.positionSpace.liveSpaceCoord
         // save state of bentospace dashboard
-        this.$store.dispatch('actionSaveSpaceNXP', 'nxp')
+        this.dispatch('actionSaveSpaceNXP', 'nxp')
       } else if (backJSON.type === 'peerprivate') {
         // peer private library contracts
         this.state.livePeerRefContIndex = backJSON.referenceContracts

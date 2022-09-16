@@ -146,6 +146,8 @@ export default {
 
 <style scoped>
 #grid-contracts {
+  max-height: 30em;
+  overflow-y: scroll;
   display: grid;
   grid-template-columns: 1fr;
   width: 96%;

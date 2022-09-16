@@ -41,11 +41,13 @@ export default {
       Vue.set(state.liveSpaceCoord, inVerified.nxp, updateXY)
     },
     SET_REMOVEMMAP_POSITION: (state, inVerified) => {
+      console.log('remove coor postion')
+      console.log(inVerified)
       let updateCOORD = state.ctx.removeMMapSpace(inVerified)
-      let updateXY = {}
+      /* let updateXY = {}
       updateXY.x = updateCOORD.x
       updateXY.y = updateCOORD.y
-      Vue.set(state.liveSpaceCoord, inVerified.nxp, updateXY)
+      Vue.set(state.liveSpaceCoord, inVerified.nxp, updateXY) */
     },
     SET_SCROLLTO_POSITION: (state, inVerified) => {
       state.ctx.scrollTODashboard(inVerified)

@@ -451,6 +451,8 @@ export default {
 }
 
 #grid-template-join {
+  max-height: 30em;
+  overflow-y: scroll;
   border: 0px dashed red;
 }
 
