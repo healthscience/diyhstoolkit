@@ -109,7 +109,6 @@ export default {
       } else {
         return this.$store.state.nxpModulelist
       }
-      // return this.$store.state.nxpModulelist
     },
     dashLive: function () {
       if (this.$store.state.liveDashList === undefined) {
@@ -117,7 +116,6 @@ export default {
       } else {
         return this.$store.state.liveDashList
       }
-      // return this.$store.state.liveDashList
     },
     spaceCoord: function () {
       if (this.$store.state.positionSpace.liveSpaceCoord === undefined) {
@@ -174,14 +172,6 @@ export default {
       ctx: {},
       firstClick: true
     }
-  },
-  watch: {
-    // whenever question changes, this function will run
-    NXPstatusData (newQuestion, oldQuestion) {
-      console.log('listender component called')
-      // this.$store.dispatch('actionSetwatchnxpMod', newQuestion)
-    },
-    deep: true
   },
   methods: {
     navMover: function () {

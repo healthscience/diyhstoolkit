@@ -87,7 +87,7 @@ export default {
       } else if (type === 'join') {
         this.$store.dispatch('actionLifeview', 'publicexperiments')
         this.$store.dispatch('actionSpaceList', 'public')
-        this.$store.dispatch('actionSpaceListShow')
+        this.$store.dispatch('actionSpaceJoinListShow', false)
       }
       this.newtypeShow = !this.newtypeShow
     },

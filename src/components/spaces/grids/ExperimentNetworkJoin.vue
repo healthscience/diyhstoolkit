@@ -388,10 +388,9 @@ export default {
       }
     },
     closeJoinList () {
-      console.log('close')
       // this.$store.dispatch('actionLifeview', 'publicexperiments')
       this.$store.dispatch('actionSpaceList', 'public')
-      this.$store.dispatch('actionSpaceListShow')
+      this.$store.dispatch('actionSpaceJoinListShow')
     },
     closeModalJoin () {
       // this.isModalJoinVisible = false

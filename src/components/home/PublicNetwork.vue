@@ -1,7 +1,7 @@
 <template>
   <div id="public-network-experiment">
     <experimentnetwork-join
-      class="experiment-info" v-if="spaceState === 'public' && spaceStateShow === true && networkNXPListlive.data"
+      class="experiment-info" v-if="spaceState === 'public' && spaceJoinStateShow === true && networkNXPListlive.data"
       :experiments="networkNXPListlive.data"
       :columns="networkNXPListlive.columns"
       :filter-key="searchQuery">
@@ -42,8 +42,8 @@ export default {
     spaceState: function () {
       return this.$store.state.spaceState
     },
-    spaceStateShow: function () {
-      return this.$store.state.spaceStateShow.state
+    spaceJoinStateShow: function () {
+      return this.$store.state.spaceJoinStateShow.state
     }
   },
   data () {

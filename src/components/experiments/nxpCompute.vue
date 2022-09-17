@@ -46,8 +46,8 @@ export default {
   computed: {
     refContractCompute: function () {
       let liveCompute = []
-      if (this.$store.state.refcontractCompute.length !== 0) {
-        liveCompute = this.$store.state.refcontractCompute
+      if (this.$store.state.genRefcontractCompute.length !== 0) {
+        liveCompute = this.$store.state.genRefcontractCompute
       } else {
         liveCompute = []
       }

@@ -271,7 +271,7 @@ export default {
       visualsettings: {
         device: null,
         compute: null,
-        xaxis: '2d11318841f43034df41de9b38ab5e77b6b01bcf', // null,
+        xaxis: 'f3d388ebd946007626ee1d6ce0642710d550eb6d', // null,
         yaxis: [], // ['c4369332b824d237ba65303af949c7b2a79c8603'], // [],
         category: [],
         time: 'cnrl-t1',

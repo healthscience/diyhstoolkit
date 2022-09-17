@@ -46,6 +46,10 @@ const store = new Vuex.Store({
       state: false,
       text: 'hide'
     },
+    spaceJoinStateShow: {
+      state: false,
+      text: 'hide'
+    },
     spaceType: 'Experiments',
     viewLifeboards: false,
     viewNXP: true,
@@ -163,6 +167,7 @@ const store = new Vuex.Store({
     },
     refcontractPackaging: [],
     refcontractCompute: [],
+    genRefcontractCompute: [],
     refcontractVisualise: [],
     nxpMakeList: [],
     nxpModulesList: [],
@@ -553,6 +558,16 @@ const store = new Vuex.Store({
         textSpace = 'show'
       }
       Vue.set(state.spaceStateShow, 'text', textSpace)
+    },
+    SET_JOINSPACE_SHOW (state, inVerified) {
+      Vue.set(state.spaceJoinStateShow, 'state', !state.spaceJoinStateShow.state)
+      let textSpace = ''
+      if (state.spaceJoinStateShow.state === true) {
+        textSpace = 'hide'
+      } else {
+        textSpace = 'show'
+      }
+      Vue.set(state.spaceJoinStateShow, 'text', textSpace)
     },
     SET_CLOSE_JOINMODAL (state, inVerified) {
       state.isModalJoinNetworkExperiment = false
@@ -1000,6 +1015,9 @@ const store = new Vuex.Store({
     },
     actionSpaceListShow (context, update) {
       context.commit('SET_SPACE_SHOW', update)
+    },
+    actionSpaceJoinListShow (context, update) {
+      context.commit('SET_JOINSPACE_SHOW', update)
     },
     actionCloseJoinexperiment (context, update) {
       context.commit('SET_CLOSE_JOINMODAL', update)

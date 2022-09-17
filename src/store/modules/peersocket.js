@@ -148,26 +148,16 @@ export default {
         const localthis = this
         watch(this.state.startPubRefContracts, function (newValue, oldValue) {
           // both pubilc and peer library arrived?
-          console.log('public watch')
-          console.log(localthis.state.startPubRefContracts.length)
-          console.log(localthis.state.startPeerRefContracts.length)
           if (localthis.state.startPubRefContracts.length > 0 && localthis.state.startPeerRefContracts.length > 0) {
-            console.log('pub both')
             // now need to ask for data for the active bentospace NXP's
             let saveDash = Object.keys(backJSON.data.value)
             if (saveDash.length > 0) {
-              console.log('yes start dash')
-              let nxpList = Object.keys(backJSON.data.value)
+                let nxpList = Object.keys(backJSON.data.value)
               for (let nxp of nxpList) {
-                console.log(nxp)
                 let positionStartInfo = {}
                 positionStartInfo.nxp = nxp
                 positionStartInfo.coord = backJSON.data.value[nxp]
                 positionStartInfo.type = 'saved'
-                // set state of space
-                // localthis.dispatch('actionLifeview', 'Experiments')
-                // localthis.dispatch('actionSpaceList', 'private')
-                // localthis.dispatch('actionSpaceListShow', true)
                 // set active space
                 localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
                 localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
@@ -177,7 +167,6 @@ export default {
           }
         })
         watch(this.state.startPeerRefContracts, function (newValue, oldValue) {
-          console.log('peer watch')
           // now need to ask for data for the active bentospace NXP's
           // both pubilc and peer library arrived?
           if (localthis.state.startPubRefContracts.length > 0 && localthis.state.startPeerRefContracts.length > 0) {
@@ -190,10 +179,6 @@ export default {
                 positionStartInfo.nxp = nxp
                 positionStartInfo.coord = backJSON.data.value[nxp]
                 positionStartInfo.type = 'saved'
-                // set state of space
-                // localthis.dispatch('actionLifeview', 'Experiments')
-                // localthis.dispatch('actionSpaceList', 'private')
-                // localthis.dispatch('actionSpaceListShow', true)
                 // set the active dash list
                 localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
                 localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
@@ -662,7 +647,7 @@ export default {
       // add to module list full details
       this.state.moduleHolder.push(inVerified)
       this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
-      this.state.refcontractCompute.push(inVerified)
+      this.state.genRefcontractCompute.push(inVerified)
     },
     SET_VISUALISE_REFCONTRACT (state, inVerified) {
       // add to module list full details
@@ -1188,7 +1173,7 @@ export default {
         // clear the new NXP forms
         this.state.moduleHolder = []
         this.state.refcontractQuestion = {}
-        this.state.refcontractCompute = []
+        this.state.genRefcontractCompute = []
         // clear the forms and inputs ref contrat modules
         this.state.nxpMakeList = []
         this.state.moduleHolder = []
