@@ -172,7 +172,6 @@ export default {
           if (localthis.state.startPubRefContracts.length > 0 && localthis.state.startPeerRefContracts.length > 0) {
             let saveDash = Object.keys(backJSON.data.value)
             if (saveDash.length > 0) {
-              console.log('yes start dash')
               let nxpList = Object.keys(backJSON.data.value)
               for (let nxp of nxpList) {
                 let positionStartInfo = {}

@@ -550,7 +550,11 @@ const store = new Vuex.Store({
       state.spaceState = inVerified
     },
     SET_SPACE_SHOW (state, inVerified) {
-      Vue.set(state.spaceStateShow, 'state', !state.spaceStateShow.state)
+      if (inVerified === false) {
+        Vue.set(state.spaceStateShow, 'state', false)
+      } else {
+        Vue.set(state.spaceStateShow, 'state', !state.spaceStateShow.state)
+      }
       let textSpace = ''
       if (state.spaceStateShow.state === true) {
         textSpace = 'hide'
@@ -747,7 +751,7 @@ const store = new Vuex.Store({
         update = update.nxp
       }
       // remove lists
-      context.commit('SET_SPACE_SHOW', true)
+      context.commit('SET_SPACE_SHOW', false)
       let futureTimeCheck = false
       context.commit('SET_LIVE_NXP', update)
       context.commit('SET_NXP_MODULED', update)
@@ -999,7 +1003,7 @@ const store = new Vuex.Store({
       context.commit('SET_DATASOURCECOUNT', update)
     },
     actionCloseDashboard (context, update) {
-      // context.commit('SET_DASHBOARD_CLOSE', update)
+      context.commit('SET_DASHBOARD_CLOSE', update)
     },
     actionRemoveDashboard (context, update) {
       context.commit('SET_DASHBOARD_REMOVE', update)

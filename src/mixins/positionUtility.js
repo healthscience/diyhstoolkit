@@ -148,10 +148,11 @@ PositionUtility.prototype.collisionMiniDash = function (miniMouse) {
 *
 */
 PositionUtility.prototype.clearMMap = function (newCoord) {
-  console.log('clear map')
   let liveBBox = Object.keys(this.liveSpaceCoord)
   for (let mmkey of liveBBox) {
-    delete this.liveSpaceCoord[mmkey]
+    if (newCoord === mmkey) {
+      delete this.liveSpaceCoord[mmkey]
+    }
   }
   this.ctx.clearRect(0, 0, 200, 200)
 }
@@ -213,11 +214,9 @@ PositionUtility.prototype.updateMMapSpace = function (newCoord) {
 *
 */
 PositionUtility.prototype.removeMMapSpace = function (newCoord) {
-  console.log('remove utilty')
-  console.log(newCoord)
   this.clearMMap()
   // update mini coords  remove nxp key
-  delete this.liveSpaceCoord[newCoord.nxp]
+  delete this.liveSpaceCoord[newCoord]
   // redraw the dashboards and mouse pointer
   this.miniMapLocations()
   return this.liveSpaceCoord[newCoord.nxp]

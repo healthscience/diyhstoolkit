@@ -190,7 +190,7 @@ export default {
       datatypeMatcher.yaxisSet = newDatatypes
       let datatypeHolder = {}
       datatypeHolder.xaxisSet = datatypeMatcher.xaxisSet
-      datatypeHolder.yaxisSet = datatypeMatcher.yaxisSet
+      datatypeHolder.yaxisSet = this.filterEmptycol(datatypeMatcher.yaxisSet)
       return datatypeHolder
     },
     category: function () {
@@ -261,6 +261,17 @@ export default {
       return this.$store.state.setTimeFormat
     }
   },
+  filters: {
+    noBlanks (value) {
+      let allowed = ''
+      if (value !== undefined) {
+        allowed = value
+        return allowed
+      } else {
+        return 'empty'
+      }
+    }
+  },
   data () {
     return {
       selectChange: {
@@ -297,6 +308,15 @@ export default {
     clearKnowledgeBox () {
       // set defaults
     },
+    filterEmptycol (colArr) {
+      let tidyArr = []
+      for (let cm of colArr) {
+        if (cm.refcontract !== null && cm.refcontract !== 'f3d388ebd946007626ee1d6ce0642710d550eb6d') {
+          tidyArr.push(cm)
+        }
+      }
+      return tidyArr
+    },
     convertReftoText (cat, dtList) {
       let nameText = ''
       for (let dtref of dtList) {
@@ -324,7 +344,6 @@ export default {
     },
     yaxisSelect () {
       // set default y-axis chart setting
-      console.log(this.visualsettings.yaxis)
       this.$store.dispatch('actionSetVisYaxis', this.visualsettings.yaxis)
     },
     categorySelect () {
