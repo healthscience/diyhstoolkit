@@ -4,6 +4,7 @@ import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import VisToolsUtility from '@/mixins/visualUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
 import moment from 'moment'
+import { configureRequestOptions } from 'builder-util-runtime'
 const ToolUtility = new ToolkitUtility()
 const VisualUtility = new VisToolsUtility()
 const ValidateUtility = new ContextUtility()
@@ -186,8 +187,11 @@ export default {
             }
           }
         })
-      } else if (backJSON.type === 'publickey') {
-        this.state.publickeys.push(backJSON.pubkey)
+      } else if (backJSON.type === 'hyperdrive-pubkey') {
+        Vue.set(this.state, 'publickeyHyperdrive', backJSON.data)
+      } else if (backJSON.type === 'hyperbee-pubkeys') {
+        this.state.publickeys = backJSON.data
+        Vue.set(this.state, 'publickeys', [...backJSON.data])
       } else if (backJSON.type === 'open-library') {
         this.state.swarmStatus = true
       } else if (backJSON.type === 'replicate-publiclibrary') {
@@ -228,7 +232,7 @@ export default {
           Vue.prototype.$socket.send(referenceContractReady)
         }
       } else if (backJSON.type === 'extractexperimentmodules') {
-        Vue.set(this.state.joinNXPlive, 'data', backJSON.data)
+        Vue.set(this.state.joinNXPlivejwttoken, 'data', backJSON.data)
         Vue.set(this.state.joinNXPlive, 'compute', backJSON.compute)
         Vue.set(this.state.joinNXPlive, 'visualise', backJSON.visualise)
       } else if (backJSON.safeflow === true) {
@@ -256,14 +260,11 @@ export default {
             refContract.jwt = this.state.jwttoken
             const refCJSON = JSON.stringify(refContract)
             Vue.prototype.$socket.send(refCJSON)
-            // ask for datastore public keys
-            //  need call, added manualy for now  SET_ASK_KEYMANAGEMENT(state)
-            this.state.publickeys = []
-            const pubkeyGet = {}
+            /* const pubkeyGet = {}
             pubkeyGet.type = 'library'
             pubkeyGet.reftype = 'keymanagement'
             pubkeyGet.jwt = this.state.jwttoken
-            Vue.prototype.$socket.send(JSON.stringify(pubkeyGet))
+            Vue.prototype.$socket.send(JSON.stringify(pubkeyGet)) */
             // get datastore
             let getWarmPeers = {}
             getWarmPeers.type = 'library'
@@ -1288,9 +1289,6 @@ export default {
       Vue.prototype.$socket.send(refCJSONp)
     },
     actionSaveSpaceNXP (context, update) {
-      console.log('save or update nxp bentospace')
-      // console.log(this.state.liveDashList)
-      console.log(this.state.positionSpace.liveSpaceCoord)
       const saveSpacePosition = {}
       saveSpacePosition.type = 'bentospace'
       saveSpacePosition.reftype = 'bentospace'

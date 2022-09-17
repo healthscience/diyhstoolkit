@@ -4,6 +4,9 @@
       <div id="peers-listkeys">
           <div v-if="swarmState === true" id="open-connect">Public Library OPEN for replication
           </div>
+          <div id="drive-pubkey">
+            Drive key: {{ publickeyDrive }}
+            </div>
           <ul class="peer-ledgers" v-for='pk in publicKeysList' :key='pk.id'>
             <li>{{ pk.keyname }} pubkey- {{ pk.pubkey }}
             <!-- <button type="button" class="btn" @click="openReplication(pk)">sync</button> -->
@@ -48,6 +51,9 @@ export default {
   mounted () {
   },
   computed: {
+    publickeyDrive: function () {
+      return this.$store.state.publickeyHyperdrive
+    },
     publicKeysList: function () {
       let displayKeys = []
       for (let keyi of this.$store.state.publickeys) {

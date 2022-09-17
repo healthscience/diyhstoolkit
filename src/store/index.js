@@ -54,6 +54,7 @@ const store = new Vuex.Store({
     viewLifeboards: false,
     viewNXP: true,
     viewTimeline: false,
+    publickeyHyperdrive: '',
     publickeys: [],
     warmNetwork: [],
     swarmStatus: false,
