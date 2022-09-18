@@ -232,7 +232,7 @@ export default {
           Vue.prototype.$socket.send(referenceContractReady)
         }
       } else if (backJSON.type === 'extractexperimentmodules') {
-        Vue.set(this.state.joinNXPlivejwttoken, 'data', backJSON.data)
+        Vue.set(this.state.joinNXPlive, 'data', backJSON.data)
         Vue.set(this.state.joinNXPlive, 'compute', backJSON.compute)
         Vue.set(this.state.joinNXPlive, 'visualise', backJSON.visualise)
       } else if (backJSON.safeflow === true) {
