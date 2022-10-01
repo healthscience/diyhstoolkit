@@ -23,7 +23,7 @@
         </div>
       </div>
       <div id="connection-message" v-if="socketClosed ===  true">
-        Connection to the network has been broken.
+        Connecting to the HOP .. .. .
       </div>
     </div>
     <network-activespaces></network-activespaces>
