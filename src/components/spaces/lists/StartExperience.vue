@@ -1,17 +1,14 @@
 <template>
   <div id="grid-start">
-    <div id="demo-data">Hello start experiencedemo data</div>
+    <div id="demo-data">Hello, click button to replicate demo data</div>
     <div id="replicate-librarydatastore">
-      Replicate library:
-      <input v-model="peerSynckey" placeholder="public key">
-      <button type="button" class="btn" @click="peerSyncPublicLibrary()">Sync Library</button>
+      <button type="button" class="btn" @click="peerSyncPublicLibrary()">Get demo data</button>
       <div id="replicate-feedback" v-if="replicateStatus">
         <button v-if="replicateStatus.data.replicate === true" type="button" class="btn" @click="viewReplicatePubLib()">View synced public library</button>
       </div>
     </div>
     <div id="listpeer-publiclibrary" v-if="networkNXPListlive">
-      Peers friends public library
-      <button type="button" class="btn" @click="removePublicLibrary()">Remove</button>
+      Demo data
       <experimentnetwork-join
         class="experiment-info" v-if="networkNXPListlive.data"
         :experiments="networkNXPListlive.data"
