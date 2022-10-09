@@ -2,9 +2,9 @@
   <div id="grid-start">
     <div id="demo-data">Hello, click button to replicate demo data</div>
     <div id="replicate-librarydatastore">
-      <button type="button" class="btn" @click="peerSyncPublicLibrary()">Get demo data</button>
+      <button v-if="replicateStatus.data.replicate !== true" type="button" class="btn" @click="peerSyncPublicLibrary()">Get demo data</button>
       <div id="replicate-feedback" v-if="replicateStatus">
-        <button v-if="replicateStatus.data.replicate === true" type="button" class="btn" @click="viewReplicatePubLib()">View synced public library</button>
+        <!-- <button v-if="replicateStatus.data.replicate === true" type="button" class="btn" @click="viewReplicatePubLib()">View synced public library</button> -->
       </div>
     </div>
     <div id="listpeer-publiclibrary" v-if="networkNXPListlive">
@@ -44,7 +44,7 @@ export default {
   },
   data () {
     return {
-      peerSynckey: ''
+      peerSynckey: '5ba68eb298f548d6e955987e70acf1fb3dfc5698038bb6d53b0cd79ed037a4c4'
     }
   },
   methods: {

@@ -196,6 +196,8 @@ export default {
         this.state.swarmStatus = true
       } else if (backJSON.type === 'replicate-publiclibrary') {
         Vue.set(this.state.replicatePubliclibrary, 'data', backJSON.data)
+        // auto call add peer public library
+        this.dispatch('actionViewSyncLibrary', 'replicate-publiclibrary')
       } else if (backJSON.type === 'publiclibraryaddcomplete') {
         console.log('add to public library')
         // Vue.set(this.state., '', backJSON.data)
@@ -207,10 +209,27 @@ export default {
         refContractp.jwt = this.state.jwttoken
         const refCJSONp = JSON.stringify(refContractp)
         Vue.prototype.$socket.send(refCJSONp)
+        // open up the join list
+        this.dispatch('actionLifeview', 'publicexperiments', { root: true })
+        this.dispatch('actionSpaceList', 'public', { root: true })
+        this.dispatch('actionSpaceJoinListShow', true, { root: true })
       } else if (backJSON.type === 'replicatedata-publiclibrary') {
         this.state.tempNetworkLibrary = backJSON
         let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)
         this.state.replicateNXPexperimentList = gridAnnon
+        // now replicate reference contract to produce join list
+        // match nxp id to full ref contract
+        let fullnxpRefcontract = {}
+        for (let nxpopt of this.state.replicateNXPexperimentList.data) {
+          if (nxpopt.id === 'c77453057ebe97d24ae1ccbc67f774f70fd224f8') {
+            fullnxpRefcontract = nxpopt
+          }
+        }
+        let demoRefcontract1 = {}
+        demoRefcontract1.type = 'addPlibrary'
+        demoRefcontract1.nxpID = 'c77453057ebe97d24ae1ccbc67f774f70fd224f8'
+        demoRefcontract1.nxpContract = fullnxpRefcontract
+        this.dispatch('actionAddPubliclibrary', demoRefcontract1)
       } else if (backJSON.type === 'new-peer') {
         this.state.warmNetwork.push(backJSON.data.value)
       } else if (backJSON.type === 'warm-peers') {
