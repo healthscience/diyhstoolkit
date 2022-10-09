@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import ExperimentnetworkJoin from '@/components/spaces/grids/ExperimentNetworkReplicate.vue'
+import ExperimentnetworkJoin from '@/components/spaces/grids/input/ExperimentNetworkReplicate.vue'
 
 export default {
   name: 'start-experience',

@@ -251,7 +251,7 @@ export default {
 #list-flows {
   height: inherit;
   position: fixed;
-  top: 7.2em;
+  top: 6.8em;
   margin-left: 10px;
   z-index: 29;
   border: 0px dashed blue;

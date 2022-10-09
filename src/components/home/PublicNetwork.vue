@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import ExperimentnetworkJoin from '@/components/spaces/grids/ExperimentNetworkJoin.vue'
+import ExperimentnetworkJoin from '@/components/spaces/grids/input/ExperimentNetworkJoin.vue'
 
 export default {
   name: 'PublicNetwork',
