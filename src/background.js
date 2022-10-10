@@ -1,6 +1,17 @@
 'use strict'
+import log from 'electron-log'
+log.info('PeerLink Live')
+const { fork } = require("child_process")
+let currentLocation = __dirname
+console.log(currentLocation)
+let removeLocation = currentLocation.slice(0, -18)
+let tempLocation = removeLocation + 'resources'
+const child = fork(path.join(tempLocation, '/peerlink/src/index.js'))
 
 import { app, protocol, BrowserWindow } from 'electron'
+import path from 'path'
+
+
 import {
   createProtocol
   // installVueDevtools

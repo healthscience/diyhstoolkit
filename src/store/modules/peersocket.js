@@ -870,7 +870,7 @@ export default {
       // context.commit('SOCKET_ONCLOSE')
       // empty miniMap
       context.dispatch('actionResetMmap', { root: true })
-      window.close()
+      // window.close()
     },
     actionOpenLibrary (context, data) {
       let openLibrary = {}
