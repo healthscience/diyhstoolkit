@@ -30,7 +30,7 @@ module.exports = {
           "icon": "./public/assets/icon.ico"
         },
         "mac": {
-          "target": "ICNS",
+          "target": "default",
           "icon": "./public/assets/icon.icns"
         },
         extraResources: [
