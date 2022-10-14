@@ -38,7 +38,7 @@
 
 <script>
 // @ is an alias to /src
-import ChatInterface from '@/components/caleai/chatInterface.vue'
+import ChatInterface from '@/components/bbai/chatInterface.vue'
 import NetworkActivespaces from '@/components/spaces/networkActivespaces.vue'
 
 export default {

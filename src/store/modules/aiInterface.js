@@ -54,7 +54,7 @@ export default {
       if (inVerified.token.length !== 0) {
         Vue.set(state.helpchatAsk, 'active', true)
         let aiMessageout = {}
-        aiMessageout.type = 'caleai'
+        aiMessageout.type = 'bbai'
         aiMessageout.reftype = 'ignore'
         aiMessageout.action = 'question'
         aiMessageout.data = state.helpchatAsk

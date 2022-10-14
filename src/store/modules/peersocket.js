@@ -129,12 +129,12 @@ export default {
             // need to set toolbar settings TODO
           }
         }
-      } else if (backJSON.type === 'caleai') {
+      } else if (backJSON.type === 'bbai-reply') {
         // flow messages to ai helper
         let date = new Date()
         // get the time as a string
         let time = date.toLocaleTimeString()
-        Vue.set(this.state.aiInterface.caleaiReply, 'text', backJSON.data)
+        Vue.set(this.state.aiInterface.caleaiReply, 'text', backJSON.data.text)
         Vue.set(this.state.aiInterface.caleaiReply, 'time', time)
         Vue.set(this.state.aiInterface.caleaiReply, 'active', true)
       } else if (backJSON.type === 'lifeboard') {

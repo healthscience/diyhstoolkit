@@ -79,7 +79,7 @@
 
 <script>
 import HelpModal from '@/components/help/HelpModal.vue'
-import ChatInterface from '@/components/caleai/chatInterface.vue'
+import ChatInterface from '@/components/bbai/chatInterface.vue'
 
 export default {
   name: 'Help-AI',
