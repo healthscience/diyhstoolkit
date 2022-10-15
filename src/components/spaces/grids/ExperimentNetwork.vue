@@ -50,9 +50,9 @@
                   <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
                     <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
                     <div id="module-ready" v-if="NXPstatusData[dashi]">
-                      <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
+                      <div id="dash-main" v-for="modI in NXPstatusData[dashi]" :key="modI">
                         <nxp-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></nxp-board>
-                      </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -62,7 +62,6 @@
         </div>
       </div>
     </div>
-      bentospace END
   </div>
 </template>
 

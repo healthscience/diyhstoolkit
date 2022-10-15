@@ -30,7 +30,7 @@
     <div class="network-protocol">
       <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png">
       <div id="health-oracle-protocol">
-        HOP v0.7.3.1
+        BB-v0.7.3.5 HOP-v0.9.25
       </div>
     </div>
   </div>

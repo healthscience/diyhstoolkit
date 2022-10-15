@@ -1,25 +1,25 @@
 <template>
   <div id="dashboard-holder" v-if="moduleContent">
     <div id="dash-modules">
-      <module-board @close="closeModule">
+      <module-board>
         <template v-slot:header>
-        <!-- The code below goes into the header slot -->
-          <div id="nxp-content" v-if="moduleContent.prime">
-            {{ moduleContent.prime.text }}
+          <div id="dash-nametools">
+            <div class="nametool-item" id="nxp-content" v-if="moduleContent.prime">
+              {{ moduleContent.prime.text }}
+            </div>
+            <div class="nametool-item" id="module-toolbar">
+              <div id="layouttools" v-if="moduleContent.prime.text !== 'Question'">
+                <!-- <button @click='addItem'>Add an item</button> -->
+                <input class="layout-controls" type='checkbox' v-model='draggable'/> Draggable
+                <input class="layout-controls" type='checkbox' v-model='resizable'/> Resizable
+                <!-- <button @click='decreaseWidth'>Decrease Width</button>
+                <button @click='increaseWidth'>Increase Width</button> v-if="toolbarStatusLive.active" -->
+              </div>
+            </div>
           </div>
         </template>
         <template v-slot:body>
-        <!-- The code below goes into the header slot -->
-          <div id="module-toolbar">
-            <div id="layouttools" v-if="moduleContent.prime.text !== 'Question'">
-              <!-- <button @click='addItem'>Add an item</button> -->
-              <input class="layout-controls" type='checkbox' v-model='draggable'/> Draggable
-              <input class="layout-controls" type='checkbox' v-model='resizable'/> Resizable
-              <!-- <button @click='decreaseWidth'>Decrease Width</button>
-              <button @click='increaseWidth'>Increase Width</button> v-if="toolbarStatusLive.active" -->
-            </div>
-          </div>
-          <div id="zoom-holder">
+          <div id="zoom-holder"  v-if="moduleContent.prime.text !== 'Question'">
             <br/>
             <div class="grid-section" v-if="localGrid.length > 0">
               <grid-layout v-if="localGrid"
@@ -46,6 +46,9 @@
                 </div>
               </grid-layout>
             </div>
+          </div>
+          <div v-else>
+            <component v-bind:is="'nxp-plain'" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="'cnrl-112'" :mData="9898989" class="module-placer"></component>
           </div>
         </template>
       </module-board>
@@ -190,14 +193,25 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #dashboard-holder {
   border: 0px solid red;
 }
+
 #dash-modules {
   border: 1px solid grey;
   list-style: none;
 }
+
+#dash-nametools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.nametool-item {
+  border: 0px solid red;
+}
+
 #zoom-holder {
   border: 0px solid green;
 }

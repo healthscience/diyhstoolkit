@@ -153,7 +153,7 @@ export default {
             // now need to ask for data for the active bentospace NXP's
             let saveDash = Object.keys(backJSON.data.value)
             if (saveDash.length > 0) {
-                let nxpList = Object.keys(backJSON.data.value)
+              let nxpList = Object.keys(backJSON.data.value)
               for (let nxp of nxpList) {
                 let positionStartInfo = {}
                 positionStartInfo.nxp = nxp

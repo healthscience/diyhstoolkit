@@ -43,7 +43,8 @@ export default {
     SET_REMOVEMMAP_POSITION: (state, inVerified) => {
       console.log('remove coor postion')
       console.log(inVerified)
-      let updateCOORD = state.ctx.removeMMapSpace(inVerified)
+      // let updateCOORD = state.ctx.removeMMapSpace(inVerified)
+      state.ctx.removeMMapSpace(inVerified)
       /* let updateXY = {}
       updateXY.x = updateCOORD.x
       updateXY.y = updateCOORD.y
