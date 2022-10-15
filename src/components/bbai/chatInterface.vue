@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="chat-flow" id="ai-interaction">
-        <form id="ask-ai-form" v-on:submit.prevent>
+        <form id="ask-ai-form" v-on:submit.prevent @keyup.enter.prevent="submitAsk">
           <label for="askname"></label>
           <input type="text" id="askinput" name="ainame" v-on:keyup="askeCalesave" v-model="askInput">
         </form>
