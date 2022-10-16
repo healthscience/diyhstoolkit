@@ -22,7 +22,7 @@
           <div id="help-topics">
             <div class="topic-item" v-if="helpLive === 'about'">
               <article>
-                <p>ABOUT</p>
+                <header>ABOUT</header>
                 <p>
                   BentoBox-DS  is a Peer to Peer Data Science open source project.  The Toolkit has a none-coding graphical interface that enbables more people to particpate in understanding data that shapes their health, community or local nature. The core features:
                 </p>
@@ -45,7 +45,7 @@
             </div>
             <div class="topic-item" v-if="helpLive === 'connect'">
               <article>
-                <p>CONNECT</p>
+                <header>CONNECT</header>
                 <p>
                   Click the Connect button in the top navigation.  This will present the network connection screen. Click Lunch to be taken main BentoSpaces interface. If you have use the toolkit before the visualisaton dashboard will be layout where it was left.
                 </p>
@@ -53,7 +53,7 @@
             </div>
             <div class="topic-item" v-if="helpLive === 'bentospaces'">
               <article>
-                <p>BENTOSPACES</p>
+                <header>BENTOSPACES</header>
                 <p>
                   1. BentoSpaces is where the individual bentbox visuation are displayed.
                 </p>
@@ -64,7 +64,7 @@
             </div>
             <div class="topic-item" v-if="helpLive === 'experiments'">
               <article>
-                <p>EXPERIMENTS</p>
+                <header>EXPERIMENTS</header>
                 <p>
                   1. Concept of a network experiment.  First provie gurante when collborating but first ..
                 </p>
@@ -84,7 +84,7 @@
             </div>
             <div class="topic-item" v-if="helpLive === 'collaborate'">
               <article>
-                <p>COLLABORATE</p>
+                <header>COLLABORATE</header>
                 <p>
                   Peer to Peer  or allow AI to collaborate
                 </p>
@@ -98,7 +98,7 @@
             </div>
             <div class="topic-item" v-if="helpLive === 'demo'">
               <article>
-                <p>DEMO DATA</p>
+                <header>DEMO DATA</header>
                 <p>
                   A BentoBox-DS toolkit empty on first use.  To get familar with the way the toolkit works it is good to have data. To replicate the demo data follow these setups or watch the video:
                 </p>
@@ -112,7 +112,7 @@
             </div>
               <div class="topic-item" v-if="helpLive === 'library'">
               <article>
-                <p>LIBRARY</p>
+                <header>LIBRARY</header>
                 <p>
                   To provide gurantess on via Library toolkit included within BentoBox.
                 </p>
@@ -126,7 +126,7 @@
             </div>
             <div class="topic-item" v-if="helpLive === 'bb-ai'">
               <article>
-                <p>BB AI</p>
+                <header>BB AI</header>
                 <p>
                   4. Personal AI - BB  "Bee Bee"
                 </p>
@@ -205,6 +205,15 @@ export default {
 #select-topic {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+header {
+  margin: 2em;
+  font-weight: bold;
+}
+.topic-item p {
+  border: 1px solid red;
+  margin-left: 2em;
 }
 
 #help-topics {

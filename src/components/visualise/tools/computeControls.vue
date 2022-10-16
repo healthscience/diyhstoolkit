@@ -9,7 +9,7 @@
           <div id="update-status">
           </div>
       </div>
-      <div class="compute-control-button">
+      <!-- <div class="compute-control-button">
         <button @click.prevent="startLearn($event)"  v-bind:value="cnrlkbid" id="compute-start">Start</button>
       </div>
       <div class="compute-control-button">
@@ -20,7 +20,7 @@
         <div>
           <b>Manual</b>  AUTO
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
