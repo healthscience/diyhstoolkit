@@ -26,7 +26,7 @@ export default {
   getters: {
   },
   mutations: {
-    SET_CALEAI_STATE: (state, inVerified) => {
+    SET_BBAI_STATE: (state, inVerified) => {
       // check current state and reverse
       if (state.statusCALE.active === false) {
         Vue.set(state.statusCALE, 'active', true)
@@ -41,7 +41,7 @@ export default {
       state.liveHelpcontext = 'cale'
       Vue.set(state.helpModal, 'active', true)
     },
-    SET_ASKCALE_CHAT: (state, inVerified) => {
+    SET_ASKBB_CHAT: (state, inVerified) => {
       // set context
       Vue.set(state.helpchatAsk, 'text', inVerified)
       let date = new Date()
@@ -49,7 +49,7 @@ export default {
       let time = date.toLocaleTimeString()
       Vue.set(state.helpchatAsk, 'time', time)
     },
-    SET_ASKCALE_ENTRY: (state, inVerified) => {
+    SET_ASKBB_ENTRY: (state, inVerified) => {
       // need to check if access to AI or local?
       if (inVerified.token.length !== 0) {
         Vue.set(state.helpchatAsk, 'active', true)
@@ -72,7 +72,7 @@ export default {
       }
     },
     SET_FUTURE_DATA: (state, inVerified) => {
-      console.log('GET future data CALE')
+      console.log('GET future data CALE via BB ')
       let fstate = !state.liveFutureCollection.active
       Vue.set(state.liveFutureCollection, 'active', fstate)
       // data nxp context ref contracts
@@ -90,23 +90,23 @@ export default {
     }
   },
   actions: {
-    actionCALEAI: (context, update) => {
+    actionBBAI: (context, update) => {
     // filter a list of Kentity bundles given the Experiment CNRL
-      context.commit('SET_CALEAI_STATE', update)
+      context.commit('SET_BBAI_STATE', update)
     },
-    actionAskCALE: (context, update) => {
-      // context.commit('SET_ASKCALE_HELP', update)
-      context.rootState.liveHelpcontext = 'cale'
+    actionAskBB: (context, update) => {
+      // context.commit('SET_ASKBB_HELP', update)
+      context.rootState.liveHelpcontext = 'BB-AI'
       Vue.set(context.rootState.helpModal, 'active', true)
     },
     actionHelpAsk: (context, update) => {
-      context.commit('SET_ASKCALE_CHAT', update)
+      context.commit('SET_ASKBB_CHAT', update)
     },
     actionHelpaskentry: (context, update) => {
       let dataAI = {}
       dataAI.token = context.rootState.jwttoken
       dataAI.update = update
-      context.commit('SET_ASKCALE_ENTRY', dataAI)
+      context.commit('SET_ASKBB_ENTRY', dataAI)
     },
     actionFuture: (context, update) => {
       let dataAI = {}

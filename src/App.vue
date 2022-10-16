@@ -101,7 +101,7 @@ export default {
       this.$store.dispatch('actionShowhelp', 'home')
     },
     caleAIset () {
-      this.$store.dispatch('actionCALEAI', 'click')
+      this.$store.dispatch('actionBBAI', 'click')
     }
   }
 }

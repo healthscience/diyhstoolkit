@@ -44,7 +44,7 @@
               </option>
             </select> -->
           </div>
-          <div class="context-future">
+          <!-- <div class="context-future">
             <select v-model="selectedFuture" @change.prevent="setFuture()">
               <option disabled value="">make future</option>
               <option v-for="foption in futureoptions" :key='foption.value' v-bind:value="foption.value">
@@ -55,7 +55,7 @@
           </div>
           <div class="context-future">
             <button class="new-viscombine" v-bind:class="{ active: combineSetting.active }" @click.prevent="setCombine()">{{ combineSetting.text }}</button>
-          </div>
+          </div> -->
       </div>
       <div class="clear"></div>
     </div>
