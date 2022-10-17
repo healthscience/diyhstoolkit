@@ -25,16 +25,16 @@
               <article>
                 <header>ABOUT</header>
                 <p>
-                  BentoBox-DS  is a Peer to Peer Data Science toolkit and is an <a href="https://bentobox.healthscience.network" target="_blank">open source project</a>.  The Toolkit has a none-coding graphical interface that enables more people to particpate in understanding data that shapes their health, community or nature. The core features:
+                  BentoBox-DS  is a Peer to Peer Data Science toolkit and is an <a href="https://bentobox.healthscience.network" target="_blank">open source project</a>.  The Toolkit has a none-coding graphical interface that enables more people to participate in understanding data that shapes their health, community or nature. The core features:
                 </p>
                 <p>
                   1. Build visualisation dashboards, chart data that matters and perform time analysis.
                 </p>
                 <p>
-                  2. Upload files locally, initialy CSV, JSON or SQLite.
+                  2. Upload files locally, initially CSV, JSON or SQLite.
                 </p>
                 <p>
-                  3. Collaborate to build multi-level collective intelligence. Join a network experiment that gurantees data interoperabilty.
+                  3. Collaborate to build multi-level collective intelligence. Join a network experiment that guarantees data interoperability.
                 </p>
                 <p>
                   4. BB-AI is a natural language AI agent to provide help and manage a toolkit. It works on behalf of the owner of the toolkit.
@@ -48,7 +48,7 @@
               <article>
                 <header>CONNECT</header>
                 <p>
-                  Click the Connect button in the top navigation.  This will present the network connection screen. Click Lunch to be taken to the BentoSpaces interface. If you have used the toolkit before the dashboard will be layout where it was left.
+                  Click the Connect button in the top navigation.  This will present the network connection screen. Click Launch to be taken to the BentoSpaces display. If you have used the toolkit before the dashboard layout will be where it was last left.
                   <img class="medium-conect-help" alt="connect UI" src="../../assets/help/connect-help.png">
                 </p>
               </article>
@@ -61,13 +61,13 @@
                   <img class="medium-conect-help" alt="bentospaces" src="../../assets/help/bentospaces-help.png">
                 </p>
                 <p>
-                  2. Drag & drop BentoBox visualisiation and click on the save layout button to keep.  A min-map helps with navigating the entire space.
+                  2. Drag & drop BentoBox visualisation and click on the save layout button to store the layout.  A min-map located bottom right helps with navigating the entire space.
                 </p>
                 <p>
                   3. The BB toolbar has a LIST button.  Click to access the Network Experiments joined, this is searchable.  Click view to add to BentoSpaces.
                 </p>
                 <p>
-                  4. The BB toolbar has a NEW button. This produces two options: a. join a network work experiment  b. add a new data.  See the Experiment help section for more details.
+                  4. The BB toolbar has a NEW button. This produces two options: a. join a network work experiment  b. add new data.  See the Experiment help section for more details.
                 </p>
               </article>
             </div>
@@ -75,29 +75,29 @@
               <article>
                 <header>EXPERIMENTS</header>
                 <p>
-                  1. The concept of network experiment: this is core building block of a BentoBox. This bring together all the information required to build a visualisation: source devices for the data, this storage location, type of compute and visualisation style e.g. a chart.  Once one peer has contributed a network experiment these templates are available to other peers in the network.  It is import to note the source data is private to each peer and made avaialble for collaboration under the control of each peer.  This setup provides some guarantees on data interoperability.
+                  1. The concept of a network experiment: this is core building block of a BentoBox. This bring together all the information required to build a visualisation: source devices for the data, this storage location, type of compute and visualisation style e.g. a chart.  Once one peer has contributed a network experiment these templates are available to other peers in the network.  It is import to note the source data is private to each peer and made avaialble for collaboration under the control of each peer.  This setup provides some guarantees on data interoperability.
                 </p>
                 <p>
-                  2. BentoSpaces toobar has a LIST and NEW buttons to give access to show existing peer experiments or give the abilty to join or make a new one.
+                  2. BentoSpaces toobar has a LIST and NEW buttons to give access to show existing peer experiments or give the ability to join or make a new one.
                 </p>
                 <p>
-                  A list of network experiments from the network will be listed
+                  3. Click on the LIST button to show active network experiments for this peer:
                   <img class="medium-conect-help" alt="join experiment" src="../../assets/help/listnxp-help.png">
                 </p>
                 <p>
-                  Click Preview / Join Button to learn more about the experiment and select from options to join.  Click on Join the Network Experiment Button
+                  3A. Click on the NEW button and the click on the JOIN button.  This will produce a list of experiment contributed by other peers in the network you have connected with:
                   <img class="medium-conect-help" alt="join experiment" src="../../assets/help/joinnxp-help.png">
                 </p>
                 <p>
-                   click New Network Exeriment button to contribute
+                   3B. Click NEW button and then click on DATA button. This will bring up a drag and drop interface.  The experiment modules availalbe are in the left box, drag the Question, Device Data, Compute & Visualisation modules to the right box.  Next we need to add reference contracts to be used. See the library section follow:
                   <img class="medium-conect-help" alt="join experiment" src="../../assets/help/newnxp-help.png">
                 </p>
                 <p>
-                   Library: the base building block of desribing data: datatypes, data sources, compute etc.
+                   Library: the base building block of describing data: datatypes, data sources, compute etc. The are two basic views in the library, view existing reference contracts and there is category buttons to view the different categories. To add new reference contract click on NEW REFERENCE CONTRACT  and then select the type from the drop down list. Fill in the form.  This video talks you through the process.
                   <img class="medium-conect-help" alt="join experiment" src="../../assets/help/library-help.png">
                 </p>
                 <p>
-                  d) The Network Experiment will now be listed in Peer list.  Click on View Button to display visualisation and access toolbars
+                  The Network Experiment will now be listed in Peer list.  Click on View Button to display visualisation and access toolbars.
                 </p>
               </article>
             </div>
@@ -108,18 +108,18 @@
                   A BentoBox contains the modules making up a network experiment and supporting tools:
                 </p>
                 <p>
-                  1. Visualiation & charting & Time analysis tools
+                  1. Visualisation & charting & Time analysis tools
                   <img class="medium-conect-help" alt="vis tools" src="../../assets/help/bbvistools-help.png">
                 </p>
                 <p>
-                  A calendar tool provides the way to select an specific day, pick many days or series of days via the drop down box. The back and forward buttons give a quick way to go back/forward one day at a time.
-                  When more than one day is selected, the drop down button allow for TIME SERIES or OVERLAY modes.  Overlay normalising all day to normalised 24 hour period.  Labels can be removed or added.
+                  A calendar tool provides the way to select a specific day, pick many days or series of days via the drop down box. The back and forward buttons give a quick way to go back/forward one day at a time.
+                  When more than one day is selected, the drop down button allow for TIME SERIES or OVERLAY modes.  Overlay normalising all day to a normalised 24 hour period.  Labels can be removed or added.
                 </p>
                 <p>
-                  2. Compute controls.
+                  2. Compute controls. Only observation i.e. display are chart.  In the future a range of statistical or PtoP privacy preserving machine learning to be undertaken by network of peers.
                 </p>
                 <p>
-                  3. Device and data information.
+                  3. Device and data information.  Information on the source device.
                 </p>
               </article>
             </div>
@@ -127,13 +127,13 @@
               <article>
                 <header>DEMO DATA</header>
                 <p>
-                  A BentoBox-DS toolkit empty on first use.  To get familar with the way the toolkit works it is good to have data. To replicate the demo data follow these setups or watch the video:
+                  A BentoBox-DS toolkit is empty on first use.  To get familiar with the way the toolkit works it is good to have data to play with. To replicate the demo data follow these steps or watch this video:
                 </p>
                 <p>
                   Click Demo Data BUTTON
                 </p>
                 <p>
-                  Click on the New Button on the toolbar .cc..c.
+                  Click on the New Button on the toolbar, then click JOIN button. Select view/join button presented.
                 </p>
                 </article>
             </div>
@@ -144,10 +144,8 @@
                   To provide gurantess on via Library toolkit included within BentoBox.
                 </p>
                 <p>
-                  dfdfd
-                </p>
-                <p>
-                  dfdf.
+                   Library: the base building block of describing data: datatypes, data sources, compute etc. The are two basic views in the library, view existing reference contracts and there is category buttons to view the different categories. To add new reference contract click on NEW REFERENCE CONTRACT  and then select the type from the drop down list. Fill in the form.  This video talks you through the process.
+                  <img class="medium-conect-help" alt="join experiment" src="../../assets/help/library-help.png">
                 </p>
                 </article>
             </div>
@@ -158,10 +156,7 @@
                   4. Personal AI - BB  "Bee Bee"
                 </p>
                 <p>
-                  The first goal of CALE AI is to produce future times series data based on learning from historical data. This uses an evolutionary algorithm to tune variables in an autregressional model.
-                </p>
-                <p>
-                  The toolkit is open source to encourage others to add AI and other capabilites to aid none-code tools
+                  BB-AI is the toolkit help. This goal is to read natural language questions and direct Peers to help or form queries to present data e.g. show me all the movement days when I walk more than 10,000 steps or when air quality was above a safe level?
                 </p>
               </article>
             </div>
