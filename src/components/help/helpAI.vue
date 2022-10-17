@@ -130,10 +130,34 @@
                   A BentoBox-DS toolkit is empty on first use.  To get familiar with the way the toolkit works it is good to have data to play with. To replicate the demo data follow these steps or watch this video:
                 </p>
                 <p>
-                  Click Demo Data BUTTON
+                  Click LIST button on the toolbar and the click on the DEMO DATA button
+                  <img class="medium-conect-help" alt="vis tools" src="../../assets/help/demostart-help.png">
                 </p>
                 <p>
-                  Click on the New Button on the toolbar, then click JOIN button. Select view/join button presented.
+                  A list with the data demo will be presented. Click on the PREVIEW/JOIN button
+                  <img class="medium-conect-help" alt="vis tools" src="../../assets/help/demojoin-help.png">
+                </p>
+                <p>
+                  Set the source from the drop down list
+                  <img class="medium-conect-help" alt="vis tools" src="../../assets/help/demoption-help.png">
+                </p>
+                <p>
+                  Set the date to the 1 January 2017
+                  <img class="medium-conect-help" alt="vis tools" src="../../assets/help/demotime-help.png">
+                </p>
+                <p>
+                  Set the y-axis to bitcoin and then click the JOIN THE EXPERIMENT
+                  <img class="medium-conect-help" alt="vis tools" src="../../assets/help/demovisset-help.png">
+                </p>
+                <p>
+                  Click on the LIST button
+                </p>
+                <p>
+                  <img class="medium-conect-help" alt="vis tools" src="../../assets/help/demoview-help.png">
+                </p>
+                <p>
+                  Click on the view button and the BentoBox will be displayed on the bentospace.
+                  <img class="medium-conect-help" alt="vis tools" src="../../assets/help/demobbox-help.png">
                 </p>
                 </article>
             </div>

@@ -7,7 +7,7 @@
           <li>1. Peer to Peer Data Science</li>
           <li>2. Charting Time Analysis</li>
           <li>3. Private or Collaborate</li>
-          <li>4. Personal AI - AGENT</li>
+          <li>4. Personal AI</li>
         </ul>
         <div id="interface">
           <div id="cale-ai">
