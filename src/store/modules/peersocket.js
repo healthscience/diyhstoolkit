@@ -986,13 +986,13 @@ export default {
       dataCNRLbundle5.grid = []
       moduleContracts.push(dataCNRLbundle5)
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      const dataCNRLbundle7 = {}
+      /* const dataCNRLbundle7 = {}
       dataCNRLbundle7.reftype = 'module'
       dataCNRLbundle7.type = 'education'
       dataCNRLbundle7.primary = 'genesis'
       dataCNRLbundle7.concept = ''
       dataCNRLbundle7.grid = []
-      moduleContracts.push(dataCNRLbundle7)
+      moduleContracts.push(dataCNRLbundle7) */
       /* const dataCNRLbundle8 = {}
       dataCNRLbundle8.reftype = 'module'
       dataCNRLbundle8.type = 'lifestyle'
@@ -1021,13 +1021,13 @@ export default {
       dataCNRLbundle11.concept = ''
       dataCNRLbundle11.grid = []
       moduleContracts.push(dataCNRLbundle11) */
-      const dataCNRLbundle12 = {}
+      /* const dataCNRLbundle12 = {}
       dataCNRLbundle12.reftype = 'module'
       dataCNRLbundle12.type = 'communication'
       dataCNRLbundle12.primary = 'genesis'
       dataCNRLbundle12.concept = ''
       dataCNRLbundle12.grid = []
-      moduleContracts.push(dataCNRLbundle12)
+      moduleContracts.push(dataCNRLbundle12) */
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
       /* const dataCNRLbundle13 = {}
       dataCNRLbundle13.reftype = 'module'
