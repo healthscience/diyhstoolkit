@@ -150,6 +150,7 @@ const store = new Vuex.Store({
     ecsMessageLive: '',
     nxpProgress: {},
     visProgress: {},
+    replicatDataStatus: false,
     timeStartperiod: 0,
     newNXshell: {},
     moduleHolder: [],

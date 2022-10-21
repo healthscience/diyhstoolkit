@@ -198,6 +198,8 @@ export default {
         Vue.set(this.state.replicatePubliclibrary, 'data', backJSON.data)
         // auto call add peer public library
         this.dispatch('actionViewSyncLibrary', 'replicate-publiclibrary')
+        // replicate data results complete when temp library complete
+        this.state.replicatDataStatus = false
       } else if (backJSON.type === 'publiclibraryaddcomplete') {
         console.log('add to public library')
         // Vue.set(this.state., '', backJSON.data)
@@ -907,6 +909,9 @@ export default {
       const peerSyncJSON = JSON.stringify(peerSync)
       console.log(peerSyncJSON)
       Vue.prototype.$socket.send(peerSyncJSON)
+      // set the replication status
+      this.state.replicatDataStatus = true
+
     },
     actionViewSyncLibrary (context, message) {
       const viewSyncLibrary = {}

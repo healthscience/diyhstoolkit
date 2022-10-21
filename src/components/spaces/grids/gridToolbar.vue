@@ -24,6 +24,9 @@
       <div id="combine-list">
         <!--<button class="save-space" @click.prevent="combineSelected()">combine</button>-->
       </div>
+      <div id="replicate-status" v-if="replicataStatus === true">
+        <div class="rep-status">Replication in progess</div>
+      </div>
     </div>
     <div v-if="liveStorytools === true" id="story-board">
       <story-tools></story-tools>
@@ -56,6 +59,9 @@ export default {
     },
     combinedList: function () {
       return this.$store.state.combineSpaceList
+    },
+    replicataStatus: function () {
+      return this.$store.state.replicatDataStatus
     }
   },
   data: function () {
@@ -68,7 +74,8 @@ export default {
       },
       zoomscaleStatus: false,
       // scale: 1,
-      liveStorytools: false
+      liveStorytools: false,
+      replicateDataStatus: false
     }
   },
   methods: {
@@ -122,7 +129,7 @@ export default {
   position: fixed;
   top: 100px;
   display: grid;
-  grid-template-columns: auto auto auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto auto auto;
   justify-content: center;
   align-content: center;
   gap: 10px;
@@ -141,6 +148,20 @@ export default {
   display: inline-block;
   border: 0px solid red;
 }
+
+.rep-status {
+  background-color: green;
+  animation: blinkingBackground 2s infinite;
+}
+
+@keyframes blinkingBackground {
+  0% { background-color: #10c018;}
+  25% { background-color: #1056c0;}
+  50% { background-color: #ef0a1a;}
+  75% { background-color: #254878;}
+  100% { background-color: #04a1d5;}
+}
+
 /*
 #space-map {
   right: 20px;
