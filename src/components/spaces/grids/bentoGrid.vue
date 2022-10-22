@@ -51,7 +51,7 @@
                     <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
                     <div id="module-ready" v-if="NXPstatusData[dashi]">
                       <div id="dash-main" v-for="modI in NXPstatusData[dashi]" :key="modI">
-                        <nxp-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></nxp-board>
+                        <bento-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></bento-board>
                       </div>
                     </div>
                   </div>
@@ -70,7 +70,7 @@ import GridToolbar from './gridToolbar'
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 import MininavMap from './minimap/mininavMap.vue'
-import NxpBoard from '@/components/experiments/edashBoard.vue'
+import BentoBoard from '@/components/bentoboard/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
 // import NewLifeboardVue from '../../lifeboard/NewLifeboard.vue'
 
@@ -79,7 +79,7 @@ export default {
   components: {
     GridToolbar,
     MininavMap,
-    NxpBoard,
+    BentoBoard,
     ProgressMessage,
     VueDraggableResizable
   },

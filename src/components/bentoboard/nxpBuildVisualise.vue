@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import chartBuilder from '@/components/experiments/setChartBuilder'
+import chartBuilder from '@/components/bentoboard/setChartBuilder'
 
 export default {
   name: 'nxp-visualdashboard',

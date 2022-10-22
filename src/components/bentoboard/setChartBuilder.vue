@@ -32,7 +32,7 @@
 
 <script>
 // import CalendarTool from '@/components/experiments/setCalendarTool'
-import OpendataTool from '@/components/experiments/setKnowledgeLive'
+import OpendataTool from '@/components/bentoboard/setKnowledgeLive'
 
 export default {
   name: 'module-chartbuilder',

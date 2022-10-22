@@ -42,7 +42,7 @@
 
 <script>
 import NewLifeboard from '@/components/lifeboard/NewLifeboard.vue'
-import NewNetworkexperiment from '@/components/experiments/NewNetworkExperiment.vue'
+import NewNetworkexperiment from '@/components/bentoboard/NewNetworkExperiment.vue'
 import ModuleBuilder from '@/components/spaces/new/moduleBuilder.vue'
 
 export default {

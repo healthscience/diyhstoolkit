@@ -64,7 +64,7 @@ import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
 import PublicNetworknxp from '@/components/home/PublicNetwork.vue'
 // import LiveTimeline from '@/components/home/LiveTimeline.vue'
 // import LifeboardNetwork from '@/components/spaces/grids/LifeboardNetwork.vue'
-import ExperimentNetwork from '@/components/spaces/grids/ExperimentNetwork.vue'
+import ExperimentNetwork from '@/components/spaces/grids/bentoGrid.vue'
 
 export default {
   name: 'Network-Spaces',
