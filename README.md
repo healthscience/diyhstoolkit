@@ -13,7 +13,7 @@ The Toolkit includes a <a href="https://github.com/DaMaHub/networklibrary">Libra
 
 The software is at ALPHA stage of release.  See <a href="https://github.com/healthscience/diyhstoolkit/releases">releases</a> for binaires
 
-Understand the <a href="https://github.com/healthscience/diyhstoolkit/releases">components</a>
+Understand the <a href="https://design.penpot.app/#/view/e8b3498a-41f9-8006-8001-7af986efdd68?page-id=ea5ce67c-df2d-80eb-8001-7b02328f8faf&section=interactions&index=0&share-id=e8b3498a-41f9-8006-8001-7b21ea5cbad9">components</a>
 
 --------------------------------------
 
