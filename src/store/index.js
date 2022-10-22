@@ -50,7 +50,7 @@ const store = new Vuex.Store({
       state: false,
       text: 'hide'
     },
-    spaceType: 'Experiments',
+    spaceType: 'Boards',
     viewLifeboards: false,
     viewNXP: true,
     viewTimeline: false,

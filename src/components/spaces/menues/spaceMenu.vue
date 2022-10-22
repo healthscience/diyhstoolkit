@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     statusSpace (sp) {
-      this.$store.dispatch('actionLifeview', 'Experiments')
+      this.$store.dispatch('actionLifeview', 'Boards')
       this.$store.dispatch('actionSpaceList', sp)
       this.$store.dispatch('actionSpaceListShow', true)
     }

@@ -19,8 +19,8 @@
               <!-- <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Lifeboards' }" id="Lifeboards" @click.prevent="setView($event)">
                 Lifeboards
               </button> -->
-              <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Experiment' }" id="Experiments" @click.prevent="setView($event)">
-                Experiment
+              <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Experiment' }" id="Boards" @click.prevent="setView($event)">
+                Boards
               </button>
               <!-- <button class="peer-medium" id="timeline" v-bind:class="{ active: viewFlowtype === 'timeline' }"  @click.prevent="setView($event)">
                 Timeline
@@ -47,7 +47,7 @@
     </div>
     <div id="list-flows" v-if="peerauth === true"> <!--z25 -->
       <!-- <live-lifestyle v-if="spaceType === 'Lifeboards'"></live-lifestyle>-->
-      <live-networknxp v-if="spaceType === 'Experiments' && spaceState === 'private'"></live-networknxp>
+      <live-networknxp v-if="spaceType === 'Boards' && spaceState === 'private'"></live-networknxp>
       <public-networknxp v-if="spaceType === 'publicexperiments' && spaceState === 'public'"></public-networknxp>
       <!-- <live-timeline v-if="spaceType === 'timeline'"></live-timeline> -->
     </div>
