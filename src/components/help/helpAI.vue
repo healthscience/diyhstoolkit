@@ -14,7 +14,7 @@
             <a href="#" id="about"  @click.prevent="viewHelpContent('about')">About</a>
             <a href="#" id="connect" @click.prevent="viewHelpContent('connect')">Connect</a>
             <a href="#" id="bentospaces" @click.prevent="viewHelpContent('bentospaces')">Bentospaces</a>
-            <a href="#" id="experiments" @click.prevent="viewHelpContent('experiments')">Experiments</a>
+            <a href="#" id="experiments" @click.prevent="viewHelpContent('experiments')">Board Builder</a>
             <a href="#" id="tools" @click.prevent="viewHelpContent('tools')">BB tools</a>
             <a href="#" id="demo"  @click.prevent="viewHelpContent('demo')">Demo data</a>
             <a href="#" id="library" @click.prevent="viewHelpContent('library')">Library</a>
@@ -73,9 +73,9 @@
             </div>
             <div class="topic-item" v-if="helpLive === 'experiments'">
               <article>
-                <header>EXPERIMENTS</header>
+                <header>Board Builder</header>
                 <p>
-                  1. The concept of a network experiment: this is core building block of a BentoBox. This bring together all the information required to build a visualisation: source devices for the data, this storage location, type of compute and visualisation style e.g. a chart.  Once one peer has contributed a network experiment these templates are available to other peers in the network.  It is import to note the source data is private to each peer and made avaialble for collaboration under the control of each peer.  This setup provides some guarantees on data interoperability.
+                  1. The Board Builder allows for the creation of network experiments: this contains a seletion of Module Contracts. This bring together all the information required to build a visualisation: source devices for the data, this storage location, type of compute and visualisation style e.g. a chart.  Once one peer has contributed a network experiment these templates are available to other peers in the network.  It is import to note the source data is private to each peer and made avaialble for collaboration under the control of each peer.  This setup provides some guarantees on data interoperability. <a href="https://youtu.be/UMjWhPoWMnc" target="_blank">Watch tutorial</a> on how to add data.
                 </p>
                 <p>
                   2. BentoSpaces toobar has a LIST and NEW buttons to give access to show existing peer experiments or give the ability to join or make a new one.
@@ -127,7 +127,7 @@
               <article>
                 <header>DEMO DATA</header>
                 <p>
-                  A BentoBox-DS toolkit is empty on first use.  To get familiar with the way the toolkit works it is good to have data to play with. To replicate the demo data follow these steps or watch this video:
+                  A BentoBox-DS toolkit is empty on first use.  To get familiar with the way the toolkit works it is good to have data to play with. To replicate the demo data follow these steps or watch this <a href="https://youtu.be/XmsenOfT2pg" target="_blank">video</a>:
                 </p>
                 <p>
                   Click LIST button on the toolbar and the click on the DEMO DATA button

@@ -55,8 +55,8 @@ export default {
     SOCKET_ONMESSAGE (state, message) {
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      console.log('****INPUUTTT******')
-      console.log(backJSON)
+      // console.log('****INPUUTTT******')
+      // console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -310,8 +310,8 @@ export default {
           console.log('---')
         }
       } else if (backJSON.type === 'ecssummary') {
-        console.log('SUMMAERY==========================')
-        console.log(backJSON)
+        // console.log('SUMMAERY==========================')
+        // console.log(backJSON)
         let nxpUUID = Object.keys(backJSON.data)
         // update the NXP contract list held in toolkit
         let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[nxpUUID[0]], this.state.networkPeerExpModules)

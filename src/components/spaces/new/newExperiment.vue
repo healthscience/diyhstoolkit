@@ -25,7 +25,7 @@
       </template>
       <template v-slot:body>
       <!-- The code below goes into the header slot -->
-        <header>Build Network Experiment</header>
+        <header>Board Builder</header>
       </template>
       <template v-slot:dashboard>
         <module-builder></module-builder>

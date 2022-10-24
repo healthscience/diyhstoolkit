@@ -11,8 +11,7 @@ export default {
   },
   props: {
     shellID: String,
-    moduleCNRL: String,
-    mData: String
+    moduleCNRL: String
   },
   computed: {
     liveData: function () {
