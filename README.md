@@ -71,12 +71,12 @@ DONATIONS manged by [aboynejames](https://twitter.com/aboynejames)
 
 Lightning Invoices
 
-![alt text](https://twitter.com/aboynejames)
+![Ln 10000]()
 
-![alt text](https://flic.kr/p/2nVsPG8)
+![Ln 50000](https://flic.kr/p/2nVsPG8)
 
-![alt text](https://flic.kr/p/2nVxPnP)
+![Ln 250000](https://flic.kr/p/2nVxPnP)
 
 Bitcoin
-![alt text](https://flic.kr/p/2nVvvV9)
+![btc addr](https://live.staticflickr.com/65535/52457717846_ab1e1b40c5_o.png)
 
