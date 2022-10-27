@@ -62,3 +62,21 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+===========================================
+
+DONATIONS manged by [aboynejames](https://twitter.com/aboynejames)
+
+----------
+
+Lightning Invoices
+
+![alt text](https://twitter.com/aboynejames)
+
+![alt text](https://flic.kr/p/2nVsPG8)
+
+![alt text](https://flic.kr/p/2nVxPnP)
+
+Bitcoin
+![alt text](https://flic.kr/p/2nVvvV9)
+
