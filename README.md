@@ -71,7 +71,7 @@ DONATIONS manged by [aboynejames](https://twitter.com/aboynejames)
 
 Lightning Invoices
 
-10000 sats ![Ln 10000](https://live.staticflickr.com/65535/52458246188_01c1099eb3_n.jpg)
+100000 sats ![Ln 10000](https://live.staticflickr.com/65535/52458246188_01c1099eb3_n.jpg)
 
 250000 sats ![Ln 250000](	https://live.staticflickr.com/65535/52457192307_c96084f6e3_n.jpg)
 
