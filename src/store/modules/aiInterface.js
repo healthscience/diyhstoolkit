@@ -51,7 +51,8 @@ export default {
     },
     SET_ASKBB_ENTRY: (state, inVerified) => {
       // need to check if access to AI or local?
-      if (inVerified.token.length !== 0) {
+      console.log(inVerified)
+      if (inVerified.update === true) {
         Vue.set(state.helpchatAsk, 'active', true)
         let aiMessageout = {}
         aiMessageout.type = 'bbai'

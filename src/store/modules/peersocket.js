@@ -338,8 +338,8 @@ export default {
           Vue.set(this.state.NXPexperimentData[nxpUUID[0]][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        // console.log('SECOND------DATA RETURNED-----')
-        // console.log(backJSON)
+        console.log('SECOND------DATA RETURNED-----')
+        console.log(backJSON)
         // is the data for the Lifeboard or NXP space?
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {

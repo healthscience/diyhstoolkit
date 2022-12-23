@@ -105,6 +105,8 @@ export default {
       }
     },
     moduleContent: function () {
+      // console.log('mccmmc')
+      // console.log(this.$store.state.NXPexperimentData[this.expCNRL])
       let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
       if (contentModule === undefined) {
         return false

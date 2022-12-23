@@ -830,8 +830,8 @@ const store = new Vuex.Store({
         message.action = 'networkexperiment'
         message.data = ECSbundle
         message.jwt = this.state.jwttoken
-        // console.log('OUTmesssage+++++++++OUT+FIRST++++++')
-        // console.log(message)
+        console.log('OUTmesssage+++++++++OUT+FIRST++++++')
+        console.log(message)
         const safeFlowMessage = JSON.stringify(message)
         Vue.prototype.$socket.send(safeFlowMessage)
       } else {
