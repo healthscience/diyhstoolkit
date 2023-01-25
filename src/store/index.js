@@ -123,7 +123,10 @@ const store = new Vuex.Store({
     experimentStatus: {},
     experimentPeerStatus: {},
     startPubRefContracts: [],
-    startPeerRefContracts: [],
+    startPeerRefContracts2:
+    {
+      live: false
+    },
     NXPexperimentData: {},
     entityUUIDReturn: {},
     entityUUIDsummary: {},
@@ -311,8 +314,6 @@ const store = new Vuex.Store({
       Vue.set(state.experimentStatus, inVerified.cnrl, inVerified)
     },
     SET_Dashboard_NXP: (state, inVerified) => {
-      // console.log('set dash')
-      // console.log(inVerified)
       // set live dashboard list
       state.liveDashList.push(inVerified)
       // move minimpa code
@@ -740,8 +741,6 @@ const store = new Vuex.Store({
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionDashboardState (context, update) {
-      // console.log('clicked VIEW NXP------------')
-      // console.log(update)
       // set the minimap in position store module
       if (typeof update !== 'object') {
         let positionStartInfo = {}
@@ -830,8 +829,8 @@ const store = new Vuex.Store({
         message.action = 'networkexperiment'
         message.data = ECSbundle
         message.jwt = this.state.jwttoken
-        console.log('OUTmesssage+++++++++OUT+FIRST++++++')
-        console.log(message)
+        // console.log('OUTmesssage+++++++++OUT+FIRST++++++')
+        // console.log(message)
         const safeFlowMessage = JSON.stringify(message)
         Vue.prototype.$socket.send(safeFlowMessage)
       } else {

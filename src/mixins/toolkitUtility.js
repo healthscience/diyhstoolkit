@@ -1,4 +1,7 @@
 'use strict'
+
+// import { all } from 'core-js/fn/promise'
+
 /**
 *  toolkit Utilitiy functions
 *
@@ -87,7 +90,9 @@ ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
         }
       }
     }
-    gridDatapeer.push({ id: nxp.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
+    if (question2 !== undefined) {
+      gridDatapeer.push({ id: nxp.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
+    }
   }
   return gridDatapeer
 }

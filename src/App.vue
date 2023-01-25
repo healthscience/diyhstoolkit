@@ -64,6 +64,9 @@ export default {
     authConnectStatus: function () {
       return this.$store.state.peerauthStatus
     },
+    libraryStartData: function () {
+      return this.$store.state.peersocket.HOPreturn
+    },
     caleAIStatus: function () {
       return this.$store.state.aiInterface.statusCALE
     },
@@ -76,6 +79,18 @@ export default {
         }
       } else {
         return {}
+      }
+    }
+  },
+  watch: {
+    libraryStartData: {
+      deep: true,
+      immediate: true,
+      handler: function (val, oldVal) {
+        if (val.publiclib === true && val.peerlib === true) {
+          console.log('yes both libraries have returned')
+          this.$store.dispatch('actionHOPdataHander', 'hop')
+        }
       }
     }
   },

@@ -420,8 +420,6 @@ export default {
       const peerChoices = {}
       peerChoices.genesis = this.actionKBundle.id
       peerChoices.question = this.actionKBundle.name
-      console.log('join info ')
-      console.log(peerChoices)
       this.$store.dispatch('actionJoinExperiment', peerChoices)
       // this.closeModalJoin()
     },
