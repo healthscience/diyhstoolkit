@@ -27,6 +27,9 @@
                     <div class="remove-controls">
                       <div id="dashboard-controls">
                         <div class="dash-controls-master">
+                          <button type="button" class="btn" @click="soloSpaceOpen(dashi)">SoloSpace</button>
+                        </div>
+                        <div class="dash-controls-master">
                           <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
                         </div>
                         <div class="dash-controls-master">
@@ -62,6 +65,7 @@
         </div>
       </div>
     </div>
+    <solo-space :sbboard="solospaceLive"></solo-space>
   </div>
 </template>
 
@@ -73,6 +77,7 @@ import MininavMap from './minimap/mininavMap.vue'
 import BentoBoard from '@/components/bentoboard/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
 // import NewLifeboardVue from '../../lifeboard/NewLifeboard.vue'
+import SoloSpace from '@/components/bentosolo/soloTemplate.vue'
 
 export default {
   name: 'ExperimentNetwork',
@@ -81,7 +86,8 @@ export default {
     MininavMap,
     BentoBoard,
     ProgressMessage,
-    VueDraggableResizable
+    VueDraggableResizable,
+    SoloSpace
   },
   beforeMount () {
   },
@@ -140,6 +146,9 @@ export default {
     },
     activeDrag: function () {
       return this.$store.state.activeDragList
+    },
+    solospaceStatus: function () {
+      return this.$store.state.solospace.soloState
     }
   },
   data: function () {
@@ -150,6 +159,8 @@ export default {
         controls: false,
         startperiod: null
       },
+      bboardLive: '',
+      solospaceLive: '',
       shellID: null,
       moduleCNRL: '',
       mData: '',
@@ -228,6 +239,12 @@ export default {
       // set this NXP as live
       this.$store.dispatch('actionActiveNXP', nxpID)
     },
+    soloSpaceOpen (bs) {
+      console.log('open solospace modal')
+      console.log(bs)
+      this.solospaceLive = bs
+      this.$store.dispatch('actionSolospace', bs)
+    },
     closeDashboard (dc) {
       this.$store.dispatch('actionCloseDashboard', dc)
     },
@@ -295,7 +312,7 @@ export default {
 
 #dashboard-controls {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .dashboard-space {

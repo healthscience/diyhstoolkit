@@ -685,7 +685,7 @@ export default {
         let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.networkPeerExpModules)
         this.state.joinedNXPlist = gridPeer
       } else if (backJSON.type === 'publiclibrary') {
-        // console.log('public library returned')
+        //console.log('public library returned')
         Vue.set(state.HOPreturn, 'publiclib', true)
         // save copy of te ref contract indexes
         this.state.liveRefContIndex = backJSON.referenceContracts
@@ -972,7 +972,7 @@ export default {
             localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
             localthis.dispatch('actionDashboardState', positionStartInfo, { root: true })
           }
-        // peerlibrary
+          // peerlibrary
           for (let nxp of nxpList) {
             let positionStartInfo = {}
             positionStartInfo.nxp = nxp
