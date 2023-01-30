@@ -1,12 +1,11 @@
 <template>
-  <div id="cells-holder"><!--</div> v-if="moduleContent">-->
+  <div id="cells-holder">
     <div id="cells-pmodulde" v-for="imod of this.localGrid" :key="imod.id">
-      ---  ACTIVATION BAR -----
-      <vue-draggable-resizable id="soloispace" data-no-dragscroll :min-width="900" :w="1000" h="auto" :parent="true" @activated="onDragSolostartCallback(moduleCNRL)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handle'" :x=130 :y=130>
-        <div class="drag-handle" @click.prevent="setActiveSpace(moduleCNRL)" v-bind:class="{active: soloActivedrag === true }">
-        <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="imod.i" class="module-placer"></component>
-        <!--<component v-bind:is="'nxp-plain'" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="'cnrl-112'" :mData="9898989" class="module-placer"></component>-->
+      <vue-draggable-resizable id="soloispace" data-no-dragscroll :min-width="900" :w="1000" h="auto" :parent="true" @activated="onDragSolostartCallback(moduleCNRL)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handle'" :x=imod.x :y=imod.y>
+        <div class="drag-handle" @click.prevent="setActiveSolo(moduleCNRL)" v-bind:class="{active: soloActivedrag === true }">
+        -- ACTIVATION BAR --- {{ imod }}
         </div>
+        <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="imod.i" class="module-placer"></component>
       </vue-draggable-resizable>
     </div>
   </div>
@@ -69,6 +68,13 @@ export default {
         return contentModule[this.moduleCNRL]
       }
     },
+    spaceCoord: function () {
+      if (this.$store.state.solopositionSpace.liveSpaceCoord === undefined) {
+        return {}
+      } else {
+        return this.$store.state.solopositionSpace.liveSpaceCoord
+      }
+    },
     storeGrid () {
       this.setLocalGrid(this.$store.state.moduleGrid[this.moduleCNRL])
       return _.cloneDeep(this.$store.state.moduleGrid[this.moduleCNRL])
@@ -77,6 +83,14 @@ export default {
   watch: {
     storeGrid (newValue) {
       this.localGrid = newValue
+    },
+    spaceCoord: {
+      deep: true,
+      // immediate: true,
+      handler: function (newVal, oldVal) {
+        console.log('solo space coor dupdated')
+        console.log(newVal)
+      }
     }
   },
   data () {
@@ -104,6 +118,13 @@ export default {
     setLocalGrid (grid) {
       this.localGrid = grid
     },
+    setActiveSolo (nxpID) {
+      // only one active at a time
+      this.$store.dispatch('actionActiveSoloSelect', nxpID)
+      this.dragDashmove = nxpID
+      // set this NXP as live
+      // this.$store.dispatch('actionActiveCell', nxpID)
+    },
     onResize: function (x, y, width, height) {
       this.x = x
       this.y = y
@@ -111,7 +132,7 @@ export default {
       this.height = height
     },
     onDragSolostartCallback (ev) {
-      // this.$store.dispatch('actionSoloactiveNXP', ev)
+      this.$store.dispatch('actionSoloactiveNXP', ev)
     },
     onDrag: function (x, y) {
       let dragScale = 1
@@ -129,7 +150,7 @@ export default {
       dbmove.x = x
       dbmove.y = y
       dbmove.nxp = this.bboard
-      // this.$store.dispatch('actionSoloBmove', dbmove)
+      this.$store.dispatch('actionSoloBmove', dbmove)
     },
     soloActivedrag: function () {
       return true

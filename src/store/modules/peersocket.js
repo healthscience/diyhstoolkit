@@ -198,56 +198,6 @@ export default {
             // put data in library holder
             Vue.set(state.libraryHolder, 'bentospacestart', backJSON)
           }
-          /* watch(this.state.startPubRefContracts, function (newValue, oldValue) {
-            // both pubilc and peer library arrived?
-            if (localthis.state.startPubRefContracts.length > 0 && state.startPeerRefContracts.length > 0) {
-              console.log('yes both arrived')
-              // now need to ask for data for the active bentospace NXP's
-              let saveDash = Object.keys(backJSON.data.value)
-              if (saveDash.length > 0) {
-                let nxpList = Object.keys(backJSON.data.value)
-                for (let nxp of nxpList) {
-                  let positionStartInfo = {}
-                  positionStartInfo.nxp = nxp
-                  positionStartInfo.coord = backJSON.data.value[nxp]
-                  positionStartInfo.type = 'saved'
-                  // set active space
-                  localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
-                  localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
-                  localthis.dispatch('actionDashboardState', positionStartInfo, { root: true })
-                }
-              }
-            }
-          },
-          {
-              deep: true //add this if u need to watch object properties change etc.
-          }) */
-          /* watch(state.startPeerRefContracts, function (newValue, oldValue) {
-            console.log('watch2')
-            console.log(state.startPeerRefContracts.length)
-            // now need to ask for data for the active bentospace NXP's
-            // both pubilc and peer library arrived?
-            if (localthis.state.startPubRefContracts.length > 0 && state.startPeerRefContracts.length > 1) {
-              let saveDash = Object.keys(backJSON.data.value)
-              if (saveDash.length > 0) {
-                let nxpList = Object.keys(backJSON.data.value)
-                for (let nxp of nxpList) {
-                  let positionStartInfo = {}
-                  positionStartInfo.nxp = nxp
-                  positionStartInfo.coord = backJSON.data.value[nxp]
-                  positionStartInfo.type = 'saved'
-                  // set the active dash list
-                  localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
-                  localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
-                  localthis.dispatch('actionDashboardState', positionStartInfo, { root: true })
-                }
-              }
-            }
-          },
-          {
-              immediate: true,
-              deep: true //add this if u need to watch object properties change etc.
-          }) */
         } else {
           console.log('blank bentospace - empty')
         }
@@ -685,7 +635,7 @@ export default {
         let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.networkPeerExpModules)
         this.state.joinedNXPlist = gridPeer
       } else if (backJSON.type === 'publiclibrary') {
-        //console.log('public library returned')
+        // console.log('public library returned')
         Vue.set(state.HOPreturn, 'publiclib', true)
         // save copy of te ref contract indexes
         this.state.liveRefContIndex = backJSON.referenceContracts
@@ -960,7 +910,7 @@ export default {
       const localthis = this
       let saveDash = Object.keys(localthis.state.peersocket.libraryHolder.bentospacestart)
       if (saveDash.length > 0) {
-        if(localthis.state.peersocket.libraryHolder.bentospacestart.data.value !== null) {
+        if (localthis.state.peersocket.libraryHolder.bentospacestart.data.value !== null) {
           let nxpList = Object.keys(localthis.state.peersocket.libraryHolder.bentospacestart.data.value)
           for (let nxp of nxpList) {
             let positionStartInfo = {}

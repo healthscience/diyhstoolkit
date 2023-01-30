@@ -15,21 +15,14 @@
       </template>
       <template v-slot:solospace>
         <div id="solo-grid">
+          <div id="solo-toolbar">
           <grid-toolbar></grid-toolbar>
-          <mininav-map></mininav-map>
+          </div>
+          <minisolo-map></minisolo-map>
           <div id="dragwheel-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
             <div id="dashboard-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
               <div v-for="soloi of BoardstatusData[sbboard]" :key="soloi.id" id="soloispace">
-              <!--<vue-draggable-resizable v-for="soloi of BoardstatusData[sbboard]" :key="soloi.id" id="soloispace" data-no-dragscroll :min-width="900" :w="1000" h="auto" :parent="true" @activated="onDragSolostartCallback(soloi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handle'" :x=130 :y=130>
-                <div class="drag-handle" @click.prevent="setActiveSpace(soloi)" v-bind:class="{active: soloActivedrag === true }">-->
                 <solo-cells :expCNRL="sbboard" :moduleCNRL="soloi"></solo-cells>
-                <!--  :x=spaceCoord[soloi].x :y=spaceCoord[soloi].y   -->
-                <!-- <div id="single-space" v-if="activeDrag[soloi]">
-                  <div class="drag-handle" @click.prevent="setActiveSpace(soloi)" v-bind:class="{active: soloActivedrag[soloi].active === true }">
-                    --- Activation Bar ---
-                  </div>
-                </div> -->
-              <!-- </vue-draggable-resizable>-->
               </div>
             </div>
           </div>
@@ -41,9 +34,9 @@
 
 <script>
 import SoloModal from '@/components/bentosolo/soloModal.vue'
-import GridToolbar from '@/components/spaces/grids/gridToolbar.vue'
+import GridToolbar from './soloToolbar.vue'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
-import MininavMap from '@/components/spaces/grids/minimap/mininavMap.vue'
+import MinisoloMap from './minisoloMap.vue'
 import SoloCells from '@/components/bentosolo/soloCells.vue'
 
 export default {
@@ -51,7 +44,7 @@ export default {
   components: {
     SoloModal,
     GridToolbar,
-    MininavMap,
+    MinisoloMap,
     SoloCells
   },
   computed: {
@@ -164,6 +157,15 @@ export default {
   background-color: #fff4f4;
   background: linear-gradient(-90deg, rgba(0, 0, 0, .1) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, .1) 1px, transparent 1px);
   background-size: 60px 60px, 60px 60px;
+}
+
+#solo-toolbar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 31;
+  border: 2px dashed red;
+  width: 640px;
 }
 
 </style>

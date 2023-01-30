@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import GridToolbar from './gridToolbar'
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
@@ -147,13 +148,23 @@ export default {
     activeDrag: function () {
       return this.$store.state.activeDragList
     },
+    activeGrid () {
+      this.setLocalGrid(this.$store.state.moduleGrid)
+      return _.cloneDeep(this.$store.state.moduleGrid)
+    },
     solospaceStatus: function () {
       return this.$store.state.solospace.soloState
+    }
+  },
+  watch: {
+    activeGrid (newValue) {
+      this.localGrid = newValue
     }
   },
   data: function () {
     return {
       isModalDashboardVisible: true,
+      localGrid: [],
       newCompute: {
         automation: false,
         controls: false,
@@ -184,6 +195,9 @@ export default {
     }
   },
   methods: {
+    setLocalGrid (grid) {
+      this.localGrid = grid
+    },
     navMover: function () {
       console.log('scroll in space')
     },
@@ -244,6 +258,9 @@ export default {
       console.log(bs)
       this.solospaceLive = bs
       this.$store.dispatch('actionSolospace', bs)
+      console.log('active grid')
+      console.log(this.localGrid)
+      this.$store.dispatch('actionAllCells', this.localGrid)
     },
     closeDashboard (dc) {
       this.$store.dispatch('actionCloseDashboard', dc)
