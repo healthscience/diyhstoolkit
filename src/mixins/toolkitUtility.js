@@ -63,6 +63,8 @@ ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
 *
 */
 ToolkitUtility.prototype.prepareJoinedNXPlist = function (peerExpModules) {
+  console.log('dispay data perp')
+  console.log(peerExpModules)
   let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
   let gridDatapeer = this.prepareExperimentSummary(peerExpModules)
   let gridPeer = {}
@@ -79,19 +81,17 @@ ToolkitUtility.prototype.prepareJoinedNXPlist = function (peerExpModules) {
 ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
   let gridDatapeer = []
   let question2 = {}
-  for (let nxp of peerExpModules) {
+  for (let mod of peerExpModules) {
     // look up question
-    for (const mod of nxp.modules) {
-      if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
-        if (mod.value.info.type === 'question') {
-          question2 = mod.value.info.question
-        } else {
-          question2 = 'none'
-        }
+    if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
+      if (mod.value.info.type === 'question') {
+        question2 = mod.value.info.question
+      } else {
+        question2 = 'none'
       }
     }
     if (question2 !== undefined) {
-      gridDatapeer.push({ id: nxp.exp.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
+      gridDatapeer.push({ id: mod.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
     }
   }
   return gridDatapeer

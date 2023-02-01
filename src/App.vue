@@ -67,6 +67,11 @@ export default {
     libraryStartData: function () {
       return this.$store.state.peersocket.HOPreturn
     },
+    HOPdataListen: function () {
+      console.log('lisisisisisi')
+      console.log(this.$store.state.peersocket.HOPHolder)
+      return this.$store.state.peersocket.HOPHolder
+    },
     caleAIStatus: function () {
       return this.$store.state.aiInterface.statusCALE
     },
@@ -91,6 +96,16 @@ export default {
           console.log('yes both libraries have returned')
           this.$store.dispatch('actionHOPdataHander', 'hop')
         }
+      }
+    },
+    HOPdataListen: {
+      deep: true,
+      immediate: true,
+      handler: function (val, oldVal) {
+        console.log('watching HOPdataHolder')
+        console.log(val)
+        console.log(oldVal)
+        this.$store.dispatch('actionHOPdataAssess', val)
       }
     }
   },

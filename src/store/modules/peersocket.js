@@ -21,11 +21,12 @@ export default {
       publiclib: false,
       peerlib: false
     },
+    HOPHolder: {},
     libraryHolder:
     {
       bentospacestart: {},
       publiclibrary: {},
-      peerlibrary: {}      
+      peerlibrary: {}   
     }
   },
   getters: {
@@ -189,14 +190,29 @@ export default {
           }
         }
       } else if (backJSON.type === 'bentospaces-list') {
-        // the callback will be called whenever any of the watched object properties 
+        console.log('bentospaces-boards and solos saved info')
+        console.log(backJSON)
+        // the callback will be called whenever any of the watched object properties
         // now need to ask for data for the active bentospace NXP's
         // first check if any bentospaces list is provided
         if (backJSON.data !== null) {
           let saveDash = Object.keys(backJSON.data)
           if (saveDash.length > 0) {
+            let boardKeys = Object.keys(backJSON.data.value)
+            for (let bkey of boardKeys) {
             // put data in library holder
-            Vue.set(state.libraryHolder, 'bentospacestart', backJSON)
+              Vue.set(state.libraryHolder, 'bentospacestart', backJSON)
+              // now ask HOP for more information: modulue, refContracts and data
+              const refContract = {}
+              refContract.type = 'library'
+              refContract.reftype = 'privatelibrary'
+              refContract.action = 'GET'
+              refContract.data = bkey
+              refContract.jwt = this.state.jwttoken
+              console.log(refContract)
+              const refCJSON = JSON.stringify(refContract)
+              Vue.prototype.$socket.send(refCJSON)
+            }
           }
         } else {
           console.log('blank bentospace - empty')
@@ -294,21 +310,21 @@ export default {
             // set the JWT for this session
             this.state.jwttoken = backJSON.jwt
             // get starting experiments
-            const refContractp = {}
+            /* const refContractp = {}
             refContractp.type = 'library'
             refContractp.reftype = 'publiclibrary'
             refContractp.action = 'GET'
             refContractp.jwt = this.state.jwttoken
             const refCJSONp = JSON.stringify(refContractp)
-            Vue.prototype.$socket.send(refCJSONp)
+            Vue.prototype.$socket.send(refCJSONp) */
             // network library updates?
-            const refContract = {}
+            /* const refContract = {}
             refContract.type = 'library'
             refContract.reftype = 'privatelibrary'
             refContract.action = 'GET'
             refContract.jwt = this.state.jwttoken
             const refCJSON = JSON.stringify(refContract)
-            Vue.prototype.$socket.send(refCJSON)
+            Vue.prototype.$socket.send(refCJSON) */
             /* const pubkeyGet = {}
             pubkeyGet.type = 'library'
             pubkeyGet.reftype = 'keymanagement'
@@ -321,11 +337,11 @@ export default {
             getWarmPeers.jwt = this.state.jwttoken
             Vue.prototype.$socket.send(JSON.stringify(getWarmPeers))
             // get the peer start lifeboard
-            let getLifeboard = {}
+            /* let getLifeboard = {}
             getLifeboard.type = 'library'
             getLifeboard.reftype = 'peerLifeboard'
             getLifeboard.jwt = this.state.jwttoken
-            Vue.prototype.$socket.send(JSON.stringify(getLifeboard))
+            Vue.prototype.$socket.send(JSON.stringify(getLifeboard)) */
             // get bentospaces layout
             let getBentospaces = {}
             getBentospaces.type = 'bentospace'
@@ -615,26 +631,41 @@ export default {
         // save state of bentospace dashboard
         this.dispatch('actionSaveSpaceNXP', 'nxp')
       } else if (backJSON.type === 'peerprivate') {
+        console.log('private librayr back data')
+        console.log(backJSON)
+        // set the HOPholder to say data for this back
+        Vue.set(state.HOPHolder, backJSON.board, {})
+        Vue.set(state.HOPHolder, backJSON.board, 'request')
         // peer private library contracts
-        Vue.set(state.HOPreturn, 'peerlib', true)
+        // Vue.set(state.HOPreturn, 'peerlib', true)
+        // keep track of what data has been asked for
         this.state.livePeerRefContIndex = backJSON.referenceContracts
-        this.state.networkPeerExpModules = backJSON.networkPeerExpModules
-        for (let exl of backJSON.networkPeerExpModules) {
+        this.state.networkPeerExpModules = backJSON.data.expanded
+        for (let exl of this.state.networkPeerExpModules) {
           let experBundle = {}
-          experBundle.cnrl = exl.exp.key
+          experBundle.cnrl = backJSON.data.board
           experBundle.status = false
           experBundle.active = false
-          experBundle.contract = exl.exp
-          experBundle.modules = VisualUtility.orderModules(exl.modules, 'private')
-          let objectPropC = exl.exp.key
+          experBundle.contract = backJSON.data.value
+          experBundle.modules = VisualUtility.orderModules(backJSON.data.expanded, 'private')
+          let objectPropC = backJSON.data.board
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }
         // tell toolkit ref contracts are active
         state.startPeerRefContracts.push('peeref')
         // prepare PEER JOINED LIST
-        let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.networkPeerExpModules)
+        let gridPeer = ToolUtility.prepareJoinedNXPlist(this.state.networkPeerExpModules)
         this.state.joinedNXPlist = gridPeer
+        // now ask for the data & list top 10 public library join options
+        /* const refContractp = {}
+        refContractp.type = 'library'
+        refContractp.reftype = 'publiclibrary-start'
+        refContractp.action = 'GET'
+        refContractp.jwt = this.state.jwttoken
+        const refCJSONp = JSON.stringify(refContractp)
+        Vue.prototype.$socket.send(refCJSONp) */
       } else if (backJSON.type === 'publiclibrary') {
+        console.log('public library back, prepare join list')
         // console.log('public library returned')
         Vue.set(state.HOPreturn, 'publiclib', true)
         // save copy of te ref contract indexes
@@ -655,6 +686,32 @@ export default {
           this.state.startPubRefContracts.push('pubref')
           let objectPropC = exl.exp.key
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
+        }
+      }
+    },
+    UPDATE_HOP_HOLDER (state, update) {
+      console.log('start of UP holder')
+      // loop over and if request prepare output for HOP
+      let listAssess = Object.keys(state.HOPHolder)
+      for (let assess of listAssess) {
+        if (state.HOPHolder[assess] === 'request') {
+          console.log('prepare HOP query')
+          console.log(assess)
+          // prepare output
+          let positionStartInfo = {}
+          positionStartInfo.nxp = assess
+          positionStartInfo.coord = state.libraryHolder.bentospacestart.data.value[assess]
+          positionStartInfo.type = 'saved'
+          // console.log(positionStartInfo)
+          // set active space
+          // this.dispatch('actionLiveNXPlist', this.state.joinedNXPlist.data, { root: true })
+          // this.dispatch('actionPostionCoord', positionStartInfo, { root: true })
+          // this.dispatch('actionDashboardState', positionStartInfo, { root: true })
+          console.log('before')
+          console.log(state.HOPHolder)
+          Vue.set(state.HOPHolder, assess, 'sent')
+          console.log('set to sent state')
+          console.log(state.HOPHolder)
         }
       }
     },
@@ -903,6 +960,12 @@ export default {
       // empty miniMap
       context.dispatch('actionResetMmap', { root: true })
       window.close()
+    },
+    actionHOPdataAssess (context, data) {
+      const localthis = this
+      console.log('actions for HOP assess data')
+      console.log(data)
+      context.commit('UPDATE_HOP_HOLDER', data)
     },
     actionHOPdataHander (context, data) {
       console.log('actions for HOP data returned')

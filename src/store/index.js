@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
+import HopPreare from '@/mixins/HOPprepare.js'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
 import VisToolsUtility from '@/mixins/visualUtility.js'
 const moment = require('moment')
+const HopprepareUtility = new HopPreare()
 const ToolUtility = new ToolkitUtility()
 const ContextOut = new ContextUtility()
 const VisualUtility = new VisToolsUtility()
@@ -742,6 +744,7 @@ const store = new Vuex.Store({
     },
     async actionDashboardState (context, update) {
       // set the minimap in position store module
+      HopprepareUtility.savePrepare(update)
       if (typeof update !== 'object') {
         let positionStartInfo = {}
         positionStartInfo.nxp = update
@@ -829,8 +832,8 @@ const store = new Vuex.Store({
         message.action = 'networkexperiment'
         message.data = ECSbundle
         message.jwt = this.state.jwttoken
-        // console.log('OUTmesssage+++++++++OUT+FIRST++++++')
-        // console.log(message)
+        console.log('OUTmesssage+++++++++OUT+FIRST++++++')
+        console.log(message)
         const safeFlowMessage = JSON.stringify(message)
         Vue.prototype.$socket.send(safeFlowMessage)
       } else {
