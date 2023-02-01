@@ -190,8 +190,8 @@ export default {
           }
         }
       } else if (backJSON.type === 'bentospaces-list') {
-        console.log('bentospaces-boards and solos saved info')
-        console.log(backJSON)
+        console.log('bentospaces-boards and solos START info')
+        // console.log(backJSON)
         // the callback will be called whenever any of the watched object properties
         // now need to ask for data for the active bentospace NXP's
         // first check if any bentospaces list is provided
@@ -209,7 +209,7 @@ export default {
               refContract.action = 'GET'
               refContract.data = bkey
               refContract.jwt = this.state.jwttoken
-              console.log(refContract)
+              // console.log(refContract)
               const refCJSON = JSON.stringify(refContract)
               Vue.prototype.$socket.send(refCJSON)
             }
@@ -636,6 +636,12 @@ export default {
         // set the HOPholder to say data for this back
         Vue.set(state.HOPHolder, backJSON.board, {})
         Vue.set(state.HOPHolder, backJSON.board, 'request')
+        // form HOP exp contract style
+        let nxpContract = {}
+        nxpContract.key = backJSON.board
+        nxpContract.value = backJSON.data.value
+        Vue.set(this.state.HOPrequestLive, backJSON.board, nxpContract)
+        Vue.set(state.HOPHolder, backJSON.board, 'request')
         // peer private library contracts
         // Vue.set(state.HOPreturn, 'peerlib', true)
         // keep track of what data has been asked for
@@ -648,7 +654,7 @@ export default {
           experBundle.active = false
           experBundle.contract = backJSON.data.value
           experBundle.modules = VisualUtility.orderModules(backJSON.data.expanded, 'private')
-          let objectPropC = backJSON.data.board
+          let objectPropC = backJSON.board
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }
         // tell toolkit ref contracts are active
@@ -665,6 +671,7 @@ export default {
         const refCJSONp = JSON.stringify(refContractp)
         Vue.prototype.$socket.send(refCJSONp) */
       } else if (backJSON.type === 'publiclibrary') {
+        // consider renaming this to board (nxp) return listener and have sperate ref contracts if done library next to hyperbee no need to return all prepared there as much as possible. 
         console.log('public library back, prepare join list')
         // console.log('public library returned')
         Vue.set(state.HOPreturn, 'publiclib', true)
@@ -695,23 +702,16 @@ export default {
       let listAssess = Object.keys(state.HOPHolder)
       for (let assess of listAssess) {
         if (state.HOPHolder[assess] === 'request') {
-          console.log('prepare HOP query')
-          console.log(assess)
           // prepare output
           let positionStartInfo = {}
           positionStartInfo.nxp = assess
           positionStartInfo.coord = state.libraryHolder.bentospacestart.data.value[assess]
           positionStartInfo.type = 'saved'
-          // console.log(positionStartInfo)
           // set active space
-          // this.dispatch('actionLiveNXPlist', this.state.joinedNXPlist.data, { root: true })
-          // this.dispatch('actionPostionCoord', positionStartInfo, { root: true })
-          // this.dispatch('actionDashboardState', positionStartInfo, { root: true })
-          console.log('before')
-          console.log(state.HOPHolder)
+          this.dispatch('actionLiveNXPlist', this.state.joinedNXPlist.data, { root: true })
+          this.dispatch('actionPostionCoord', positionStartInfo, { root: true })
+          this.dispatch('actionDashboardState', positionStartInfo, { root: true })
           Vue.set(state.HOPHolder, assess, 'sent')
-          console.log('set to sent state')
-          console.log(state.HOPHolder)
         }
       }
     },

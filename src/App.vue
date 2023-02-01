@@ -68,8 +68,6 @@ export default {
       return this.$store.state.peersocket.HOPreturn
     },
     HOPdataListen: function () {
-      console.log('lisisisisisi')
-      console.log(this.$store.state.peersocket.HOPHolder)
       return this.$store.state.peersocket.HOPHolder
     },
     caleAIStatus: function () {
@@ -93,7 +91,6 @@ export default {
       immediate: true,
       handler: function (val, oldVal) {
         if (val.publiclib === true && val.peerlib === true) {
-          console.log('yes both libraries have returned')
           this.$store.dispatch('actionHOPdataHander', 'hop')
         }
       }
@@ -102,9 +99,6 @@ export default {
       deep: true,
       immediate: true,
       handler: function (val, oldVal) {
-        console.log('watching HOPdataHolder')
-        console.log(val)
-        console.log(oldVal)
         this.$store.dispatch('actionHOPdataAssess', val)
       }
     }

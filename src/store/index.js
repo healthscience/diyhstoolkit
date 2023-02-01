@@ -194,7 +194,8 @@ const store = new Vuex.Store({
       communication: { 'prime': { 'module': 'communication', 'type': 'nxp-communication' } },
       clone: { 'prime': { 'module': 'clone', 'type': 'nxp-clone' } },
       idea: { 'prime': { 'module': 'idea', 'type': 'nxp-idea' } }
-    }
+    },
+    HOPrequestLive: {}
   },
   getters: {
     liveGrid: state => state.moduleGrid,
@@ -743,8 +744,19 @@ const store = new Vuex.Store({
       // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionDashboardState (context, update) {
+      console.log('prep start NEW DASHOUT message')
+      console.log(update)
+      console.log(this.state.networkPeerExpModules)
       // set the minimap in position store module
-      HopprepareUtility.savePrepare(update)
+      let prepOutHOP = HopprepareUtility.savePrepare(update, this.state.networkPeerExpModules)
+      // set
+      // context.commit('SET_SPACE_SHOW', false)
+      // let futureTimeCheck = false
+      // context.commit('SET_LIVE_NXP', update)
+      // context.commit('SET_NXP_MODULED', update)
+      // context.commit('SET_Dashboard_NXP', update)
+      // context.commit('setNXPprogressUpdate', update)
+      /*
       if (typeof update !== 'object') {
         let positionStartInfo = {}
         positionStartInfo.nxp = update
@@ -821,10 +833,13 @@ const store = new Vuex.Store({
           peerOptions.push(pmod)
         }
       }
-      if (futureTimeCheck === false) {
+      */
+      console.log('back from PREP')
+      console.log(prepOutHOP)
+      if (prepOutHOP.futureTimeCheck === false) {
         let ECSbundle = {}
-        ECSbundle.exp = matchExp.exp
-        ECSbundle.modules = peerOptions
+        ECSbundle.exp = this.state.HOPrequestLive[prepOutHOP.board]
+        ECSbundle.modules = prepOutHOP.modules
         // send message to PeerLink for safeFLOW
         let message = {}
         message.type = 'safeflow'
