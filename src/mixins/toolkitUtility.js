@@ -1,5 +1,7 @@
 'use strict'
 
+// import { update } from 'lodash'
+
 // import { all } from 'core-js/fn/promise'
 
 /**
@@ -32,8 +34,6 @@ util.inherits(ToolkitUtility, events.EventEmitter)
 *
 */
 ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
-  // console.log('lifeboardIN')
-  // console.log(lifeboardIN)
   let lifeboardList = []
   let lbMembersList = []
   // need to splt into lifeboard and members and link members to lifeboar ids
@@ -47,7 +47,6 @@ ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
   let listColumns = ['id', 'name', 'description', 'action']
   let listDatapeer = []
   for (let lb of lifeboardList) {
-    // console.log(lb)
     listDatapeer.push({ id: lb.key, name: lb.value.concept.name, description: '--', action: 'View' })
   }
   let listLBPeer = {}
@@ -63,8 +62,6 @@ ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
 *
 */
 ToolkitUtility.prototype.prepareJoinedNXPlist = function (peerExpModules) {
-  console.log('dispay data perp')
-  console.log(peerExpModules)
   let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
   let gridDatapeer = this.prepareExperimentSummary(peerExpModules)
   let gridPeer = {}
@@ -81,17 +78,19 @@ ToolkitUtility.prototype.prepareJoinedNXPlist = function (peerExpModules) {
 ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
   let gridDatapeer = []
   let question2 = {}
-  for (let mod of peerExpModules) {
+  for (let modules of peerExpModules) {
     // look up question
-    if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
-      if (mod.value.info.type === 'question') {
-        question2 = mod.value.info.question
-      } else {
-        question2 = 'none'
+    for (let mod of modules.modules) {
+      if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
+        if (mod.value.info.type === 'question') {
+          question2 = mod.value.info.question
+        } else {
+          question2 = 'none'
+        }
       }
-    }
-    if (question2 !== undefined) {
-      gridDatapeer.push({ id: mod.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
+      if (question2 !== undefined) {
+        gridDatapeer.push({ id: modules.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
+      }
     }
   }
   return gridDatapeer
@@ -248,20 +247,20 @@ ToolkitUtility.prototype.orderNewestContract = function (contractList) {
 * @method updateContractList
 *
 */
-ToolkitUtility.prototype.updateContractList = function (nxpref, expContract, allContract) {
+ToolkitUtility.prototype.updateContractList = function (board, expContract, allContract) {
   let updateList = []
-  for (let rcontract of allContract) {
-    if (nxpref === rcontract.exp.key) {
+  for (let modContract of allContract) {
+    if (expContract === modContract.key) {
       // set local state exp expaneded
-      let newFormed = {}
-      newFormed.key = nxpref
-      newFormed.value = expContract.modules
-      let addExpMod = {}
-      addExpMod.exp = newFormed
-      addExpMod.modules = expContract.modules
-      updateList.push(addExpMod)
+      // let newFormed = {}
+      // newFormed.key = expContract
+      // newFormed.value = expContract.modules
+      // let addExpMod = {}
+      // addExpMod.exp = newFormed
+      // addExpMod.modules = expContract.modules
+      updateList.push(modContract)
     } else {
-      updateList.push(rcontract)
+      updateList.push(modContract)
     }
   }
   return updateList

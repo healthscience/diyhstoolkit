@@ -745,10 +745,12 @@ const store = new Vuex.Store({
     },
     async actionDashboardState (context, update) {
       console.log('prep start NEW DASHOUT message')
-      console.log(update)
-      console.log(this.state.networkPeerExpModules)
+      // console.log(update)
+      // console.log(this.state.networkPeerExpModules)
       // set the minimap in position store module
-      let prepOutHOP = HopprepareUtility.savePrepare(update, this.state.networkPeerExpModules)
+      let prepOutHOP = HopprepareUtility.savePrepare(update, this.state.networkPeerExpModules, this.state.liveRefContIndex, this.state.livePeerRefContIndex)
+      console.log('prepa first back')
+      console.log(prepOutHOP)
       // set
       // context.commit('SET_SPACE_SHOW', false)
       // let futureTimeCheck = false
@@ -838,8 +840,11 @@ const store = new Vuex.Store({
       console.log(prepOutHOP)
       if (prepOutHOP.futureTimeCheck === false) {
         let ECSbundle = {}
-        ECSbundle.exp = this.state.HOPrequestLive[prepOutHOP.board]
-        ECSbundle.modules = prepOutHOP.modules
+        let boardOut = {}
+        boardOut.key = prepOutHOP.modules.key
+        boardOut.value = prepOutHOP.modules.value
+        ECSbundle.exp = boardOut // this.state.HOPrequestLive[prepOutHOP.board]
+        ECSbundle.modules = prepOutHOP.modules.modules
         // send message to PeerLink for safeFLOW
         let message = {}
         message.type = 'safeflow'

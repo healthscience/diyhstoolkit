@@ -1,10 +1,11 @@
 <template>
   <div id="new-experimentmenu">
-    <button type="button" class="btn-newnxp" @click="newType()">new</button>
+    <button type="button" class="btn-newnxp" @click="newType()">Data</button>
     <div id="new-type" v-if="newtypeShow === true">
       <!-- <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button> -->
       <button type="button" class="btn-new" @click="newExperiment('join')">Join</button>
-      <button type="button" class="btn-new" @click="newExperiment('experiment')">data</button>
+      <button type="button" class="btn-new" @click="newExperiment('experiment')">Board</button>
+      <button type="button" class="btn-new" @click="newLibrary('library')">Library</button>
     </div>
     <new-lifeboard v-show="isModalNewLifeboard" @close="closeModalNewLB">
       <template v-slot:header>
@@ -37,20 +38,30 @@
         <button class="contribute-nxp-button" @click="contributeNXP" >Contribute experiment to network</button>
       </template>
     </new-networkexperiment>
+    <networklibrary-modal v-show="isModalNLib" @closenl="closeModalNLib">
+      <template v-slot:header>
+      <!-- The code below goes into the header slot -->
+        Network Library
+      </template>
+      <template v-slot:body>
+      </template>
+    </networklibrary-modal>
   </div>
 </template>
 
 <script>
 import NewLifeboard from '@/components/lifeboard/NewLifeboard.vue'
 import NewNetworkexperiment from '@/components/bentoboard/NewNetworkExperiment.vue'
-import ModuleBuilder from '@/components/spaces/new/moduleBuilder.vue'
+import ModuleBuilder from '@/components/bentoboard/new/moduleBuilder.vue'
+import NetworklibraryModal from '@/components/bentoboard/networklibrary/networklibraryModal.vue'
 
 export default {
   name: 'new-experiment',
   components: {
     NewLifeboard,
     NewNetworkexperiment,
-    ModuleBuilder
+    ModuleBuilder,
+    NetworklibraryModal
   },
   computed: {
     newxnpFeedback: function () {
@@ -71,7 +82,8 @@ export default {
       newtypeShow: false,
       lifeboardName: '',
       flowMenu: false,
-      lifeboardState: 'private'
+      lifeboardState: 'private',
+      isModalNLib: false
     }
   },
   methods: {
@@ -90,6 +102,16 @@ export default {
         this.$store.dispatch('actionSpaceJoinListShow', false)
       }
       this.newtypeShow = !this.newtypeShow
+    },
+    newLibrary () {
+      console.log('open DaMaHub Library')
+      this.$store.dispatch('actionLibraryStart', true)
+      this.isModalNLib = true
+    },
+    closeModalNLib () {
+      this.isModalNLib = false
+      // refresh the networklibrary contract to access new contracts
+      // this.$store.dispatch('actionRrefreshRefContracts')
     },
     saveLifeboard () {
       this.$store.dispatch('actionSaveLifeboard', this.lifeboardName)

@@ -67,8 +67,8 @@ export default {
     SOCKET_ONMESSAGE (state, message) {
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      // console.log('****BB--INPUUTTT******')
-      // console.log(backJSON)
+      console.log('****BB--INPUUTTT******')
+      console.log(backJSON)
       if (backJSON.stored === true) {
         console.log('saved data path')
         // success in saving reference contract
@@ -173,6 +173,7 @@ export default {
             standardExp.modules = backJSON.expanded
             // need to add to joined list of experiments
             let newExpJoinedDataItem = ToolUtility.prepareExperimentSummarySingle(standardExp)
+            Vue.set(this.state.joinedNXPlist, 'data', [])
             this.state.joinedNXPlist.data.push(newExpJoinedDataItem)
           } else {
             // genesis contract
@@ -209,13 +210,21 @@ export default {
               refContract.action = 'GET'
               refContract.data = bkey
               refContract.jwt = this.state.jwttoken
-              // console.log(refContract)
               const refCJSON = JSON.stringify(refContract)
               Vue.prototype.$socket.send(refCJSON)
             }
           }
         } else {
           console.log('blank bentospace - empty')
+          const refContract = {}
+          refContract.type = 'library'
+          refContract.reftype = 'privatelibrary-start'
+          refContract.action = 'GET'
+          refContract.data = 'first'
+          refContract.jwt = this.state.jwttoken
+          // console.log(refContract)
+          const refCJSON = JSON.stringify(refContract)
+          Vue.prototype.$socket.send(refCJSON)
         }
       } else if (backJSON.type === 'bbai-reply') {
         // flow messages to ai helper
@@ -354,10 +363,11 @@ export default {
           console.log('---')
         }
       } else if (backJSON.type === 'ecssummary') {
-        // console.log('SUMMAERY==========================')
-        // console.log(backJSON)
+        console.log('SUMMAERY======HOP=ECS===================')
+        console.log(backJSON)
         let nxpUUID = Object.keys(backJSON.data)
         // update the NXP contract list held in toolkit
+        // let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[nxpUUID[0]], this.state.networkPeerExpModules)
         let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[nxpUUID[0]], this.state.networkPeerExpModules)
         // this.state.networkPeerExpModules = updateListContracts
         Vue.set(this.state.networkPeerExpModules, updateListContracts)
@@ -630,6 +640,15 @@ export default {
         // this.state.positionSpace.liveSpaceCoord
         // save state of bentospace dashboard
         this.dispatch('actionSaveSpaceNXP', 'nxp')
+      } else if (backJSON.type === 'peerprivate-start') {
+        console.log('private START librayr back data')
+        console.log(backJSON)
+        // prepare PEER JOINED LIST
+        let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.data)
+        console.log('join grid')
+        console.log(gridPeer)
+        this.state.joinedNXPlist = gridPeer
+        this.state.networkPeerExpModules = backJSON.data
       } else if (backJSON.type === 'peerprivate') {
         console.log('private librayr back data')
         console.log(backJSON)
@@ -696,8 +715,16 @@ export default {
         }
       }
     },
+    LIBRARY_START_DATA (state, update) {
+      const refContractp = {}
+      refContractp.type = 'library'
+      refContractp.reftype = 'publiclibrary-start'
+      refContractp.action = 'GET'
+      refContractp.jwt = this.state.jwttoken
+      const refCJSONp = JSON.stringify(refContractp)
+      Vue.prototype.$socket.send(refCJSONp)
+    },
     UPDATE_HOP_HOLDER (state, update) {
-      console.log('start of UP holder')
       // loop over and if request prepare output for HOP
       let listAssess = Object.keys(state.HOPHolder)
       for (let assess of listAssess) {
@@ -756,8 +783,6 @@ export default {
       this.state.genRefcontractCompute.push(inVerified)
     },
     SET_VISUALISE_REFCONTRACT (state, inVerified) {
-      console.log('set visuals contract')
-      console.log(inVerified)
       // add to module list full details
       this.state.moduleHolder.push(inVerified)
       this.state.newNXPmakeRefs.push(inVerified.moduleinfo.refcont)
@@ -963,12 +988,9 @@ export default {
     },
     actionHOPdataAssess (context, data) {
       const localthis = this
-      console.log('actions for HOP assess data')
-      console.log(data)
       context.commit('UPDATE_HOP_HOLDER', data)
     },
     actionHOPdataHander (context, data) {
-      console.log('actions for HOP data returned')
       // public library
       const localthis = this
       let saveDash = Object.keys(localthis.state.peersocket.libraryHolder.bentospacestart)
@@ -1317,8 +1339,6 @@ export default {
         setNewNXPplusModules.action = 'newexperimentmodule'
         setNewNXPplusModules.data = this.state.moduleHolder
         setNewNXPplusModules.jwt = this.state.jwttoken
-        // console.log('setup new NXP contract geneiss')
-        // console.log(setNewNXPplusModules)
         const genesisNXPjson = JSON.stringify(setNewNXPplusModules)
         Vue.prototype.$socket.send(genesisNXPjson)
         // clear the new NXP forms
@@ -1443,13 +1463,10 @@ export default {
       saveSpacePosition.action = 'save-position'
       saveSpacePosition.data = this.state.positionSpace.liveSpaceCoord
       saveSpacePosition.jwt = this.state.jwttoken
-      console.log(saveSpacePosition)
       const saveJSONp = JSON.stringify(saveSpacePosition)
       Vue.prototype.$socket.send(saveJSONp)
     },
     actionSyncRequest (context, update) {
-      console.log('sync requiest')
-      console.log(update)
       const syncDataBundle = {}
       syncDataBundle.type = 'library'
       syncDataBundle.reftype = 'sync-nxp-data'
@@ -1460,8 +1477,6 @@ export default {
       Vue.prototype.$socket.send(syncJSON)
     },
     actionFileupload (context, update) {
-      console.log('update file requiest FIRST TIME')
-      console.log(update)
       const fileLocalBundle = {}
       fileLocalBundle.type = 'library'
       fileLocalBundle.reftype = 'convert-csv-json'
@@ -1470,6 +1485,9 @@ export default {
       fileLocalBundle.jwt = this.state.jwttoken
       const fileJSON = JSON.stringify(fileLocalBundle)
       Vue.prototype.$socket.send(fileJSON)
+    },
+    actionLibraryStart (context, update) {
+      context.commit('LIBRARY_START_DATA', update)
     }
   }
 }

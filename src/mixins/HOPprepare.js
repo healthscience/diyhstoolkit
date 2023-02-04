@@ -10,9 +10,9 @@
 * @version    $Id$
 */
 import EventEmitter from 'events'
-import ToolkitUtility from '@/mixins/toolkitUtility.js'
-const moment = require('moment')
-const ToolUtility = new ToolkitUtility()
+// import ToolkitUtility from '@/mixins/toolkitUtility.js'
+// const moment = require('moment')
+// const ToolUtility = new ToolkitUtility()
 
 class HOPprepare extends EventEmitter {
   constructor () {
@@ -25,12 +25,10 @@ class HOPprepare extends EventEmitter {
   * @method savePrepare
   *
   */
-  savePrepare = function (input, board) {
-    console.log('hop prepare check existing saved')
-    console.log(input)
-    console.log(board)
+  savePrepare = function (input, boardmods, liveRefContIndex, livePeerRefContIndex) {
+    console.log('prepHOPOUT')
     let checkPosition = this.checkPositionObject(input)
-    let connectRefContracts = this.prepHOPmodules(board)
+    let connectRefContracts = this.prepHOPmodules(input, boardmods, liveRefContIndex, livePeerRefContIndex)
     let outMessageHOP = {}
     outMessageHOP.futureTimeCheck = false
     outMessageHOP.board = checkPosition
@@ -39,8 +37,8 @@ class HOPprepare extends EventEmitter {
   }
 
   /**
-  * take existing input prepare
-  * @method savePrepare
+  * check position
+  * @method checkPositionObject
   *
   */
   checkPositionObject = function (update) {
@@ -58,7 +56,7 @@ class HOPprepare extends EventEmitter {
 
   /**
   * take existing input prepare
-  * @method savePrepare
+  * @method assessTime
   *
   */
   assessTime = function (update) {
@@ -74,14 +72,17 @@ class HOPprepare extends EventEmitter {
   * @method prepHOPmodules
   *
   */
-  prepHOPmodules = function (update, futureTimeCheck) {
+  prepHOPmodules = function (update, networkPeerExpModules, liveRefContIndex, livePeerRefContIndex) {
     // build the safeFLOW-ECS input bundle
     let matchExp = {}
-    for (let nxp of this.state.networkPeerExpModules) {
-      if (nxp.exp.key === update) {
+    for (let nxp of networkPeerExpModules) {
+      if (nxp.key === update) {
         matchExp = nxp
       }
     }
+    return matchExp
+    /*
+    let futureTimeCheck = false
     // prepare ECS inputs- lookup peer selected module options
     let peerOptions = []
     for (let pmod of matchExp.modules) {
@@ -89,19 +90,19 @@ class HOPprepare extends EventEmitter {
       if (pmod.value.type === 'question') {
         peerOptions.push(pmod)
       } else if (pmod.value.type === 'data') {
-        let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.data, this.state.liveRefContIndex.packaging)
+        let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.data, liveRefContIndex.packaging)
         pmod.value.info.data = peerDataRC
         peerOptions.push(pmod)
       } else if (pmod.value.type === 'compute') {
         // get the latest refcontract nB. link compute ie one to many, sort many list and this used in presentation
-        let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, this.state.liveRefContIndex.compute)
+        let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, liveRefContIndex.compute)
         pmod.value.info.compute = peerDataRC
-        let newestContract = ToolUtility.refcontractLookupCompute(pmod, this.state.livePeerRefContIndex.module)
+        let newestContract = ToolUtility.refcontractLookupCompute(pmod, livePeerRefContIndex.module)
         // set key to master ref contract key
         newestContract.key = pmod.key
         // check if data is not in the future
         let timeModule = newestContract.value.info.controls.date
-        futureTimeCheck = ToolUtility.timeCheck(timeModule)
+        // futureTimeCheck = ToolUtility.timeCheck(timeModule)
         if (futureTimeCheck === true) {
           // flag to peer to ask if they want future or if yes what data to use ie CALE/ other
           let feedbackMessage = {}
@@ -120,7 +121,7 @@ class HOPprepare extends EventEmitter {
         }
       } else if (pmod.value.type === 'visualise') {
         pmod.value.info.settings.single = true
-        let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.visualise, this.state.liveRefContIndex.visualise)
+        let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.visualise, liveRefContIndex.visualise)
         if (pmod.value.info.settings.yaxis.length > 1) {
           pmod.value.info.settings.multidata = true
         } else {
@@ -129,7 +130,7 @@ class HOPprepare extends EventEmitter {
         pmod.value.info.visualise = peerDataRC
         peerOptions.push(pmod)
       }
-    }
+    } */
   }
 }
 

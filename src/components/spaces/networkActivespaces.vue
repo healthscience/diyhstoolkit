@@ -58,7 +58,7 @@
 
 <script>
 import SpaceMenu from '@/components/spaces/menues/spaceMenu.vue'
-import NewExperiment from '@/components/spaces/new/newExperiment.vue'
+import NewExperiment from '@/components/bentoboard/new/newExperiment.vue'
 // import LiveLifestyle from '@/components/home/LiveLifeboard.vue'
 import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
 import PublicNetworknxp from '@/components/home/PublicNetwork.vue'
