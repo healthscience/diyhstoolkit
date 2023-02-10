@@ -118,11 +118,11 @@ PositionUtility.prototype.startPositionCellspace = function (mcount, cells, spac
 }
 
 /**
-* draw the current dashboard mini map locations
-* @method miniMapLocations
+* draw the current SOLO mini map locations
+* @method miniMapSoloLocations
 *
 */
-PositionUtility.prototype.miniMapLocations = function () {
+PositionUtility.prototype.miniMapSoloLocations = function (soloCells) {
   const localthis = this
   function placeBBox (box, scale, zoom) {
     let xStart = box.x / (scale * zoom)
@@ -132,9 +132,9 @@ PositionUtility.prototype.miniMapLocations = function () {
     localthis.ctx.rect(xStart, yStart, 15, 30)
     localthis.ctx.stroke()
   }
-  let liveBBox = Object.keys(this.liveSpaceCoord)
+  let liveBBox = Object.keys(soloCells)
   liveBBox.forEach(
-    element => placeBBox(this.liveSpaceCoord[element], this.scale, this.zoom))
+    element => placeBBox(soloCells[element], this.scale, this.zoom))
 }
 
 /**
@@ -223,20 +223,34 @@ PositionUtility.prototype.scrollTODashboard = function (miniMouse) {
 }
 
 /**
-* update locations of Dashboards and minimap
-* @method updateMMapSpace
+* update locations of SOLO Cells and minimap
+* @method updateSoloMMapSpace
 *
 */
-PositionUtility.prototype.updateMMapSpace = function (newCoord) {
+PositionUtility.prototype.updateSoloMMapSpace = function (newCoord, cellsList) {
   console.log('update mini map')
   console.log(newCoord)
-  console.log(this.liveSpaceCoord)
+  console.log(cellsList)
   this.clearMMap()
+  let cellHolder = {}
+  // loop over and find last cell location status
+  let modules = Object.keys(cellsList)
+  for (let celP of modules) {
+    console.log(celP)
+    if (celP === newCoord.cell.moduleCNRL) {
+      console.log('yes match')
+      console.log(celP)
+      let matchCell = cellsList[celP][newCoord.cell.order]
+      matchCell.x = newCoord.x
+      matchCell.y = newCoord.y
+      cellHolder = matchCell
+    }
+  }
   // update mini coords  update nxp key
-  this.liveSpaceCoord[newCoord.nxp] = newCoord
+  // this.liveSpaceCoord[newCoord.nxp] = newCoord
   // redraw the dashboards and mouse pointer
-  this.miniMapLocations()
-  return this.liveSpaceCoord[newCoord.nxp]
+  // this.miniMapSoloLocations()
+  return cellHolder
 }
 
 /**

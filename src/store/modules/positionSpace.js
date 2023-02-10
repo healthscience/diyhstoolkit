@@ -41,8 +41,6 @@ export default {
       Vue.set(state.liveSpaceCoord, inVerified.nxp, updateXY)
     },
     SET_REMOVEMMAP_POSITION: (state, inVerified) => {
-      console.log('remove coor postion')
-      console.log(inVerified)
       // let updateCOORD = state.ctx.removeMMapSpace(inVerified)
       state.ctx.removeMMapSpace(inVerified)
       /* let updateXY = {}

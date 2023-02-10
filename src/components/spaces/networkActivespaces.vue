@@ -52,7 +52,7 @@
       <!-- <live-timeline v-if="spaceType === 'timeline'"></live-timeline> -->
     </div>
     <!-- <lifeboard-network v-if="lifeView === true"></lifeboard-network> -->
-    <experiment-network v-if="nxpView === true"></experiment-network>
+    <bento-grid v-if="nxpView === true"></bento-grid>
   </div>
 </template>
 
@@ -64,7 +64,7 @@ import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
 import PublicNetworknxp from '@/components/home/PublicNetwork.vue'
 // import LiveTimeline from '@/components/home/LiveTimeline.vue'
 // import LifeboardNetwork from '@/components/spaces/grids/LifeboardNetwork.vue'
-import ExperimentNetwork from '@/components/spaces/grids/bentoGrid.vue'
+import BentoGrid from '@/components/spaces/grids/bentoGrid.vue'
 
 export default {
   name: 'Network-Spaces',
@@ -76,7 +76,7 @@ export default {
     PublicNetworknxp,
     // LiveTimeline,
     // LifeboardNetwork,
-    ExperimentNetwork
+    BentoGrid
   },
   computed: {
     peerauth: function () {

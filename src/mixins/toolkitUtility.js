@@ -88,7 +88,7 @@ ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
           question2 = 'none'
         }
       }
-      if (question2 !== undefined) {
+      if (question2 !== 'none') {
         gridDatapeer.push({ id: modules.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
       }
     }
@@ -274,7 +274,7 @@ ToolkitUtility.prototype.updateContractList = function (board, expContract, allC
 ToolkitUtility.prototype.matchExpModulesDetail = function (expContract, allContract) {
   let matchContract = {}
   for (let rcontract of allContract) {
-    if (expContract === rcontract.exp.key) {
+    if (expContract === rcontract.key) {
       matchContract = rcontract
     }
   }

@@ -22,9 +22,6 @@ export default {
       Vue.set(state.soloState, 'active', status)
       Vue.set(state.soloState, 'board', inVerified)
     },
-    SET_ACTIVE_SOLOI: (state, inVerified) => {
-      console.log('set active solo cell')
-    },
     SET_ACTIVE_SMODULE: (state, inVerified) => {
       console.log('set active solo module')
     }
@@ -34,9 +31,6 @@ export default {
     actionSolospace: (context, update) => {
     // filter a list of Kentity bundles given the Experiment CNRL
       context.commit('SET_SOLO_STATE', update)
-    },
-    actionActiveSoloSelect (context, update) {
-      context.commit('SET_ACTIVE_SOLOI', update)
     },
     actionSoloactiveNXP (context, update) {
       context.commit('SET_ACTIVE_SMODULE', update)

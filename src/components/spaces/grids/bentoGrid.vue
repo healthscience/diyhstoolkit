@@ -131,7 +131,11 @@ export default {
       }
     },
     NXPprogress: function () {
-      return this.$store.state.nxpProgress
+      if (this.$store.state.nxpProgress === undefined) {
+        return {}
+      } else {
+        return this.$store.state.nxpProgress
+      }
     },
     ecsMessage: function () {
       return this.$store.state.ecsMessageLive
@@ -146,7 +150,14 @@ export default {
       return this.$store.state.activeScalevalue
     },
     activeDrag: function () {
-      return this.$store.state.activeDragList
+      if (this.$store.state.activeDragList === undefined) {
+        return {}
+      } else {
+        return this.$store.state.activeDragList
+      }
+    },
+    postionGrid: function () {
+      return this.$store.state.moduleGrid
     },
     activeGrid () {
       this.setLocalGrid(this.$store.state.moduleGrid)
@@ -254,13 +265,9 @@ export default {
       this.$store.dispatch('actionActiveNXP', nxpID)
     },
     soloSpaceOpen (bs) {
-      console.log('open solospace modal')
-      console.log(bs)
       this.solospaceLive = bs
       this.$store.dispatch('actionSolospace', bs)
-      console.log('active grid')
-      console.log(this.localGrid)
-      this.$store.dispatch('actionAllCells', this.localGrid)
+      this.$store.dispatch('actionAllCells', this.postionGrid)
     },
     closeDashboard (dc) {
       this.$store.dispatch('actionCloseDashboard', dc)

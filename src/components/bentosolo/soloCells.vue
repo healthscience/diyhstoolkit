@@ -1,19 +1,16 @@
 <template>
   <div id="cells-holder">
-    <div id="cells-pmodulde" v-for="imod of this.localGrid" :key="imod.id">
-      <vue-draggable-resizable id="soloispace" data-no-dragscroll :min-width="900" :w="1000" h="auto" :parent="true" @activated="onDragSolostartCallback(moduleCNRL)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handle'" :x=imod.x :y=imod.y>
-        <div class="drag-handle" @click.prevent="setActiveSolo(moduleCNRL)" v-bind:class="{active: soloActivedrag === true }">
-        -- ACTIVATION BAR --- {{ imod }}
-        </div>
-        <component v-bind:is="moduleContent.prime.vistype" :shellID="expCNRL" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="imod.i" class="module-placer"></component>
-      </vue-draggable-resizable>
-    </div>
+    <vue-draggable-resizable id="solocell" data-no-dragscroll :min-width="900" :w="1000" h="auto" :parent="true" @activated="onDragSolostartCallback(moduleCNRL)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handlesolo'" :x=cellposition.x :y=cellposition.y>
+      <div class="drag-handlesolo" @click.prevent="setActiveSolo(moduleCNRL)" v-bind:class="{active: soloActivedrag === true }">
+      ---- CELL BAR ----
+      </div>
+      <component v-bind:is="moduleContent.prime.vistype" :shellID="board" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="order" class="module-placer"></component>
+    </vue-draggable-resizable>
   </div>
 </template>
 
 <script>
 import VueDraggableResizable from 'vue-draggable-resizable'
-import _ from 'lodash'
 // import ModuleBoard from './moduleBoard.vue'
 // need to dynamically plug in modules required into toolkit see https://itnext.io/create-a-vue-js-component-library-part-2-c92a42af84e9
 import nxpDevice from '@/components/visualise/nxpDevice.vue'
@@ -40,8 +37,10 @@ export default {
   created: function () {
   },
   props: {
-    expCNRL: String,
-    moduleCNRL: String
+    board: String,
+    moduleCNRL: String,
+    cellposition: null,
+    order: String
   },
   computed: {
     toolbarStatusLive: function () {
@@ -59,7 +58,7 @@ export default {
       }
     },
     moduleContent: function () {
-      let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
+      let contentModule = this.$store.state.NXPexperimentData[this.board]
       if (contentModule === undefined) {
         return false
       } else if (contentModule[this.moduleCNRL].data.length === 0) {
@@ -68,23 +67,27 @@ export default {
         return contentModule[this.moduleCNRL]
       }
     },
-    spaceCoord: function () {
+    BoardstatusData: function () {
+      if (this.$store.state.nxpModulelist === undefined) {
+        return {}
+      } else {
+        return this.$store.state.nxpModulelist
+      }
+    },
+    solospaceCoord: function () {
       if (this.$store.state.solopositionSpace.liveSpaceCoord === undefined) {
         return {}
       } else {
         return this.$store.state.solopositionSpace.liveSpaceCoord
       }
     },
-    storeGrid () {
-      this.setLocalGrid(this.$store.state.moduleGrid[this.moduleCNRL])
-      return _.cloneDeep(this.$store.state.moduleGrid[this.moduleCNRL])
+    soloStoreGrid () {
+      return this.$store.state.solopositionSpace.soloGrid
     }
   },
+  /*
   watch: {
-    storeGrid (newValue) {
-      this.localGrid = newValue
-    },
-    spaceCoord: {
+    solospaceCoord: {
       deep: true,
       // immediate: true,
       handler: function (newVal, oldVal) {
@@ -92,13 +95,15 @@ export default {
         console.log(newVal)
       }
     }
-  },
+  }, */
   data () {
     return {
       localGrid: [],
       moduleType: 'solo-cells',
       index: 0,
-      zoomdata: 0
+      zoomdata: 0,
+      startCountPos: 0,
+      startCountPosY: 0
     }
   },
   mounted () {
@@ -115,13 +120,11 @@ export default {
         this.zoomdata -= 1
       }
     },
-    setLocalGrid (grid) {
-      this.localGrid = grid
-    },
     setActiveSolo (nxpID) {
+      console.log('move cell bar')
       // only one active at a time
-      this.$store.dispatch('actionActiveSoloSelect', nxpID)
-      this.dragDashmove = nxpID
+      // this.$store.dispatch('actionActiveSoloSelect', nxpID)
+      // this.dragDashmove = nxpID
       // set this NXP as live
       // this.$store.dispatch('actionActiveCell', nxpID)
     },
@@ -132,7 +135,7 @@ export default {
       this.height = height
     },
     onDragSolostartCallback (ev) {
-      this.$store.dispatch('actionSoloactiveNXP', ev)
+      // this.$store.dispatch('actionSoloactiveNXP', ev)
     },
     onDrag: function (x, y) {
       let dragScale = 1
@@ -146,10 +149,17 @@ export default {
       this.y = y
     },
     onDragStop: function (x, y) {
+      console.log('drag stop-----------------')
+      console.log(x)
+      console.log(y)
       let dbmove = {}
       dbmove.x = x
       dbmove.y = y
-      dbmove.nxp = this.bboard
+      let cellContext = {}
+      cellContext.board = this.board
+      cellContext.moduleCNRL = this.moduleCNRL
+      cellContext.order = this.order
+      dbmove.cell = cellContext
       this.$store.dispatch('actionSoloBmove', dbmove)
     },
     soloActivedrag: function () {
@@ -164,13 +174,18 @@ export default {
   border: 0px solid red;
 }
 
-.drag-handle {
+#solocell {
+  border: 0px solid red;
+  height: 100%;
+}
+
+.drag-handlesolo {
   display: grid;
   background-color: lightgrey;
   height: 50px;
 }
 
-.drag-handle.active {
+.drag-handlesolo.active {
   display: grid;
   background-color: #4CAF50; /* Green */
   height: 50px;

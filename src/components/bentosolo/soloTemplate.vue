@@ -16,13 +16,20 @@
       <template v-slot:solospace>
         <div id="solo-grid">
           <div id="solo-toolbar">
-          <grid-toolbar></grid-toolbar>
+            <grid-toolbar></grid-toolbar>
           </div>
           <minisolo-map></minisolo-map>
           <div id="dragwheel-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
             <div id="dashboard-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
               <div v-for="soloi of BoardstatusData[sbboard]" :key="soloi.id" id="soloispace">
-                <solo-cells :expCNRL="sbboard" :moduleCNRL="soloi"></solo-cells>
+                <div v-if="BoardstatusData[sbboard]">
+                  <div v-for="cell of startPostions[soloi]" :key="cell.id" id="cellholder">
+                    <solo-cells :board="sbboard" :moduleCNRL="soloi" :cellposition="cell" :order="cell.cell.i"></solo-cells>
+                  </div>
+                </div>
+                <div v-else>
+                  data not arrived
+                </div>
               </div>
             </div>
           </div>
@@ -65,8 +72,19 @@ export default {
         return this.$store.state.nxpModulelist
       }
     },
-    spaceCoord: function () {
-      return [ 1, 2 ]
+    startPostions: function () {
+      if (this.$store.state.solopositionSpace.initialGrid === undefined) {
+        return {}
+      } else {
+        return this.$store.state.solopositionSpace.initialGrid
+      }
+    },
+    cellspaceCoord: function () {
+      if (this.$store.state.solopositionSpace.liveSpaceCoord === undefined) {
+        return {}
+      } else {
+        return this.$store.state.solopositionSpace.liveSpaceCoord
+      }
     },
     zoomscaleValue: function () {
       return this.$store.state.activeScalevalue
@@ -93,7 +111,8 @@ export default {
       {
         x: 10,
         y: 10
-      }
+      },
+      cellindex: []
     }
   },
   methods: {
@@ -103,6 +122,9 @@ export default {
       // this.dragDashmove = nxpID
       // set this NXP as live
       // this.$store.dispatch('actionActiveNXP', nxpID)
+    },
+    setCellindex (solo) {
+      this.cellindex = this.cellspaceCoord[solo]
     },
     navMover: function () {
       console.log('scroll in space')
@@ -126,7 +148,6 @@ export default {
       }
     },
     returnBentospace () {
-      console.log(this.bboard)
       this.$store.dispatch('actionSolospace', this.bboard)
     },
     closeModal () {
@@ -140,7 +161,7 @@ export default {
 #solo-grid {
   display: grid;
   grid-template-columns: 1fr;
-  border: 4px dashed black;
+  border: 0px dashed black;
   height: 100%;
 }
 .solo-space {
@@ -164,7 +185,7 @@ export default {
   top: 20px;
   right: 20px;
   z-index: 31;
-  border: 2px dashed red;
+  border: 0px dashed red;
   width: 640px;
 }
 

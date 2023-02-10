@@ -133,7 +133,8 @@ export default {
       this.shellContract = board
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
-        this.$store.dispatch('actionDashboardState', board)
+        this.$store.dispatch('actionHOPoutState', board)
+        // this.$store.dispatch('actionDashboardState', board)
       } else {
         // preview network experiment
         this.$store.dispatch('actionJOINViewexperiment', board)

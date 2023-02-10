@@ -26,7 +26,6 @@ class HOPprepare extends EventEmitter {
   *
   */
   savePrepare = function (input, boardmods, liveRefContIndex, livePeerRefContIndex) {
-    console.log('prepHOPOUT')
     let checkPosition = this.checkPositionObject(input)
     let connectRefContracts = this.prepHOPmodules(input, boardmods, liveRefContIndex, livePeerRefContIndex)
     let outMessageHOP = {}
