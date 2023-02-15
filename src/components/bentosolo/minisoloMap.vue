@@ -1,7 +1,7 @@
 <template>
   <div id="space-mapsolo"> <!-- v-bind:style="{ translate: '(' + offRight + ')' }"   -->
     <div id="minimapsolo" class="minmove-right" v-bind:style="{ right: offRight }">
-      <canvas v-if="openminib === true" id="minimapsolo-canvas" @click="mouseMiniSelect" ></canvas>
+      <canvas v-if="openminib === true" id="minimapsolo-canvas" @click="mouseMiniSelect($event)" ></canvas>
     </div>
     <button id="open-minisolo" @click.prevent="setMiniMapShowSolo">map</button>
   </div>

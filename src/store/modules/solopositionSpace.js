@@ -38,7 +38,7 @@ export default {
         modCount++
         Vue.set(state.liveSpaceCoord, mitem, positionTrack)
         Vue.set(state.initialGrid, mitem, positionTrack)
-        // state.ctx.miniMapSoloLocations()
+        state.ctx.miniMapSoloLocations(state.initialGrid[mitem])
       }
     },
     SET_SPACEPOSITION_STATE: (state, inVerified) => {
@@ -74,6 +74,8 @@ export default {
       Vue.set(state.liveSpaceCoord, inVerified.nxp, updateXY) */
     },
     SET_SCROLLTO_POSITION: (state, inVerified) => {
+      console.log('scholl to solo')
+      console.log(inVerified)
       state.ctx.scrollTODashboard(inVerified)
     },
     SET_ZOOM_MAP: (state, inVerified) => {

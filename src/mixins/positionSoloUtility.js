@@ -105,7 +105,7 @@ PositionUtility.prototype.startPositionCellspace = function (mcount, cells, spac
     // make sure each cell has a unquie space
     for (let cl of cells) {
       let coord = {}
-      coord.x = 200 * (cellCount * mcount)
+      coord.x = 200 // * (cellCount * mcount)
       coord.y = 200 * (cellCount * mcount)
       coord.cell = cl
       cellPostions.push(coord)
@@ -123,6 +123,8 @@ PositionUtility.prototype.startPositionCellspace = function (mcount, cells, spac
 *
 */
 PositionUtility.prototype.miniMapSoloLocations = function (soloCells) {
+  console.log('set solo minimap')
+  console.log(soloCells)
   const localthis = this
   function placeBBox (box, scale, zoom) {
     let xStart = box.x / (scale * zoom)
