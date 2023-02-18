@@ -39,7 +39,6 @@ export default {
       this.state.connectStatus = true
     },
     SOCKET_ONCLOSE (state, event) {
-      console.log('onclose')
       state.socket.isConnected = false
       this.state.connectStatus = false
       this.state.peerauthStatus = false
@@ -47,7 +46,6 @@ export default {
       this.dispatch('actionDisconnect')
     },
     SOCKET_ONERROR (state, event) {
-      console.log('on erroror')
       this.state.socketClosed = true
       this.state.connectStatus = false
       this.state.peerauthStatus = false
@@ -393,7 +391,7 @@ export default {
           Vue.set(this.state.NXPexperimentData[boardUUID[0]][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        // console.log('SECOND-PART-----DATA RETURNED-----')
+        console.log('SECOND-PART-----DATA RETURNED-----')
         // console.log(backJSON)
         // is the data for the Lifeboard or NXP space?
         // check for none data  e.g. bug, error, goes wrong cannot return data for display

@@ -228,9 +228,6 @@ PositionUtility.prototype.scrollTODashboard = function (miniMouse) {
 *
 */
 PositionUtility.prototype.updateMMapSpace = function (newCoord) {
-  console.log('update mini map')
-  console.log(newCoord)
-  console.log(this.liveSpaceCoord)
   this.clearMMap()
   // update mini coords  update nxp key
   this.liveSpaceCoord[newCoord.nxp] = newCoord

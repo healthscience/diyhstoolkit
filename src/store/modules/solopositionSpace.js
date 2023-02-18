@@ -17,7 +17,7 @@ export default {
   getters: {
   },
   mutations: {
-    SET_CANVAS_SPACE: (state, inVerified) => {
+    SET_CANVASSOLO_SPACE: (state, inVerified) => {
       state.ctx.setCanvas(inVerified)
     },
     SET_RESET_MMAP: (state, inVerified) => {
@@ -28,7 +28,7 @@ export default {
       state.ctx.mousePointer(inVerified)
     },
     SET_INITAL_CELLS: (state, inVerified) => {
-      Vue.set(state.initialGrid, inVerified)
+      // Vue.set(state.initialGrid, inVerified)
       let modHash = Object.keys(inVerified)
       let modCount = 1
       for (let mitem of modHash) {
@@ -41,7 +41,7 @@ export default {
         state.ctx.miniMapSoloLocations(state.initialGrid[mitem])
       }
     },
-    SET_SPACEPOSITION_STATE: (state, inVerified) => {
+    SET_SPACEPOSITIONSOLO_STATE: (state, inVerified) => {
       let positionTrack = state.ctx.startPositionSpace(inVerified.nxp, inVerified.coord, inVerified.type)
       Vue.set(state.liveSpaceCoord, inVerified.nxp, positionTrack)
       // update the minimap
@@ -51,19 +51,11 @@ export default {
       console.log(inVerified)
     },
     SET_UPDATESOLOMMAP_POSITION: (state, inVerified) => {
-      console.log('update positon+++++++++++++++')
-      console.log(inVerified)
       let updateCOORD = state.ctx.updateSoloMMapSpace(inVerified, state.initialGrid)
-      console.log(updateCOORD)
-      console.log('update solo space cells')
       state.initialGrid[inVerified.cell.moduleCNRL] = []
-      state.initialGrid[inVerified.cell.moduleCNRL].push(updateCOORD)
-      console.log('inital location cell upda ted=================')
-      console.log(state.initialGrid)
-      // let updateXY = {}
-      // updateXY.x = updateCOORD.x
-      // updateXY.y = updateCOORD.y
-      // Vue.set(state.liveSpaceCoord, inVerified.nx, updateXY)
+      Vue.set(state.initialGrid, inVerified.cell.moduleCNRL, updateCOORD)
+      // need to update SOLO minimap
+      // state.ctx.miniMapSoloLocations(state.initialGrid)
     },
     SET_REMOVEMMAP_POSITION: (state, inVerified) => {
       // let updateCOORD = state.ctx.removeMMapSpace(inVerified)
@@ -73,10 +65,8 @@ export default {
       updateXY.y = updateCOORD.y
       Vue.set(state.liveSpaceCoord, inVerified.nxp, updateXY) */
     },
-    SET_SCROLLTO_POSITION: (state, inVerified) => {
-      console.log('scholl to solo')
-      console.log(inVerified)
-      state.ctx.scrollTODashboard(inVerified)
+    SET_SCROLLTOCELL_POSITION: (state, inVerified) => {
+      state.ctx.scrollTODashboard(inVerified, state.initialGrid)
     },
     SET_ZOOM_MAP: (state, inVerified) => {
       state.ctx.setZoom(inVerified)
@@ -95,9 +85,9 @@ export default {
   },
   actions: {
     actionSetsolominmap: (context, update) => {
-      context.commit('SET_CANVAS_SPACE', update)
+      context.commit('SET_CANVASSOLO_SPACE', update)
     },
-    actionAllCells: (context, update) => {
+    actionAllSoloCells: (context, update) => {
       context.commit('SET_INITAL_CELLS', update)
     },
     actionResetMmap: (context) => {
@@ -106,16 +96,16 @@ export default {
     actionPostionCoordMouse: (context, update) => {
       context.commit('SET_POSITION_MOUSE', update)
     },
-    actionPostionCoord: (context, update) => {
+    actionPostionSoloCoord: (context, update) => {
       // keep track of position in bento space
-      context.commit('SET_SPACEPOSITION_STATE', update)
+      context.commit('SET_SPACEPOSITIONSOLO_STATE', update)
     },
     actionClearPosition: (context, update) => {
       context.commit('SET_CLEAR_POSITION', update)
     },
     actionMMapSoloMove: (context, update) => {
       context.rootState.activeScalevalue = 1
-      context.commit('SET_SCROLLTO_POSITION', update)
+      context.commit('SET_SCROLLTOCELL_POSITION', update)
     },
     actionSoloBmove: (context, update) => {
       context.commit('SET_UPDATESOLOMMAP_POSITION', update)

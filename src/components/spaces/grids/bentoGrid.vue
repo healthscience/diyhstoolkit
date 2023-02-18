@@ -267,7 +267,7 @@ export default {
     soloSpaceOpen (bs) {
       this.solospaceLive = bs
       this.$store.dispatch('actionSolospace', bs)
-      this.$store.dispatch('actionAllCells', this.postionGrid)
+      this.$store.dispatch('actionAllSoloCells', this.postionGrid)
     },
     closeDashboard (dc) {
       this.$store.dispatch('actionCloseDashboard', dc)

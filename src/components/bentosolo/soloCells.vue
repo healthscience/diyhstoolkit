@@ -1,17 +1,10 @@
 <template>
-  <div id="cells-holder">
-    <vue-draggable-resizable id="solocell" data-no-dragscroll :min-width="900" :w="1000" h="auto" :parent="true" @activated="onDragSolostartCallback(moduleCNRL)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handlesolo'" :x=cellposition.x :y=cellposition.y>
-      <div class="drag-handlesolo" @click.prevent="setActiveSolo(moduleCNRL)" v-bind:class="{active: soloActivedrag === true }">
-      ---- CELL BAR ----
-      </div>
+  <div id="cell-holder">
       <component v-bind:is="moduleContent.prime.vistype" :shellID="board" :moduleCNRL="moduleCNRL" :moduleType="moduleContent.prime.cnrl" :mData="order" class="module-placer"></component>
-    </vue-draggable-resizable>
   </div>
 </template>
 
 <script>
-import VueDraggableResizable from 'vue-draggable-resizable'
-// import ModuleBoard from './moduleBoard.vue'
 // need to dynamically plug in modules required into toolkit see https://itnext.io/create-a-vue-js-component-library-part-2-c92a42af84e9
 import nxpDevice from '@/components/visualise/nxpDevice.vue'
 import nxpDapp from '@/components/visualise/nxpDapp.vue'
@@ -24,7 +17,6 @@ import nxpVisualise from '@/components/visualise/nxpVisualise.vue'
 export default {
   name: 'visual-dashview',
   components: {
-    VueDraggableResizable,
     // learnReport,
     // learnAction
     // ModuleBoard,
@@ -85,17 +77,6 @@ export default {
       return this.$store.state.solopositionSpace.soloGrid
     }
   },
-  /*
-  watch: {
-    solospaceCoord: {
-      deep: true,
-      // immediate: true,
-      handler: function (newVal, oldVal) {
-        console.log('solo space coor dupdated')
-        console.log(newVal)
-      }
-    }
-  }, */
   data () {
     return {
       localGrid: [],
@@ -138,6 +119,9 @@ export default {
       // this.$store.dispatch('actionSoloactiveNXP', ev)
     },
     onDrag: function (x, y) {
+      console.log('on drag')
+      console.log(x)
+      console.log(y)
       let dragScale = 1
       let smallz = 0.2
       if (this.zoomscaleValue <= smallz) {
@@ -160,7 +144,8 @@ export default {
       cellContext.moduleCNRL = this.moduleCNRL
       cellContext.order = this.order
       dbmove.cell = cellContext
-      this.$store.dispatch('actionSoloBmove', dbmove)
+      console.log(dbmove)
+      // this.$store.dispatch('actionSoloBmove', dbmove)
     },
     soloActivedrag: function () {
       return true
@@ -171,24 +156,8 @@ export default {
 
 <style scoped>
 #cell-holder {
-  border: 0px solid red;
-}
-
-#solocell {
-  border: 0px solid red;
+  border: 2px solid blue;
   height: 100%;
-}
-
-.drag-handlesolo {
-  display: grid;
-  background-color: lightgrey;
-  height: 50px;
-}
-
-.drag-handlesolo.active {
-  display: grid;
-  background-color: #4CAF50; /* Green */
-  height: 50px;
 }
 
 </style>

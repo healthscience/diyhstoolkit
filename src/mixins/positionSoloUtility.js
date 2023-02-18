@@ -123,8 +123,6 @@ PositionUtility.prototype.startPositionCellspace = function (mcount, cells, spac
 *
 */
 PositionUtility.prototype.miniMapSoloLocations = function (soloCells) {
-  console.log('set solo minimap')
-  console.log(soloCells)
   const localthis = this
   function placeBBox (box, scale, zoom) {
     let xStart = box.x / (scale * zoom)
@@ -144,7 +142,7 @@ PositionUtility.prototype.miniMapSoloLocations = function (soloCells) {
 * @method collisionMiniDash
 *
 */
-PositionUtility.prototype.collisionMiniDash = function (miniMouse) {
+PositionUtility.prototype.collisionMiniDash = function (miniMouse, listCells) {
   let dashMatch = {}
   let distanceList = []
   function collitionMatch (mdash, mmouse, scale, zoom) {
@@ -156,19 +154,23 @@ PositionUtility.prototype.collisionMiniDash = function (miniMouse) {
     trackCoord.dash = mdash
     distanceList.push(trackCoord)
   }
-
-  let liveBBox = Object.keys(this.liveSpaceCoord)
+  let liveBBox = Object.keys(listCells)
   if (liveBBox.length > 0) {
-    liveBBox.forEach(
-      element => collitionMatch(this.liveSpaceCoord[element], miniMouse, this.scale, this.zoom))
-    let lowest = distanceList.sort(function (a, b) {
-      return a.dist - b.dist
-    })
-    // whick is closest?  Return coordion of that dashboard
-    dashMatch = lowest[0].dash
+    for (let celli of liveBBox) {
+      if (listCells[celli] !== undefined) {
+        listCells[celli].forEach(
+          element => collitionMatch(celli, miniMouse, this.scale, this.zoom))
+        let lowest = distanceList.sort(function (a, b) {
+          return a.dist - b.dist
+        })
+        // whick is closest?  Return coordion of that dashboard
+        dashMatch = lowest[0].dash
+      }
+    }
   } else {
     console.log('no dashboard on space')
   }
+
   return dashMatch
 }
 
@@ -201,12 +203,12 @@ PositionUtility.prototype.drawmMMap = function () {
 * @method scrollTODashboard
 *
 */
-PositionUtility.prototype.scrollTODashboard = function (miniMouse) {
+PositionUtility.prototype.scrollTODashboard = function (miniMouse, listCells) {
   let mMouse = {}
   mMouse.x = miniMouse.offsetX
   mMouse.y = miniMouse.offsetY
   // identify click minidash closest to mouse click on minimap
-  let scrollMatch = this.collisionMiniDash(mMouse)
+  let scrollMatch = this.collisionMiniDash(mMouse, listCells)
   // executue scrollTO  dashboard-space
   // window.scrollTo(scrollMatch.x, scrollMatch.y)
   // document.getElementById('dashboard-placeholder').scrollIntoView()
@@ -230,28 +232,25 @@ PositionUtility.prototype.scrollTODashboard = function (miniMouse) {
 *
 */
 PositionUtility.prototype.updateSoloMMapSpace = function (newCoord, cellsList) {
-  console.log('update mini map')
-  console.log(newCoord)
-  console.log(cellsList)
   this.clearMMap()
-  let cellHolder = {}
+  let cellHolder = []
   // loop over and find last cell location status
   let modules = Object.keys(cellsList)
   for (let celP of modules) {
-    console.log(celP)
     if (celP === newCoord.cell.moduleCNRL) {
-      console.log('yes match')
-      console.log(celP)
-      let matchCell = cellsList[celP][newCoord.cell.order]
-      matchCell.x = newCoord.x
-      matchCell.y = newCoord.y
-      cellHolder = matchCell
+      // loop over cells within module
+      for (let celli of cellsList[celP]) {
+        if (celli.cell.i === newCoord.cell.order) {
+          let matchCell = celli
+          matchCell.x = newCoord.x
+          matchCell.y = newCoord.y
+          cellHolder.push(matchCell)
+        } else {
+          cellHolder.push(celli)
+        }
+      }
     }
   }
-  // update mini coords  update nxp key
-  // this.liveSpaceCoord[newCoord.nxp] = newCoord
-  // redraw the dashboards and mouse pointer
-  // this.miniMapSoloLocations()
   return cellHolder
 }
 
