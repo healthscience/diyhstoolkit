@@ -145,6 +145,7 @@ export default {
       } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]) {
         return {}
       } else {
+        console.log('live data ')
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
       }
     },

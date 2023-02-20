@@ -93,14 +93,6 @@ export default {
     closeModule () {
       console.log('close module')
     },
-    wheelItBetter (event) {
-      // use mouse wheel to zoom in out
-      if (event.deltaY < 0) {
-        this.zoomdata += 1
-      } else {
-        this.zoomdata -= 1
-      }
-    },
     setActiveSolo (nxpID) {
       console.log('move cell bar')
       // only one active at a time
@@ -108,47 +100,6 @@ export default {
       // this.dragDashmove = nxpID
       // set this NXP as live
       // this.$store.dispatch('actionActiveCell', nxpID)
-    },
-    onResize: function (x, y, width, height) {
-      this.x = x
-      this.y = y
-      this.width = width
-      this.height = height
-    },
-    onDragSolostartCallback (ev) {
-      // this.$store.dispatch('actionSoloactiveNXP', ev)
-    },
-    onDrag: function (x, y) {
-      console.log('on drag')
-      console.log(x)
-      console.log(y)
-      let dragScale = 1
-      let smallz = 0.2
-      if (this.zoomscaleValue <= smallz) {
-        dragScale = (1 / (this.zoomscaleValue * 0.001))
-      } else {
-        dragScale = (1 / this.zoomscaleValue)
-      }
-      this.x = x * (dragScale)
-      this.y = y
-    },
-    onDragStop: function (x, y) {
-      console.log('drag stop-----------------')
-      console.log(x)
-      console.log(y)
-      let dbmove = {}
-      dbmove.x = x
-      dbmove.y = y
-      let cellContext = {}
-      cellContext.board = this.board
-      cellContext.moduleCNRL = this.moduleCNRL
-      cellContext.order = this.order
-      dbmove.cell = cellContext
-      console.log(dbmove)
-      // this.$store.dispatch('actionSoloBmove', dbmove)
-    },
-    soloActivedrag: function () {
-      return true
     }
   }
 }
@@ -156,8 +107,8 @@ export default {
 
 <style scoped>
 #cell-holder {
-  border: 2px solid blue;
-  height: 100%;
+  border: 0px solid lightblue;
+  width: 900px;
 }
 
 </style>

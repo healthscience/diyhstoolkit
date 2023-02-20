@@ -22,23 +22,12 @@
           <div id="spacesolo-shaper">
             <div id="dragwheelsolo-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
               <div id="solo-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
-                <div v-for="soloi of BoardstatusData[sbboard]" :key="soloi.id" id="soloispace">
-                  <div v-if="BoardstatusData[sbboard]">
-                    <div v-for="cell of soloPosition[soloi]" :key="cell.id">
-                      <div v-if="cell?.cell.i !== undefined">
-                        <vue-draggable-resizable id="solocell" data-no-dragscroll :min-width="900" :w="1000" h="auto" :parent="true" @activated="onDragSolostartCallback(soloi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handlesolo'" :x=cell.x :y=cell.y>
-                        <div class="drag-handlesolo" @click.prevent="setActiveSolo(soloi)" v-bind:class="{active: soloActivedrag === true }">
-                        ---- CELL BAR ----
-                        </div>
-                        <solo-cells :board="sbboard" :moduleCNRL="soloi" :cellposition="cell" :order="cell.cell.i"></solo-cells>
-                      </vue-draggable-resizable>
-                      </div>
-                    </div>
-                  </div>
-                  <div v-else>
-                    data not arrived
-                  </div>
+                <vue-draggable-resizable v-for="soloi of BoardstatusData" :key="soloi.id" id="solocellspace" data-no-dragscroll w="auto" h="auto" :parent="true" @activated="onDragSolostartCallback(soloi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handlesolo'" :x=soloi.x :y=soloi.y>
+                <div class="drag-handlesolo" @click.prevent="setActiveSolo(soloi)" v-bind:class="{active: soloActivedrag === true }">
+                ---- CELL BAR ----
                 </div>
+                <solo-cells :board="sbboard" :moduleCNRL="soloi.mod" :cellposition="soloi.cell" :order="soloi.cell.i"></solo-cells>
+              </vue-draggable-resizable>
               </div>
             </div>
           </div>
@@ -77,10 +66,27 @@ export default {
       }
     },
     BoardstatusData: function () {
+      // need to prepare into single array for drag drop to work
       if (this.$store.state.nxpModulelist === undefined) {
         return {}
       } else {
-        return this.$store.state.nxpModulelist
+        let liveListCells = []
+        if (this.$store.state.nxpModulelist[this.sbboard]?.length > 0) {
+          for (let soloi of this.$store.state.nxpModulelist[this.sbboard]) {
+            if (this.$store.state.nxpModulelist[this.sbboard]) {
+              for (let cell of this.soloPosition[soloi]) {
+                console.log(cell)
+                let newCellinfo = {}
+                newCellinfo = cell
+                newCellinfo.mod = soloi
+                liveListCells.push(newCellinfo)
+              }
+            }
+          }
+        } else {
+          console.log('no modues')
+        }
+        return liveListCells
       }
     },
     startPostions: function () {
@@ -233,9 +239,6 @@ export default {
       // this.$store.dispatch('actionSoloactiveNXP', ev)
     },
     onDrag: function (x, y) {
-      console.log('on drag')
-      console.log(x)
-      console.log(y)
       let dragScale = 1
       let smallz = 0.2
       if (this.zoomscaleValue <= smallz) {
@@ -272,13 +275,12 @@ export default {
 .solo-space {
   position: relative;
   border: 3px solid red;
-  height: 100%;
 }
+
 #solo-grid {
   display: grid;
   grid-template-columns: 1fr;
-  border: 2px dashed black;
-  height: auto;
+  border: 0px dashed black;
 }
 
 #spacesolo-shaper {
@@ -304,6 +306,9 @@ export default {
   background-size: 60px 60px, 60px 60px;
 }
 
+.soloispace {
+}
+
 #solo-toolbar {
   position: fixed;
   top: 20px;
@@ -313,15 +318,17 @@ export default {
   width: 640px;
 }
 
-#solocell {
+#solocellspace {
   border: 1px solid grey;
   height: 100%;
+  min-width: 400px;
 }
 
 .drag-handlesolo {
   display: grid;
   background-color: lightgrey;
   height: 50px;
+  border: 2px dashed red;
 }
 
 .drag-handlesolo.active {

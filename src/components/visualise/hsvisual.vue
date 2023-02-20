@@ -187,7 +187,7 @@ export default {
 #grid-visual {
   display: grid;
   grid-template-columns: 5fr 1fr;
-  border: 0px solid red;
+  border: 2px solid red;
 }
 
 .visual-item {
@@ -197,12 +197,11 @@ export default {
 #grid-bentobox {
   display: grid;
   grid-template-columns: 1fr auto; /* repeat(content-fill minmax(50% 50%)); 50% 50%; repeat(50% - calc(100% - 2fr)); */
-  border: 0px solid blue;
-  width: 100%;
+  border: 1px solid blue;
 }
 
 .grid-item-chart {
-  border: 0px solid red;
+  border: 2px dashed green;
 }
 
 #future-tools {
