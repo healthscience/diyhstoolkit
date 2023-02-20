@@ -38,19 +38,19 @@
 </template>
 
 <script>
-import NetworklibraryModal from '@/components/experiments/networklibrary/networklibraryModal.vue'
+import NetworklibraryModal from '@/components/bentoboard/networklibrary/networklibraryModal.vue'
 import draggable from 'vuedraggable'
-import NxpQuestion from '@/components/experiments/nxpQuestion.vue'
-import NxpDevice from '@/components/experiments/nxpDevice.vue'
-import NxpDapp from '@/components/experiments/nxpDapp.vue'
-import NxpCompute from '@/components/experiments/nxpCompute.vue'
-import NxpControl from '@/components/experiments/nxpControl.vue'
-import NxpVisualise from '@/components/experiments/nxpBuildVisualise.vue'
-import NxpSciencereview from '@/components/experiments/nxpSciencereview.vue'
-import nxpLifestylemedicine from '@/components/experiments/nxpLifestylemedicine.vue'
-import NxpPrescription from '@/components/experiments/nxpPrescription.vue'
-import NxpCommunicate from '@/components/experiments/nxpCommunicate.vue'
-import NxpEvolve from '@/components/experiments/nxpEvolve.vue'
+import NxpQuestion from '@/components/bentoboard/nxpQuestion.vue'
+import NxpDevice from '@/components/bentoboard/nxpDevice.vue'
+import NxpDapp from '@/components/bentoboard/nxpDapp.vue'
+import NxpCompute from '@/components/bentoboard/nxpCompute.vue'
+import NxpControl from '@/components/bentoboard/nxpControl.vue'
+import NxpVisualise from '@/components/bentoboard/nxpBuildVisualise.vue'
+import NxpSciencereview from '@/components/bentoboard/nxpSciencereview.vue'
+import nxpLifestylemedicine from '@/components/bentoboard/nxpLifestylemedicine.vue'
+import NxpPrescription from '@/components/bentoboard/nxpPrescription.vue'
+import NxpCommunicate from '@/components/bentoboard/nxpCommunicate.vue'
+import NxpEvolve from '@/components/bentoboard/nxpEvolve.vue'
 
 export default {
   name: 'ModuleBuilder',
@@ -112,7 +112,7 @@ export default {
     closeModalNLib () {
       this.isModalNLib = false
       // refresh the networklibrary contract to access new contracts
-      this.$store.dispatch('actionRrefreshRefContracts')
+      // this.$store.dispatch('actionRrefreshRefContracts')
     }
   }
 }

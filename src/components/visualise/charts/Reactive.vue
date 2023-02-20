@@ -5,7 +5,6 @@ import annotation from 'chartjs-plugin-annotation'
 // eslint-disable-next-line
 import draggable from 'chartjs-plugin-draggable'
 const { reactiveProp } = mixins
-
 export default ({
   name: 'reactive-chart',
   components: {

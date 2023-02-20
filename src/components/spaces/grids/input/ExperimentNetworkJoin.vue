@@ -139,9 +139,9 @@
 </template>
 
 <script>
-import JoinExperiment from '@/components/experiments/JoinExperiment.vue'
+import JoinExperiment from '@/components/bentoboard/JoinExperiment.vue'
 import CalendarSelect from '@/components/visualise/tools/calendarSelect.vue'
-import ChartBuilder from '@/components/experiments/setChartBuilder'
+import ChartBuilder from '@/components/bentoboard/setChartBuilder'
 import axios from 'axios'
 
 export default {
@@ -420,8 +420,6 @@ export default {
       const peerChoices = {}
       peerChoices.genesis = this.actionKBundle.id
       peerChoices.question = this.actionKBundle.name
-      console.log('join info ')
-      console.log(peerChoices)
       this.$store.dispatch('actionJoinExperiment', peerChoices)
       // this.closeModalJoin()
     },

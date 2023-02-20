@@ -3,7 +3,7 @@
     <div id="time-control-update">
       <div id="time-options" class="series-style">
         <div id="calendar-selector">
-          <date-picker v-model="calendarvalue" @change="calendarSelect()" :lang="lang" :range="rangeActive === true" ></date-picker>
+          <date-picker class="select-caldate" v-model="calendarvalue" @change="calendarSelect()" :lang="lang" :range="rangeActive === true" ></date-picker>
           <div id="time-calendar-tools">
             <div class="time-tools" id="select-range-type">
               <select v-model="selectedTimeBundle" @change.prevent="setTimeBundle()">
@@ -131,7 +131,7 @@ export default {
       { text: 'Single day', value: 'single', id: 0 },
       { text: 'Pick days', value: 'multi', id: 1 },
       { text: 'Range days', value: 'range', id: 2 },
-      { text: 'Ask CALE', value: 'natlang', id: 3 }
+      { text: 'Ask BB', value: 'natlang', id: 3 }
     ],
     selectedTimeBundle: 'single',
     time1: '',
@@ -231,7 +231,7 @@ export default {
         this.rangeActive = false
       } else if (this.selectedTimeBundle === 'natlang') {
         // natural language ask CALE
-        this.$store.dispatch('actionAskCALE', 'askcale')
+        this.$store.dispatch('actionAskBB', 'askBB')
       } else {
         this.calendarToolMulti.active = false
         this.rangeActive = false
@@ -326,8 +326,11 @@ export default {
 
 #calendar-selector {
   display: grid;
-  grid-template-columns: 4fr 2fr 1fr;
-  border: 0px solid red;
+  grid-template-columns: 8fr 2fr 1fr;
+}
+
+.select-caldate {
+  min-width: 340px;
 }
 
 .time-tools {

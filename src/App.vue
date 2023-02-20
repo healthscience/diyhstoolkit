@@ -64,6 +64,12 @@ export default {
     authConnectStatus: function () {
       return this.$store.state.peerauthStatus
     },
+    libraryStartData: function () {
+      return this.$store.state.peersocket.HOPreturn
+    },
+    HOPdataListen: function () {
+      return this.$store.state.peersocket.HOPHolder
+    },
     caleAIStatus: function () {
       return this.$store.state.aiInterface.statusCALE
     },
@@ -76,6 +82,24 @@ export default {
         }
       } else {
         return {}
+      }
+    }
+  },
+  watch: {
+    libraryStartData: {
+      deep: true,
+      immediate: true,
+      handler: function (val, oldVal) {
+        if (val.publiclib === true && val.peerlib === true) {
+          this.$store.dispatch('actionHOPdataHander', 'hop')
+        }
+      }
+    },
+    HOPdataListen: {
+      deep: true,
+      immediate: true,
+      handler: function (val, oldVal) {
+        this.$store.dispatch('actionHOPdataAssess', val)
       }
     }
   },
@@ -101,7 +125,7 @@ export default {
       this.$store.dispatch('actionShowhelp', 'home')
     },
     caleAIset () {
-      this.$store.dispatch('actionCALEAI', 'click')
+      this.$store.dispatch('actionBBAI', 'click')
     }
   }
 }

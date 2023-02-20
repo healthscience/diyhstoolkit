@@ -5,15 +5,15 @@
         <header>BentoBox - DS</header>
         <ul>
           <li>1. Peer to Peer Data Science</li>
-          <li>2. Charting & Analysis</li>
-          <li>3. Private & Network</li>
-          <li>4. Personal AI - AGENT</li>
+          <li>2. Charting Time Analysis</li>
+          <li>3. Private or Collaborate</li>
+          <li>4. Personal AI</li>
         </ul>
         <div id="interface">
           <div id="cale-ai">
             <div id="cale-interface" v-if="caleAIStatus.active === true">
               <div class="ci-space"></div>
-              <img class="medium-start-cale" alt="caleAI" src=".././assets/caleailogo.png">
+              <!-- <img class="medium-start-cale" alt="caleAI" src=".././assets/caleailogo.png"> -->
               <chat-interface></chat-interface>
             </div>
           </div>
@@ -30,7 +30,7 @@
     <div class="network-protocol">
       <img class="hop-small" alt="bentox data science" src=".././assets/hoplogosmall.png">
       <div id="health-oracle-protocol">
-        HOP v0.7.3.1
+        BB-v0.7.6 HOP-v0.9.25
       </div>
     </div>
   </div>
@@ -38,7 +38,7 @@
 
 <script>
 // @ is an alias to /src
-import ChatInterface from '@/components/caleai/chatInterface.vue'
+import ChatInterface from '@/components/bbai/chatInterface.vue'
 import NetworkActivespaces from '@/components/spaces/networkActivespaces.vue'
 
 export default {

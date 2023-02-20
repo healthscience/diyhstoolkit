@@ -2,14 +2,14 @@
   <div id="vis-toolkit"> Device: {{ mData }}
     <div id="diy-tools">
       <div id="chart-type">
-        <div class="network-tools">
+        <!-- <div class="network-tools">
           <div class="context-network">
             <button @click.prevent="setNetworkgraph('networkview')">{{ network.text }}</button>
           </div>
           <div class="context-network">
             <button @click.prevent="setNetworkmap('mapview')">{{ mapButton.text }}</button>
           </div>
-        </div>
+        </div> -->
         <div class="network-tools">
           <calendar-tool :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></calendar-tool>
         </div>
@@ -36,7 +36,7 @@
       <div v-if="openDataLive[mData] !== undefined" id="open-knowledge">
         <opendata-tool v-if="openDataLive[mData].active === true" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData" :toolInfo="visToolbarStatusLive"></opendata-tool>
       </div>
-      <div id="social-graph">
+      <!-- <div id="social-graph">
         <div id="social-network" v-if="socialState === true && socialgraphActive !== undefined && socialgraphActive.length > 0">
           <div id="network-graph-container">
             <header>SOCAIL GRAPH</header>
@@ -62,7 +62,7 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <div id="feedback-time" v-if="feedbackmessage !== 'clear'" v-bind:class="{ active: feedbackActive }">
       {{ feedbackmessage }}
@@ -145,6 +145,7 @@ export default {
       } else if (!this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]) {
         return {}
       } else {
+        console.log('live data ')
         return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
       }
     },
@@ -260,7 +261,7 @@ export default {
 
 #chart-type {
   display: grid;
-  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-columns: 4fr 1fr;
   border: 0px solid red;
 }
 

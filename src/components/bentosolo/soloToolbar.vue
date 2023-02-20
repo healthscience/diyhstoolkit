@@ -2,7 +2,7 @@
   <div id="toolbar-master" v-if="peerauth === true">
     <div id="scale-tools">
       <div class="scale-item">
-        BentoSpace
+        SoloSpace
       </div>
       <div class="scale-item">
        <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
@@ -127,11 +127,11 @@ export default {
 
 #scale-tools {
   position: fixed;
-  top: 100px;
+  top: 30px;
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto;
-  justify-content: center;
-  align-content: center;
+  justify-content: left;
+  align-content: left;
   gap: 10px;
   width: 100%;
   height: 60px;

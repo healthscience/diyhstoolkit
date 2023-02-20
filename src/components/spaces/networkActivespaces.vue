@@ -19,8 +19,8 @@
               <!-- <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Lifeboards' }" id="Lifeboards" @click.prevent="setView($event)">
                 Lifeboards
               </button> -->
-              <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Experiment' }" id="Experiments" @click.prevent="setView($event)">
-                Experiment
+              <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Experiment' }" id="Boards" @click.prevent="setView($event)">
+                Boards
               </button>
               <!-- <button class="peer-medium" id="timeline" v-bind:class="{ active: viewFlowtype === 'timeline' }"  @click.prevent="setView($event)">
                 Timeline
@@ -47,24 +47,24 @@
     </div>
     <div id="list-flows" v-if="peerauth === true"> <!--z25 -->
       <!-- <live-lifestyle v-if="spaceType === 'Lifeboards'"></live-lifestyle>-->
-      <live-networknxp v-if="spaceType === 'Experiments' && spaceState === 'private'"></live-networknxp>
+      <live-networknxp v-if="spaceType === 'Boards' && spaceState === 'private'"></live-networknxp>
       <public-networknxp v-if="spaceType === 'publicexperiments' && spaceState === 'public'"></public-networknxp>
       <!-- <live-timeline v-if="spaceType === 'timeline'"></live-timeline> -->
     </div>
     <!-- <lifeboard-network v-if="lifeView === true"></lifeboard-network> -->
-    <experiment-network v-if="nxpView === true"></experiment-network>
+    <bento-grid v-if="nxpView === true"></bento-grid>
   </div>
 </template>
 
 <script>
 import SpaceMenu from '@/components/spaces/menues/spaceMenu.vue'
-import NewExperiment from '@/components/spaces/newExperiment.vue'
+import NewExperiment from '@/components/bentoboard/new/newExperiment.vue'
 // import LiveLifestyle from '@/components/home/LiveLifeboard.vue'
 import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
 import PublicNetworknxp from '@/components/home/PublicNetwork.vue'
 // import LiveTimeline from '@/components/home/LiveTimeline.vue'
 // import LifeboardNetwork from '@/components/spaces/grids/LifeboardNetwork.vue'
-import ExperimentNetwork from '@/components/spaces/grids/ExperimentNetwork.vue'
+import BentoGrid from '@/components/spaces/grids/bentoGrid.vue'
 
 export default {
   name: 'Network-Spaces',
@@ -76,7 +76,7 @@ export default {
     PublicNetworknxp,
     // LiveTimeline,
     // LifeboardNetwork,
-    ExperimentNetwork
+    BentoGrid
   },
   computed: {
     peerauth: function () {

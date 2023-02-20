@@ -25,7 +25,7 @@
 
 <script>
 import DeviceSource from './nxpDeviceAdd.vue'
-import NetworklibraryModal from '@/components/experiments/networklibrary/networklibraryModal.vue'
+import NetworklibraryModal from '@/components/bentoboard/networklibrary/networklibraryModal.vue'
 
 export default {
   name: 'nxp-device',

@@ -4,7 +4,7 @@ import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import VisToolsUtility from '@/mixins/visualUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
 import moment from 'moment'
-import { configureRequestOptions } from 'builder-util-runtime'
+// import { configureRequestOptions } from 'builder-util-runtime'
 const ToolUtility = new ToolkitUtility()
 const VisualUtility = new VisToolsUtility()
 const ValidateUtility = new ContextUtility()
@@ -15,6 +15,18 @@ export default {
       isConnected: false,
       message: '',
       reconnectError: false
+    },
+    startPeerRefContracts: [],
+    HOPreturn: {
+      publiclib: false,
+      peerlib: false
+    },
+    HOPHolder: {},
+    libraryHolder:
+    {
+      bentospacestart: {},
+      publiclibrary: {},
+      peerlibrary: {}
     }
   },
   getters: {
@@ -27,7 +39,6 @@ export default {
       this.state.connectStatus = true
     },
     SOCKET_ONCLOSE (state, event) {
-      console.log('onclose')
       state.socket.isConnected = false
       this.state.connectStatus = false
       this.state.peerauthStatus = false
@@ -35,7 +46,6 @@ export default {
       this.dispatch('actionDisconnect')
     },
     SOCKET_ONERROR (state, event) {
-      console.log('on erroror')
       this.state.socketClosed = true
       this.state.connectStatus = false
       this.state.peerauthStatus = false
@@ -55,9 +65,10 @@ export default {
     SOCKET_ONMESSAGE (state, message) {
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      console.log('****INPUUTTT******')
-      console.log(backJSON)
+      // console.log('****BB--INPUUTTT******')
+      // console.log(backJSON)
       if (backJSON.stored === true) {
+        console.log('saved data path')
         // success in saving reference contract
         // what type of save?
         if (backJSON.type === 'module') {
@@ -82,7 +93,7 @@ export default {
             const referenceContractReady = JSON.stringify(prepareNXPrefcont)
             Vue.prototype.$socket.send(referenceContractReady)
           }
-        } else if (backJSON.type === 'experiment') {
+        } else if (backJSON.type === 'experiment-new') {
           // what is the state of the experiment Genesis or Joined?
           if (backJSON.contract.concept.state === 'joined') {
             // set the state of the experiment for the dashboard
@@ -128,13 +139,97 @@ export default {
             this.state.NXPexperimentList.data.push(newExpGenesisDataItem)
             // need to set toolbar settings TODO
           }
+        } else if (backJSON.contract.refcontract === 'experiment-join') {
+          console.log('save jioned list')
+          // what is the state of the experiment Genesis or Joined?
+          if (backJSON.contract.concept.state === 'joined') {
+            console.log('joined')
+            // set the state of the experiment for the dashboard
+            // set the exeriment status object i.e. add to list
+            // context.commit('SET_EXP_JOINLIST', joinNXP)
+            // SET_EXP_JOINLIST (state, inVerified)
+            // set state for experiment just joined
+            let experBundle = {}
+            experBundle.cnrl = backJSON.key
+            experBundle.status = false
+            experBundle.active = false
+            experBundle.contract = backJSON.contract
+            experBundle.modules = backJSON.expanded
+            let objectPropC = backJSON.key
+            Vue.set(this.state.experimentStatus, objectPropC, experBundle)
+            // set local state exp expaneded
+            let newFormed = {}
+            newFormed.key = backJSON.key
+            newFormed.value = backJSON.contract
+            let addExpMod = {}
+            addExpMod.exp = newFormed
+            addExpMod.modules = backJSON.expanded
+            this.state.networkPeerExpModules.push(addExpMod)
+            // standard from key value
+            let standardExp = {}
+            standardExp.exp = backJSON
+            standardExp.modules = backJSON.expanded
+            // need to add to joined list of experiments
+            let newExpJoinedDataItem = ToolUtility.prepareExperimentSummarySingle(standardExp)
+            Vue.set(this.state.joinedNXPlist, 'data', [])
+            this.state.joinedNXPlist.data.push(newExpJoinedDataItem)
+          } else {
+            // genesis contract
+            let newFormed = {}
+            newFormed.key = backJSON.key
+            newFormed.value = backJSON.contract
+            let standardExp = {}
+            standardExp.exp = newFormed
+            standardExp.modules = backJSON.expanded
+            // add to local modules ref contract list
+            this.state.networkExpModules.push(standardExp)
+            let newExpGenesisDataItem = ToolUtility.prepareExperimentSummarySingleGenesis(standardExp)
+            this.state.NXPexperimentList.data.push(newExpGenesisDataItem)
+            // need to set toolbar settings TODO
+          }
         }
-      } else if (backJSON.type === 'caleai') {
+      } else if (backJSON.type === 'bentospaces-list') {
+        // console.log('bentospaces-boards and solos START info')
+        // console.log(backJSON)
+        // the callback will be called whenever any of the watched object properties
+        // now need to ask for data for the active bentospace NXP's
+        // first check if any bentospaces list is provided
+        if (backJSON.data !== null) {
+          let saveDash = Object.keys(backJSON.data)
+          if (saveDash.length > 0) {
+            let boardKeys = Object.keys(backJSON.data.value)
+            for (let bkey of boardKeys) {
+            // put data in library holder
+              Vue.set(state.libraryHolder, 'bentospacestart', backJSON)
+              // now ask HOP for more information: modulue, refContracts and data
+              const refContract = {}
+              refContract.type = 'library'
+              refContract.reftype = 'privatelibrary'
+              refContract.action = 'GET'
+              refContract.data = bkey
+              refContract.jwt = this.state.jwttoken
+              const refCJSON = JSON.stringify(refContract)
+              Vue.prototype.$socket.send(refCJSON)
+            }
+          }
+        } else {
+          // console.log('blank bentospace - empty')
+          const refContract = {}
+          refContract.type = 'library'
+          refContract.reftype = 'privatelibrary-start'
+          refContract.action = 'GET'
+          refContract.data = 'first'
+          refContract.jwt = this.state.jwttoken
+          // console.log(refContract)
+          const refCJSON = JSON.stringify(refContract)
+          Vue.prototype.$socket.send(refCJSON)
+        }
+      } else if (backJSON.type === 'bbai-reply') {
         // flow messages to ai helper
         let date = new Date()
         // get the time as a string
         let time = date.toLocaleTimeString()
-        Vue.set(this.state.aiInterface.caleaiReply, 'text', backJSON.data)
+        Vue.set(this.state.aiInterface.caleaiReply, 'text', backJSON.data.text)
         Vue.set(this.state.aiInterface.caleaiReply, 'time', time)
         Vue.set(this.state.aiInterface.caleaiReply, 'active', true)
       } else if (backJSON.type === 'lifeboard') {
@@ -144,49 +239,6 @@ export default {
         } else if (backJSON.contract.concept.state === 'add') {
 
         }
-      } else if (backJSON.type === 'bentospaces-list') {
-        // now need to ask for data for the active bentospace NXP's
-        const localthis = this
-        watch(this.state.startPubRefContracts, function (newValue, oldValue) {
-          // both pubilc and peer library arrived?
-          if (localthis.state.startPubRefContracts.length > 0 && localthis.state.startPeerRefContracts.length > 0) {
-            // now need to ask for data for the active bentospace NXP's
-            let saveDash = Object.keys(backJSON.data.value)
-            if (saveDash.length > 0) {
-                let nxpList = Object.keys(backJSON.data.value)
-              for (let nxp of nxpList) {
-                let positionStartInfo = {}
-                positionStartInfo.nxp = nxp
-                positionStartInfo.coord = backJSON.data.value[nxp]
-                positionStartInfo.type = 'saved'
-                // set active space
-                localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
-                localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
-                localthis.dispatch('actionDashboardState', positionStartInfo, { root: true })
-              }
-            }
-          }
-        })
-        watch(this.state.startPeerRefContracts, function (newValue, oldValue) {
-          // now need to ask for data for the active bentospace NXP's
-          // both pubilc and peer library arrived?
-          if (localthis.state.startPubRefContracts.length > 0 && localthis.state.startPeerRefContracts.length > 0) {
-            let saveDash = Object.keys(backJSON.data.value)
-            if (saveDash.length > 0) {
-              let nxpList = Object.keys(backJSON.data.value)
-              for (let nxp of nxpList) {
-                let positionStartInfo = {}
-                positionStartInfo.nxp = nxp
-                positionStartInfo.coord = backJSON.data.value[nxp]
-                positionStartInfo.type = 'saved'
-                // set the active dash list
-                localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
-                localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
-                localthis.dispatch('actionDashboardState', positionStartInfo, { root: true })
-              }
-            }
-          }
-        })
       } else if (backJSON.type === 'hyperdrive-pubkey') {
         Vue.set(this.state, 'publickeyHyperdrive', backJSON.data)
       } else if (backJSON.type === 'hyperbee-pubkeys') {
@@ -198,6 +250,8 @@ export default {
         Vue.set(this.state.replicatePubliclibrary, 'data', backJSON.data)
         // auto call add peer public library
         this.dispatch('actionViewSyncLibrary', 'replicate-publiclibrary')
+        // replicate data results complete when temp library complete
+        this.state.replicatDataStatus = false
       } else if (backJSON.type === 'publiclibraryaddcomplete') {
         console.log('add to public library')
         // Vue.set(this.state., '', backJSON.data)
@@ -256,7 +310,6 @@ export default {
         Vue.set(this.state.joinNXPlive, 'visualise', backJSON.visualise)
       } else if (backJSON.safeflow === true) {
         // safeFLOW inflow
-        console.log('auth passed and now get library info')
         if (backJSON.type === 'auth-hop') {
           if (backJSON.auth !== false) {
             // set remove welcome message
@@ -264,21 +317,21 @@ export default {
             // set the JWT for this session
             this.state.jwttoken = backJSON.jwt
             // get starting experiments
-            const refContractp = {}
+            /* const refContractp = {}
             refContractp.type = 'library'
             refContractp.reftype = 'publiclibrary'
             refContractp.action = 'GET'
             refContractp.jwt = this.state.jwttoken
             const refCJSONp = JSON.stringify(refContractp)
-            Vue.prototype.$socket.send(refCJSONp)
+            Vue.prototype.$socket.send(refCJSONp) */
             // network library updates?
-            const refContract = {}
+            /* const refContract = {}
             refContract.type = 'library'
             refContract.reftype = 'privatelibrary'
             refContract.action = 'GET'
             refContract.jwt = this.state.jwttoken
             const refCJSON = JSON.stringify(refContract)
-            Vue.prototype.$socket.send(refCJSON)
+            Vue.prototype.$socket.send(refCJSON) */
             /* const pubkeyGet = {}
             pubkeyGet.type = 'library'
             pubkeyGet.reftype = 'keymanagement'
@@ -291,11 +344,11 @@ export default {
             getWarmPeers.jwt = this.state.jwttoken
             Vue.prototype.$socket.send(JSON.stringify(getWarmPeers))
             // get the peer start lifeboard
-            let getLifeboard = {}
+            /* let getLifeboard = {}
             getLifeboard.type = 'library'
             getLifeboard.reftype = 'peerLifeboard'
             getLifeboard.jwt = this.state.jwttoken
-            Vue.prototype.$socket.send(JSON.stringify(getLifeboard))
+            Vue.prototype.$socket.send(JSON.stringify(getLifeboard)) */
             // get bentospaces layout
             let getBentospaces = {}
             getBentospaces.type = 'bentospace'
@@ -308,35 +361,37 @@ export default {
           console.log('---')
         }
       } else if (backJSON.type === 'ecssummary') {
-        console.log('SUMMAERY==========================')
-        console.log(backJSON)
-        let nxpUUID = Object.keys(backJSON.data)
+        // console.log('SUMMAERY======HOP=ECS===================')
+        // console.log(backJSON)
+        let boardUUID = Object.keys(backJSON.data)
         // update the NXP contract list held in toolkit
-        let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[nxpUUID[0]], this.state.networkPeerExpModules)
+        // let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[boardUUID[0]], this.state.networkPeerExpModules)
+        let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[boardUUID[0]], this.state.networkPeerExpModules)
         // this.state.networkPeerExpModules = updateListContracts
         Vue.set(this.state.networkPeerExpModules, updateListContracts)
         // context.commit('SET_ENTITY_RETURN', entityReturn)
-        this.state.entityUUIDReturn = backJSON.data[nxpUUID[0]].shellID
+        this.state.entityUUIDReturn = backJSON.data[boardUUID[0]].shellID
         // keep copy of latest returne nxp state
-        if (this.state.entityUUIDsummary[nxpUUID[0]] === undefined) {
-          this.state.entityUUIDsummary[nxpUUID[0]] = {}
+        if (this.state.entityUUIDsummary[boardUUID[0]] === undefined) {
+          this.state.entityUUIDsummary[boardUUID[0]] = {}
         }
-        this.state.entityUUIDsummary[nxpUUID[0]] = backJSON
+        this.state.entityUUIDsummary[boardUUID[0]] = backJSON
         // set the grid base for the experiment
-        for (let mod of backJSON.data[nxpUUID[0]].modules) {
+        for (let mod of backJSON.data[boardUUID[0]].modules) {
           Vue.set(this.state.moduleGrid, mod.key, [])
+          Vue.set(this.state.solopositionSpace.soloGrid, mod.key, [])
         }
         // set the data placer for per module
-        Vue.set(this.state.NXPexperimentData, nxpUUID[0], {})
+        Vue.set(this.state.NXPexperimentData, boardUUID[0], {})
         // being placer of modules
-        let extractModuleOrder = VisualUtility.orderModules(backJSON.data[nxpUUID[0]].modules, 'private')
+        let extractModuleOrder = VisualUtility.orderModules(backJSON.data[boardUUID[0]].modules, 'private')
         for (let modd of extractModuleOrder) { // backJSON.data[this.state.liveNXP].modules) {
-          Vue.set(this.state.NXPexperimentData[nxpUUID[0]], modd.key, {}) // now set the data elements
-          Vue.set(this.state.NXPexperimentData[nxpUUID[0]][modd.key], 'data', [])
-          Vue.set(this.state.NXPexperimentData[nxpUUID[0]][modd.key], 'prime', {})
+          Vue.set(this.state.NXPexperimentData[boardUUID[0]], modd.key, {}) // now set the data elements
+          Vue.set(this.state.NXPexperimentData[boardUUID[0]][modd.key], 'data', [])
+          Vue.set(this.state.NXPexperimentData[boardUUID[0]][modd.key], 'prime', {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        // console.log('SECOND------DATA RETURNED-----')
+        console.log('SECOND-PART-----DATA RETURNED-----')
         // console.log(backJSON)
         // is the data for the Lifeboard or NXP space?
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
@@ -358,7 +413,7 @@ export default {
           // has data for the visual module already been setup?
           let displayModulesReady = {}
           let gridBefore = Object.keys(this.state.moduleGrid[backJSON.context.moduleorder.visualise.key])
-          if (gridBefore.length > 0) {
+          if (gridBefore.length !== 0) {
           } else {
             // set experiment progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
@@ -489,6 +544,7 @@ export default {
               }
             } else {
               // switch off the update message for update
+              // console.log('switch off update message+++++++++++++++++++++++++++++++++++++')
               let setProgress = {}
               setProgress = { text: 'Updating visualisation', active: false }
               Vue.set(this.state.visProgress[backJSON.context.moduleorder.visualise.key], backJSON.data.context.triplet.device, setProgress)
@@ -579,35 +635,80 @@ export default {
         let lbPeer = ToolUtility.prepareLifeboardList(backJSON.lifeboard)
         this.state.joinedLifeboard.push(lbPeer)
       } else if (backJSON.type === 'peerprivatedelete') {
-        console.log('remove ref contr confirmed')
-        console.log(backJSON)
         // need to update space coord dash/minmap list ie remove id just removed
         this.dispatch('actionDashBRemove', backJSON.data.nxp)
         // this.state.positionSpace.liveSpaceCoord
         // save state of bentospace dashboard
         this.dispatch('actionSaveSpaceNXP', 'nxp')
+      } else if (backJSON.type === 'peerprivate-start') {
+        // console.log('private START librayr back data-xxxxxxxxxxxxxxxxx')
+        // prepare PEER JOINED LIST
+        let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.data)
+        this.state.joinedNXPlist = gridPeer
+        this.state.networkPeerExpModules = backJSON.data
+        // setup UI settings for spaces grid
+        // this.state.livePeerRefContIndex = backJSON.referenceContracts
+        // this.state.networkPeerExpModules = backJSON.data.expanded
+        for (let board of backJSON.data) {
+          let strCheck = typeof board.key
+          if (strCheck === 'string') {
+            for (let exl of board.modules) {
+              let experBundle = {}
+              experBundle.cnrl = board.key
+              experBundle.status = false
+              experBundle.active = false
+              experBundle.contract = board
+              experBundle.modules = VisualUtility.orderModules(board.modules, 'private')
+              let objectPropC = board.key
+              Vue.set(this.state.experimentStatus, objectPropC, experBundle)
+            }
+          }
+        }
       } else if (backJSON.type === 'peerprivate') {
+        // console.log('private librayr back data')
+        // console.log(backJSON)
+        // set the HOPholder to say data for this back
+        Vue.set(state.HOPHolder, backJSON.board, {})
+        Vue.set(state.HOPHolder, backJSON.board, 'request')
+        // form HOP board/exp contract style
+        let nxpContract = {}
+        nxpContract.key = backJSON.board
+        nxpContract.value = backJSON.data.value
+        Vue.set(this.state.HOPrequestLive, backJSON.board, nxpContract)
         // peer private library contracts
+        // Vue.set(state.HOPreturn, 'peerlib', true)
+        // keep track of what data has been asked for
         this.state.livePeerRefContIndex = backJSON.referenceContracts
-        this.state.networkPeerExpModules = backJSON.networkPeerExpModules
-        for (let exl of backJSON.networkPeerExpModules) {
+        this.state.networkPeerExpModules = backJSON.data.expanded
+        for (let exl of this.state.networkPeerExpModules) {
           let experBundle = {}
-          experBundle.cnrl = exl.exp.key
+          experBundle.cnrl = backJSON.data.board
           experBundle.status = false
           experBundle.active = false
-          experBundle.contract = exl.exp
-          experBundle.modules = VisualUtility.orderModules(exl.modules, 'private')
-          let objectPropC = exl.exp.key
-          // tell toolkit ref contracts are active
-          this.state.startPeerRefContracts.push('peeref')
+          experBundle.contract = backJSON.data.value
+          experBundle.modules = VisualUtility.orderModules(backJSON.data.expanded, 'private')
+          let objectPropC = backJSON.board
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }
+        // tell toolkit ref contracts are active
+        state.startPeerRefContracts.push('peeref')
         // prepare PEER JOINED LIST
-        let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.networkPeerExpModules)
+        let gridPeer = ToolUtility.prepareJoinedNXPlist(this.state.networkPeerExpModules)
         this.state.joinedNXPlist = gridPeer
+        // now ask for the data & list top 10 public library join options
+        /* const refContractp = {}
+        refContractp.type = 'library'
+        refContractp.reftype = 'publiclibrary-start'
+        refContractp.action = 'GET'
+        refContractp.jwt = this.state.jwttoken
+        const refCJSONp = JSON.stringify(refContractp)
+        Vue.prototype.$socket.send(refCJSONp) */
       } else if (backJSON.type === 'publiclibrary') {
+        // consider renaming this to board (nxp) return listener and have sperate ref contracts if done library next to hyperbee no need to return all prepared there as much as possible.
+        // console.log('public library back, prepare join list')
         // console.log('public library returned')
-        // save copy of ref contract indexes
+        Vue.set(state.HOPreturn, 'publiclib', true)
+        // save copy of te ref contract indexes
         this.state.liveRefContIndex = backJSON.referenceContracts
         // prepare NPXs in NETWORK
         this.state.networkExpModules = backJSON.networkExpModules
@@ -625,6 +726,48 @@ export default {
           this.state.startPubRefContracts.push('pubref')
           let objectPropC = exl.exp.key
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
+        }
+      }
+    },
+    SET_HOPOUT_MESSAGE (state, update) {
+      // set the HOPholder to say data for this been message to HOP
+      Vue.set(state.HOPHolder, update, {})
+      Vue.set(state.HOPHolder, update, 'request')
+    },
+    LIBRARY_START_DATA (state, update) {
+      const refContractp = {}
+      refContractp.type = 'library'
+      refContractp.reftype = 'publiclibrary-start'
+      refContractp.action = 'GET'
+      refContractp.jwt = this.state.jwttoken
+      const refCJSONp = JSON.stringify(refContractp)
+      Vue.prototype.$socket.send(refCJSONp)
+    },
+    UPDATE_HOP_HOLDER (state, update) {
+      // prepare UI supporting UI ready for return of HOP Data
+      // console.log('new data back listenering--HOPHOLDER--xxxxxxxxxxxxxxxx')
+      // console.log(update)
+      // loop over and if request prepare output for HOP
+      let listAssess = Object.keys(state.HOPHolder)
+      for (let assess of listAssess) {
+        if (state.HOPHolder[assess] === 'request') {
+          // prepare output
+          let positionStartInfo = {}
+          positionStartInfo.nxp = assess
+          // does a bentospace start place location exist?
+          let bentospacePosition = {}
+          if (state.libraryHolder?.bentospacestart?.data?.value === undefined) {
+            bentospacePosition = { x: 80, y: 40 }
+          } else {
+            bentospacePosition = state.libraryHolder.bentospacestart.data.value[assess]
+          }
+          positionStartInfo.coord = bentospacePosition
+          positionStartInfo.type = 'saved'
+          // set active space
+          this.dispatch('actionLiveNXPlist', this.state.joinedNXPlist.data, { root: true })
+          this.dispatch('actionPostionCoord', positionStartInfo, { root: true })
+          this.dispatch('actionDashboardState', positionStartInfo, { root: true })
+          Vue.set(state.HOPHolder, assess, 'sent')
         }
       }
     },
@@ -872,6 +1015,42 @@ export default {
       context.dispatch('actionResetMmap', { root: true })
       window.close()
     },
+    actionHOPdataAssess (context, data) {
+      context.commit('UPDATE_HOP_HOLDER', data)
+    },
+    actionHOPdataHander (context, data) {
+      // public library
+      const localthis = this
+      let saveDash = Object.keys(localthis.state.peersocket.libraryHolder.bentospacestart)
+      if (saveDash.length > 0) {
+        if (localthis.state.peersocket.libraryHolder.bentospacestart.data.value !== null) {
+          let nxpList = Object.keys(localthis.state.peersocket.libraryHolder.bentospacestart.data.value)
+          for (let nxp of nxpList) {
+            let positionStartInfo = {}
+            positionStartInfo.nxp = nxp
+            positionStartInfo.coord = localthis.state.peersocket.libraryHolder.bentospacestart.data.value[nxp]
+            positionStartInfo.type = 'saved'
+            // set active space
+            localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
+            localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
+            localthis.dispatch('actionDashboardState', positionStartInfo, { root: true })
+          }
+          // peerlibrary
+          for (let nxp of nxpList) {
+            let positionStartInfo = {}
+            positionStartInfo.nxp = nxp
+            positionStartInfo.coord = localthis.state.peersocket.libraryHolder.bentospacestart.data.value[nxp]
+            positionStartInfo.type = 'saved'
+            // set the active dash list
+            localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
+            localthis.dispatch('actionPostionCoord', positionStartInfo, { root: true })
+            localthis.dispatch('actionDashboardState', positionStartInfo, { root: true })
+          }
+        } else {
+          console.log('no start list')
+        }
+      }
+    },
     actionOpenLibrary (context, data) {
       let openLibrary = {}
       openLibrary.type = 'library'
@@ -905,8 +1084,9 @@ export default {
       peerSync.publickey = message
       peerSync.jwt = this.state.jwttoken
       const peerSyncJSON = JSON.stringify(peerSync)
-      console.log(peerSyncJSON)
       Vue.prototype.$socket.send(peerSyncJSON)
+      // set the replication status
+      this.state.replicatDataStatus = true
     },
     actionViewSyncLibrary (context, message) {
       const viewSyncLibrary = {}
@@ -986,13 +1166,13 @@ export default {
       dataCNRLbundle5.grid = []
       moduleContracts.push(dataCNRLbundle5)
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      const dataCNRLbundle7 = {}
+      /* const dataCNRLbundle7 = {}
       dataCNRLbundle7.reftype = 'module'
       dataCNRLbundle7.type = 'education'
       dataCNRLbundle7.primary = 'genesis'
       dataCNRLbundle7.concept = ''
       dataCNRLbundle7.grid = []
-      moduleContracts.push(dataCNRLbundle7)
+      moduleContracts.push(dataCNRLbundle7) */
       /* const dataCNRLbundle8 = {}
       dataCNRLbundle8.reftype = 'module'
       dataCNRLbundle8.type = 'lifestyle'
@@ -1021,13 +1201,13 @@ export default {
       dataCNRLbundle11.concept = ''
       dataCNRLbundle11.grid = []
       moduleContracts.push(dataCNRLbundle11) */
-      const dataCNRLbundle12 = {}
+      /* const dataCNRLbundle12 = {}
       dataCNRLbundle12.reftype = 'module'
       dataCNRLbundle12.type = 'communication'
       dataCNRLbundle12.primary = 'genesis'
       dataCNRLbundle12.concept = ''
       dataCNRLbundle12.grid = []
-      moduleContracts.push(dataCNRLbundle12)
+      moduleContracts.push(dataCNRLbundle12) */
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
       /* const dataCNRLbundle13 = {}
       dataCNRLbundle13.reftype = 'module'
@@ -1230,8 +1410,6 @@ export default {
         newJoinExperiment.action = 'joinexperiment'
         newJoinExperiment.data = dataChoices
         newJoinExperiment.jwt = this.state.jwttoken
-        console.log('newJoinExperiment')
-        console.log(newJoinExperiment)
         let ExpmoduleRefContract = JSON.stringify(newJoinExperiment)
         Vue.prototype.$socket.send(ExpmoduleRefContract)
         this.state.isModalJoinNetworkExperiment = false
@@ -1297,7 +1475,6 @@ export default {
       Vue.prototype.$socket.send(refCJSONp)
     },
     actionRemoveTempNLibrary (context, update) {
-      console.log('remove temp library')
       const refContractp = {}
       refContractp.type = 'library'
       refContractp.reftype = 'removetemppubliclibrary'
@@ -1318,8 +1495,6 @@ export default {
       Vue.prototype.$socket.send(saveJSONp)
     },
     actionSyncRequest (context, update) {
-      console.log('sync requiest')
-      console.log(update)
       const syncDataBundle = {}
       syncDataBundle.type = 'library'
       syncDataBundle.reftype = 'sync-nxp-data'
@@ -1330,8 +1505,6 @@ export default {
       Vue.prototype.$socket.send(syncJSON)
     },
     actionFileupload (context, update) {
-      console.log('update file requiest FIRST TIME')
-      console.log(update)
       const fileLocalBundle = {}
       fileLocalBundle.type = 'library'
       fileLocalBundle.reftype = 'convert-csv-json'
@@ -1340,6 +1513,12 @@ export default {
       fileLocalBundle.jwt = this.state.jwttoken
       const fileJSON = JSON.stringify(fileLocalBundle)
       Vue.prototype.$socket.send(fileJSON)
+    },
+    actionLibraryStart (context, update) {
+      context.commit('LIBRARY_START_DATA', update)
+    },
+    actionHOPoutState (context, update) {
+      context.commit('SET_HOPOUT_MESSAGE', update)
     }
   }
 }

@@ -44,7 +44,7 @@
               </option>
             </select> -->
           </div>
-          <div class="context-future">
+          <!-- <div class="context-future">
             <select v-model="selectedFuture" @change.prevent="setFuture()">
               <option disabled value="">make future</option>
               <option v-for="foption in futureoptions" :key='foption.value' v-bind:value="foption.value">
@@ -55,7 +55,7 @@
           </div>
           <div class="context-future">
             <button class="new-viscombine" v-bind:class="{ active: combineSetting.active }" @click.prevent="setCombine()">{{ combineSetting.text }}</button>
-          </div>
+          </div> -->
       </div>
       <div class="clear"></div>
     </div>
@@ -187,7 +187,7 @@ export default {
 #grid-visual {
   display: grid;
   grid-template-columns: 5fr 1fr;
-  border: 0px solid red;
+  border: 2px solid red;
 }
 
 .visual-item {
@@ -197,12 +197,11 @@ export default {
 #grid-bentobox {
   display: grid;
   grid-template-columns: 1fr auto; /* repeat(content-fill minmax(50% 50%)); 50% 50%; repeat(50% - calc(100% - 2fr)); */
-  border: 0px solid blue;
-  width: 100%;
+  border: 1px solid blue;
 }
 
 .grid-item-chart {
-  border: 0px solid red;
+  border: 2px dashed green;
 }
 
 #future-tools {

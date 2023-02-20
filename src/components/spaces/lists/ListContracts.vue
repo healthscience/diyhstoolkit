@@ -129,14 +129,15 @@ export default {
     setactiveXNPlist (nxp) {
       this.$store.dispatch('actionLiveNXPlist', nxp)
     },
-    actionExperiment (expCNRL, NXPcontract) {
-      this.shellContract = expCNRL
+    actionExperiment (board, NXPcontract) {
+      this.shellContract = board
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
-        this.$store.dispatch('actionDashboardState', expCNRL)
+        this.$store.dispatch('actionHOPoutState', board)
+        // this.$store.dispatch('actionDashboardState', board)
       } else {
         // preview network experiment
-        this.$store.dispatch('actionJOINViewexperiment', expCNRL)
+        this.$store.dispatch('actionJOINViewexperiment', board)
         this.refContractLookup()
       }
     }

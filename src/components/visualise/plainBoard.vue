@@ -11,8 +11,7 @@ export default {
   },
   props: {
     shellID: String,
-    moduleCNRL: String,
-    mData: String
+    moduleCNRL: String
   },
   computed: {
     liveData: function () {
@@ -42,6 +41,7 @@ export default {
 #plain-nxp {
   display: grid;
   grid-template-columns: 1fr;
-  font-size: 2em;
+  font-size: 1.4em;
+  border: 0px solid green;
 }
 </style>

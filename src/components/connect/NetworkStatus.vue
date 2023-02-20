@@ -19,7 +19,7 @@
       <template v-slot:submit-self v-if="selfConnect === 'self-sign' && peerauth === false">
         <div id="connect-wallet">
           <div id="create-wallet">
-            <button id="create-new-wallet" @click=createWallet>create +</button>
+            <!-- <button id="create-new-wallet" @click=createWallet>create +</button> -->
           </div>
           <div id="self-verify">
             <form id="self-signin-form" >

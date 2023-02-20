@@ -27,6 +27,9 @@
                     <div class="remove-controls">
                       <div id="dashboard-controls">
                         <div class="dash-controls-master">
+                          <button type="button" class="btn" @click="soloSpaceOpen(dashi)">SoloSpace</button>
+                        </div>
+                        <div class="dash-controls-master">
                           <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
                         </div>
                         <div class="dash-controls-master">
@@ -50,9 +53,9 @@
                   <div id="module-list" v-if="NXPstatusData[dashi].length > 0">
                     <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
                     <div id="module-ready" v-if="NXPstatusData[dashi]">
-                      <ul v-for="modI in NXPstatusData[dashi]" :key="modI">
-                        <nxp-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></nxp-board>
-                      </ul>
+                      <div id="dash-main" v-for="modI in NXPstatusData[dashi]" :key="modI">
+                        <bento-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></bento-board>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -62,27 +65,30 @@
         </div>
       </div>
     </div>
-      bentospace END
+    <solo-space :sbboard="solospaceLive"></solo-space>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
 import GridToolbar from './gridToolbar'
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 import MininavMap from './minimap/mininavMap.vue'
-import NxpBoard from '@/components/experiments/edashBoard.vue'
+import BentoBoard from '@/components/bentoboard/edashBoard.vue'
 import ProgressMessage from '@/components/visualise/tools/inNXPprogress.vue'
 // import NewLifeboardVue from '../../lifeboard/NewLifeboard.vue'
+import SoloSpace from '@/components/bentosolo/soloTemplate.vue'
 
 export default {
   name: 'ExperimentNetwork',
   components: {
     GridToolbar,
     MininavMap,
-    NxpBoard,
+    BentoBoard,
     ProgressMessage,
-    VueDraggableResizable
+    VueDraggableResizable,
+    SoloSpace
   },
   beforeMount () {
   },
@@ -125,7 +131,11 @@ export default {
       }
     },
     NXPprogress: function () {
-      return this.$store.state.nxpProgress
+      if (this.$store.state.nxpProgress === undefined) {
+        return {}
+      } else {
+        return this.$store.state.nxpProgress
+      }
     },
     ecsMessage: function () {
       return this.$store.state.ecsMessageLive
@@ -140,17 +150,39 @@ export default {
       return this.$store.state.activeScalevalue
     },
     activeDrag: function () {
-      return this.$store.state.activeDragList
+      if (this.$store.state.activeDragList === undefined) {
+        return {}
+      } else {
+        return this.$store.state.activeDragList
+      }
+    },
+    postionGrid: function () {
+      return this.$store.state.moduleGrid
+    },
+    activeGrid () {
+      this.setLocalGrid(this.$store.state.moduleGrid)
+      return _.cloneDeep(this.$store.state.moduleGrid)
+    },
+    solospaceStatus: function () {
+      return this.$store.state.solospace.soloState
+    }
+  },
+  watch: {
+    activeGrid (newValue) {
+      this.localGrid = newValue
     }
   },
   data: function () {
     return {
       isModalDashboardVisible: true,
+      localGrid: [],
       newCompute: {
         automation: false,
         controls: false,
         startperiod: null
       },
+      bboardLive: '',
+      solospaceLive: '',
       shellID: null,
       moduleCNRL: '',
       mData: '',
@@ -174,6 +206,9 @@ export default {
     }
   },
   methods: {
+    setLocalGrid (grid) {
+      this.localGrid = grid
+    },
     navMover: function () {
       console.log('scroll in space')
     },
@@ -228,6 +263,11 @@ export default {
       this.dragDashmove = nxpID
       // set this NXP as live
       this.$store.dispatch('actionActiveNXP', nxpID)
+    },
+    soloSpaceOpen (bs) {
+      this.solospaceLive = bs
+      this.$store.dispatch('actionSolospace', bs)
+      this.$store.dispatch('actionAllSoloCells', this.postionGrid)
     },
     closeDashboard (dc) {
       this.$store.dispatch('actionCloseDashboard', dc)
@@ -296,7 +336,7 @@ export default {
 
 #dashboard-controls {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .dashboard-space {
