@@ -9,7 +9,7 @@ module.exports = {
     hotOnly: false
   },
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/help/'
+    ? '/'
     : '/',
   // ? '/hop/code/diyhstoolkit/dist/'
   // : '/hop/code/diyhstoolkit/dist/',
