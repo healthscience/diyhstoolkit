@@ -139,10 +139,10 @@ PositionUtility.prototype.miniMapSoloLocations = function (soloCells) {
 
 /**
 * mouse minidash collition ie closest to minimouse click
-* @method collisionMiniDash
+* @method collisionSoloMiniDash
 *
 */
-PositionUtility.prototype.collisionMiniDash = function (miniMouse, listCells) {
+PositionUtility.prototype.collisionSoloMiniDash = function (miniMouse, listCells) {
   let dashMatch = {}
   let distanceList = []
   function collitionMatch (mdash, mmouse, scale, zoom) {
@@ -204,26 +204,32 @@ PositionUtility.prototype.drawmMMap = function () {
 *
 */
 PositionUtility.prototype.scrollTODashboard = function (miniMouse, listCells) {
+  console.log('scroll to')
+  console.log(miniMouse)
+  console.log(listCells)
   let mMouse = {}
   mMouse.x = miniMouse.offsetX
   mMouse.y = miniMouse.offsetY
   // identify click minidash closest to mouse click on minimap
-  let scrollMatch = this.collisionMiniDash(mMouse, listCells)
-  // executue scrollTO  dashboard-space
-  // window.scrollTo(scrollMatch.x, scrollMatch.y)
-  // document.getElementById('dashboard-placeholder').scrollIntoView()
-  // document.getElementById('single-space').scrollIntoView(false) // { behavior: 'smooth', block: 'end', inline: 'nearest' })
-  // window.scrollBy(-1600, 1600)
-  // document.getElementById('dashboard-placeholder').scroll = true
-  window.scroll((scrollMatch.x), scrollMatch.y)
+  let scrollMatch = this.collisionSoloMiniDash(mMouse, listCells)
+  console.log('scrolllmatch---------------')
+  console.log(scrollMatch)
+  // roughly match to module ID for now show match to specific order within modules
+  let modMatch = listCells[scrollMatch][0]
+  console.log(modMatch)
+  let element = document.getElementById('dragwheelsolo-space')
+  console.log('elelelctiment')
+  console.log(element)
+  element.scrollTo(modMatch.x, modMatch.y)
+  // document.getElementById('dragwheelsolo-space').scrollTop = topPos + 100
   // window.scroll(5000, 5000)
-  const element = document.getElementById('dragwheel-space')
-  let x = element.scrollLeft
+  // const element = document.getElementById('dragwheelsolo-space')
+  /* let x = element.scrollLeft
   let y = element.scrollTop
   console.log(x, y)
-  const elementm = document.getElementById('dragwheel-space')
+  const elementm = document.getElementById('dragwheelsolo-space')
   elementm.scrollLeft = 0
-  elementm.scrollTop = 0
+  elementm.scrollTop = 0 */
 }
 
 /**

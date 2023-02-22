@@ -745,11 +745,13 @@ const store = new Vuex.Store({
     async actionDashboardState (context, update) {
       // keep track of HOP out messages
       console.log('prep start NEW DASHOUT message--xxxxxxxxxxxxxxxxx')
-      // console.log(update)
+      console.log(update)
       // context.commit('SET_HOPOUT_MESSAGE', update)
       // console.log(update)
       // set the minimap in position store module
-      let prepOutHOP = HopprepareUtility.savePrepare(update.nxp, this.state.networkPeerExpModules, this.state.liveRefContIndex, this.state.livePeerRefContIndex)
+      let prepOutHOP = HopprepareUtility.savePrepare(update.nxp, this.state.networkPeerExpModules)
+      console.log('prep data for OUT----------')
+      console.log(prepOutHOP)
       // set
       context.commit('SET_SPACE_SHOW', false)
       // let futureTimeCheck = false
@@ -757,84 +759,6 @@ const store = new Vuex.Store({
       context.commit('SET_NXP_MODULED', update.nxp)
       context.commit('SET_Dashboard_NXP', update.nxp)
       context.commit('setNXPprogressUpdate', update.nxp)
-      /*
-      if (typeof update !== 'object') {
-        let positionStartInfo = {}
-        positionStartInfo.nxp = update
-        positionStartInfo.coord = {}
-        positionStartInfo.type = 'new'
-        context.dispatch('actionPostionCoord', positionStartInfo, { root: true })
-      } else {
-        update = update.nxp
-      }
-      // remove lists
-      context.commit('SET_SPACE_SHOW', false)
-      let futureTimeCheck = false
-      context.commit('SET_LIVE_NXP', update)
-      context.commit('SET_NXP_MODULED', update)
-      context.commit('SET_Dashboard_NXP', update)
-      context.commit('setNXPprogressUpdate', update)
-      // clear the time range for new NXP view
-      let timeContext = {}
-      timeContext.device = update.mData
-      timeContext.timerange = []
-      context.commit('SET_CLEAR_TIMERANGE', timeContext)
-      // build the safeFLOW-ECS input bundle
-      let matchExp = {}
-      for (let nxp of this.state.networkPeerExpModules) {
-        if (nxp.exp.key === update) {
-          matchExp = nxp
-        }
-      }
-      // prepare ECS inputs- lookup peer selected module options
-      let peerOptions = []
-      for (let pmod of matchExp.modules) {
-        // for each type of module look up ref contract
-        if (pmod.value.type === 'question') {
-          peerOptions.push(pmod)
-        } else if (pmod.value.type === 'data') {
-          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.data, this.state.liveRefContIndex.packaging)
-          pmod.value.info.data = peerDataRC
-          peerOptions.push(pmod)
-        } else if (pmod.value.type === 'compute') {
-          // get the latest refcontract nB. link compute ie one to many, sort many list and this used in presentation
-          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.compute, this.state.liveRefContIndex.compute)
-          pmod.value.info.compute = peerDataRC
-          let newestContract = ToolUtility.refcontractLookupCompute(pmod, this.state.livePeerRefContIndex.module)
-          // set key to master ref contract key
-          newestContract.key = pmod.key
-          // check if data is not in the future
-          let timeModule = newestContract.value.info.controls.date
-          futureTimeCheck = ToolUtility.timeCheck(timeModule)
-          if (futureTimeCheck === true) {
-            // flag to peer to ask if they want future or if yes what data to use ie CALE/ other
-            let feedbackMessage = {}
-            feedbackMessage.type = 'future'
-            feedbackMessage.active = true
-            feedbackMessage.feedback = 'The time period is in the future. Need data picker or select CALE etc'
-            feedbackMessage.refcontract = update
-            feedbackMessage.data = moment.utc(timeModule).format('dddd, MMMM Do YYYY')
-            context.commit('SET_FEEDBACK_MESSAGE', feedbackMessage)
-          } else {
-            // set default time for toolkit
-            context.commit('setTimeAsk', timeModule)
-            let setTimerangeLocal = []
-            setTimerangeLocal.push(timeModule)
-            peerOptions.push(newestContract)
-          }
-        } else if (pmod.value.type === 'visualise') {
-          pmod.value.info.settings.single = true
-          let peerDataRC = ToolUtility.refcontractLookup(pmod.value.info.visualise, this.state.liveRefContIndex.visualise)
-          if (pmod.value.info.settings.yaxis.length > 1) {
-            pmod.value.info.settings.multidata = true
-          } else {
-            pmod.value.info.settings.multidata = false
-          }
-          pmod.value.info.visualise = peerDataRC
-          peerOptions.push(pmod)
-        }
-      }
-      */
       if (prepOutHOP.futureTimeCheck === false) {
         let ECSbundle = {}
         let boardOut = {}

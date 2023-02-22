@@ -57,6 +57,20 @@ ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
 }
 
 /**
+* Prepare table from bentospace saved list
+* @method prepareBentoSpaceJoinedNXPlist
+*
+*/
+ToolkitUtility.prototype.prepareBentoSpaceJoinedNXPlist = function (peerExpModules) {
+  let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
+  let gridDatapeer = this.prepareBentoSpaceExperimentSummary(peerExpModules)
+  let gridPeer = {}
+  gridPeer.columns = gridColumns
+  gridPeer.data = gridDatapeer
+  return gridPeer
+}
+
+/**
 * Prepare table list view of experiments joined
 * @method prepareJoinedNXPlist
 *
@@ -68,6 +82,30 @@ ToolkitUtility.prototype.prepareJoinedNXPlist = function (peerExpModules) {
   gridPeer.columns = gridColumns
   gridPeer.data = gridDatapeer
   return gridPeer
+}
+
+/**
+* Prepare from bentospace start sequence data
+* @method prepareBentoSpaceExperimentSummary
+*
+*/
+ToolkitUtility.prototype.prepareBentoSpaceExperimentSummary = function (peerExpModules) {
+  let gridDatapeer = []
+  let question2 = {}
+  for (let mod of peerExpModules) {
+    // look up question
+    if (typeof mod.value.info === 'object' && Object.keys(mod.value.info).length > 0) {
+      if (mod.value.info.type === 'question') {
+        question2 = mod.value.info.question
+      } else {
+        question2 = 'none'
+      }
+    }
+    if (question2 !== 'none') {
+      gridDatapeer.push({ id: mod.key, name: question2.text, description: '--', time: Infinity, dapps: 'Yes', device: 'Yes', action: 'View' })
+    }
+  }
+  return gridDatapeer
 }
 
 /**

@@ -45,7 +45,7 @@ export default {
       let positionTrack = state.ctx.startPositionSpace(inVerified.nxp, inVerified.coord, inVerified.type)
       Vue.set(state.liveSpaceCoord, inVerified.nxp, positionTrack)
       // update the minimap
-      // state.ctx.miniMapSoloLocations()
+      // state.ctx.miniMapSoloLocations(state.initialGrid[mitem])
     },
     SET_SPACEPOSITION_REFRESH: (state, inVerified) => {
       console.log(inVerified)
@@ -55,7 +55,10 @@ export default {
       state.initialGrid[inVerified.cell.moduleCNRL] = []
       Vue.set(state.initialGrid, inVerified.cell.moduleCNRL, updateCOORD)
       // need to update SOLO minimap
-      // state.ctx.miniMapSoloLocations(state.initialGrid)
+      let modHash = Object.keys(state.initialGrid)
+      for (let mitem of modHash) {
+        state.ctx.miniMapSoloLocations(state.initialGrid[mitem])
+      }
     },
     SET_REMOVEMMAP_POSITION: (state, inVerified) => {
       // let updateCOORD = state.ctx.removeMMapSpace(inVerified)

@@ -76,9 +76,16 @@ export default {
     display: flex;
     flex-direction: column;
     width: 99%;
+    overflow-x: hidden;
   }
 
-  .modal-header,
+  .modal-header {
+    padding: 5px;
+    display: flex;
+    position: sticky;
+    top: 0.45px;
+    z-index: 26;
+  }
   .modal-footer {
     padding: 15px;
     display: flex;

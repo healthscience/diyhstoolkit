@@ -3,7 +3,7 @@
     <grid-toolbar></grid-toolbar>
     <mininav-map></mininav-map>
     <div id="space-shaper">
-      <div id="dragwheel-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
+      <div id="dragwheel-space" v-dragscroll.pass="true" @click="whereMinmap($event)">
         <div id="dashboard-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }"> <!-- v-bind:style="{ minWidth: '1100px', height: 'auto'}"   v-bind:style="{ width: '100%', height: '100%'}" drag-handle=".drag-handle" -->
           <!--loop over live dashboards -->
           <vue-draggable-resizable v-for="dashi of dashLive" :key="dashi.id" id="dashispace" data-no-dragscroll :min-width="900" :w="1000" h="auto" :parent="true" @activated="onDragStartCallback(dashi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handle'" :x=spaceCoord[dashi].x :y=spaceCoord[dashi].y  >
@@ -297,10 +297,10 @@ export default {
 }
 
 #dragwheel-space {
-  height: 16000px;
+  height: 1600%;
   width: 1000%;
   overflow: hidden;
-  border: 0px dashed blue;
+  border: 2px dashed blue;
 }
 
 #dashboard-placeholder {

@@ -16,14 +16,14 @@
       <template v-slot:solospace>
         <div id="solo-grid">
           <div id="solo-toolbar">
-            <grid-toolbar></grid-toolbar>
+            <solo-toolbar></solo-toolbar>
           </div>
           <minisolo-map></minisolo-map>
           <div id="spacesolo-shaper">
             <div id="dragwheelsolo-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
               <div id="solo-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
-                <vue-draggable-resizable v-for="soloi of BoardstatusData" :key="soloi.id" id="solocellspace" data-no-dragscroll w="auto" h="auto" :parent="true" @activated="onDragSolostartCallback(soloi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handlesolo'" :x=soloi.x :y=soloi.y>
-                <div class="drag-handlesolo" @click.prevent="setActiveSolo(soloi)" v-bind:class="{active: soloActivedrag === true }">
+                <vue-draggable-resizable v-for="soloi of BoardstatusData" :key="soloi.id" id="solocellspace" data-no-dragscroll w="auto" h="auto" :parent="true"   @click.prevent="setActiveSolo(soloi)" @activated="onDragSolostartCallback(soloi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handlesolo'" :x=soloi.x :y=soloi.y>
+                <div class="drag-handlesolo" v-bind:class="{active: soloActivedrag === true }">
                 ---- CELL BAR ----
                 </div>
                 <solo-cells :board="sbboard" :moduleCNRL="soloi.mod" :cellposition="soloi.cell" :order="soloi.cell.i"></solo-cells>
@@ -39,7 +39,7 @@
 
 <script>
 import SoloModal from '@/components/bentosolo/soloModal.vue'
-import GridToolbar from './soloToolbar.vue'
+import SoloToolbar from './soloToolbar.vue'
 import MinisoloMap from './minisoloMap.vue'
 import SoloCells from '@/components/bentosolo/soloCells.vue'
 import VueDraggableResizable from 'vue-draggable-resizable'
@@ -49,7 +49,7 @@ export default {
   name: 'solo-space',
   components: {
     SoloModal,
-    GridToolbar,
+    SoloToolbar,
     MinisoloMap,
     SoloCells,
     VueDraggableResizable
@@ -75,7 +75,6 @@ export default {
           for (let soloi of this.$store.state.nxpModulelist[this.sbboard]) {
             if (this.$store.state.nxpModulelist[this.sbboard]) {
               for (let cell of this.soloPosition[soloi]) {
-                console.log(cell)
                 let newCellinfo = {}
                 newCellinfo = cell
                 newCellinfo.mod = soloi
@@ -160,7 +159,9 @@ export default {
       index: 0,
       zoomdata: 0,
       startCountPos: 0,
-      startCountPosY: 0
+      startCountPosY: 0,
+      liveModule: '',
+      liveOrder: ''
     }
   },
   watch: {
@@ -221,13 +222,14 @@ export default {
         this.zoomdata -= 1
       }
     },
-    setActiveSolo (nxpID) {
-      console.log('move cell bar')
+    setActiveSolo (cellID) {
+      this.liveModule = cellID.mod
+      this.liveOrder = cellID.cell.i
       // only one active at a time
       // this.$store.dispatch('actionActiveSoloSelect', nxpID)
       // this.dragDashmove = nxpID
       // set this NXP as live
-      // this.$store.dispatch('actionActiveCell', nxpID)
+      // this.$store.dispatch('actionActiveSoloCell', nxpID)
     },
     onResize: function (x, y, width, height) {
       this.x = x
@@ -235,7 +237,9 @@ export default {
       this.width = width
       this.height = height
     },
-    onDragSolostartCallback (ev) {
+    onDragSolostartCallback (cellID) {
+      this.liveModule = cellID.mod
+      this.liveOrder = cellID.cell.i
       // this.$store.dispatch('actionSoloactiveNXP', ev)
     },
     onDrag: function (x, y) {
@@ -250,19 +254,15 @@ export default {
       this.y = y
     },
     onDragStop: function (x, y) {
-      console.log('drag stop-----------------')
-      console.log(x)
-      console.log(y)
       let dbmove = {}
       dbmove.x = x
       dbmove.y = y
       let cellContext = {}
-      cellContext.board = this.board
-      cellContext.moduleCNRL = this.moduleCNRL
-      cellContext.order = this.order
+      cellContext.board = this.sbboard
+      cellContext.moduleCNRL = this.liveModule
+      cellContext.order = this.liveOrder
       dbmove.cell = cellContext
-      console.log(dbmove)
-      // this.$store.dispatch('actionSoloBmove', dbmove)
+      this.$store.dispatch('actionSoloBmove', dbmove)
     },
     soloActivedrag: function () {
       return true
@@ -290,7 +290,7 @@ export default {
 #dragwheelsolo-space {
   height: 16000px;
   width: 1000%;
-  overflow: hidden;
+  overflow-x: hidden;
   border: 0px dashed blue;
 }
 
@@ -320,7 +320,7 @@ export default {
 
 #solocellspace {
   border: 1px solid grey;
-  height: 100%;
+  background-color: whitesmoke;
   min-width: 400px;
 }
 
@@ -328,7 +328,7 @@ export default {
   display: grid;
   background-color: lightgrey;
   height: 50px;
-  border: 2px dashed red;
+  border: 0px dashed red;
 }
 
 .drag-handlesolo.active {

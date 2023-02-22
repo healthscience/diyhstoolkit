@@ -103,7 +103,7 @@ export default {
     },
     saveSpaceLayout () {
       console.log('save spaces layout')
-      this.$store.dispatch('actionSaveSpaceNXP', 'nxp')
+      this.$store.dispatch('actionSaveSoloSpaceNXP', 'nxp')
     },
     combineSelected () {
       console.log('look at combine list and merage to one chart')

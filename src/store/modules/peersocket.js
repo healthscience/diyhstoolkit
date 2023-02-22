@@ -189,12 +189,15 @@ export default {
           }
         }
       } else if (backJSON.type === 'bentospaces-list') {
-        // console.log('bentospaces-boards and solos START info')
-        // console.log(backJSON)
+        console.log('bentospaces-boards and solos START info')
+        console.log(backJSON)
         // the callback will be called whenever any of the watched object properties
         // now need to ask for data for the active bentospace NXP's
         // first check if any bentospaces list is provided
         if (backJSON.data !== null) {
+          console.log('YES---------------------------saved bentospace---')
+          let bentospaceStartList = Object.keys(backJSON.data.value)
+          Vue.set(this.state.livePeerRefContIndex, bentospaceStartList[0])
           let saveDash = Object.keys(backJSON.data)
           if (saveDash.length > 0) {
             let boardKeys = Object.keys(backJSON.data.value)
@@ -377,6 +380,8 @@ export default {
         }
         this.state.entityUUIDsummary[boardUUID[0]] = backJSON
         // set the grid base for the experiment
+        console.log('databack')
+        console.log(backJSON)
         for (let mod of backJSON.data[boardUUID[0]].modules) {
           Vue.set(this.state.moduleGrid, mod.key, [])
           Vue.set(this.state.solopositionSpace.soloGrid, mod.key, [])
@@ -641,7 +646,8 @@ export default {
         // save state of bentospace dashboard
         this.dispatch('actionSaveSpaceNXP', 'nxp')
       } else if (backJSON.type === 'peerprivate-start') {
-        // console.log('private START librayr back data-xxxxxxxxxxxxxxxxx')
+        console.log('private START librayr back data-xxxxxxxxxxxxxxxxx')
+        console.log(backJSON)
         // prepare PEER JOINED LIST
         let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.data)
         this.state.joinedNXPlist = gridPeer
@@ -665,8 +671,8 @@ export default {
           }
         }
       } else if (backJSON.type === 'peerprivate') {
-        // console.log('private librayr back data')
-        // console.log(backJSON)
+        console.log('private librayr back data-----------------')
+        console.log(backJSON)
         // set the HOPholder to say data for this back
         Vue.set(state.HOPHolder, backJSON.board, {})
         Vue.set(state.HOPHolder, backJSON.board, 'request')
@@ -679,21 +685,23 @@ export default {
         // Vue.set(state.HOPreturn, 'peerlib', true)
         // keep track of what data has been asked for
         this.state.livePeerRefContIndex = backJSON.referenceContracts
-        this.state.networkPeerExpModules = backJSON.data.expanded
+        this.state.networkPeerExpModules.push(backJSON.data)
+        console.log('modelist')
+        console.log(this.state.networkPeerExpModules)
         for (let exl of this.state.networkPeerExpModules) {
           let experBundle = {}
           experBundle.cnrl = backJSON.data.board
           experBundle.status = false
           experBundle.active = false
           experBundle.contract = backJSON.data.value
-          experBundle.modules = VisualUtility.orderModules(backJSON.data.expanded, 'private')
+          experBundle.modules = VisualUtility.orderModules(backJSON.data.modules, 'private')
           let objectPropC = backJSON.board
           Vue.set(this.state.experimentStatus, objectPropC, experBundle)
         }
         // tell toolkit ref contracts are active
         state.startPeerRefContracts.push('peeref')
         // prepare PEER JOINED LIST
-        let gridPeer = ToolUtility.prepareJoinedNXPlist(this.state.networkPeerExpModules)
+        let gridPeer = ToolUtility.prepareBentoSpaceJoinedNXPlist(this.state.networkPeerExpModules)
         this.state.joinedNXPlist = gridPeer
         // now ask for the data & list top 10 public library join options
         /* const refContractp = {}
@@ -745,7 +753,7 @@ export default {
     },
     UPDATE_HOP_HOLDER (state, update) {
       // prepare UI supporting UI ready for return of HOP Data
-      // console.log('new data back listenering--HOPHOLDER--xxxxxxxxxxxxxxxx')
+      console.log('new data back listenering--HOPHOLDER--xxxxxxxxxxxxxxxx')
       // console.log(update)
       // loop over and if request prepare output for HOP
       let listAssess = Object.keys(state.HOPHolder)
