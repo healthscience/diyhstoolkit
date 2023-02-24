@@ -47,6 +47,7 @@ export default {
   mounted () {
   },
   props: {
+    board: String
   },
   computed: {
     peerauth: function () {
@@ -103,7 +104,7 @@ export default {
     },
     saveSpaceLayout () {
       console.log('save spaces layout')
-      this.$store.dispatch('actionSaveSoloSpaceNXP', 'nxp')
+      this.$store.dispatch('actionSaveSoloSpaceCells', this.board)
     },
     combineSelected () {
       console.log('look at combine list and merage to one chart')

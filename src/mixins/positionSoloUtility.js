@@ -133,8 +133,28 @@ PositionUtility.prototype.miniMapSoloLocations = function (soloCells) {
     localthis.ctx.stroke()
   }
   let liveBBox = Object.keys(soloCells)
+  console.log(liveBBox)
   liveBBox.forEach(
     element => placeBBox(soloCells[element], this.scale, this.zoom))
+}
+
+/**
+*
+* @method miniMapSoloStartLoc
+*
+*/
+PositionUtility.prototype.miniMapSoloStartLoc = function (soloCells) {
+  const localthis = this
+  function placeBBox (box, scale, zoom) {
+    let xStart = box.x / (scale * zoom)
+    let yStart = box.y / (scale * zoom)
+    localthis.ctx.beginPath()
+    localthis.ctx.strokeStyle = '#000000'
+    localthis.ctx.rect(xStart, yStart, 15, 30)
+    localthis.ctx.stroke()
+  }
+  soloCells.forEach(
+    element => placeBBox(element, this.scale, this.zoom))
 }
 
 /**

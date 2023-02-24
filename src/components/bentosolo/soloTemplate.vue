@@ -16,7 +16,7 @@
       <template v-slot:solospace>
         <div id="solo-grid">
           <div id="solo-toolbar">
-            <solo-toolbar></solo-toolbar>
+            <solo-toolbar :board="sbboard"></solo-toolbar>
           </div>
           <minisolo-map></minisolo-map>
           <div id="spacesolo-shaper">
@@ -74,7 +74,7 @@ export default {
         if (this.$store.state.nxpModulelist[this.sbboard]?.length > 0) {
           for (let soloi of this.$store.state.nxpModulelist[this.sbboard]) {
             if (this.$store.state.nxpModulelist[this.sbboard]) {
-              for (let cell of this.soloPosition[soloi]) {
+              for (let cell of this.soloPosition[this.sbboard][soloi]) {
                 let newCellinfo = {}
                 newCellinfo = cell
                 newCellinfo.mod = soloi

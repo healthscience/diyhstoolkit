@@ -227,6 +227,11 @@ export default {
           const refCJSON = JSON.stringify(refContract)
           Vue.prototype.$socket.send(refCJSON)
         }
+      } else if (backJSON.type === 'solospaces-list') {
+        console.log('solospaces-cells----s-s-s-s-s--s-')
+        console.log(backJSON)
+        // set in solospace  NB need to keep track of per board UUID  modules list for testing TODO update
+        this.dispatch('actionSavedLayout', backJSON.data.value, { root: true })
       } else if (backJSON.type === 'bbai-reply') {
         // flow messages to ai helper
         let date = new Date()
@@ -359,6 +364,13 @@ export default {
             getBentospaces.action = 'list-position'
             getBentospaces.jwt = this.state.jwttoken
             Vue.prototype.$socket.send(JSON.stringify(getBentospaces))
+            // get solospaces info per bentospace asked for
+            let getSolospaces = {}
+            getSolospaces.type = 'bentospace'
+            getSolospaces.reftype = 'solospace'
+            getSolospaces.action = 'list-position'
+            getSolospaces.jwt = this.state.jwttoken
+            Vue.prototype.$socket.send(JSON.stringify(getSolospaces))
           }
         } else {
           console.log('---')
@@ -1498,6 +1510,16 @@ export default {
       saveSpacePosition.reftype = 'bentospace'
       saveSpacePosition.action = 'save-position'
       saveSpacePosition.data = this.state.positionSpace.liveSpaceCoord
+      saveSpacePosition.jwt = this.state.jwttoken
+      const saveJSONp = JSON.stringify(saveSpacePosition)
+      Vue.prototype.$socket.send(saveJSONp)
+    },
+    actionSaveSoloSpaceCells (context, update) {
+      const saveSpacePosition = {}
+      saveSpacePosition.type = 'bentospace'
+      saveSpacePosition.reftype = 'solospace'
+      saveSpacePosition.action = 'save-position'
+      saveSpacePosition.data = this.state.solopositionSpace.initialGrid
       saveSpacePosition.jwt = this.state.jwttoken
       const saveJSONp = JSON.stringify(saveSpacePosition)
       Vue.prototype.$socket.send(saveJSONp)

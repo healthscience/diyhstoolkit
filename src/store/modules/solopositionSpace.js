@@ -12,7 +12,8 @@ export default {
     minmapClick: false,
     mouseClickCount: 0,
     soloGrid: {},
-    initialGrid: {}
+    initialGrid: {},
+    savedLayout: {}
   },
   getters: {
   },
@@ -27,18 +28,43 @@ export default {
       // has the minimouse area been clicked?
       state.ctx.mousePointer(inVerified)
     },
+    SET_SAVED_LAYOUT: (state, inVerified) => {
+      console.log('save layout solo')
+      Vue.set(state.savedLayout, 'start', inVerified)
+    },
     SET_INITAL_CELLS: (state, inVerified) => {
-      // Vue.set(state.initialGrid, inVerified)
-      let modHash = Object.keys(inVerified)
-      let modCount = 1
-      for (let mitem of modHash) {
-        Vue.set(state.initialGrid, mitem, {})
-        Vue.set(state.liveSpaceCoord, mitem, {})
-        let positionTrack = state.ctx.startPositionCellspace(modCount, inVerified[mitem], { x: 200, y: 300 }, 'cell')
-        modCount++
-        Vue.set(state.liveSpaceCoord, mitem, positionTrack)
-        Vue.set(state.initialGrid, mitem, positionTrack)
-        state.ctx.miniMapSoloLocations(state.initialGrid[mitem])
+      console.log('set inital cell, but first check if solospace layout save and needs to be use?')
+      console.log(inVerified)
+      console.log(state.savedLayout.start)
+      let layoutCheck = Object.keys(state.savedLayout.start[inVerified.board])
+      Vue.set(state.liveSpaceCoord, inVerified.board, {})
+      Vue.set(state.initialGrid, inVerified.board, {})
+      if (layoutCheck.length > 0) {
+        // state.ctx.miniMapSoloLocations(state.savedLayout.start)
+        console.log('yes save layout')
+        for (let mitem of layoutCheck) {
+          Vue.set(state.initialGrid[inVerified.board], mitem, [])
+          Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
+          Vue.set(state.liveSpaceCoord[inVerified.board], mitem, state.savedLayout.start[inVerified.board][mitem])
+          Vue.set(state.initialGrid[inVerified.board], mitem, state.savedLayout.start[inVerified.board][mitem])
+          state.ctx.miniMapSoloStartLoc(state.savedLayout.start[inVerified.board][mitem])
+        }
+      } else {
+        console.log('first time place standard')
+        // Vue.set(state.initialGrid, inVerified)
+        let modHash = Object.keys(inVerified.position)
+        let modCount = 1
+        Vue.set(state.liveSpaceCoord, inVerified.board, {})
+        Vue.set(state.initialGrid, inVerified.board, {})
+        for (let mitem of modHash) {
+          Vue.set(state.initialGrid[inVerified.board], mitem, [])
+          Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
+          let positionTrack = state.ctx.startPositionCellspace(modCount, inVerified.position[mitem], { x: 200, y: 300 }, 'cell')
+          modCount++
+          Vue.set(state.liveSpaceCoord[inVerified.board], mitem, positionTrack)
+          Vue.set(state.initialGrid[inVerified.board], mitem, positionTrack)
+          state.ctx.miniMapSoloLocations(state.initialGrid[inVerified.board][mitem])
+        }
       }
     },
     SET_SPACEPOSITIONSOLO_STATE: (state, inVerified) => {
@@ -124,6 +150,9 @@ export default {
     },
     actionActiveSoloSelect (context, update) {
       context.commit('SET_ACTIVE_SOLOI', update)
+    },
+    actionSavedLayout (context, update) {
+      context.commit('SET_SAVED_LAYOUT', update)
     }
   }
 }
