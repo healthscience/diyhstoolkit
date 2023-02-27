@@ -13,9 +13,6 @@
         </button>
         CONNECT <a href="#" id="disconnect-network" @click="disconnectNetwork">Disconnect</a>
       </template>
-      <template v-slot:title-form>
-        <header class="connect-info">Health Oracle Network</header>
-      </template>
       <template v-slot:submit-self v-if="selfConnect === 'self-sign' && peerauth === false">
         <div id="connect-wallet">
           <div id="create-wallet">
@@ -24,27 +21,30 @@
           <div id="self-verify">
             <form id="self-signin-form" >
               <div class="self-inputs">
-                <label class="form-couple-type" for="signin-self">Peer name</label>
+                <label class="form-couple-type" for="signin-self">Peer:</label>
                 <input class="form-couple" type="text" id="usernameself" name="username" v-model="selfsigninInput">
               </div>
               <!-- <div class="self-inputs">
                 <label class="form-couple-type" for="password-cloud">password</label>
                 <input class="form-couple" type="password" id="passwordcloud" name="password" v-model="selfpwInput">
               </div> -->
-              <div class="self-confirm">
-                <button id="self-submit" @click.prevent="submitLaunch">
-                  Launch
-                </button>
-              </div>
             </form>
+            <div class="self-confirm">
+              <button id="self-submit" @click.prevent="submitLaunch">
+                Launch
+              </button>
+             </div>
           </div>
         </div>
         <div id="self-build-wallet" v-if="selfWallet === 'new-wallet-start'">
           Start new wallet
         </div>
       </template>
+      <template v-slot:title-form>
+        <header class="connect-info">Health Oracle Network</header>
+      </template>
       <template v-slot:connect-network>
-        <div id="network-status">
+        <div id="network-status" v-if="peerauth === true">
           <div class="status-info">
             Connection Status: <div class="hon-square-status" v-bind:class="{ active: connectNetworkstatus === true && peerauth === true }"></div>
           </div>
@@ -114,11 +114,12 @@ export default {
   },
   data () {
     return {
+      bbLive: false,
       isModalVisible: false,
       buttonName: 'verify token',
       selfConnect: 'self-sign',
       selfWallet: '',
-      selfsigninInput: 'peerspace',
+      selfsigninInput: 'private',
       selfpwInput: ''
     }
   },
@@ -158,6 +159,7 @@ export default {
   font-size: 1.4em;
   padding-bottom: 2em;
   height: 100%;
+  border: 2px dashed blue;
 }
 
 .status-info {
@@ -185,6 +187,7 @@ export default {
 #connect-wallet {
   display: grid;
   grid-template-columns: 1fr 9fr;
+  border: 0px dashed red;
 }
 
 #self-signin-form {
@@ -270,6 +273,15 @@ export default {
 
 .reset {
   clear: both;
+}
+
+#self-verify {
+  border-bottom: 1px dashed grey;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 4em;
+  margin-bottom: 5em;
+  padding-bottom: 4em;
 }
 
 </style>

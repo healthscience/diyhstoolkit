@@ -28,7 +28,7 @@
             </div>
             <div id="network-status-space">
               <slot name="connect-network">
-                Connection status unknown
+                -- peer -- to -- peer --
               </slot>
             </div>
             <div id="form-input">
