@@ -68,7 +68,6 @@ export default {
       // console.log('****BB--INPUUTTT******')
       // console.log(backJSON)
       if (backJSON.stored === true) {
-        console.log('saved data path')
         // success in saving reference contract
         // what type of save?
         if (backJSON.type === 'module') {
@@ -140,10 +139,8 @@ export default {
             // need to set toolbar settings TODO
           }
         } else if (backJSON.contract.refcontract === 'experiment-join') {
-          console.log('save jioned list')
           // what is the state of the experiment Genesis or Joined?
           if (backJSON.contract.concept.state === 'joined') {
-            console.log('joined')
             // set the state of the experiment for the dashboard
             // set the exeriment status object i.e. add to list
             // context.commit('SET_EXP_JOINLIST', joinNXP)
@@ -189,13 +186,10 @@ export default {
           }
         }
       } else if (backJSON.type === 'bentospaces-list') {
-        console.log('bentospaces-boards and solos START info')
-        console.log(backJSON)
         // the callback will be called whenever any of the watched object properties
         // now need to ask for data for the active bentospace NXP's
         // first check if any bentospaces list is provided
         if (backJSON.data !== null) {
-          console.log('YES---------------------------saved bentospace---')
           let bentospaceStartList = Object.keys(backJSON.data.value)
           Vue.set(this.state.livePeerRefContIndex, bentospaceStartList[0])
           let saveDash = Object.keys(backJSON.data)
@@ -223,13 +217,10 @@ export default {
           refContract.action = 'GET'
           refContract.data = 'first'
           refContract.jwt = this.state.jwttoken
-          // console.log(refContract)
           const refCJSON = JSON.stringify(refContract)
           Vue.prototype.$socket.send(refCJSON)
         }
       } else if (backJSON.type === 'solospaces-list') {
-        console.log('solospaces-cells----s-s-s-s-s--s-')
-        console.log(backJSON)
         // set in solospace  NB need to keep track of per board UUID  modules list for testing TODO update
         this.dispatch('actionSavedLayout', backJSON.data.value, { root: true })
       } else if (backJSON.type === 'bbai-reply') {
@@ -242,8 +233,6 @@ export default {
         Vue.set(this.state.aiInterface.caleaiReply, 'active', true)
       } else if (backJSON.type === 'lifeboard') {
         if (backJSON.contract.concept.state === 'joined') {
-          // console.log('lifeboard new ref contract confirmed')
-          // console.log(backJSON.contract)
         } else if (backJSON.contract.concept.state === 'add') {
 
         }
@@ -261,7 +250,7 @@ export default {
         // replicate data results complete when temp library complete
         this.state.replicatDataStatus = false
       } else if (backJSON.type === 'publiclibraryaddcomplete') {
-        console.log('add to public library')
+        // console.log('add to public library')
         // Vue.set(this.state., '', backJSON.data)
         // now call the peers public library to refresh contracts lists
         const refContractp = {}
@@ -392,8 +381,8 @@ export default {
         }
         this.state.entityUUIDsummary[boardUUID[0]] = backJSON
         // set the grid base for the experiment
-        console.log('databack')
-        console.log(backJSON)
+        // console.log('databack')
+        // console.log(backJSON)
         for (let mod of backJSON.data[boardUUID[0]].modules) {
           Vue.set(this.state.moduleGrid, mod.key, [])
           Vue.set(this.state.solopositionSpace.soloGrid, mod.key, [])
@@ -409,7 +398,7 @@ export default {
         }
       } else if (backJSON.type === 'newEntityRange') {
         console.log('SECOND-PART-----DATA RETURNED-----')
-        // console.log(backJSON)
+        console.log(backJSON)
         // is the data for the Lifeboard or NXP space?
         // check for none data  e.g. bug, error, goes wrong cannot return data for display
         if (backJSON.data === 'none') {
@@ -658,8 +647,8 @@ export default {
         // save state of bentospace dashboard
         this.dispatch('actionSaveSpaceNXP', 'nxp')
       } else if (backJSON.type === 'peerprivate-start') {
-        console.log('private START librayr back data-xxxxxxxxxxxxxxxxx')
-        console.log(backJSON)
+        // console.log('private START librayr back data-xxxxxxxxxxxxxxxxx')
+        // console.log(backJSON)
         // prepare PEER JOINED LIST
         let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.data)
         this.state.joinedNXPlist = gridPeer
@@ -683,8 +672,8 @@ export default {
           }
         }
       } else if (backJSON.type === 'peerprivate') {
-        console.log('private librayr back data-----------------')
-        console.log(backJSON)
+        // console.log('private librayr back data-----------------')
+        // console.log(backJSON)
         // set the HOPholder to say data for this back
         Vue.set(state.HOPHolder, backJSON.board, {})
         Vue.set(state.HOPHolder, backJSON.board, 'request')
@@ -698,8 +687,8 @@ export default {
         // keep track of what data has been asked for
         this.state.livePeerRefContIndex = backJSON.referenceContracts
         this.state.networkPeerExpModules.push(backJSON.data)
-        console.log('modelist')
-        console.log(this.state.networkPeerExpModules)
+        // console.log('modelist')
+        // console.log(this.state.networkPeerExpModules)
         for (let exl of this.state.networkPeerExpModules) {
           let experBundle = {}
           experBundle.cnrl = backJSON.data.board
@@ -765,7 +754,7 @@ export default {
     },
     UPDATE_HOP_HOLDER (state, update) {
       // prepare UI supporting UI ready for return of HOP Data
-      console.log('new data back listenering--HOPHOLDER--xxxxxxxxxxxxxxxx')
+      // console.log('new data back listenering--HOPHOLDER--xxxxxxxxxxxxxxxx')
       // console.log(update)
       // loop over and if request prepare output for HOP
       let listAssess = Object.keys(state.HOPHolder)

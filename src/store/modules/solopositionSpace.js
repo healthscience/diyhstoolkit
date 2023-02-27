@@ -29,19 +29,13 @@ export default {
       state.ctx.mousePointer(inVerified)
     },
     SET_SAVED_LAYOUT: (state, inVerified) => {
-      console.log('save layout solo')
       Vue.set(state.savedLayout, 'start', inVerified)
     },
     SET_INITAL_CELLS: (state, inVerified) => {
-      console.log('set inital cell, but first check if solospace layout save and needs to be use?')
-      console.log(inVerified)
-      console.log(state.savedLayout.start)
       let layoutCheck = Object.keys(state.savedLayout.start[inVerified.board])
       Vue.set(state.liveSpaceCoord, inVerified.board, {})
       Vue.set(state.initialGrid, inVerified.board, {})
       if (layoutCheck.length > 0) {
-        // state.ctx.miniMapSoloLocations(state.savedLayout.start)
-        console.log('yes save layout')
         for (let mitem of layoutCheck) {
           Vue.set(state.initialGrid[inVerified.board], mitem, [])
           Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
@@ -50,8 +44,6 @@ export default {
           state.ctx.miniMapSoloStartLoc(state.savedLayout.start[inVerified.board][mitem])
         }
       } else {
-        console.log('first time place standard')
-        // Vue.set(state.initialGrid, inVerified)
         let modHash = Object.keys(inVerified.position)
         let modCount = 1
         Vue.set(state.liveSpaceCoord, inVerified.board, {})
@@ -76,14 +68,28 @@ export default {
     SET_SPACEPOSITION_REFRESH: (state, inVerified) => {
       console.log(inVerified)
     },
+    SET_ADDSOLOCELL_POSITION: (state, inVerified) => {
+      console.log('add cell to space and solominimap')
+      console.log(inVerified)
+      let newCelladded = {}
+      newCelladded.cell = {}
+      newCelladded.cell.i = inVerified.mData.toString()
+      newCelladded.x = 120
+      newCelladded.y = 1900
+      console.log('new cell to add')
+      // console.log(newCelladded)
+      state.initialGrid[inVerified.nxpCNRL][inVerified.moduleCNRL].push(newCelladded)
+      console.log('postion solo ===================')
+      console.log(state.initialGrid[inVerified.nxpCNRL][inVerified.moduleCNRL])
+    },
     SET_UPDATESOLOMMAP_POSITION: (state, inVerified) => {
-      let updateCOORD = state.ctx.updateSoloMMapSpace(inVerified, state.initialGrid)
-      state.initialGrid[inVerified.cell.moduleCNRL] = []
-      Vue.set(state.initialGrid, inVerified.cell.moduleCNRL, updateCOORD)
+      let updateCOORD = state.ctx.updateSoloMMapSpace(inVerified, state.initialGrid[inVerified.cell.board])
+      state.initialGrid[inVerified.cell.board][inVerified.cell.moduleCNRL] = []
+      Vue.set(state.initialGrid[inVerified.cell.board], inVerified.cell.moduleCNRL, updateCOORD)
       // need to update SOLO minimap
-      let modHash = Object.keys(state.initialGrid)
+      let modHash = Object.keys(state.initialGrid[inVerified.cell.board])
       for (let mitem of modHash) {
-        state.ctx.miniMapSoloLocations(state.initialGrid[mitem])
+        state.ctx.miniMapSoloLocations(state.initialGrid[inVerified.cell.board][mitem])
       }
     },
     SET_REMOVEMMAP_POSITION: (state, inVerified) => {
@@ -153,6 +159,9 @@ export default {
     },
     actionSavedLayout (context, update) {
       context.commit('SET_SAVED_LAYOUT', update)
+    },
+    actionAddcell (context, update) {
+      context.commit('SET_ADDSOLOCELL_POSITION', update)
     }
   }
 }

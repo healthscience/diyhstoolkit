@@ -303,7 +303,7 @@ export default {
   height: 1600%;
   width: 1000%;
   overflow: hidden;
-  border: 2px dashed blue;
+  border: 0px dashed blue;
 }
 
 #dashboard-placeholder {

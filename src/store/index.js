@@ -509,44 +509,84 @@ const store = new Vuex.Store({
       state.flowviews = true
     },
     SET_ADD_VISSPACE (state, inVerified) {
+      // add to BentoSpace or SoloSpace?
+      console.log(this.state.solospace.soloState)
       // need unquie identifer for grid
       let random = Math.random()
       let deviceUUID = random.toString()
-      let modG = inVerified.mData + deviceUUID.slice(2, 8)
-      let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': modG, static: false }
-      this.state.moduleGrid[inVerified.moduleCNRL].push(newGriditem)
-      // set setting holder
-      let visSettings =
-      {
-        devices: null,
-        data: null,
-        compute: null,
-        visualise: null,
-        category: [],
-        timeperiod: null,
-        xaxis: null,
-        yaxis: [],
-        resolution: null,
-        setTimeFormat: null
+      // path for bentospace  path for soloSpace
+      let spaceType = this.state.solospace.soloState.active
+      if (spaceType === true) {
+        console.log('solopace add bentobox')
+        console.log(inVerified)
+        console.log(state.nxpModulelist)
+        console.log(state.NXPexperimentData)
+        let newCellNumber = 0
+        // need to add new visualise module and give it unique compute contract or update to unqiue
+        // identify base module to be cloned
+        let modKeys = Object.keys(state.NXPexperimentData[inVerified.nxpCNRL])
+        for (let modl of modKeys) {
+          console.log('module')
+          if (modl === inVerified.moduleCNRL) {
+            console.log('module info')
+            console.log(modl)
+            let mItems = Object.keys(state.NXPexperimentData[inVerified.nxpCNRL][modl].data)
+            for (let cell of mItems) {
+              console.log('cell info')
+              console.log(cell)
+              console.log(inVerified.mData)
+              if (cell === inVerified.mData) {
+                console.log('match, clone data base')
+                newCellNumber = parseInt(cell) + 1
+                Vue.set(state.NXPexperimentData[inVerified.nxpCNRL][modl].data, newCellNumber, state.NXPexperimentData[inVerified.nxpCNRL][modl].data[cell])
+              }
+            }
+          }
+        }
+        // update solo positionSpace store and solominiMap
+        inVerified.mData = newCellNumber
+        this.dispatch('actionAddcell', inVerified, { root: true })
+        console.log('cloned added data prepared-------------------------')
+        console.log(state.NXPexperimentData)
+        //  Vue.set(state.nxpModulelist, inVerified, inVerified)
+      } else {
+        console.log('bentospace')
+        let modG = inVerified.mData + deviceUUID.slice(2, 8)
+        let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': modG, static: false }
+        this.state.moduleGrid[inVerified.moduleCNRL].push(newGriditem)
+        // set setting holder
+        let visSettings =
+        {
+          devices: null,
+          data: null,
+          compute: null,
+          visualise: null,
+          category: [],
+          timeperiod: null,
+          xaxis: null,
+          yaxis: [],
+          resolution: null,
+          setTimeFormat: null
+        }
+        Vue.set(this.state.visModuleHolder, modG, visSettings)
+        // set toolbars
+        let setVisTools = {}
+        setVisTools = { text: 'open tools', active: true }
+        Vue.set(this.state.toolbarVisStatus[inVerified.moduleCNRL], modG, setVisTools)
+        // set the open data toolbar
+        let setOPenDataToolbar = {}
+        setOPenDataToolbar = { text: 'open data', active: false }
+        Vue.set(this.state.opendataTools[inVerified.moduleCNRL], modG, setOPenDataToolbar)
+        // set the data for the visualisation
+        let repeatDataBundle = this.state.NXPexperimentData[inVerified.nxpCNRL][inVerified.moduleCNRL].data[inVerified.mData]
+        Vue.set(this.state.NXPexperimentData[inVerified.nxpCNRL][inVerified.moduleCNRL].data, modG, repeatDataBundle)
+        let contextPlacer = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': modG, 'data': repeatDataBundle }
+        Vue.set(this.state.NXPexperimentData[inVerified.nxpCNRL][inVerified.moduleCNRL], 'prime', contextPlacer.prime)
+        // set a placer for any subsequent updates
+        let setProgress = {}
+        setProgress = { text: 'Updating visualisation', active: false }
+        Vue.set(this.state.visProgress[inVerified.moduleCNRL], modG, setProgress)
       }
-      Vue.set(this.state.visModuleHolder, modG, visSettings)
-      // set toolbars
-      let setVisTools = {}
-      setVisTools = { text: 'open tools', active: true }
-      Vue.set(this.state.toolbarVisStatus[inVerified.moduleCNRL], modG, setVisTools)
-      // set the open data toolbar
-      let setOPenDataToolbar = {}
-      setOPenDataToolbar = { text: 'open data', active: false }
-      Vue.set(this.state.opendataTools[inVerified.moduleCNRL], modG, setOPenDataToolbar)
-      // set the data for the visualisation
-      let repeatDataBundle = this.state.NXPexperimentData[inVerified.nxpCNRL][inVerified.moduleCNRL].data[inVerified.mData]
-      Vue.set(this.state.NXPexperimentData[inVerified.nxpCNRL][inVerified.moduleCNRL].data, modG, repeatDataBundle)
-      let contextPlacer = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': modG, 'data': repeatDataBundle }
-      Vue.set(this.state.NXPexperimentData[inVerified.nxpCNRL][inVerified.moduleCNRL], 'prime', contextPlacer.prime)
-      // set a placer for any subsequent updates
-      let setProgress = {}
-      setProgress = { text: 'Updating visualisation', active: false }
-      Vue.set(this.state.visProgress[inVerified.moduleCNRL], modG, setProgress)
     },
     SET_LIFE_VIEW (state, inVerified) {
       state.spaceType = inVerified
@@ -750,8 +790,6 @@ const store = new Vuex.Store({
       // console.log(update)
       // set the minimap in position store module
       let prepOutHOP = HopprepareUtility.savePrepare(update.nxp, this.state.networkPeerExpModules)
-      console.log('prep data for OUT----------')
-      console.log(prepOutHOP)
       // set
       context.commit('SET_SPACE_SHOW', false)
       // let futureTimeCheck = false

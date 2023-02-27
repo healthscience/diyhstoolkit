@@ -133,7 +133,6 @@ PositionUtility.prototype.miniMapSoloLocations = function (soloCells) {
     localthis.ctx.stroke()
   }
   let liveBBox = Object.keys(soloCells)
-  console.log(liveBBox)
   liveBBox.forEach(
     element => placeBBox(soloCells[element], this.scale, this.zoom))
 }
@@ -224,22 +223,14 @@ PositionUtility.prototype.drawmMMap = function () {
 *
 */
 PositionUtility.prototype.scrollTODashboard = function (miniMouse, listCells) {
-  console.log('scroll to')
-  console.log(miniMouse)
-  console.log(listCells)
   let mMouse = {}
   mMouse.x = miniMouse.offsetX
   mMouse.y = miniMouse.offsetY
   // identify click minidash closest to mouse click on minimap
   let scrollMatch = this.collisionSoloMiniDash(mMouse, listCells)
-  console.log('scrolllmatch---------------')
-  console.log(scrollMatch)
   // roughly match to module ID for now show match to specific order within modules
   let modMatch = listCells[scrollMatch][0]
-  console.log(modMatch)
   let element = document.getElementById('dragwheelsolo-space')
-  console.log('elelelctiment')
-  console.log(element)
   element.scrollTo(modMatch.x, modMatch.y)
   // document.getElementById('dragwheelsolo-space').scrollTop = topPos + 100
   // window.scroll(5000, 5000)

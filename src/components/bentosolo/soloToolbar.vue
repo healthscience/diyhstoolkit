@@ -103,7 +103,6 @@ export default {
       console.log('rounte patterns / reminders')
     },
     saveSpaceLayout () {
-      console.log('save spaces layout')
       this.$store.dispatch('actionSaveSoloSpaceCells', this.board)
     },
     combineSelected () {

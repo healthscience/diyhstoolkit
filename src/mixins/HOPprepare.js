@@ -26,9 +26,6 @@ class HOPprepare extends EventEmitter {
   *
   */
   savePrepare = function (input, boardmods) {
-    console.log('hopOUT message prep')
-    console.log(input)
-    console.log(boardmods)
     let checkPosition = this.checkPositionObject(input)
     let connectRefContracts = this.prepHOPmodules(input, boardmods)
     let outMessageHOP = {}
@@ -75,9 +72,6 @@ class HOPprepare extends EventEmitter {
   *
   */
   prepHOPmodules = function (update, networkPeerExpModules) {
-    console.log('HOP modules ppppppppppppppppp')
-    console.log(update)
-    console.log(networkPeerExpModules)
     // build the safeFLOW-ECS input bundle
     let matchExp = {}
     for (let nxp of networkPeerExpModules) {

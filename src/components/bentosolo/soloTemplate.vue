@@ -15,6 +15,12 @@
       </template>
       <template v-slot:solospace>
         <div id="solo-grid">
+          <div id="bb-chat">
+            <button @click="openBBai">BB chat</button>
+            <div id="bb-chat-dialogue" v-if="openBB === true">
+              <chat-interface></chat-interface>
+            </div>
+          </div>
           <div id="solo-toolbar">
             <solo-toolbar :board="sbboard"></solo-toolbar>
           </div>
@@ -44,6 +50,7 @@ import MinisoloMap from './minisoloMap.vue'
 import SoloCells from '@/components/bentosolo/soloCells.vue'
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
+import ChatInterface from '@/components/bbai/chatInterface.vue'
 
 export default {
   name: 'solo-space',
@@ -52,7 +59,8 @@ export default {
     SoloToolbar,
     MinisoloMap,
     SoloCells,
-    VueDraggableResizable
+    VueDraggableResizable,
+    ChatInterface
   },
   computed: {
     solospaceStatus: function () {
@@ -135,6 +143,7 @@ export default {
   },
   data () {
     return {
+      openBB: false,
       isModalVisible: false,
       solospace: {
         active: false
@@ -174,6 +183,9 @@ export default {
     }
   },
   methods: {
+    openBBai () {
+      this.openBB = !this.openBB
+    },
     setActiveSpace (nxpID) {
       // only one active at a time
       // this.$store.dispatch('actionActiveDashSelect', nxpID)
@@ -335,6 +347,23 @@ export default {
   display: grid;
   background-color: #4CAF50; /* Green */
   height: 50px;
+}
+
+#bb-chat {
+  border: 0px dashed black;
+  position: fixed;
+  top: 25px;
+  left: 840px;
+  z-index: 31;
+}
+
+#bb-chat-dialogue {
+  border: 2px dashed red;
+  position: fixed;
+  top: 25px;
+  left: 20px;
+  z-index: 31;
+  background-color: white;
 }
 
 </style>
