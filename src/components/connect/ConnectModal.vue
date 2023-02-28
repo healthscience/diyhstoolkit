@@ -28,7 +28,7 @@
             </div>
             <div id="network-status-space">
               <slot name="connect-network">
-                -- peer -- to -- peer --
+                peer -- to -- peer
               </slot>
             </div>
             <div id="form-input">
@@ -40,7 +40,7 @@
         </div>
         <div id="peers-networks">
           <slot name="peers-tabs">
-            ----------------
+            -
           </slot>
         </div>
         <footer class="modal-footer">

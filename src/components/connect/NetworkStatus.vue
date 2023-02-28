@@ -15,9 +15,6 @@
       </template>
       <template v-slot:submit-self v-if="selfConnect === 'self-sign' && peerauth === false">
         <div id="connect-wallet">
-          <div id="create-wallet">
-            <!-- <button id="create-new-wallet" @click=createWallet>create +</button> -->
-          </div>
           <div id="self-verify">
             <form id="self-signin-form" >
               <div class="self-inputs">
@@ -33,11 +30,14 @@
               <button id="self-submit" @click.prevent="submitLaunch">
                 Launch
               </button>
-             </div>
+            </div>
+            <div id="create-wallet">
+              <button id="create-new-wallet" @click=createWallet>create +</button>
+            </div>
           </div>
-        </div>
-        <div id="self-build-wallet" v-if="selfWallet === 'new-wallet-start'">
-          Start new wallet
+          <div id="self-build-wallet" v-if="selfWallet === true">
+            Coming soon - multiple peers per toolkit
+          </div>
         </div>
       </template>
       <template v-slot:title-form>
@@ -118,7 +118,7 @@ export default {
       isModalVisible: false,
       buttonName: 'verify token',
       selfConnect: 'self-sign',
-      selfWallet: '',
+      selfWallet: false,
       selfsigninInput: 'private',
       selfpwInput: ''
     }
@@ -132,7 +132,7 @@ export default {
       this.$store.dispatch('actionCloseNetworkModal')
     },
     createWallet () {
-      this.selfWallet = 'new-wallet-start'
+      this.selfWallet = !this.selfWallet
     },
     submitLaunch () {
       let peerConnect = {}
@@ -184,10 +184,33 @@ export default {
   background-color: green;
 }
 
+/* account info */
+
 #connect-wallet {
   display: grid;
-  grid-template-columns: 1fr 9fr;
-  border: 0px dashed red;
+  grid-template-columns: 1fr;
+}
+
+#self-verify {
+  border-bottom: 1px dashed grey;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 4em;
+  margin-bottom: 5em;
+  padding-bottom: 4em;
+}
+
+#create-wallet {
+  grid-template-columns: 1fr 1fr;
+  justify-self: start;
+  margin-left: 2em;
+}
+
+#create-new-wallet {
+}
+
+#self-build-wallet {
+  margin: 2em;
 }
 
 #self-signin-form {
@@ -195,7 +218,6 @@ export default {
   grid-template-columns: 1fr;
   height: 100%
 }
-
 .self-inputs {
   display: grid;
   grid-template-columns: 200px 400px;
@@ -273,15 +295,6 @@ export default {
 
 .reset {
   clear: both;
-}
-
-#self-verify {
-  border-bottom: 1px dashed grey;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-top: 4em;
-  margin-bottom: 5em;
-  padding-bottom: 4em;
 }
 
 </style>
