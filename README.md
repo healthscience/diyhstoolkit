@@ -65,19 +65,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ===========================================
 
-DONATIONS manged by [aboynejames](https://twitter.com/aboynejames)
-
-----------
-
-Lightning Invoices
-
-100000 sats ![Ln 10000](https://live.staticflickr.com/65535/52458246188_01c1099eb3_n.jpg)
-
-250000 sats ![Ln 250000](	https://live.staticflickr.com/65535/52457192307_c96084f6e3_n.jpg)
-
-500000 sats ![Ln 5000000](https://live.staticflickr.com/65535/52458166805_4f4fa72038_n.jpg)
-
-Bitcoin
-address ![btc addr](https://live.staticflickr.com/65535/52457717846_ab1e1b40c5_o.png)
-
-All donation used to pay for developer to contribute to project
+DONATIONS manged by 
