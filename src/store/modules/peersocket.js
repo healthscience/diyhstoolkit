@@ -222,7 +222,9 @@ export default {
         }
       } else if (backJSON.type === 'solospaces-list') {
         // set in solospace  NB need to keep track of per board UUID  modules list for testing TODO update
-        this.dispatch('actionSavedLayout', backJSON.data.value, { root: true })
+        if (backJSON?.data?.value !== undefined) {
+          this.dispatch('actionSavedLayout', backJSON.data.value, { root: true })
+        }
       } else if (backJSON.type === 'bbai-reply') {
         // flow messages to ai helper
         let date = new Date()

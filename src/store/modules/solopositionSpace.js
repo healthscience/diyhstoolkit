@@ -32,9 +32,17 @@ export default {
       Vue.set(state.savedLayout, 'start', inVerified)
     },
     SET_INITAL_CELLS: (state, inVerified) => {
-      let layoutCheck = Object.keys(state.savedLayout.start[inVerified.board])
-      Vue.set(state.liveSpaceCoord, inVerified.board, {})
-      Vue.set(state.initialGrid, inVerified.board, {})
+      console.log('set solo cells')
+      let layoutCheck = []
+      console.log(inVerified)
+      if (state.savedLayout?.start !== undefined) {
+        console.log(state.savedLayout.start[inVerified.board])
+        layoutCheck = Object.keys(state.savedLayout.start[inVerified.board])
+        Vue.set(state.liveSpaceCoord, inVerified.board, {})
+        Vue.set(state.initialGrid, inVerified.board, {})
+      } else {
+        layoutCheck = []
+      }
       if (layoutCheck.length > 0) {
         for (let mitem of layoutCheck) {
           Vue.set(state.initialGrid[inVerified.board], mitem, [])
