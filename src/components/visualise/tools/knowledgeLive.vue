@@ -139,8 +139,16 @@ export default {
       let modulesMatch = this.$store.state.experimentStatus[this.shellID].modules
       let visContract = {}
       let dataContract = {}
+      // check if copy or not module
+      let matchModule = ''
+      let moduleCopyCheck = this.moduleCNRL.slice(0, 4)
+      if (moduleCopyCheck === 'copy') {
+        matchModule = this.moduleCNRL.slice(5)
+      } else {
+        matchModule = this.moduleCNRL
+      }
       for (let modC of modulesMatch) {
-        if (modC.key === this.moduleCNRL) {
+        if (modC.key === matchModule) {
           visContract = modC
         }
         if (modC.value.type === 'data') {
@@ -207,8 +215,16 @@ export default {
       let catDisplay = []
       let modulesMatch = this.$store.state.experimentStatus[this.shellID].modules
       let visContract = {}
+      // check if copy or not module
+      let matchModule = ''
+      let moduleCopyCheck = this.moduleCNRL.slice(0, 4)
+      if (moduleCopyCheck === 'copy') {
+        matchModule = this.moduleCNRL.slice(5)
+      } else {
+        matchModule = this.moduleCNRL
+      }
       for (let modC of modulesMatch) {
-        if (modC.key === this.moduleCNRL) {
+        if (modC.key === matchModule) {
           visContract = modC
         }
       }

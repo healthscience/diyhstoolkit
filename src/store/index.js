@@ -5,6 +5,7 @@ import HopPreare from '@/mixins/HOPprepare.js'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
 import VisToolsUtility from '@/mixins/visualUtility.js'
+// import { update } from 'lodash'
 const moment = require('moment')
 const HopprepareUtility = new HopPreare()
 const ToolUtility = new ToolkitUtility()
@@ -508,7 +509,7 @@ const store = new Vuex.Store({
     SET_VIEWFLOW_START (state, inVerified) {
       state.flowviews = true
     },
-    SET_ADD_VISSPACE (state, inVerified) {
+    SET_ADDMAIN_VISSPACE (state, inVerified) {
       // add to BentoSpace or SoloSpace?
       console.log(this.state.solospace.soloState)
       // need unquie identifer for grid
@@ -517,38 +518,36 @@ const store = new Vuex.Store({
       // path for bentospace  path for soloSpace
       let spaceType = this.state.solospace.soloState.active
       if (spaceType === true) {
-        console.log('solopace add bentobox')
-        console.log(inVerified)
-        console.log(state.nxpModulelist)
-        console.log(state.NXPexperimentData)
         let newCellNumber = 0
         // need to add new visualise module and give it unique compute contract or update to unqiue
         // identify base module to be cloned
         let modKeys = Object.keys(state.NXPexperimentData[inVerified.nxpCNRL])
         for (let modl of modKeys) {
-          console.log('module')
           if (modl === inVerified.moduleCNRL) {
-            console.log('module info')
-            console.log(modl)
             let mItems = Object.keys(state.NXPexperimentData[inVerified.nxpCNRL][modl].data)
             for (let cell of mItems) {
-              console.log('cell info')
-              console.log(cell)
-              console.log(inVerified.mData)
               if (cell === inVerified.mData) {
                 console.log('match, clone data base')
-                newCellNumber = parseInt(cell) + 1
-                Vue.set(state.NXPexperimentData[inVerified.nxpCNRL][modl].data, newCellNumber, state.NXPexperimentData[inVerified.nxpCNRL][modl].data[cell])
+                newCellNumber = parseInt(cell) + 0
+                // give copy module UUID
+                let copyMod = 'copy-' + modl
+                // create new data holder and solospace holder
+                let updateModuleInfo = inVerified
+                updateModuleInfo.moduleCNRL = copyMod
+                this.dispatch('actionCopycell', updateModuleInfo, { root: true })
+                state.nxpModulelist[inVerified.nxpCNRL].push(copyMod)
+                Vue.set(state.NXPexperimentData[inVerified.nxpCNRL], copyMod, {})
+                Vue.set(state.NXPexperimentData[inVerified.nxpCNRL][copyMod], 'data', {})
+                Vue.set(state.NXPexperimentData[inVerified.nxpCNRL][copyMod], 'prime', {})
+                Vue.set(state.NXPexperimentData[inVerified.nxpCNRL][copyMod].data, newCellNumber, state.NXPexperimentData[inVerified.nxpCNRL][modl].data[cell])
+                Vue.set(state.NXPexperimentData[inVerified.nxpCNRL][copyMod].prime, newCellNumber, state.NXPexperimentData[inVerified.nxpCNRL][modl].prime)
               }
             }
           }
         }
         // update solo positionSpace store and solominiMap
         inVerified.mData = newCellNumber
-        this.dispatch('actionAddcell', inVerified, { root: true })
-        console.log('cloned added data prepared-------------------------')
-        console.log(state.NXPexperimentData)
-        //  Vue.set(state.nxpModulelist, inVerified, inVerified)
+        // this.dispatch('actionAddcell', inVerified, { root: true })
       } else {
         console.log('bentospace')
         let modG = inVerified.mData + deviceUUID.slice(2, 8)
@@ -821,7 +820,7 @@ const store = new Vuex.Store({
     },
     async actionVisUpdate (context, update) {
       console.log('vistoolbar++++++UPdateAction')
-      // console.log(update)
+      console.log(update)
       this.state.ecsMessageLive = ''
       // perform checks for missing input data to form ECS-out bundle
       // TODO
@@ -979,9 +978,6 @@ const store = new Vuex.Store({
         console.log('self')
       }
     },
-    actionVisSpaceAdd (context, update) {
-      context.commit('SET_ADD_VISSPACE', update)
-    },
     actionDatasourceCount (context, update) {
       context.commit('SET_DATASOURCECOUNT', update)
     },
@@ -1011,6 +1007,13 @@ const store = new Vuex.Store({
     },
     actionSetwatchnxpMod (context, update) {
       context.commit('SET_NXPWATCH_MODULED', update)
+    },
+    actionCloneboardData (context, update) {
+      // get module and data objects for this board and pass to solospace store
+      let moduleList = this.state.nxpModulelist
+      context.dispatch('actionSoloModules', moduleList, { root: true })
+      let soloData = this.state.NXPexperimentData[update]
+      context.dispatch('actionSoloBoardData', soloData, { root: true })
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'

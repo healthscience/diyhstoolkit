@@ -721,6 +721,8 @@ export default {
         Vue.set(state.HOPreturn, 'publiclib', true)
         // save copy of te ref contract indexes
         this.state.liveRefContIndex = backJSON.referenceContracts
+        console.log('after public library bacoooooooooooooooooooooooooooooooooook')
+        console.log(this.state.liveRefContIndex)
         // prepare NPXs in NETWORK
         this.state.networkExpModules = backJSON.networkExpModules
         let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)

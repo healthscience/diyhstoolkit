@@ -54,7 +54,7 @@
                     <progress-message :progressMessage="NXPprogress[dashi]"></progress-message>
                     <div id="module-ready" v-if="NXPstatusData[dashi]">
                       <div id="dash-main" v-for="modI in NXPstatusData[dashi]" :key="modI">
-                        <bento-board v-if="isModalDashboardVisible === true" :expCNRL="dashi" :moduleCNRL="modI"></bento-board>
+                        <bento-board v-if="isModalDashboardVisible === true && modI.substring(0, 4) !== 'copy'" :expCNRL="dashi" :moduleCNRL="modI"></bento-board>
                       </div>
                     </div>
                   </div>
@@ -265,6 +265,8 @@ export default {
       this.$store.dispatch('actionActiveNXP', nxpID)
     },
     soloSpaceOpen (bs) {
+      // prepare data clone for this solospace
+      this.$store.dispatch('actionCloneboardData', bs)
       this.solospaceLive = bs
       this.$store.dispatch('actionSolospace', bs)
       let soloSelect = {}

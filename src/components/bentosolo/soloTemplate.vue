@@ -75,13 +75,13 @@ export default {
     },
     BoardstatusData: function () {
       // need to prepare into single array for drag drop to work
-      if (this.$store.state.nxpModulelist === undefined) {
+      if (this.$store.state.solopositionSpace.boardModulesList === undefined) {
         return {}
       } else {
         let liveListCells = []
-        if (this.$store.state.nxpModulelist[this.sbboard]?.length > 0) {
-          for (let soloi of this.$store.state.nxpModulelist[this.sbboard]) {
-            if (this.$store.state.nxpModulelist[this.sbboard]) {
+        if (this.$store.state.solopositionSpace.boardModulesList[this.sbboard]?.length > 0) {
+          for (let soloi of this.$store.state.solopositionSpace.boardModulesList[this.sbboard]) {
+            if (this.$store.state.solopositionSpace.boardModulesList[this.sbboard]) {
               for (let cell of this.soloPosition[this.sbboard][soloi]) {
                 let newCellinfo = {}
                 newCellinfo = cell
