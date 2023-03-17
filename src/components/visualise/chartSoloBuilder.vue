@@ -140,10 +140,6 @@ export default {
       }
     },
     liveData: function () {
-      console.log('chart buider solo')
-      console.log(this.moduleCNRL)
-      console.log(this.mData)
-      console.log(this.$store.state.solopositionSpace.soloData)
       if (!this.$store.state.solopositionSpace.soloData) {
         return {}
       } else if (!this.$store.state.solopositionSpace.soloData[this.moduleCNRL].data[this.mData]) {

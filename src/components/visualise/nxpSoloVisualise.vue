@@ -1,6 +1,6 @@
 <template>
   <div id="visualise-nxp">
-    <div id="prime-visualise" v-if="visPrepareStatus !== undefined">vvvv--{{ visPrepareStatus }}
+    <div id="prime-visualise" v-if="visPrepareStatus !== undefined">
       <progress-vismessage v-if="visPrepareStatus.active === true" :progressMessage="visPrepareStatus" ></progress-vismessage>
       <div id="vis-chartbuilder">
         <component v-bind:is="moduleVisType" :shellID="shellID" :moduleCNRL="moduleCNRL" :moduleType="moduleType" :mData="mData"></component>

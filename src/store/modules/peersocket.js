@@ -413,6 +413,7 @@ export default {
               this.dispatch('actionUpdateCopy', backJSON)
             } else {
               console.log('starting layout data prep++++++++++++++++++++++++')
+              this.dispatch('actionUpdateCopy', backJSON)
             }
           }
         } else {

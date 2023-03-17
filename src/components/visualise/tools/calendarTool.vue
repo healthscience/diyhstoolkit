@@ -279,6 +279,10 @@ export default {
     },
     updateKbundle (cm) {
       // prepare update for safeFLOW
+      console.log('kbudnel update caltools')
+      console.log(this.shellID)
+      console.log(this.moduleCNRL)
+      console.log(this.mData)
       let contextK = {}
       contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL

@@ -861,6 +861,8 @@ const store = new Vuex.Store({
       } else {
         nxpModules = this.state.entityUUIDsummary[update.nxpCNRL].data[update.nxpCNRL].modules
       }
+      console.log('modules for board')
+      console.log(nxpModules)
       let updateModules = []
       let newStartTime = []
       for (let mmod of nxpModules) {
@@ -914,10 +916,21 @@ const store = new Vuex.Store({
       } else {
         updateContract.input = ''
       }
-      // form hashID for output
-      let outHash = hashObject(updateModules)
-      // also need to tell solopace the outhash so know what to match incoming data to location
-      update.outhash = outHash
+      // check does existing cell hash exists in input?
+      // only if copy create new outhash
+      let copyCheck = update.moduleCNRL.slice(0, 4)
+      let outHash = ''
+      if (copyCheck !== 'copy') {
+        console.log('exising hash')
+        outHash = update.moduleCNRL
+      } else {
+        console.log('new newnew hash')
+        // form hashID for output
+        outHash = hashObject(updateModules)
+        // also need to tell solopace the outhash so know what to match incoming data to location
+        update.outhash = outHash
+      }
+      console.log(update.outhash)
       this.dispatch('actionOuthashTrack', update)
       // keep state of live modules
       updateContract.key = update.nxpCNRL

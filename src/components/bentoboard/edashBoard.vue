@@ -105,22 +105,10 @@ export default {
       }
     },
     copyLiveModule: function () {
-      console.log('live coyp---mmmmmmmmmmmmmmmmmmmmm---')
-      console.log(this.$store.state.solopositionSpace.liveCopy)
-      console.log(this.$store.state.solopositionSpace.liveTempOuthash)
       return this.$store.solopositionSpace.state.liveCopy
     },
     moduleContent: function () {
-      // console.log('module contentE---board')
-      // console.log(this.$store.state.NXPexperimentData)
       let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
-      // console.log(contentModule)
-      // console.log(this.moduleCNRL)
-      // console.log('live coyp---mmmmmmmmmmmmmmmmmmmmm---')
-      // console.log(this.$store.state.solopositionSpace.liveCopy)
-      // console.log(this.$store.state.solopositionSpace.liveTempOuthash)
-      // console.log(this.copyLiveModule)
-      // console.log(contentModule[this.moduleCNRL])
       if (contentModule === undefined) {
         return false
       } else if (this.moduleCNRL === this.$store.state.solopositionSpace.liveTempOuthash || this.moduleCNRL === this.$store.state.solopositionSpace.liveCopy) {
