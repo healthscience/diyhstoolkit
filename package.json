@@ -32,7 +32,7 @@
     "electron-builder": "^23.3.3",
     "lodash": "^4.17.15",
     "moment-range": "^4.0.2",
-    "object-hash": "^2.0.3",
+    "object-hash": "^2.2.0",
     "polling-to-event": "^2.1.0",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",

@@ -367,8 +367,8 @@ export default {
           console.log('---')
         }
       } else if (backJSON.type === 'ecssummary') {
-        // console.log('SUMMAERY======HOP=ECS===================')
-        // console.log(backJSON)
+        console.log('SUMMAERY======HOP=ECS===================')
+        console.log(backJSON)
         let boardUUID = Object.keys(backJSON.data)
         // update the NXP contract list held in toolkit
         // let updateListContracts = ToolUtility.updateContractList(this.state.liveNXP, backJSON.data[boardUUID[0]], this.state.networkPeerExpModules)
@@ -401,236 +401,251 @@ export default {
       } else if (backJSON.type === 'newEntityRange') {
         console.log('SECOND-PART-----DATA RETURNED-----')
         console.log(backJSON)
-        // is the data for the Lifeboard or NXP space?
-        // check for none data  e.g. bug, error, goes wrong cannot return data for display
-        if (backJSON.data === 'none') {
-          // switch off progress message and inform toolkit
-          let setnxpProgress = { text: 'Experiment in progress', active: false }
-          Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
-          this.state.ecsMessageLive = 'no data available'
-          // need to make toolbar appear so date can be selected
-          // set devices for this NXP
-          if (this.state.devicesLive[backJSON.context.input.key] === undefined) {
-            Vue.set(this.state.devicesLive, backJSON.context.input.key, [])
-          }
-          if (this.state.devicesLive[backJSON.context.input.key].length === 0) {
-            // need to set devices per network experiment id
-            Vue.set(this.state.devicesLive, backJSON.context.input.key, backJSON.devices)
-          }
-          let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.input.key, this.state.networkPeerExpModules)
-          // has data for the visual module already been setup?
-          let displayModulesReady = {}
-          let gridBefore = Object.keys(this.state.moduleGrid[backJSON.context.moduleorder.visualise.key])
-          if (gridBefore.length !== 0) {
-          } else {
-            // set experiment progress message
-            let setnxpProgress = { text: 'Experiment in progress', active: true }
-            Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
-            // prepare the module grid and data extract
-            displayModulesReady = VisualUtility.displayPrepareModules(matchExpRefContract.modules, backJSON)
-            // set the module GRID items
-            for (let modG of backJSON.context.input.value.modules) {
-              Vue.set(this.state.moduleGrid, modG, displayModulesReady.grid[modG])
-            }
-            // update vis toolsbars and data
-            let moduleList = Object.keys(displayModulesReady.data)
-            for (let modID of moduleList) {
-              // set the vis/calendar toolbar open
-              Vue.set(this.state.toolbarVisStatus, modID, {})
-              Vue.set(this.state.visProgress, modID, {})
-              if (displayModulesReady.data[modID].prime.text === 'Visualise') {
-                // set the toolbars per vis module per device
-                let listDevices = Object.keys(displayModulesReady.data[modID].data)
-                for (let deviceP of listDevices) {
-                  // set setting holder
-                  let visSettings =
-                  {
-                    devices: null,
-                    data: null,
-                    compute: null,
-                    visualise: null,
-                    category: [],
-                    timeperiod: null,
-                    xaxis: null,
-                    yaxis: [],
-                    resolution: null,
-                    setTimeFormat: null
-                  }
-                  Vue.set(this.state.visModuleHolder, deviceP, visSettings)
-                  // set vis e.g. chart progress message per device
-                  let setVisProgress = { text: 'Preparing visualisation', active: false }
-                  Vue.set(this.state.visProgress[modID], deviceP, setVisProgress)
-                  // set the vis toolbar status
-                  let setVisTools = {}
-                  setVisTools = { text: 'open tools', active: true }
-                  Vue.set(this.state.toolbarVisStatus[modID], deviceP, setVisTools)
-                  // set the open data toolbar
-                  let setOPenDataToolbar = {}
-                  // setOPenDataToolbar[deviceP] = { text: 'open data', active: false }
-                  setOPenDataToolbar = { text: 'open data', active: false }
-                  Vue.set(this.state.opendataTools, modID, {})
-                  Vue.set(this.state.opendataTools[modID], deviceP, setOPenDataToolbar)
-                }
-              }
-              // set the data for visualisation
-              if (backJSON.data !== 'none') {
-                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
-                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
-              } else {
-                this.state.ecsMessageLive = 'no data available'
-                // set experiment progress message off
-                let setnxpProgress = { text: 'Experiment in progress', active: false }
-                Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
-                // still setup module content to fix or add info try again?
-                // let matchContrastStart = ToolUtility.matchModuleRefcontractID(modID, this.state.experimentStatus[backJSON.context.input.key].modules)
-                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
-                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
-              }
+        // is the data for the Lifeboard(AI) or Board space or Solospace?
+        // does the context hash match any existing visualsiation module?
+        console.log('check hash of context')
+        console.log(backJSON.context.input.outhash)
+        if (backJSON.context.input.outhash !== undefined) {
+          for (let track of this._modules.root.state.solopositionSpace.trackOut) {
+            console.log(track)
+            if (track.outhash === backJSON.context.input.outhash) {
+              console.log('yes, comes from existing solospace')
+              this.dispatch('actionUpdateCopy', backJSON)
+            } else {
+              console.log('starting layout data prep++++++++++++++++++++++++')
             }
           }
         } else {
-          // switch off nxp Progress message
-          let setnxpProgress = { text: 'Experiment in progress', active: true }
-          Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
-          // set devices for this NXP
-          if (this.state.devicesLive[backJSON.context.input.key] === undefined) {
-            Vue.set(this.state.devicesLive, backJSON.context.input.key, [])
-          }
-          if (this.state.devicesLive[backJSON.context.input.key].length === 0) {
-            // need to set devices per network experiment id
-            Vue.set(this.state.devicesLive, backJSON.context.input.key, backJSON.devices)
-          }
-          let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.input.key, this.state.networkPeerExpModules)
-          // has data for the visual module already been setup?
-          let displayModulesReady = {}
-          let gridBefore = Object.keys(this.state.moduleGrid[backJSON.context.moduleorder.visualise.key])
-          if (gridBefore.length > 0) {
-            // move network experment prorgress message
-            let setnxpProgressOff = { text: 'Experiment in progress', active: false }
-            Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgressOff)
-            let matchVisModuleType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
-            // need to add data to vis module placer
-            let displayDataUpdate = VisualUtility.addVisData(matchVisModuleType, this.state.moduleGrid[backJSON.context.moduleorder.visualise.key], this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], backJSON)
-            // update setting grid
-            if (displayDataUpdate.update.grid.length > 0) {
-              for (let modG of displayDataUpdate.update.grid) {
-                // set new grid
-                this.state.moduleGrid[displayDataUpdate.module].push(modG)
-                if (backJSON.data.context.triplet.device === modG.i) {
-                  // set setting holder
-                  let visSettings =
-                  {
-                    devices: null,
-                    data: null,
-                    compute: null,
-                    visualise: null,
-                    category: [],
-                    timeperiod: null,
-                    xaxis: null,
-                    yaxis: [],
-                    resolution: null,
-                    setTimeFormat: null
-                  }
-                  Vue.set(this.state.visModuleHolder, modG.i, visSettings)
-                  // set toolbars
-                  let setVisTools = {}
-                  setVisTools = { text: 'open tools', active: true }
-                  Vue.set(this.state.toolbarVisStatus[displayDataUpdate.module], modG.i, setVisTools)
-                  // set the open data toolbar
-                  let setOPenDataToolbar = {}
-                  setOPenDataToolbar = { text: 'open data', active: false }
-                  Vue.set(this.state.opendataTools[displayDataUpdate.module], modG.i, setOPenDataToolbar)
-                  // set the data for the visualisation
-                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, modG.i, backJSON.data)
-                  let contextPlacer = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': modG, 'data': backJSON.data.data }
-                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module], 'prime', contextPlacer.prime)
-                  // set a placer for any subsequent updates
-                  let setProgress = {}
-                  setProgress = { text: 'Updating visualisation', active: false }
-                  Vue.set(this.state.visProgress[displayDataUpdate.module], modG.i, setProgress)
-                }
-              }
+          // check for none data  e.g. bug, error, goes wrong cannot return data for display
+          if (backJSON.data === 'none') {
+            // switch off progress message and inform toolkit
+            let setnxpProgress = { text: 'Experiment in progress', active: false }
+            Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
+            this.state.ecsMessageLive = 'no data available'
+            // need to make toolbar appear so date can be selected
+            // set devices for this NXP
+            if (this.state.devicesLive[backJSON.context.input.key] === undefined) {
+              Vue.set(this.state.devicesLive, backJSON.context.input.key, [])
+            }
+            if (this.state.devicesLive[backJSON.context.input.key].length === 0) {
+              // need to set devices per network experiment id
+              Vue.set(this.state.devicesLive, backJSON.context.input.key, backJSON.devices)
+            }
+            let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.input.key, this.state.networkPeerExpModules)
+            // has data for the visual module already been setup?
+            let displayModulesReady = {}
+            let gridBefore = Object.keys(this.state.moduleGrid[backJSON.context.moduleorder.visualise.key])
+            if (gridBefore.length !== 0) {
             } else {
-              // switch off the update message for update
-              // console.log('switch off update message+++++++++++++++++++++++++++++++++++++')
-              let setProgress = {}
-              setProgress = { text: 'Updating visualisation', active: false }
-              Vue.set(this.state.visProgress[backJSON.context.moduleorder.visualise.key], backJSON.data.context.triplet.device, setProgress)
-              // check for data update?  are the times the same?
-              let lastTime = 0
-              if (Object.keys(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device]).length !== 0) {
-                lastTime = this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device].context.triplet
+              // set experiment progress message
+              let setnxpProgress = { text: 'Experiment in progress', active: true }
+              Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
+              // prepare the module grid and data extract
+              displayModulesReady = VisualUtility.displayPrepareModules(matchExpRefContract.modules, backJSON)
+              // set the module GRID items
+              for (let modG of backJSON.context.input.value.modules) {
+                Vue.set(this.state.moduleGrid, modG, displayModulesReady.grid[modG])
               }
-              if (backJSON.data.context.triplet.timeout !== lastTime) {
-                // set data for experiment module
-                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, backJSON.data.context.triplet.device, backJSON.data)
+              // update vis toolsbars and data
+              let moduleList = Object.keys(displayModulesReady.data)
+              for (let modID of moduleList) {
+                // set the vis/calendar toolbar open
+                Vue.set(this.state.toolbarVisStatus, modID, {})
+                Vue.set(this.state.visProgress, modID, {})
+                if (displayModulesReady.data[modID].prime.text === 'Visualise') {
+                  // set the toolbars per vis module per device
+                  let listDevices = Object.keys(displayModulesReady.data[modID].data)
+                  for (let deviceP of listDevices) {
+                    // set setting holder
+                    let visSettings =
+                    {
+                      devices: null,
+                      data: null,
+                      compute: null,
+                      visualise: null,
+                      category: [],
+                      timeperiod: null,
+                      xaxis: null,
+                      yaxis: [],
+                      resolution: null,
+                      setTimeFormat: null
+                    }
+                    Vue.set(this.state.visModuleHolder, deviceP, visSettings)
+                    // set vis e.g. chart progress message per device
+                    let setVisProgress = { text: 'Preparing visualisation', active: false }
+                    Vue.set(this.state.visProgress[modID], deviceP, setVisProgress)
+                    // set the vis toolbar status
+                    let setVisTools = {}
+                    setVisTools = { text: 'open tools', active: true }
+                    Vue.set(this.state.toolbarVisStatus[modID], deviceP, setVisTools)
+                    // set the open data toolbar
+                    let setOPenDataToolbar = {}
+                    // setOPenDataToolbar[deviceP] = { text: 'open data', active: false }
+                    setOPenDataToolbar = { text: 'open data', active: false }
+                    Vue.set(this.state.opendataTools, modID, {})
+                    Vue.set(this.state.opendataTools[modID], deviceP, setOPenDataToolbar)
+                  }
+                }
+                // set the data for visualisation
+                if (backJSON.data !== 'none') {
+                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
+                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
+                } else {
+                  this.state.ecsMessageLive = 'no data available'
+                  // set experiment progress message off
+                  let setnxpProgress = { text: 'Experiment in progress', active: false }
+                  Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
+                  // still setup module content to fix or add info try again?
+                  // let matchContrastStart = ToolUtility.matchModuleRefcontractID(modID, this.state.experimentStatus[backJSON.context.input.key].modules)
+                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
+                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
+                }
               }
             }
           } else {
-            // set experiment progress message
+            // switch off nxp Progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
             Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
-            // prepare the module grid and data extract
-            displayModulesReady = VisualUtility.displayPrepareModules(matchExpRefContract.modules, backJSON)
-            // set the module GRID items
-            for (let modG of backJSON.context.input.value.modules) {
-              Vue.set(this.state.moduleGrid, modG, displayModulesReady.grid[modG])
+            // set devices for this NXP
+            if (this.state.devicesLive[backJSON.context.input.key] === undefined) {
+              Vue.set(this.state.devicesLive, backJSON.context.input.key, [])
             }
-            // update vis toolsbars and data
-            let moduleList = Object.keys(displayModulesReady.data)
-            for (let modID of moduleList) {
-              // set the vis/calendar toolbar open
-              Vue.set(this.state.toolbarVisStatus, modID, {})
-              Vue.set(this.state.visProgress, modID, {})
-              if (displayModulesReady.data[modID].prime.text === 'Visualise') {
-                // set the toolbars per vis module per device
-                let listDevices = Object.keys(displayModulesReady.data[modID].data)
-                for (let deviceP of listDevices) {
-                  // set setting holder
-                  let visSettings =
-                  {
-                    devices: null,
-                    data: null,
-                    compute: null,
-                    visualise: null,
-                    category: [],
-                    timeperiod: null,
-                    xaxis: null,
-                    yaxis: [],
-                    resolution: null,
-                    setTimeFormat: null
+            if (this.state.devicesLive[backJSON.context.input.key].length === 0) {
+              // need to set devices per network experiment id
+              Vue.set(this.state.devicesLive, backJSON.context.input.key, backJSON.devices)
+            }
+            let matchExpRefContract = ToolUtility.matchExpModulesDetail(backJSON.context.input.key, this.state.networkPeerExpModules)
+            // has data for the visual module already been setup?
+            let displayModulesReady = {}
+            let gridBefore = Object.keys(this.state.moduleGrid[backJSON.context.moduleorder.visualise.key])
+            if (gridBefore.length > 0) {
+              // move network experment prorgress message
+              let setnxpProgressOff = { text: 'Experiment in progress', active: false }
+              Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgressOff)
+              let matchVisModuleType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
+              // need to add data to vis module placer
+              let displayDataUpdate = VisualUtility.addVisData(matchVisModuleType, this.state.moduleGrid[backJSON.context.moduleorder.visualise.key], this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], backJSON)
+              // update setting grid
+              if (displayDataUpdate.update.grid.length > 0) {
+                for (let modG of displayDataUpdate.update.grid) {
+                  // set new grid
+                  this.state.moduleGrid[displayDataUpdate.module].push(modG)
+                  if (backJSON.data.context.triplet.device === modG.i) {
+                    // set setting holder
+                    let visSettings =
+                    {
+                      devices: null,
+                      data: null,
+                      compute: null,
+                      visualise: null,
+                      category: [],
+                      timeperiod: null,
+                      xaxis: null,
+                      yaxis: [],
+                      resolution: null,
+                      setTimeFormat: null
+                    }
+                    Vue.set(this.state.visModuleHolder, modG.i, visSettings)
+                    // set toolbars
+                    let setVisTools = {}
+                    setVisTools = { text: 'open tools', active: true }
+                    Vue.set(this.state.toolbarVisStatus[displayDataUpdate.module], modG.i, setVisTools)
+                    // set the open data toolbar
+                    let setOPenDataToolbar = {}
+                    setOPenDataToolbar = { text: 'open data', active: false }
+                    Vue.set(this.state.opendataTools[displayDataUpdate.module], modG.i, setOPenDataToolbar)
+                    // set the data for the visualisation
+                    Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, modG.i, backJSON.data)
+                    let contextPlacer = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }, 'grid': modG, 'data': backJSON.data.data }
+                    Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module], 'prime', contextPlacer.prime)
+                    // set a placer for any subsequent updates
+                    let setProgress = {}
+                    setProgress = { text: 'Updating visualisation', active: false }
+                    Vue.set(this.state.visProgress[displayDataUpdate.module], modG.i, setProgress)
                   }
-                  Vue.set(this.state.visModuleHolder, deviceP, visSettings)
-                  // set vis e.g. chart progress message per device
-                  let setVisProgress = { text: 'Preparing visualisation', active: false }
-                  Vue.set(this.state.visProgress[modID], deviceP, setVisProgress)
-                  // set the vis toolbar status
-                  let setVisTools = {}
-                  setVisTools = { text: 'open tools', active: true }
-                  Vue.set(this.state.toolbarVisStatus[modID], deviceP, setVisTools)
-                  // set the open data toolbar
-                  let setOPenDataToolbar = {}
-                  // setOPenDataToolbar[deviceP] = { text: 'open data', active: false }
-                  setOPenDataToolbar = { text: 'open data', active: false }
-                  Vue.set(this.state.opendataTools, modID, {})
-                  Vue.set(this.state.opendataTools[modID], deviceP, setOPenDataToolbar)
+                }
+              } else {
+                // switch off the update message for update
+                // console.log('switch off update message+++++++++++++++++++++++++++++++++++++')
+                let setProgress = {}
+                setProgress = { text: 'Updating visualisation', active: false }
+                Vue.set(this.state.visProgress[backJSON.context.moduleorder.visualise.key], backJSON.data.context.triplet.device, setProgress)
+                // check for data update?  are the times the same?
+                let lastTime = 0
+                if (Object.keys(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device]).length !== 0) {
+                  lastTime = this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key].data[backJSON.data.context.triplet.device].context.triplet
+                }
+                if (backJSON.data.context.triplet.timeout !== lastTime) {
+                  // set data for experiment module
+                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, backJSON.data.context.triplet.device, backJSON.data)
                 }
               }
-              // set the data for visualisation
-              if (backJSON.data !== 'none') {
-                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
-                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
-                let setnxpProgress = { text: 'Experiment in progress', active: false }
-                Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
-              } else {
-                this.state.ecsMessageLive = 'no data available'
-                // set experiment progress message off
-                let setnxpProgress = { text: 'Experiment in progress', active: false }
-                Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
-                // still setup module content to fix or add info try again?
-                // let matchContrastStart = ToolUtility.matchModuleRefcontractID(modID, this.state.experimentStatus[backJSON.context.input.key].modules)
-                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
-                Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
+            } else {
+              // set experiment progress message
+              let setnxpProgress = { text: 'Experiment in progress', active: true }
+              Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
+              // prepare the module grid and data extract
+              displayModulesReady = VisualUtility.displayPrepareModules(matchExpRefContract.modules, backJSON)
+              // set the module GRID items
+              for (let modG of backJSON.context.input.value.modules) {
+                Vue.set(this.state.moduleGrid, modG, displayModulesReady.grid[modG])
+              }
+              // update vis toolsbars and data
+              let moduleList = Object.keys(displayModulesReady.data)
+              for (let modID of moduleList) {
+                // set the vis/calendar toolbar open
+                Vue.set(this.state.toolbarVisStatus, modID, {})
+                Vue.set(this.state.visProgress, modID, {})
+                if (displayModulesReady.data[modID].prime.text === 'Visualise') {
+                  // set the toolbars per vis module per device
+                  let listDevices = Object.keys(displayModulesReady.data[modID].data)
+                  for (let deviceP of listDevices) {
+                    // set setting holder
+                    let visSettings =
+                    {
+                      devices: null,
+                      data: null,
+                      compute: null,
+                      visualise: null,
+                      category: [],
+                      timeperiod: null,
+                      xaxis: null,
+                      yaxis: [],
+                      resolution: null,
+                      setTimeFormat: null
+                    }
+                    Vue.set(this.state.visModuleHolder, deviceP, visSettings)
+                    // set vis e.g. chart progress message per device
+                    let setVisProgress = { text: 'Preparing visualisation', active: false }
+                    Vue.set(this.state.visProgress[modID], deviceP, setVisProgress)
+                    // set the vis toolbar status
+                    let setVisTools = {}
+                    setVisTools = { text: 'open tools', active: true }
+                    Vue.set(this.state.toolbarVisStatus[modID], deviceP, setVisTools)
+                    // set the open data toolbar
+                    let setOPenDataToolbar = {}
+                    // setOPenDataToolbar[deviceP] = { text: 'open data', active: false }
+                    setOPenDataToolbar = { text: 'open data', active: false }
+                    Vue.set(this.state.opendataTools, modID, {})
+                    Vue.set(this.state.opendataTools[modID], deviceP, setOPenDataToolbar)
+                  }
+                }
+                // set the data for visualisation
+                if (backJSON.data !== 'none') {
+                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
+                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
+                  let setnxpProgress = { text: 'Experiment in progress', active: false }
+                  Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
+                } else {
+                  this.state.ecsMessageLive = 'no data available'
+                  // set experiment progress message off
+                  let setnxpProgress = { text: 'Experiment in progress', active: false }
+                  Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
+                  // still setup module content to fix or add info try again?
+                  // let matchContrastStart = ToolUtility.matchModuleRefcontractID(modID, this.state.experimentStatus[backJSON.context.input.key].modules)
+                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
+                  Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
+                }
               }
             }
           }
@@ -649,8 +664,8 @@ export default {
         // save state of bentospace dashboard
         this.dispatch('actionSaveSpaceNXP', 'nxp')
       } else if (backJSON.type === 'peerprivate-start') {
-        // console.log('private START librayr back data-xxxxxxxxxxxxxxxxx')
-        // console.log(backJSON)
+        console.log('private START librayr back data-xxxxxxxxxxxxxxxxx')
+        console.log(backJSON)
         // prepare PEER JOINED LIST
         let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.data)
         this.state.joinedNXPlist = gridPeer
@@ -674,8 +689,8 @@ export default {
           }
         }
       } else if (backJSON.type === 'peerprivate') {
-        // console.log('private librayr back data-----------------')
-        // console.log(backJSON)
+        console.log('private librayr back data-----------------')
+        console.log(backJSON)
         // set the HOPholder to say data for this back
         Vue.set(state.HOPHolder, backJSON.board, {})
         Vue.set(state.HOPHolder, backJSON.board, 'request')
@@ -721,8 +736,6 @@ export default {
         Vue.set(state.HOPreturn, 'publiclib', true)
         // save copy of te ref contract indexes
         this.state.liveRefContIndex = backJSON.referenceContracts
-        console.log('after public library bacoooooooooooooooooooooooooooooooooook')
-        console.log(this.state.liveRefContIndex)
         // prepare NPXs in NETWORK
         this.state.networkExpModules = backJSON.networkExpModules
         let gridAnnon = ToolUtility.prepareAnnonNXPlist(backJSON.networkExpModules)

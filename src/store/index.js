@@ -5,6 +5,7 @@ import HopPreare from '@/mixins/HOPprepare.js'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
 import VisToolsUtility from '@/mixins/visualUtility.js'
+import hashObject from 'object-hash'
 // import { update } from 'lodash'
 const moment = require('moment')
 const HopprepareUtility = new HopPreare()
@@ -819,7 +820,7 @@ const store = new Vuex.Store({
       }
     },
     async actionVisUpdate (context, update) {
-      console.log('vistoolbar++++++UPdateAction')
+      console.log('vistoolbar+++++++++++++++++++UPdateAction')
       console.log(update)
       this.state.ecsMessageLive = ''
       // perform checks for missing input data to form ECS-out bundle
@@ -878,6 +879,9 @@ const store = new Vuex.Store({
           }
           // what device has seen selected
           updateSettings = ContextOut.prepareSettingsDevices(updateSettings, update.mData)
+          console.log(updateSettings)
+          updateSettings.value.info.controls.date = update.startperiod
+          updateSettings.value.info.controls.rangedate = update.rangechange
           updateModules.push(updateSettings)
           // update the devices asked for
           progressContext.device = update.mData
@@ -910,10 +914,16 @@ const store = new Vuex.Store({
       } else {
         updateContract.input = ''
       }
+      // form hashID for output
+      let outHash = hashObject(updateModules)
+      // also need to tell solopace the outhash so know what to match incoming data to location
+      update.outhash = outHash
+      this.dispatch('actionOuthashTrack', update)
       // keep state of live modules
       updateContract.key = update.nxpCNRL
       updateContract.modules = updateModules
       updateContract.entityUUID = entityUUID
+      updateContract.outhash = outHash
       context.commit('setUpdatesOUT', updateContract)
       // update existing ecs bundle send to peerLink
       let ECSbundle = {}
