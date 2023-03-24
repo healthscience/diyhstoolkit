@@ -146,7 +146,9 @@ export default {
     },
     SET_ADD_VISSPACE (state, inVerified) {
       // add to BentoSpace or SoloSpace?
-      // console.log(this.state.solospace.soloState)
+      console.log('solospace add')
+      console.log(inVerified)
+      console.log(this.state.solospace.soloState)
       // need unquie identifer for grid
       let random = Math.random()
       let deviceUUID = random.toString()
@@ -242,6 +244,7 @@ export default {
     SET_COPY_UPDATE (state, inVerified) {
       console.log('update copy with UUID+++++++++++++++++++')
       console.log(inVerified)
+      console.log(state.initialGrid)
       // switch copy Module for now hash ID but keep all location info.
       // match outid to in ID
       let matchOutBack = {}
@@ -250,9 +253,59 @@ export default {
           matchOutBack = outMat
         }
       }
+      // check if establish cell
+      let existingCheck = Object.keys(matchOutBack)
+      if (existingCheck.length === 0) {
+        console.log('existing')
+        matchOutBack = inVerified.context
+        console.log('Existing cell ---> update visualisation+++++++')
+        let updateModuleInfo = matchOutBack // inVerified
+        console.log(updateModuleInfo)
+        // temp use outhash as module UUiD or use device and expand to array and loop over
+        let copyMod = inVerified.context.input.outhash
+        updateModuleInfo.moduleCNRL = copyMod
+        // add to solospace holder
+        // Vue.set(state.soloData, copyMod, {})
+        // Vue.set(state.soloData[copyMod], 'data', [])
+        // Vue.set(state.soloData[copyMod], 'prime', {})
+        console.log(state.soloData)
+        console.log(copyMod)
+        console.log(matchOutBack.mData)
+        console.log(inVerified.data)
+        Vue.set(state.soloData[copyMod].data, matchOutBack.mData, inVerified.data)
+        // state.soloData[copyMod].data.push(inVerified.data)
+        let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
+        Vue.set(state.soloData[copyMod], 'prime', contextPlacer)
+        // set the progress bar info
+        let setProgress = {}
+        setProgress = { text: 'Updating visualisation', active: false }
+        // Vue.set(this.state.visProgress, copyMod, {})
+        Vue.set(this.state.visProgress[copyMod], matchOutBack.mData, setProgress)
+        // console.log(this.state.visProgress)
+        // set toolbars
+        let setVisTools = {}
+        setVisTools = { text: 'open tools', active: true }
+        // Vue.set(this.state.toolbarVisStatus, copyMod, {})
+        Vue.set(this.state.toolbarVisStatus[copyMod], matchOutBack.mData, setVisTools)
+        // set the open data tools
+        let setOPenDataToolbar = { text: 'open data', active: false }
+        // Vue.set(this.state.opendataTools, copyMod, {})
+        Vue.set(this.state.opendataTools[copyMod], matchOutBack.mData, setOPenDataToolbar)
+        // this.dispatch('actionCopycell', updateModuleInfo)
+        let newCelladded = {}
+        newCelladded.cell = {}
+        newCelladded.cell.i = matchOutBack.mData.toString()
+        newCelladded.mod = matchOutBack.moduleCNRL
+        newCelladded.x = 120
+        newCelladded.y = 1900
+        // Vue.set(state.initialGrid[matchOutBack.nxpCNRL], matchOutBack.moduleCNRL, [])
+        // state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
+        // state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
+      }
       state.liveCopy = matchOutBack.moduleCNRL
       state.liveTempOuthash = inVerified.context.input.outhash
       // is the match a copy or existing cell?
+      console.log(matchOutBack)
       let stringCopycheck = matchOutBack.moduleCNRL.slice(0, 4)
       if (stringCopycheck === 'copy') {
         // remove the copy

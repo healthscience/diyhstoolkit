@@ -1,6 +1,6 @@
 <template>
   <div id="new-experimentmenu">
-    <button type="button" class="btn-newnxp" @click="newType()">Data</button>
+    <button type="button" class="btn-newnxp" @click="newType()">Create</button>
     <div id="new-type" v-if="newtypeShow === true">
       <!-- <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button> -->
       <button type="button" class="btn-new" @click="newExperiment('join')">Join</button>
@@ -35,7 +35,7 @@
         <div id="nxp-feedback" v-if="newNXPfeedbackActive === true">
           {{ newxnpFeedback }}
         </div>
-        <button class="contribute-nxp-button" @click="contributeNXP" >Contribute experiment to network</button>
+        <button class="contribute-nxp-button" @click="contributeNXP" >Contribute Board</button>
       </template>
     </new-networkexperiment>
     <networklibrary-modal v-show="isModalNLib" @closenl="closeModalNLib">
@@ -151,7 +151,9 @@ export default {
 }
 
 .btn-newnxp, .btn-new {
+  color: white;
   font-size: 1.4em;
+  background-color: rgb(245, 162, 8);
 }
 
 .btn-newnxp:hover, .btn-new:hover {

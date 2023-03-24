@@ -14,7 +14,7 @@
         </draggable>
       </div>
       <div class="col-4">
-        <h3>Experiment - drag modules across <a href="" id="network-library-damahub" @click.prevent="networLibrary()">Network Library</a></h3>
+        <h3>Drag modules across <a href="" id="network-library-damahub" @click.prevent="networLibrary()">Network Library</a></h3>
         <networklibrary-modal v-show="isModalNLib" @closenl="closeModalNLib">
           <template v-slot:header>
           <!-- The code below goes into the header slot -->
