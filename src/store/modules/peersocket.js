@@ -231,6 +231,7 @@ export default {
         // get the time as a string
         let time = date.toLocaleTimeString()
         Vue.set(this.state.aiInterface.caleaiReply, 'text', backJSON.data.text)
+        Vue.set(this.state.aiInterface.caleaiReply, 'query', '123')
         Vue.set(this.state.aiInterface.caleaiReply, 'time', time)
         Vue.set(this.state.aiInterface.caleaiReply, 'active', true)
       } else if (backJSON.type === 'lifeboard') {

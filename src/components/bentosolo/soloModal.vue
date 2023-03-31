@@ -76,7 +76,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 99%;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   .modal-header {

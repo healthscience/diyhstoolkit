@@ -144,7 +144,7 @@ export default {
     SET_CLONE_SOLODATA: (state, inVerified) => {
       state.soloData = inVerified
     },
-    SET_ADD_VISSPACE (state, inVerified) {
+    SET_ADD_SOLOSPACE (state, inVerified) {
       // add to BentoSpace or SoloSpace?
       console.log('solospace add')
       console.log(inVerified)
@@ -466,7 +466,7 @@ export default {
       context.commit('SET_CLONE_SOLODATA', update)
     },
     actionVisSpaceAdd (context, update) {
-      context.commit('SET_ADD_VISSPACE', update)
+      context.commit('SET_ADD_SOLOSPACE', update)
     },
     actionOuthashTrack (context, update) {
       context.commit('SET_TRACK_OUT', update)

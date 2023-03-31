@@ -3,9 +3,9 @@
     <button type="button" class="btn-newnxp" @click="newType()">Create</button>
     <div id="new-type" v-if="newtypeShow === true">
       <!-- <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button> -->
-      <button type="button" class="btn-new" @click="newExperiment('join')">Join</button>
-      <button type="button" class="btn-new" @click="newExperiment('experiment')">Board</button>
-      <button type="button" class="btn-new" @click="newLibrary('library')">Library</button>
+      <button type="button" class="btn-create" @click="newExperiment('join')">Join</button>
+      <button type="button" class="btn-create" @click="newExperiment('experiment')">Board</button>
+      <button type="button" class="btn-create" @click="newLibrary('library')">Library</button>
     </div>
     <new-lifeboard v-show="isModalNewLifeboard" @close="closeModalNewLB">
       <template v-slot:header>
@@ -157,6 +157,15 @@ export default {
 }
 
 .btn-newnxp:hover, .btn-new:hover {
+  font-size: 1.4em;
+  background-color: #4CAF50;
+}
+
+.btn-create {
+  font-size: 1.4em;
+}
+
+.btn-create:hover {
   font-size: 1.4em;
   background-color: #4CAF50;
 }

@@ -25,7 +25,7 @@
             <solo-toolbar :board="sbboard"></solo-toolbar>
           </div>
           <minisolo-map></minisolo-map>
-          <div id="spacesolo-shaper">
+          <div id="spacesolo-shaper" >
             <div id="dragwheelsolo-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
               <div id="solo-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
                 <vue-draggable-resizable v-for="soloi of BoardstatusData" :key="soloi.id" id="solocellspace" data-no-dragscroll w="auto" h="auto" :parent="true"   @click.prevent="setActiveSolo(soloi)" @activated="onDragSolostartCallback(soloi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handlesolo'" :x=soloi.x :y=soloi.y>
@@ -286,7 +286,7 @@ export default {
 <style scoped>
 .solo-space {
   position: relative;
-  border: 3px solid red;
+  border: 0px solid rgb(100, 208, 24);
 }
 
 #solo-grid {
@@ -300,15 +300,15 @@ export default {
 }
 
 #dragwheelsolo-space {
-  height: 16000px;
-  width: 1000%;
-  overflow-x: hidden;
+  height: 98vh;
+  width: 98vw;
+  overflow: hidden;
   border: 0px dashed blue;
 }
 
 #solo-placeholder {
-  height: 16000px;
-  width: 1000%;
+  height: 900vh;
+  width: 900vw;
   padding-top: 60px;
   margin: auto;
   transform-origin: left top;

@@ -10,7 +10,11 @@
         </div>
         <div class="cale-reply" id="cale-chat-right">
           <span class="right-chat">{{ aiResponse.time }}</span>
-          <div class="right-chat">{{ aiResponse.text }}</div>
+          <div class="right-chat">{{ aiResponse.text }} ---
+            <span v-if="aiResponse.query">
+              <button id="new-query" @click.prevent="beebeeChartSpace(aiResponse.query)">query</button>
+            </span>
+          </div>
           <img class="right-chat-cale" src="../.././assets/logo.png" alt="bbAI">
         </div>
       </div>
@@ -20,7 +24,7 @@
           <input type="text" id="askinput" name="ainame" v-on:keyup="askeCalesave" v-model="askInput">
         </form>
         <button v-if="caleAIStatus.active === true" id="natlang-ask" @click.prevent="submitAsk">
-          Ask BB
+          Ask BeeBee
         </button>
       </div>
     </div>
@@ -64,6 +68,16 @@ export default {
     },
     submitAsk () {
       this.$store.dispatch('actionHelpaskentry', true)
+    },
+    beebeeChartSpace (board) {
+      console.log('beebee chart dispaly')
+      console.log(board)
+      let spaceContext = {}
+      spaceContext.nxpCNRL = '0c3e5833d490ed0b0ccefa677e44e009a1ab2a12'
+      spaceContext.moduleCNRL = '370f110a0ae6d6fb3b53e667500e28e8849371e7'
+      spaceContext.moduleType = 'cnrl-114'
+      spaceContext.mData = '3'
+      this.$store.dispatch('actionVisSpaceAdd', spaceContext)
     }
   }
 }
