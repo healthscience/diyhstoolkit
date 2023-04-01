@@ -12,30 +12,30 @@
         <input type="range" min="0.1" max="2" step="0.1" v-model.number="scalelocal" @change="setzoomScale">
           {{ scalespace }} %
       </div>
-      <div id="story-life">-
-          <!-- <a @click.prevent="viewStorytools" href="" id="story-button">Story</a> -->
+      <div id="story-life">
+          <button @click.prevent="viewStorytools" id="story-button">Story</button>
       </div>
-      <div id="routine-life"> -
-          <!-- <a @click.prevent="viewRoutines" href="" id="routine-button">Routines</a> -->
+      <div id="routine-life">
+          <button @click.prevent="viewRoutines" href="" id="routine-button">Routines</button>
+      </div>
+      <div id="combine-list">
+        <button class="save-space" @click.prevent="combineSelected()">+  +</button>
       </div>
       <div id="space-save">
         <button class="save-space" @click.prevent="saveSpaceLayout()">save layout</button>
-      </div>
-      <div id="combine-list">
-        <!--<button class="save-space" @click.prevent="combineSelected()">combine</button>-->
       </div>
       <div id="replicate-status" v-if="replicataStatus === true">
         <div class="rep-status">Replication in progess</div>
       </div>
     </div>
-    <div v-if="liveStorytools === true" id="story-board">
-      <story-tools></story-tools>
+    <div v-if="storyspaceStatus.active === true" id="story-board">
+      <story-tools :solospace="board"></story-tools>
     </div>
   </div>
 </template>
 
 <script>
-import StoryTools from '@/components/spaces/grids/story/storyTools.vue'
+import StoryTools from '@/components/bentosolo/story/storyTools.vue'
 
 export default {
   name: 'ExperimentNetwork',
@@ -58,6 +58,9 @@ export default {
       let scalePercent = roundNumber * 100
       return scalePercent.toFixed(0)
     },
+    storyspaceStatus: function () {
+      return this.$store.state.solospace.storyState
+    },
     combinedList: function () {
       return this.$store.state.combineSpaceList
     },
@@ -70,12 +73,12 @@ export default {
       scalelocal: 1,
       scaleSetting:
       {
-        text: 'mouse scale off',
+        text: 'mouse',
         active: false
       },
       zoomscaleStatus: false,
       // scale: 1,
-      liveStorytools: false,
+      liveStorytools: true,
       replicateDataStatus: false
     }
   },
@@ -84,11 +87,11 @@ export default {
       // set mouse scaling on or off  (add slider with time)
       this.scaleSetting.active = !this.scaleSetting.active
       if (this.scaleSetting.active === true) {
-        this.scaleSetting.text = 'Mouse Scale On'
+        this.scaleSetting.text = 'Mouse'
         this.zoomscaleStatus = true
         this.$store.dispatch('actionZoomscale', true)
       } else if (this.scaleSetting.active === false) {
-        this.scaleSetting.text = 'Mouse Scale Off'
+        this.scaleSetting.text = 'Mouse'
         this.zoomscaleStatus = false
         this.$store.dispatch('actionZoomscale', false)
       }
@@ -97,7 +100,8 @@ export default {
       this.$store.dispatch('actionScalevalue', this.scalelocal)
     },
     viewStorytools (ev) {
-      this.liveStorytools = !this.liveStorytools
+      // this.liveStorytools = !this.liveStorytools
+      this.$store.dispatch('actionStoryspace', this.board)
     },
     viewRoutines () {
       console.log('rounte patterns / reminders')
@@ -135,7 +139,7 @@ export default {
   gap: 10px;
   width: 100%;
   height: 60px;
-  border-bottom: 2px solid orange;
+  border-bottom: 1px dashed orange;
   background-color: white;
   padding: .1em;
 }

@@ -121,13 +121,13 @@ export default {
   height: 100%;
   width: 100%;
   position: sticky;
-  top: 8em;
+  top: 2em;
   z-index: 16;
 }
 
 #scale-tools {
   position: fixed;
-  top: 100px;
+  top: 60px;
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto;
   justify-content: center;

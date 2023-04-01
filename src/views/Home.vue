@@ -5,9 +5,9 @@
         <header>BentoBox - DS</header>
         <ul>
           <li>1. Peer to Peer Data Science</li>
-          <li>2. Charting Time Analysis</li>
-          <li>3. Private or Collaborate</li>
-          <li>4. Personal AI</li>
+          <li>2. AI supported Charting</li>
+          <li>3. Easy data aggregation</li>
+          <li>4. Build DML networks</li>
         </ul>
         <div id="interface">
           <div id="cale-ai">

@@ -1,55 +1,63 @@
 <template>
   <div class="network-experiments">
-    <div id="toolkit-boards" v-if="peerauth === true"> <!--z18 -->
+    <div id="beebee-tools"  v-if="peerauth === true">
       <div class="toolkit-logo">
-        <img class="small-logo" alt="logo" src="../.././assets/logo.png">
+        <button @click="beebeeOpen">
+          <img class="small-logo" alt="logo" src="../.././assets/logo.png">beebee
+        </button>
       </div>
-      <div id="peer-views" v-if="flowviews === true">
-        <div id="flow-space" class="flow-menu">
-          <div id="flow-type">
-            <button id="select-flow" @click.prevent="setFlow">Space</button>
-            <div id="active-space-selected" v-if="flowMenu === false">
-              <button class="select-peer-medium">
-                {{ spaceType }}
-              </button>
-            </div>
-            <div id="active-space-selected" v-else>
-            </div>
-            <div id="flow-styles" v-if="flowMenu === true"><!--z26 -->
-              <!-- <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Lifeboards' }" id="Lifeboards" @click.prevent="setView($event)">
-                Lifeboards
-              </button> -->
-              <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Experiment' }" id="Boards" @click.prevent="setView($event)">
-                Boards
-              </button>
-              <!-- <button class="peer-medium" id="timeline" v-bind:class="{ active: viewFlowtype === 'timeline' }"  @click.prevent="setView($event)">
-                Timeline
-              </button> -->
+      <div id="toolkit-boards" v-if="peerauth === true && beebeeOpenStatus === true"> <!--z18 -->
+        <div id="beebee-support">
+          <div id="peer-views" v-if="flowviews === true">
+            <div id="flow-space" class="flow-menu">
+              <div id="flow-type">
+                <button id="select-flow" @click.prevent="setFlow">Space</button>
+                <div id="active-space-selected" v-if="flowMenu === false">
+                  <button class="select-peer-medium">
+                    {{ spaceType }}
+                  </button>
+                </div>
+                <div id="active-space-selected" v-else>
+                </div>
+                <div id="flow-styles" v-if="flowMenu === true"><!--z26 -->
+                  <!-- <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Lifeboards' }" id="Lifeboards" @click.prevent="setView($event)">
+                    Lifeboards
+                  </button> -->
+                  <button class="peer-medium" v-bind:class="{ active: viewFlowtype === 'Experiment' }" id="Boards" @click.prevent="setView($event)">
+                    Boards
+                  </button>
+                  <!-- <button class="peer-medium" id="timeline" v-bind:class="{ active: viewFlowtype === 'timeline' }"  @click.prevent="setView($event)">
+                    Timeline
+                  </button> -->
+                </div>
+              </div>
+              <div id="sub-flow-menu">
+                <space-menu></space-menu>
+              </div>
+              <!--<div class="flow-menu">
+                <div class="live-network-header">
+                  <div class="network-toolbar">
+                    <form id="search-form">
+                      Search <input id="query-input" name="query" @keyup="textQuery" v-model="searchText">
+                    </form>
+                  </div>
+                </div>
+              </div>-->
             </div>
           </div>
-          <div id="sub-flow-menu">
-            <space-menu></space-menu>
-          </div>
+          <chat-interface></chat-interface>
+          <!-- end of beebeeHelp-->
         </div>
-        <div class="flow-menu">
-          <div class="live-network-header">
-            <div class="network-toolbar">
-              <form id="search-form">
-                Search <input id="query-input" name="query" @keyup="textQuery" v-model="searchText">
-              </form>
-            </div>
-            <div class="network-toolbar" id="new-button-top">
-              <new-experiment></new-experiment>
-            </div>
-          </div>
+        <div id="list-flows" v-if="peerauth === true"> <!--z25 -->
+          <!-- <live-lifestyle v-if="spaceType === 'Lifeboards'"></live-lifestyle>-->
+         <live-networknxp v-if="spaceType === 'Boards' && spaceState === 'private'"></live-networknxp>
+          <public-networknxp v-if="spaceType === 'publicexperiments' && spaceState === 'public'"></public-networknxp>
+         <!-- <live-timeline v-if="spaceType === 'timeline'"></live-timeline> -->
         </div>
       </div>
-    </div>
-    <div id="list-flows" v-if="peerauth === true"> <!--z25 -->
-      <!-- <live-lifestyle v-if="spaceType === 'Lifeboards'"></live-lifestyle>-->
-      <live-networknxp v-if="spaceType === 'Boards' && spaceState === 'private'"></live-networknxp>
-      <public-networknxp v-if="spaceType === 'publicexperiments' && spaceState === 'public'"></public-networknxp>
-      <!-- <live-timeline v-if="spaceType === 'timeline'"></live-timeline> -->
+      <div class="create-toolbar" id="new-button-top">
+        <new-experiment></new-experiment>
+      </div>
     </div>
     <!-- <lifeboard-network v-if="lifeView === true"></lifeboard-network> -->
     <bento-grid v-if="nxpView === true"></bento-grid>
@@ -57,6 +65,7 @@
 </template>
 
 <script>
+import ChatInterface from '@/components/bbai/chatInterface.vue'
 import SpaceMenu from '@/components/spaces/menues/spaceMenu.vue'
 import NewExperiment from '@/components/bentoboard/new/newExperiment.vue'
 // import LiveLifestyle from '@/components/home/LiveLifeboard.vue'
@@ -69,6 +78,7 @@ import BentoGrid from '@/components/spaces/grids/bentoGrid.vue'
 export default {
   name: 'Network-Spaces',
   components: {
+    ChatInterface,
     SpaceMenu,
     NewExperiment,
     // LiveLifestyle,
@@ -110,7 +120,8 @@ export default {
       newtypeShow: false,
       lifeboardName: '',
       flowMenu: false,
-      lifeboardState: 'private'
+      lifeboardState: 'private',
+      beebeeOpenStatus: false
     }
   },
   methods: {
@@ -125,6 +136,10 @@ export default {
       this.viewFlowtype = e.target.id
       this.$store.dispatch('actionLifeview', viewLive)
       this.flowMenu = !this.flowMenu
+    },
+    beebeeOpen () {
+      console.log('open bee bee help')
+      this.beebeeOpenStatus = !this.beebeeOpenStatus
     }
   }
 }
@@ -136,18 +151,22 @@ export default {
   grid-template-columns: 1fr;
   width: 100%;
   height: 100%;
-  border: 0px dashed green;
 }
 
-#toolkit-boards {
+#beebee-tools {
   display: grid;
-  grid-template-columns: 1fr 10fr;
-  background-color: white;
+  grid-template-columns: 1fr 9fr 1fr;
+}
+
+#beebee-support {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.toolkit-logo {
   position: fixed;
-  top: 3em;
-  border-top: 2px solid lightgrey;
-  border-bottom: 2px solid lightgrey;
-  padding-top: 0em;
+  top: 2em;
+  left: 0.2em;
   z-index: 32;
 }
 
@@ -156,11 +175,30 @@ export default {
   height: 50px;
 }
 
+#toolkit-boards {
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: white;
+  position: fixed;
+  top: 5.4em;
+  left: 4em;
+  border-top: 2px solid lightgrey;
+  border-bottom: 2px solid lightgrey;
+  padding-top: 0em;
+  z-index: 32;
+  box-shadow: 20px 20px 20px 10px rgb(151, 151, 205);
+}
+
+.create-toolbar {
+  position: fixed;
+  top: 3em;
+  right: 1em;
+}
+
 #peer-views {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1fr;
   border: 0px solid red;
-  align-items: center;
 }
 
 #flow-type {
@@ -214,18 +252,10 @@ export default {
   z-index: 26;
 }
 
-.flow-menu {
-  border: 0px solid red;
-}
-
 #sub-flow-menu {
   display: grid;
   align-self: start;
   width: 240px;
-}
-
-.network-toolbar {
-  display: grid;
 }
 
 .live-network-header {
@@ -250,7 +280,7 @@ export default {
 
 #list-flows {
   height: inherit;
-  position: fixed;
+  display: block;
   top: 6.8em;
   margin-left: 10px;
   z-index: 29;

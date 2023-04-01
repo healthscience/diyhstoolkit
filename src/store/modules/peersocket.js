@@ -1762,10 +1762,10 @@ export default {
       saveSpacePosition.action = 'save-position'
       saveSpacePosition.data = this.state.solopositionSpace.initialGrid
       saveSpacePosition.jwt = this.state.jwttoken
-      // const saveJSONp = JSON.stringify(saveSpacePosition)
+      const saveJSONp = JSON.stringify(saveSpacePosition)
       console.log('save solospace layout')
       console.log(saveSpacePosition)
-      // Vue.prototype.$socket.send(saveJSONp)
+      Vue.prototype.$socket.send(saveJSONp)
     },
     actionSyncRequest (context, update) {
       const syncDataBundle = {}

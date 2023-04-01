@@ -6,6 +6,11 @@ export default {
     {
       active: false,
       board: ''
+    },
+    storyState:
+    {
+      active: false,
+      story: ''
     }
   },
   getters: {
@@ -24,8 +29,21 @@ export default {
     },
     SET_ACTIVE_SMODULE: (state, inVerified) => {
       console.log('set active solo module')
+    },
+    SET_STORY_STATE: (state, inVerified) => {
+      console.log('story status')
+      console.log(inVerified)
+      // set active or not
+      let status = state.storyState.active
+      if (status === true) {
+        status = false
+      } else {
+        status = true
+      }
+      Vue.set(state.storyState, 'active', status)
+      Vue.set(state.storyState, 'story', inVerified)
+      console.log(state.storyState)
     }
-
   },
   actions: {
     actionSolospace: (context, update) => {
@@ -34,6 +52,9 @@ export default {
     },
     actionSoloactiveNXP (context, update) {
       context.commit('SET_ACTIVE_SMODULE', update)
+    },
+    actionStoryspace: (context, update) => {
+      context.commit('SET_STORY_STATE', update)
     }
   }
 }
