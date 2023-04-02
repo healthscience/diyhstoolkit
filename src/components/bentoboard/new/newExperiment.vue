@@ -3,7 +3,7 @@
     <button type="button" class="btn-newnxp" @click="newType()">Create</button>
     <div id="new-type" v-if="newtypeShow === true">
       <!-- <button type="button" class="btn-new" @click="newExperiment('lifeboard')">lifeboard</button> -->
-      <button type="button" class="btn-create" @click="newExperiment('join')">Join</button>
+      <!--<button type="button" class="btn-create" @click="newExperiment('join')">Join</button>-->
       <button type="button" class="btn-create" @click="newExperiment('experiment')">Board</button>
       <button type="button" class="btn-create" @click="newLibrary('library')">Library</button>
     </div>

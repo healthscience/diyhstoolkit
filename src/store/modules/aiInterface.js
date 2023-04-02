@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
   state: {
+    beebeeStatus: false,
     statusCALE:
     {
       text: 'off',
@@ -88,6 +89,9 @@ export default {
       aiMessageout.jwt = inVerified.token
       // const caleMessage = JSON.stringify(aiMessageout)
       // Vue.prototype.$socket.send(caleMessage)
+    },
+    SET_STATUS_BB: (state, inVerified) => {
+      state.beebeeStatus = !state.beebeeStatus
     }
   },
   actions: {
@@ -114,6 +118,9 @@ export default {
       dataAI.token = context.rootState.jwttoken
       dataAI.update = update
       context.commit('SET_FUTURE_DATA', dataAI)
+    },
+    actionBBstate: (context) => {
+      context.commit('SET_STATUS_BB')
     }
   }
 }

@@ -4,8 +4,8 @@
       <div v-if="peerauth === false" id="diy-summary">
         <header>BentoBox - DS</header>
         <ul>
-          <li>1. Peer to Peer Data Science</li>
-          <li>2. AI supported Charting</li>
+          <li>1. No-code Data Science</li>
+          <li>2. AI supported Charts</li>
           <li>3. Easy data aggregation</li>
           <li>4. Build DML networks</li>
         </ul>

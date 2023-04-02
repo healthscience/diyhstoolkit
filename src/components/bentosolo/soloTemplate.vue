@@ -16,7 +16,9 @@
       <template v-slot:solospace>
         <div id="solo-grid">
           <div id="bb-chat">
-            <button @click="openBBai">BB chat</button>
+            <button @click="openBBai" class="beebee-awake"  v-bind:class="{ active: openBB === true }">
+              <img class="small-logo" alt="logo" src="../.././assets/logo.png">beebee
+            </button>
             <div id="bb-chat-dialogue" v-if="openBB === true">
               <chat-interface></chat-interface>
             </div>
@@ -295,6 +297,15 @@ export default {
   border: 0px dashed black;
 }
 
+.beebee-awake.active {
+  background-color: rgb(128, 128, 212);
+}
+
+.small-logo {
+  width: 50px;
+  height: 50px;
+}
+
 #spacesolo-shaper {
   position: static;
 }
@@ -353,16 +364,16 @@ export default {
   border: 0px dashed black;
   position: fixed;
   top: 25px;
-  left: 840px;
+  left: 2em;
   z-index: 31;
 }
 
 #bb-chat-dialogue {
-  border: 2px dashed red;
+  border: 0px dashed red;
   position: fixed;
   top: 25px;
-  left: 20px;
-  z-index: 31;
+  left: 9em;
+  z-index: 61;
   background-color: white;
 }
 

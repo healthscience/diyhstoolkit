@@ -2,7 +2,7 @@
   <div class="network-experiments">
     <div id="beebee-tools"  v-if="peerauth === true">
       <div class="toolkit-logo">
-        <button @click="beebeeOpen">
+        <button @click="beebeeOpen" class="beebee-awake"  v-bind:class="{ active: beebeeOpenStatus === true }">
           <img class="small-logo" alt="logo" src="../.././assets/logo.png">beebee
         </button>
       </div>
@@ -48,11 +48,17 @@
           <chat-interface></chat-interface>
           <!-- end of beebeeHelp-->
         </div>
-        <div id="list-flows" v-if="peerauth === true"> <!--z25 -->
+        <div id="list-flows" v-if="peerauth === true">
+          <header>
+            {{ spaceType }}
+          </header>
           <!-- <live-lifestyle v-if="spaceType === 'Lifeboards'"></live-lifestyle>-->
          <live-networknxp v-if="spaceType === 'Boards' && spaceState === 'private'"></live-networknxp>
           <public-networknxp v-if="spaceType === 'publicexperiments' && spaceState === 'public'"></public-networknxp>
          <!-- <live-timeline v-if="spaceType === 'timeline'"></live-timeline> -->
+        </div>
+        <div id="peer-flows" v-if="peerauth === true && spaceType === 'invite'">
+          <invite-peers></invite-peers>
         </div>
       </div>
       <div class="create-toolbar" id="new-button-top">
@@ -73,6 +79,7 @@ import LiveNetworknxp from '@/components/home/LiveNetwork.vue'
 import PublicNetworknxp from '@/components/home/PublicNetwork.vue'
 // import LiveTimeline from '@/components/home/LiveTimeline.vue'
 // import LifeboardNetwork from '@/components/spaces/grids/LifeboardNetwork.vue'
+import InvitePeers from '@/components/connect/peernetwork/invitePeers.vue'
 import BentoGrid from '@/components/spaces/grids/bentoGrid.vue'
 
 export default {
@@ -80,6 +87,7 @@ export default {
   components: {
     ChatInterface,
     SpaceMenu,
+    InvitePeers,
     NewExperiment,
     // LiveLifestyle,
     LiveNetworknxp,
@@ -91,6 +99,9 @@ export default {
   computed: {
     peerauth: function () {
       return this.$store.state.peerauthStatus
+    },
+    beebeeOpenStatus: function () {
+      return this.$store.state.aiInterface.beebeeStatus
     },
     flowviews: function () {
       return this.$store.state.flowviews
@@ -120,8 +131,8 @@ export default {
       newtypeShow: false,
       lifeboardName: '',
       flowMenu: false,
-      lifeboardState: 'private',
-      beebeeOpenStatus: false
+      lifeboardState: 'private'
+      // beebeeOpenStatus: false
     }
   },
   methods: {
@@ -138,8 +149,8 @@ export default {
       this.flowMenu = !this.flowMenu
     },
     beebeeOpen () {
-      console.log('open bee bee help')
-      this.beebeeOpenStatus = !this.beebeeOpenStatus
+      this.$store.dispatch('actionBBstate')
+      this.$store.dispatch('actionLifeview', 'invite')
     }
   }
 }
@@ -156,6 +167,10 @@ export default {
 #beebee-tools {
   display: grid;
   grid-template-columns: 1fr 9fr 1fr;
+}
+
+.beebee-awake.active {
+  background-color: rgb(128, 128, 212);
 }
 
 #beebee-support {
@@ -187,6 +202,7 @@ export default {
   padding-top: 0em;
   z-index: 32;
   box-shadow: 20px 20px 20px 10px rgb(151, 151, 205);
+  padding-top: 1em;
 }
 
 .create-toolbar {
@@ -284,6 +300,8 @@ export default {
   top: 6.8em;
   margin-left: 10px;
   z-index: 29;
-  border: 0px dashed blue;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  border-bottom: 1px dashed lightgrey;
 }
 </style>

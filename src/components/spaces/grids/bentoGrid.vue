@@ -27,10 +27,13 @@
                     <div class="remove-controls">
                       <div id="dashboard-controls">
                         <div class="dash-controls-master">
+                          <button type="button" class="btn" @click="boardInvite(dashi)">+ Invite</button>
+                        </div>
+                        <div class="dash-controls-master">
                           <button type="button" class="btn" @click="soloSpaceOpen(dashi)">SoloSpace</button>
                         </div>
                         <div class="dash-controls-master">
-                          <button type="button" class="btn" @click="closeDashboard(dashi)">Close dashboard</button>
+                          <button type="button" class="btn" @click="closeDashboard(dashi)">Close</button>
                         </div>
                         <div class="dash-controls-master">
                           <a href="" id="remove-nxp" @click.prevent="removeDashboard(dashi)">remove</a>
@@ -284,6 +287,10 @@ export default {
     removeConfirmDashboard (dc) {
       this.$store.dispatch('actionRemoveDashboard', this.removeNXPid)
       this.messageRemove = !this.messageRemove
+    },
+    boardInvite (board) {
+      console.log('add peer to board collboration')
+      this.$store.dispatch('actionBBstate', board)
     }
   }
 }
@@ -342,7 +349,7 @@ export default {
 
 #dashboard-controls {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .dashboard-space {
