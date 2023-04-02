@@ -69,7 +69,7 @@ export default {
       scalelocal: 1,
       scaleSetting:
       {
-        text: 'mouse scale off',
+        text: 'mouse scale',
         active: false
       },
       zoomscaleStatus: false,
@@ -83,11 +83,11 @@ export default {
       // set mouse scaling on or off  (add slider with time)
       this.scaleSetting.active = !this.scaleSetting.active
       if (this.scaleSetting.active === true) {
-        this.scaleSetting.text = 'Mouse Scale On'
+        this.scaleSetting.text = 'Mouse Scale'
         this.zoomscaleStatus = true
         this.$store.dispatch('actionZoomscale', true)
       } else if (this.scaleSetting.active === false) {
-        this.scaleSetting.text = 'Mouse Scale Off'
+        this.scaleSetting.text = 'Mouse Scale'
         this.zoomscaleStatus = false
         this.$store.dispatch('actionZoomscale', false)
       }

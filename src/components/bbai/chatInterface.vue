@@ -68,6 +68,7 @@ export default {
     },
     submitAsk () {
       this.$store.dispatch('actionHelpaskentry', true)
+      this.askInput = ''
     },
     beebeeChartSpace (board) {
       console.log('beebee chart dispaly')

@@ -115,6 +115,9 @@ export default {
     zoomscaleValue: function () {
       return this.$store.state.solopositionSpace.soloZoom
     },
+    zoomscaleStatus: function () {
+      return this.$store.state.solopositionSpace.scaleMouse
+    },
     toolbarStatusLive: function () {
       if (!this.$store.state.toolbarStatus) {
         return { active: false, text: '' }
@@ -220,9 +223,9 @@ export default {
       // use mouse wheel to zoom in out
       if (this.zoomscaleStatus === true) {
         if (event.deltaY < 0) {
-          this.$store.dispatch('actionScalewheel', 0.05)
+          this.$store.dispatch('actionSoloScalewheel', 0.05)
         } else {
-          this.$store.dispatch('actionScalewheel', -0.05)
+          this.$store.dispatch('actionSoloScalewheel', -0.05)
         }
       }
     },

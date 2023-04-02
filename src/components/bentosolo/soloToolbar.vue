@@ -4,16 +4,6 @@
       <div class="scale-item">
         SoloSpace
       </div>
-      <div class="scale-item">
-       <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
-      </div>
-      <div class="scale-item">
-        <label>Scale</label>
-        <!--<input type="range" min="0.1" max="2" step="0.1" v-model.number="scalelocal" @change="setzoomScale">-->
-        <button class="point-change" @click="setzoomScale(-0.05)">-</button>
-        {{ scalespace }} %
-        <button class="point-change" @click="setzoomScale(0.05)">+</button>
-      </div>
       <div id="story-life">
           <button @click.prevent="viewStorytools" id="story-button">Story</button>
       </div>
@@ -28,6 +18,16 @@
       </div>
       <div id="replicate-status" v-if="replicataStatus === true">
         <div class="rep-status">Replication in progess</div>
+      </div>
+      <div class="scale-item">
+       <button class="scale-space" v-bind:class="{ active: scaleSetting.active }" @click.prevent="setSpacescale()">{{ scaleSetting.text }}</button>
+      </div>
+      <div class="scale-item scalebuttons">
+        <label>Scale</label>
+        <!--<input type="range" min="0.1" max="2" step="0.1" v-model.number="scalelocal" @change="setzoomScale">-->
+        <button class="point-change" @click="setzoomScale(-0.05)">-</button>
+        {{ scalespace }} %
+        <button class="point-change" @click="setzoomScale(0.05)">+</button>
       </div>
     </div>
     <div v-if="storyspaceStatus.active === true" id="story-board">
@@ -86,16 +86,17 @@ export default {
   },
   methods: {
     setSpacescale () {
+      console.log('mousezoooooom')
       // set mouse scaling on or off  (add slider with time)
       this.scaleSetting.active = !this.scaleSetting.active
       if (this.scaleSetting.active === true) {
         this.scaleSetting.text = 'Mouse'
         this.zoomscaleStatus = true
-        this.$store.dispatch('actionZoomscale', true)
+        this.$store.dispatch('actionSoloZoomscale', true)
       } else if (this.scaleSetting.active === false) {
         this.scaleSetting.text = 'Mouse'
         this.zoomscaleStatus = false
-        this.$store.dispatch('actionZoomscale', false)
+        this.$store.dispatch('actionSoloZoomscale', false)
       }
     },
     setzoomScale (amount) {
@@ -171,6 +172,12 @@ export default {
 .point-change {
   cursor: pointer;
 }
+
+.scale-item.scalebuttons {
+  height: 1.8em;
+  border: 1px solid lightgrey;
+}
+
 /*
 #space-map {
   right: 20px;

@@ -230,13 +230,6 @@ export default {
     viewHelpContent (hcontext) {
       console.log(hcontext)
       this.helpLive = hcontext
-    },
-    askeCalesave () {
-      let chatASKCALE = this.askInput
-      this.$store.dispatch('actionHelpAsk', chatASKCALE)
-    },
-    submitAsk () {
-      this.$store.dispatch('actionHelpaskentry', true)
     }
   }
 }

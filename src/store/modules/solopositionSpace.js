@@ -19,7 +19,8 @@ export default {
     soloData: {},
     trackOut: [],
     liveCopy: '',
-    liveTempOuthash: ''
+    liveTempOuthash: '',
+    scaleMouse: false
   },
   getters: {
   },
@@ -122,6 +123,9 @@ export default {
     },
     SET_SCROLLTOCELL_POSITION: (state, inVerified) => {
       state.ctx.scrollTODashboard(inVerified, state.initialGrid)
+    },
+    SET_SOLOSCALE_MOUSE: (state, inVerified) => {
+      state.scaleMouse = !state.scaleMouse
     },
     SET_SOLOZOOM_MAP: (state, inVerified) => {
       let updateZoom = state.ctx.setZoom(inVerified)
@@ -475,6 +479,12 @@ export default {
     },
     actionUpdateCopy (context, update) {
       context.commit('SET_COPY_UPDATE', update)
+    },
+    actionSoloScalewheel (context, update) {
+      context.commit('SET_SOLOZOOM_MAP', update)
+    },
+    actionSoloZoomscale (context, update) {
+      context.commit('SET_SOLOSCALE_MOUSE', update)
     }
   }
 }
