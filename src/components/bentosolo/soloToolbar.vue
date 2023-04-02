@@ -9,8 +9,10 @@
       </div>
       <div class="scale-item">
         <label>Scale</label>
-        <input type="range" min="0.1" max="2" step="0.1" v-model.number="scalelocal" @change="setzoomScale">
-          {{ scalespace }} %
+        <!--<input type="range" min="0.1" max="2" step="0.1" v-model.number="scalelocal" @change="setzoomScale">-->
+        <button class="point-change" @click="setzoomScale(-0.05)">-</button>
+        {{ scalespace }} %
+        <button class="point-change" @click="setzoomScale(0.05)">+</button>
       </div>
       <div id="story-life">
           <button @click.prevent="viewStorytools" id="story-button">Story</button>
@@ -54,7 +56,7 @@ export default {
       return this.$store.state.peerauthStatus
     },
     scalespace: function () {
-      let roundNumber = this.$store.state.activeScalevalue.toFixed(2)
+      let roundNumber = this.$store.state.solopositionSpace.soloZoom
       let scalePercent = roundNumber * 100
       return scalePercent.toFixed(0)
     },
@@ -96,8 +98,8 @@ export default {
         this.$store.dispatch('actionZoomscale', false)
       }
     },
-    setzoomScale () {
-      this.$store.dispatch('actionScalevalue', this.scalelocal)
+    setzoomScale (amount) {
+      this.$store.dispatch('actionSoloScalevalue', amount)
     },
     viewStorytools (ev) {
       // this.liveStorytools = !this.liveStorytools
@@ -166,6 +168,9 @@ export default {
   100% { background-color: #04a1d5;}
 }
 
+.point-change {
+  cursor: pointer;
+}
 /*
 #space-map {
   right: 20px;

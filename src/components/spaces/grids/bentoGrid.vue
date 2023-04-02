@@ -3,7 +3,7 @@
     <grid-toolbar></grid-toolbar>
     <mininav-map></mininav-map>
     <div id="space-shaper">
-      <div id="dragwheel-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
+      <div id="dragwheel-space" @mousedown.middle.capture="grabSpace" @mouseup.middle="dropSpace" v-bind:class="{ dragging: grabMouse }" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
         <div id="dashboard-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }"> <!-- v-bind:style="{ minWidth: '1100px', height: 'auto'}"   v-bind:style="{ width: '100%', height: '100%'}" drag-handle=".drag-handle" -->
           <!--loop over live dashboards -->
           <vue-draggable-resizable v-for="dashi of dashLive" :key="dashi.id" id="dashispace" data-no-dragscroll :min-width="900" :w="1000" h="auto" :parent="true" @activated="onDragStartCallback(dashi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handle'" :x=spaceCoord[dashi].x :y=spaceCoord[dashi].y  >
@@ -205,7 +205,8 @@ export default {
       },
       c: {},
       ctx: {},
-      firstClick: true
+      firstClick: true,
+      grabMouse: false
     }
   },
   methods: {
@@ -228,6 +229,12 @@ export default {
       this.y = y
       this.width = width
       this.height = height
+    },
+    grabSpace () {
+      this.grabMouse = !this.grabMouse
+    },
+    dropSpace () {
+      this.grabMouse = !this.grabMouse
     },
     onDragStartCallback (ev) {
       this.$store.dispatch('actionActiveNXP', ev)
@@ -398,5 +405,9 @@ export default {
 .remove-controls {
   float: right;
   margin-right: 2em;
+}
+
+.dragging * {
+    cursor: grabbing;
 }
 </style>

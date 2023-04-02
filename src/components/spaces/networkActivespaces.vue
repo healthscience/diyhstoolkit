@@ -207,8 +207,8 @@ export default {
 
 .create-toolbar {
   position: fixed;
-  top: 3em;
-  right: 1em;
+  top: .6em;
+  right: 23em;
 }
 
 #peer-views {

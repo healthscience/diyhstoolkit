@@ -130,11 +130,12 @@ export default {
   top: 60px;
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto;
-  justify-content: center;
-  align-content: center;
+  justify-content: right;
+  /* align-content: center; */
   gap: 10px;
   width: 100%;
-  height: 60px;
+  height: 40px;
+  right: 1em;
   border-bottom: 2px solid orange;
   background-color: white;
   padding: .1em;

@@ -65,14 +65,13 @@ export default {
     justify-content: center;
     /*align-items: center; */
     z-index: 50;
-    height: auto;
+    height: 100%;
     width: 100%;
   }
 
   .modal {
     background: #FFFFFF;
     box-shadow: 2px 2px 20px 1px;
-    overflow: auto;
     display: flex;
     flex-direction: column;
     width: 99%;

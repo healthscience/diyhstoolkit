@@ -28,7 +28,7 @@
           </div>
           <minisolo-map></minisolo-map>
           <div id="spacesolo-shaper" >
-            <div id="dragwheelsolo-space" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
+            <div id="dragwheelsolo-space" @mousedown.middle.capture="grabSpace" @mouseup.middle="dropSpace" v-bind:class="{ dragging: grabMouse }" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
               <div id="solo-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
                 <vue-draggable-resizable v-for="soloi of BoardstatusData" :key="soloi.id" id="solocellspace" data-no-dragscroll w="auto" h="auto" :parent="true"   @click.prevent="setActiveSolo(soloi)" @activated="onDragSolostartCallback(soloi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handlesolo'" :x=soloi.x :y=soloi.y>
                 <div class="drag-handlesolo" v-bind:class="{active: soloActivedrag === true }">
@@ -113,7 +113,7 @@ export default {
       }
     },
     zoomscaleValue: function () {
-      return this.$store.state.activeScalevalue
+      return this.$store.state.solopositionSpace.soloZoom
     },
     toolbarStatusLive: function () {
       if (!this.$store.state.toolbarStatus) {
@@ -164,6 +164,7 @@ export default {
         x: 10,
         y: 10
       },
+      grabMouse: false,
       cellindex: [],
       localGrid: [],
       moduleType: 'solo-cells',
@@ -187,6 +188,12 @@ export default {
   methods: {
     openBBai () {
       this.openBB = !this.openBB
+    },
+    grabSpace () {
+      this.grabMouse = !this.grabMouse
+    },
+    dropSpace () {
+      this.grabMouse = !this.grabMouse
     },
     setActiveSpace (nxpID) {
       // only one active at a time
@@ -257,6 +264,7 @@ export default {
       // this.$store.dispatch('actionSoloactiveNXP', ev)
     },
     onDrag: function (x, y) {
+      console.log('drag')
       let dragScale = 1
       let smallz = 0.2
       if (this.zoomscaleValue <= smallz) {
@@ -377,4 +385,7 @@ export default {
   background-color: white;
 }
 
+.dragging * {
+    cursor: grabbing;
+}
 </style>

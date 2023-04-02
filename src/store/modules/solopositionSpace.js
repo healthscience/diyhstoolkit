@@ -8,6 +8,7 @@ export default {
     liveSpaceCoord: {},
     c: {},
     ctx: PositionUtility,
+    soloZoom: 1,
     spaceClick: true,
     minmapClick: false,
     mouseClickCount: 0,
@@ -122,8 +123,9 @@ export default {
     SET_SCROLLTOCELL_POSITION: (state, inVerified) => {
       state.ctx.scrollTODashboard(inVerified, state.initialGrid)
     },
-    SET_ZOOM_MAP: (state, inVerified) => {
-      state.ctx.setZoom(inVerified)
+    SET_SOLOZOOM_MAP: (state, inVerified) => {
+      let updateZoom = state.ctx.setZoom(inVerified)
+      state.soloZoom = updateZoom
     },
     SET_CLEAR_POSITION: (state, inVerified) => {
       let coordKeys = Object.keys(state.liveSpaceCoord)
@@ -440,8 +442,8 @@ export default {
     actionDashBRemove: (context, update) => {
       context.commit('SET_REMOVEMMAP_POSITION', update)
     },
-    actionZoomset: (context, update) => {
-      context.commit('SET_ZOOM_MAP', update)
+    actionSoloZoomset: (context, update) => {
+      context.commit('SET_SOLOZOOM_MAP', update)
     },
     actionRefreshminimap: (context, update) => {
       context.commit('SET_SPACEPOSITION_REFRESH', update)

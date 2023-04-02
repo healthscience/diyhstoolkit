@@ -28,6 +28,9 @@
         <div class="toolkit-settings">
           <div class="software-status">ALPHA</div>
         </div>
+        <div class="toolkit-settings" id="new-button-top">
+          ---
+        </div>
         <div class="toolkit-settings">
           <button type="button" v-bind:class="{ networklive: connectBut.active === true && authConnectStatus === true}" class="connect-network" @click="connectNetwork(connectBut)">{{ connectBut.text }}</button>
         </div>
@@ -151,7 +154,7 @@ body {
 
 #peer-being  {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 2fr;
   position: fixed;
   top: 0;
   z-index: 12;
@@ -216,7 +219,7 @@ body {
 
 #peer-settings {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   align-items: end;
   align-items: center;
 }
@@ -237,9 +240,9 @@ body {
 
 .connect-network {
   margin-left: 3em;
-  margin-right: 3em;
+  margin-right: 1em;
   font-size: 1.2em;
-  min-width: 10em;
+  min-width: 8em;
 }
 
 .networklive {

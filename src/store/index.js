@@ -215,7 +215,7 @@ const store = new Vuex.Store({
       } else {
         // yes socket connection
         Vue.set(state.networkConnection, 'active', true)
-        Vue.set(state.networkConnection, 'text', 'peer-settings')
+        Vue.set(state.networkConnection, 'text', 'peer')
         Vue.set(state.networkConnection, 'type', 'check-connection')
       }
     },
@@ -730,6 +730,10 @@ const store = new Vuex.Store({
     actionScalevalue (context, update) {
       context.commit('SET_ACTIVE_SCALE', update)
       context.dispatch('actionZoomset', update, { root: true })
+    },
+    actionSoloScalevalue (context, update) {
+      // context.commit('SET_ACTIVE_SCALE', update)
+      context.dispatch('actionSoloZoomset', update, { root: true })
     },
     actionScalewheel (context, update) {
       context.commit('SET_WHEEL_SCALE', update)

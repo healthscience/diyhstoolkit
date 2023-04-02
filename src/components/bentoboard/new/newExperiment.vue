@@ -134,7 +134,7 @@ export default {
 
 <style scoped>
 #new-experimentmenu {
-  z-index: 31;
+  z-index: 11;
 }
 
 #new-type {
