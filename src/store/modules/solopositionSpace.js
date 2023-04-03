@@ -40,6 +40,15 @@ export default {
       Vue.set(state.savedLayout, 'start', inVerified)
     },
     SET_INITAL_CELLS: (state, inVerified) => {
+      console.log('set save solospace layout and data')
+      console.log(inVerified)
+      console.log(state.savedLayout)
+      let arrA = Object.keys(inVerified.position)
+      let arrB = Object.keys(state.savedLayout.start[inVerified.board])
+      // compare what data is already here ie module data and what to ask for starting layout?
+      let differenceStart = arrA.filter(x => !arrB.includes(x)).concat(arrB.filter(x => !arrA.includes(x)))
+      console.log('differ')
+      console.log(differenceStart)
       let layoutCheck = []
       if (state.savedLayout?.start !== undefined) {
         layoutCheck = Object.keys(state.savedLayout.start[inVerified.board])
@@ -144,6 +153,9 @@ export default {
     SET_SOLOSCALE_MOUSE: (state, inVerified) => {
       state.scaleMouse = !state.scaleMouse
     },
+    SET_STARTSOLO_ZOOM: (state, inVerified) => {
+      state.soloZoom = inVerified
+    },
     SET_SOLOZOOM_MAP: (state, inVerified) => {
       let updateZoom = state.ctx.setZoom(inVerified)
       state.soloZoom = updateZoom
@@ -168,9 +180,6 @@ export default {
     SET_ADD_SOLOSPACE (state, inVerified) {
       // add to BentoSpace or SoloSpace?
       console.log('solospace add')
-      console.log(inVerified)
-      console.log(this.state.solospace.soloState)
-      console.log(state.initialGrid)
       // need unquie identifer for grid
       let random = Math.random()
       let deviceUUID = random.toString()
@@ -329,22 +338,17 @@ export default {
         state.liveCopy = matchOutBack.moduleCNRL
         state.liveTempOuthash = inVerified.context.input.outhash
         // is the match a copy or existing cell?
-        console.log(matchOutBack)
         let stringCopycheck = matchOutBack.moduleCNRL.slice(0, 4)
         if (stringCopycheck === 'copy') {
           // remove from module list
           let updateListmods = []
           for (let mli of state.boardModulesList[matchOutBack.nxpCNRL]) {
-            console.log(mli)
-            console.log(matchOutBack.moduleCNRL)
             if (mli !== matchOutBack.moduleCNRL) {
               updateListmods.push(mli)
             } else {
               console.log('match')
             }
           }
-          console.log('list mouldes not match')
-          console.log(updateListmods)
           state.boardModulesList[matchOutBack.nxpCNRL] = updateListmods
           let copyPostionLocation = state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL]
           // remove the copy
@@ -357,14 +361,12 @@ export default {
           let updateModuleInfo = matchOutBack // inVerified
           // temp use outhash as module UUiD or use device and expand to array and loop over
           let copyMod = inVerified.context.input.outhash
-          console.log(copyMod)
           updateModuleInfo.moduleCNRL = copyMod
           // add to solospace holder
           Vue.set(state.soloData, copyMod, {})
           Vue.set(state.soloData[copyMod], 'data', [])
           Vue.set(state.soloData[copyMod], 'prime', {})
           Vue.set(state.soloData[copyMod].data, matchOutBack.mData, inVerified.data)
-          console.log(state.soloData)
           // state.soloData[copyMod].data.push(inVerified.data)
           let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
           Vue.set(state.soloData[copyMod], 'prime', contextPlacer)
@@ -384,9 +386,6 @@ export default {
           Vue.set(this.state.opendataTools, copyMod, {})
           Vue.set(this.state.opendataTools[copyMod], matchOutBack.mData, setOPenDataToolbar)
           // this.dispatch('actionCopycell', updateModuleInfo)
-          console.log('cell postion info')
-          console.log(copyPostionLocation)
-          console.log(state.initialGrid)
           let newCelladded = {}
           newCelladded.cell = {}
           newCelladded.cell.i = matchOutBack.mData.toString()
@@ -506,6 +505,9 @@ export default {
     },
     actionUpdateCopy (context, update) {
       context.commit('SET_COPY_UPDATE', update)
+    },
+    actionSavedSoloZoom (context, update) {
+      context.commit('SET_STARTSOLO_ZOOM', update)
     },
     actionSoloScalewheel (context, update) {
       context.commit('SET_SOLOZOOM_MAP', update)
