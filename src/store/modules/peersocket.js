@@ -407,6 +407,7 @@ export default {
         console.log('check hash of context')
         console.log(backJSON.context.input.outhash)
         if (backJSON.context.input.outhash !== undefined) {
+          console.log('dataHASH on RETURN--------------')
           for (let track of this._modules.root.state.solopositionSpace.trackOut) {
             console.log(track)
             if (track.outhash === backJSON.context.input.outhash) {

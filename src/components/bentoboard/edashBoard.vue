@@ -108,6 +108,8 @@ export default {
       return this.$store.solopositionSpace.state.liveCopy
     },
     moduleContent: function () {
+      console.log('module contenteedash')
+      console.log(this.$store.state.NXPexperimentData[this.expCNRL])
       let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
       if (contentModule === undefined) {
         return false

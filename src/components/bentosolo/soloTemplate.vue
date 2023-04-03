@@ -267,7 +267,6 @@ export default {
       // this.$store.dispatch('actionSoloactiveNXP', ev)
     },
     onDrag: function (x, y) {
-      console.log('drag')
       let dragScale = 1
       let smallz = 0.2
       if (this.zoomscaleValue <= smallz) {

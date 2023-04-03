@@ -16,6 +16,7 @@ export default {
     initialGrid: {},
     savedLayout: {},
     boardModulesList: [],
+    copyModuleList: [],
     soloData: {},
     trackOut: [],
     liveCopy: '',
@@ -56,6 +57,7 @@ export default {
           state.ctx.miniMapSoloStartLoc(state.savedLayout.start[inVerified.board][mitem])
         }
       } else {
+        // first time setup solospace
         let modHash = Object.keys(inVerified.position)
         let modCount = 1
         Vue.set(state.liveSpaceCoord, inVerified.board, {})
@@ -94,12 +96,27 @@ export default {
     SET_COPYSOLOCELL_POSITION: (state, inVerified) => {
       console.log('cell position set')
       console.log(inVerified)
+      let removeCopy = inVerified.moduleCNRL.slice(5)
+      // match to box to place near by
+      let keysMods = Object.keys(state.initialGrid[inVerified.nxpCNRL])
+      let positionOrigin = {}
+      let deviceMatch = {}
+      for (let keymo of keysMods) {
+        if (keymo === removeCopy) {
+          positionOrigin = state.initialGrid[inVerified.nxpCNRL][keymo]
+          for (let posD of positionOrigin) {
+            if (posD.cell.i === inVerified.mData) {
+              deviceMatch = posD
+            }
+          }
+        }
+      }
       let newCelladded = {}
       newCelladded.cell = {}
       newCelladded.cell.i = inVerified.mData.toString()
       newCelladded.mod = inVerified.moduleCNRL
-      newCelladded.x = 120
-      newCelladded.y = 1900
+      newCelladded.x = deviceMatch.cell.x + 100
+      newCelladded.y = deviceMatch.cell.y + 1000
       Vue.set(state.initialGrid[inVerified.nxpCNRL], inVerified.moduleCNRL, [])
       state.initialGrid[inVerified.nxpCNRL][inVerified.moduleCNRL].push(newCelladded)
     },
@@ -143,8 +160,6 @@ export default {
       console.log(inVerified)
     },
     SET_BOARD_MODULES: (state, inVerified) => {
-      // console.log('board modules')
-      // console.log(inVerified)
       state.boardModulesList = inVerified
     },
     SET_CLONE_SOLODATA: (state, inVerified) => {
@@ -155,6 +170,7 @@ export default {
       console.log('solospace add')
       console.log(inVerified)
       console.log(this.state.solospace.soloState)
+      console.log(state.initialGrid)
       // need unquie identifer for grid
       let random = Math.random()
       let deviceUUID = random.toString()
@@ -163,7 +179,7 @@ export default {
       if (spaceType === true) {
         let newCellNumber = 0
         // need to add new visualise module and give it unique compute contract or update to unqiue
-        // identify base module to be cloned
+        // identify base module to be copied
         let modKeys = Object.keys(state.soloData)
         for (let modl of modKeys) {
           if (modl === inVerified.moduleCNRL) {
@@ -178,6 +194,7 @@ export default {
                 updateModuleInfo.moduleCNRL = copyMod
                 this.dispatch('actionCopycell', updateModuleInfo)
                 state.boardModulesList[inVerified.nxpCNRL].push(copyMod)
+                state.copyModuleList.push(copyMod)
                 Vue.set(state.soloData, copyMod, {})
                 Vue.set(state.soloData[copyMod], 'data', {})
                 Vue.set(state.soloData[copyMod], 'prime', {})
@@ -307,112 +324,123 @@ export default {
         // Vue.set(state.initialGrid[matchOutBack.nxpCNRL], matchOutBack.moduleCNRL, [])
         // state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
         // state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
-      }
-      state.liveCopy = matchOutBack.moduleCNRL
-      state.liveTempOuthash = inVerified.context.input.outhash
-      // is the match a copy or existing cell?
-      console.log(matchOutBack)
-      let stringCopycheck = matchOutBack.moduleCNRL.slice(0, 4)
-      if (stringCopycheck === 'copy') {
-        // remove the copy
-        Vue.delete(state.initialGrid[matchOutBack.nxpCNRL], matchOutBack.moduleCNRL)
-        // remove frol soloData ie main data holder
-        Vue.delete(state.soloData, matchOutBack.moduleCNRL)
-        Vue.delete(this.state.NXPexperimentData[matchOutBack.nxpCNRL], matchOutBack.moduleCNRL)
-        // remove array item
-        let updateListmods = []
-        for (let mli of state.boardModulesList[matchOutBack.nxpCNRL]) {
-          if (mli !== matchOutBack.moduleCNRL) {
-            updateListmods.push(mli)
-          } else {
-            console.log('match')
-          }
-        }
-        state.boardModulesList[matchOutBack.nxpCNRL] = updateListmods
-        // delete from track list  TODO
-        // now create new cell on solospace
-        let updateModuleInfo = matchOutBack // inVerified
-        // temp use outhash as module UUiD or use device and expand to array and loop over
-        let copyMod = inVerified.context.input.outhash
-        updateModuleInfo.moduleCNRL = copyMod
-        // add to solospace holder
-        Vue.set(state.soloData, copyMod, {})
-        Vue.set(state.soloData[copyMod], 'data', [])
-        Vue.set(state.soloData[copyMod], 'prime', {})
-        Vue.set(state.soloData[copyMod].data, matchOutBack.mData, inVerified.data)
-        console.log(state.soloData)
-        // state.soloData[copyMod].data.push(inVerified.data)
-        let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
-        Vue.set(state.soloData[copyMod], 'prime', contextPlacer)
-        // set the progress bar info
-        let setProgress = {}
-        setProgress = { text: 'Updating visualisation', active: false }
-        Vue.set(this.state.visProgress, copyMod, {})
-        Vue.set(this.state.visProgress[copyMod], matchOutBack.mData, setProgress)
-        // console.log(this.state.visProgress)
-        // set toolbars
-        let setVisTools = {}
-        setVisTools = { text: 'open tools', active: true }
-        Vue.set(this.state.toolbarVisStatus, copyMod, {})
-        Vue.set(this.state.toolbarVisStatus[copyMod], matchOutBack.mData, setVisTools)
-        // set the open data tools
-        let setOPenDataToolbar = { text: 'open data', active: false }
-        Vue.set(this.state.opendataTools, copyMod, {})
-        Vue.set(this.state.opendataTools[copyMod], matchOutBack.mData, setOPenDataToolbar)
-        // this.dispatch('actionCopycell', updateModuleInfo)
-        let newCelladded = {}
-        newCelladded.cell = {}
-        newCelladded.cell.i = matchOutBack.mData.toString()
-        newCelladded.mod = matchOutBack.moduleCNRL
-        newCelladded.x = 120
-        newCelladded.y = 1900
-        Vue.set(state.initialGrid[matchOutBack.nxpCNRL], matchOutBack.moduleCNRL, [])
-        state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
-        state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
       } else {
-        console.log('Existing cell ---> update visualisation+++++++')
-        let updateModuleInfo = matchOutBack // inVerified
-        console.log(updateModuleInfo)
-        // temp use outhash as module UUiD or use device and expand to array and loop over
-        let copyMod = inVerified.context.input.outhash
-        updateModuleInfo.moduleCNRL = copyMod
-        // add to solospace holder
-        // Vue.set(state.soloData, copyMod, {})
-        // Vue.set(state.soloData[copyMod], 'data', [])
-        // Vue.set(state.soloData[copyMod], 'prime', {})
-        console.log(state.soloData)
-        console.log(copyMod)
-        console.log(matchOutBack.mData)
-        console.log(inVerified.data)
-        Vue.set(state.soloData[copyMod].data, matchOutBack.mData, inVerified.data)
-        // state.soloData[copyMod].data.push(inVerified.data)
-        let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
-        Vue.set(state.soloData[copyMod], 'prime', contextPlacer)
-        // set the progress bar info
-        let setProgress = {}
-        setProgress = { text: 'Updating visualisation', active: false }
-        // Vue.set(this.state.visProgress, copyMod, {})
-        Vue.set(this.state.visProgress[copyMod], matchOutBack.mData, setProgress)
-        // console.log(this.state.visProgress)
-        // set toolbars
-        let setVisTools = {}
-        setVisTools = { text: 'open tools', active: true }
-        // Vue.set(this.state.toolbarVisStatus, copyMod, {})
-        Vue.set(this.state.toolbarVisStatus[copyMod], matchOutBack.mData, setVisTools)
-        // set the open data tools
-        let setOPenDataToolbar = { text: 'open data', active: false }
-        // Vue.set(this.state.opendataTools, copyMod, {})
-        Vue.set(this.state.opendataTools[copyMod], matchOutBack.mData, setOPenDataToolbar)
-        // this.dispatch('actionCopycell', updateModuleInfo)
-        let newCelladded = {}
-        newCelladded.cell = {}
-        newCelladded.cell.i = matchOutBack.mData.toString()
-        newCelladded.mod = matchOutBack.moduleCNRL
-        newCelladded.x = 120
-        newCelladded.y = 1900
-        // Vue.set(state.initialGrid[matchOutBack.nxpCNRL], matchOutBack.moduleCNRL, [])
-        // state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
-        // state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
+        console.log('from COPYPCOPYCPYCPY')
+        state.liveCopy = matchOutBack.moduleCNRL
+        state.liveTempOuthash = inVerified.context.input.outhash
+        // is the match a copy or existing cell?
+        console.log(matchOutBack)
+        let stringCopycheck = matchOutBack.moduleCNRL.slice(0, 4)
+        if (stringCopycheck === 'copy') {
+          // remove from module list
+          let updateListmods = []
+          for (let mli of state.boardModulesList[matchOutBack.nxpCNRL]) {
+            console.log(mli)
+            console.log(matchOutBack.moduleCNRL)
+            if (mli !== matchOutBack.moduleCNRL) {
+              updateListmods.push(mli)
+            } else {
+              console.log('match')
+            }
+          }
+          console.log('list mouldes not match')
+          console.log(updateListmods)
+          state.boardModulesList[matchOutBack.nxpCNRL] = updateListmods
+          let copyPostionLocation = state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL]
+          // remove the copy
+          Vue.delete(state.initialGrid[matchOutBack.nxpCNRL], matchOutBack.moduleCNRL)
+          // remove frol soloData ie main data holder
+          Vue.delete(state.soloData, matchOutBack.moduleCNRL)
+          Vue.delete(this.state.NXPexperimentData[matchOutBack.nxpCNRL], matchOutBack.moduleCNRL)
+          // delete from track list  TODO
+          // now create new cell on solospace
+          let updateModuleInfo = matchOutBack // inVerified
+          // temp use outhash as module UUiD or use device and expand to array and loop over
+          let copyMod = inVerified.context.input.outhash
+          console.log(copyMod)
+          updateModuleInfo.moduleCNRL = copyMod
+          // add to solospace holder
+          Vue.set(state.soloData, copyMod, {})
+          Vue.set(state.soloData[copyMod], 'data', [])
+          Vue.set(state.soloData[copyMod], 'prime', {})
+          Vue.set(state.soloData[copyMod].data, matchOutBack.mData, inVerified.data)
+          console.log(state.soloData)
+          // state.soloData[copyMod].data.push(inVerified.data)
+          let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
+          Vue.set(state.soloData[copyMod], 'prime', contextPlacer)
+          // set the progress bar info
+          let setProgress = {}
+          setProgress = { text: 'Updating visualisation', active: false }
+          Vue.set(this.state.visProgress, copyMod, {})
+          Vue.set(this.state.visProgress[copyMod], matchOutBack.mData, setProgress)
+          // console.log(this.state.visProgress)
+          // set toolbars
+          let setVisTools = {}
+          setVisTools = { text: 'open tools', active: true }
+          Vue.set(this.state.toolbarVisStatus, copyMod, {})
+          Vue.set(this.state.toolbarVisStatus[copyMod], matchOutBack.mData, setVisTools)
+          // set the open data tools
+          let setOPenDataToolbar = { text: 'open data', active: false }
+          Vue.set(this.state.opendataTools, copyMod, {})
+          Vue.set(this.state.opendataTools[copyMod], matchOutBack.mData, setOPenDataToolbar)
+          // this.dispatch('actionCopycell', updateModuleInfo)
+          console.log('cell postion info')
+          console.log(copyPostionLocation)
+          console.log(state.initialGrid)
+          let newCelladded = {}
+          newCelladded.cell = {}
+          newCelladded.cell.i = matchOutBack.mData.toString()
+          newCelladded.mod = matchOutBack.moduleCNRL
+          newCelladded.x = copyPostionLocation[0].x
+          newCelladded.y = copyPostionLocation[0].y
+          Vue.set(state.initialGrid[matchOutBack.nxpCNRL], matchOutBack.moduleCNRL, [])
+          state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
+          state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
+        } else {
+          console.log('Existing cell ---> update visualisation+++++++')
+          let updateModuleInfo = matchOutBack // inVerified
+          console.log(updateModuleInfo)
+          // temp use outhash as module UUiD or use device and expand to array and loop over
+          let copyMod = inVerified.context.input.outhash
+          updateModuleInfo.moduleCNRL = copyMod
+          // add to solospace holder
+          // Vue.set(state.soloData, copyMod, {})
+          // Vue.set(state.soloData[copyMod], 'data', [])
+          // Vue.set(state.soloData[copyMod], 'prime', {})
+          console.log(state.soloData)
+          console.log(copyMod)
+          console.log(matchOutBack.mData)
+          console.log(inVerified.data)
+          Vue.set(state.soloData[copyMod].data, matchOutBack.mData, inVerified.data)
+          // state.soloData[copyMod].data.push(inVerified.data)
+          let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
+          Vue.set(state.soloData[copyMod], 'prime', contextPlacer)
+          // set the progress bar info
+          let setProgress = {}
+          setProgress = { text: 'Updating visualisation', active: false }
+          // Vue.set(this.state.visProgress, copyMod, {})
+          Vue.set(this.state.visProgress[copyMod], matchOutBack.mData, setProgress)
+          // console.log(this.state.visProgress)
+          // set toolbars
+          let setVisTools = {}
+          setVisTools = { text: 'open tools', active: true }
+          // Vue.set(this.state.toolbarVisStatus, copyMod, {})
+          Vue.set(this.state.toolbarVisStatus[copyMod], matchOutBack.mData, setVisTools)
+          // set the open data tools
+          let setOPenDataToolbar = { text: 'open data', active: false }
+          // Vue.set(this.state.opendataTools, copyMod, {})
+          Vue.set(this.state.opendataTools[copyMod], matchOutBack.mData, setOPenDataToolbar)
+          // this.dispatch('actionCopycell', updateModuleInfo)
+          let newCelladded = {}
+          newCelladded.cell = {}
+          newCelladded.cell.i = matchOutBack.mData.toString()
+          newCelladded.mod = matchOutBack.moduleCNRL
+          newCelladded.x = 120
+          newCelladded.y = 1900
+          // Vue.set(state.initialGrid[matchOutBack.nxpCNRL], matchOutBack.moduleCNRL, [])
+          // state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
+          // state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
+        }
       }
     }
   },
@@ -459,7 +487,6 @@ export default {
       context.commit('SET_SAVED_LAYOUT', update)
     },
     actionAddcell (context, update) {
-      console.log('addadada')
       context.commit('SET_ADDSOLOCELL_POSITION', update)
     },
     actionCopycell (context, update) {

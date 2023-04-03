@@ -426,6 +426,9 @@ const store = new Vuex.Store({
       }
     }, */
     setVisProgressUpdate: (state, inVerified) => {
+      console.log('set progressIIIIIIIIIIIIIIIIIIIII')
+      console.log(inVerified)
+      console.log(state.visProgress)
       let setProgress = {}
       setProgress = { text: 'Updating visualisation', active: true }
       Vue.set(state.visProgress[inVerified.module], inVerified.device, setProgress)
@@ -826,6 +829,9 @@ const store = new Vuex.Store({
     async actionVisUpdate (context, update) {
       console.log('vistoolbar+++++++++++++++++++UPdateAction')
       console.log(update)
+      // is the module a copy?
+      let copyStatus = update.moduleCNRL.slice(0, 4)
+      console.log(copyStatus)
       this.state.ecsMessageLive = ''
       // perform checks for missing input data to form ECS-out bundle
       // TODO
@@ -965,7 +971,13 @@ const store = new Vuex.Store({
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
-      context.commit('setVisProgressUpdate', progressContext)
+      console.log('setup rogress paess supdate dudpadpa')
+      console.log(progressContext)
+      if (copyStatus === 'copy') {
+        console.log('copy set in solospace')
+      } else {
+        context.commit('setVisProgressUpdate', progressContext)
+      }
     },
     actionFutureOLD (context, update) {
       // console.log('action future')

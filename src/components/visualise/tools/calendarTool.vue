@@ -279,7 +279,7 @@ export default {
     },
     updateKbundle (cm) {
       // prepare update for safeFLOW
-      console.log('kbudnel update caltools')
+      console.log('Update from chart tools solo------------')
       console.log(this.shellID)
       console.log(this.moduleCNRL)
       console.log(this.mData)
