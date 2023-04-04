@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { watch } from 'vue'
 import ToolkitUtility from '@/mixins/toolkitUtility.js'
 import VisToolsUtility from '@/mixins/visualUtility.js'
 import ContextUtility from '@/mixins/contextUtility.js'
@@ -411,8 +410,6 @@ export default {
         console.log(backJSON)
         // is the data for the Lifeboard(AI) or Board space or Solospace?
         // does the context hash match any existing visualsiation module?
-        console.log('check hash of context')
-        console.log(backJSON.context.input.outhash)
         if (backJSON.context.input.outhash !== undefined) {
           console.log('dataHASH on RETURN--------------')
           for (let track of this._modules.root.state.solopositionSpace.trackOut) {
@@ -936,8 +933,8 @@ export default {
           }
         }
       } else if (backJSON.type === 'peerprivate') {
-        console.log('private librayr back data-----------------')
-        console.log(backJSON)
+        // console.log('private librayr back data-----------------')
+        // console.log(backJSON)
         // set the HOPholder to say data for this back
         Vue.set(state.HOPHolder, backJSON.board, {})
         Vue.set(state.HOPHolder, backJSON.board, 'request')

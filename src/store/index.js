@@ -791,7 +791,7 @@ const store = new Vuex.Store({
     },
     async actionDashboardState (context, update) {
       // keep track of HOP out messages
-      console.log('prep start NEW DASHOUT message--xxxxxxxxxxxxxxxxx')
+      console.log('prep start NEW HOP OUT message--xxxxxxxxxxxxxxxxx')
       console.log(update)
       // context.commit('SET_HOPOUT_MESSAGE', update)
       // console.log(update)
@@ -825,6 +825,39 @@ const store = new Vuex.Store({
       } else {
         console.log('first is a future time')
       }
+    },
+    async actionStartLayout (context, update) {
+      // keep track of HOP out messages
+      console.log('start extra LAYOUT NEW HOP OUT message--xxxxxxxxxxxxxxxxx')
+      console.log(update)
+      // context.commit('SET_HOPOUT_MESSAGE', update)
+      // console.log(update)
+      // set the minimap in position store module
+      let prepOutHOP = {} // HopprepareUtility.savePrepare(update.nxp, this.state.networkPeerExpModules)
+      // set
+      // context.commit('SET_SPACE_SHOW', false)
+      // let futureTimeCheck = false
+      // context.commit('SET_LIVE_NXP', update.nxp)
+      // context.commit('SET_NXP_MODULED', update.nxp)
+      // context.commit('SET_Dashboard_NXP', update.nxp)
+      // context.commit('setNXPprogressUpdate', update.nxp)
+      let ECSbundle = {}
+      let boardOut = {}
+      boardOut.key = prepOutHOP.modules.key
+      boardOut.value = prepOutHOP.modules.value
+      ECSbundle.exp = boardOut // this.state.HOPrequestLive[prepOutHOP.board]
+      ECSbundle.modules = prepOutHOP.modules.modules
+      // send message to PeerLink for safeFLOW
+      let message = {}
+      message.type = 'safeflow'
+      message.reftype = 'ignore'
+      message.action = 'networkexperiment'
+      message.data = ECSbundle
+      message.jwt = this.state.jwttoken
+      console.log('EXTRA LAOYT HOP OUTmesssage+++EXTRA +++++')
+      console.log(message)
+      const safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionVisUpdate (context, update) {
       console.log('vistoolbar+++++++++++++++++++UPdateAction')

@@ -105,8 +105,6 @@ export default {
       return this.$store.state.lifeBoard.liveMapNetwork
     },
     cellFeedback: function () {
-      console.log('cell feedback')
-      console.log(this.$store.state.solopositionSpace.dataFeedback)
       let feedbackObject = Object.keys(this.$store.state.solopositionSpace.dataFeedback)
       if (feedbackObject.length === 0) {
         return null

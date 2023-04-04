@@ -93,10 +93,8 @@ export default {
             }
           }
         } else {
-          console.log('no modues')
+          console.log('')
         }
-        console.log('moduesl per board soloosssoooloo')
-        console.log(liveListCells)
         return liveListCells
       }
     },
