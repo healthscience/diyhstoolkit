@@ -424,9 +424,13 @@ export default {
               // this.dispatch('actionUpdateCopy', backJSON)
               // check for none data  e.g. bug, error, goes wrong cannot return data for display
               if (backJSON.data === 'none') {
+                console.log('no data to update------------')
+                console.log(backJSON)
                 // switch off progress message and inform toolkit
                 let setnxpProgress = { text: 'Experiment in progress', active: false }
                 Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
+                // set feedback message per cell
+                this.dispatch('actionDataFeedback', backJSON, { root: true })
                 this.state.ecsMessageLive = 'no data available'
                 // need to make toolbar appear so date can be selected
                 // set devices for this NXP
@@ -497,6 +501,7 @@ export default {
                       Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
                       Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
                     } else {
+                      console.log('no data twoowowowo---')
                       this.state.ecsMessageLive = 'no data available'
                       // set experiment progress message off
                       let setnxpProgress = { text: 'Experiment in progress', active: false }

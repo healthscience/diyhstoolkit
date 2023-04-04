@@ -13,6 +13,7 @@ export default {
     minmapClick: false,
     mouseClickCount: 0,
     soloGrid: {},
+    dataFeedback: {},
     initialGrid: {},
     savedLayout: {},
     boardModulesList: [],
@@ -177,6 +178,17 @@ export default {
     SET_CLONE_SOLODATA: (state, inVerified) => {
       state.soloData = inVerified
     },
+    SET_DATA_FEEDBACK (state, inVerified) {
+      Vue.set(state.dataFeedback, inVerified.context.input.outhash, inVerified.data)
+      // turn off progress message
+      let progressDetail = {}
+      progressDetail.module = inVerified.context.input.outhash
+      progressDetail.device = '3'
+      this.dispatch('actionCellFeedbackUpdate', progressDetail, { root: true })
+    },
+    SET_CLEAR_FEEDBACK (state, inVerified) {
+      Vue.set(state.dataFeedback, inVerified, '')
+    },
     SET_ADD_SOLOSPACE (state, inVerified) {
       // add to BentoSpace or SoloSpace?
       console.log('solospace add')
@@ -205,6 +217,7 @@ export default {
                 state.boardModulesList[inVerified.nxpCNRL].push(copyMod)
                 state.copyModuleList.push(copyMod)
                 Vue.set(state.soloData, copyMod, {})
+                Vue.set(state.dataFeedback, copyMod, {})
                 Vue.set(state.soloData[copyMod], 'data', {})
                 Vue.set(state.soloData[copyMod], 'prime', {})
                 Vue.set(state.soloData[copyMod].data, newCellNumber, state.soloData[modl].data[cell])
@@ -514,6 +527,12 @@ export default {
     },
     actionSoloZoomscale (context, update) {
       context.commit('SET_SOLOSCALE_MOUSE', update)
+    },
+    actionDataFeedback (context, update) {
+      context.commit('SET_DATA_FEEDBACK', update)
+    },
+    actionClearCellFeedback (context, update) {
+      context.commit('SET_CLEAR_FEEDBACK', update)
     }
   }
 }

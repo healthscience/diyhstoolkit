@@ -1,5 +1,8 @@
 <template>
   <div id="vis-toolkit"> Device: {{ mData }}
+    <div id="cell-feedback">
+      {{ cellFeedback }}
+    </div>
     <div id="diy-tools">
       <div id="chart-type">
         <!-- <div class="network-tools">
@@ -100,6 +103,16 @@ export default {
     },
     networkMap: function () {
       return this.$store.state.lifeBoard.liveMapNetwork
+    },
+    cellFeedback: function () {
+      console.log('cell feedback')
+      console.log(this.$store.state.solopositionSpace.dataFeedback)
+      let feedbackObject = Object.keys(this.$store.state.solopositionSpace.dataFeedback)
+      if (feedbackObject.length === 0) {
+        return null
+      } else {
+        return this.$store.state.solopositionSpace.dataFeedback[this.moduleCNRL]
+      }
     },
     futurecollection: function () {
       let futureData = this.$store.state.lifeBoard.liveFutureCollection
@@ -287,4 +300,8 @@ export default {
   padding-top: .6em;
 }
 
+#cell-feedback {
+  font-weight: bold;
+  background-color: rgb(222, 222, 146);
+}
 </style>

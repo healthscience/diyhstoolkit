@@ -829,6 +829,8 @@ const store = new Vuex.Store({
     async actionVisUpdate (context, update) {
       console.log('vistoolbar+++++++++++++++++++UPdateAction')
       console.log(update)
+      // clear the cell feedback
+      this.dispatch('actionClearCellFeedback', update.moduleCNRL, { root: true })
       // is the module a copy?
       let copyStatus = update.moduleCNRL.slice(0, 4)
       console.log(copyStatus)
@@ -1053,6 +1055,9 @@ const store = new Vuex.Store({
       context.dispatch('actionSoloModules', moduleList, { root: true })
       let soloData = this.state.NXPexperimentData[update]
       context.dispatch('actionSoloBoardData', soloData, { root: true })
+    },
+    actionCellFeedbackUpdate (context, update) {
+      context.commit('setVisProgressComplete', update)
     }
   },
   strict: false // process.env.NODE_ENV !== 'production'
