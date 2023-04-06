@@ -19,7 +19,7 @@
             {{entry[key]}}
             </div>
             <div v-else>
-              <button type="button" class="btn" @click="actionExperiment(entry.id, entry)">{{ entry[key] }}</button>
+              <button type="button" class="btn" @click="actionBoard(entry.id, entry)">{{ entry[key] }}</button>
             </div>
           </div>
         </div>
@@ -129,12 +129,14 @@ export default {
     setactiveXNPlist (nxp) {
       this.$store.dispatch('actionLiveNXPlist', nxp)
     },
-    actionExperiment (board, NXPcontract) {
+    actionBoard (board, NXPcontract) {
       this.shellContract = board
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
         this.$store.dispatch('actionHOPoutState', board)
         // this.$store.dispatch('actionDashboardState', board)
+        // close BeeBee
+        this.$store.dispatch('actionBBstate')
       } else {
         // preview network experiment
         this.$store.dispatch('actionJOINViewexperiment', board)

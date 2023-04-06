@@ -69,7 +69,10 @@ export default {
         console.log('differ')
         console.log(differenceStart)
         // ask HOP for data
-        this.dispatch('actionStartLayout', differenceStart, { root: true })
+        let soloNeededMod = {}
+        soloNeededMod.board = inVerified.board
+        soloNeededMod.modules = differenceStart
+        this.dispatch('actionStartLayout', soloNeededMod, { root: true })
         let layoutCheck = []
         if (state.savedLayout?.start !== undefined) {
           layoutCheck = Object.keys(state.savedLayout.start[inVerified.board])
@@ -211,7 +214,7 @@ export default {
       Vue.set(state.dataFeedback, inVerified, '')
     },
     SET_ADD_SOLOSPACE (state, inVerified) {
-      // add to BentoSpace or SoloSpace?
+      // add to SoloSpace
       console.log('solospace add')
       // need unquie identifer for grid
       let random = Math.random()
@@ -308,7 +311,7 @@ export default {
       state.trackOut.push(inVerified)
     },
     SET_COPY_UPDATE (state, inVerified) {
-      console.log('update copy with UUID+++++++++++++++++++')
+      console.log('update copy with UUID+++++++SOLOSPACE++++++++++++')
       console.log(inVerified)
       console.log(state.initialGrid)
       // switch copy Module for now hash ID but keep all location info.

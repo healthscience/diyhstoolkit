@@ -129,7 +129,7 @@
         <div id="termsofjoin">
           Terms: a private and autonomous set of contracts will be setup. This makes it possible to be compatible with others in the next work. To connect with peers in the next work needs further setup.
         </div>
-        <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkExperiment()">Join The Experiment</button>
+        <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkBoard()">Join The Board</button>
         <div id="join-feedback" v-if="joinFeedbackActive === true">
           {{ joinFeedback }} --
         </div>
@@ -411,7 +411,7 @@ export default {
     datastartLookup () {
       this.newCompute.startperiod = 12345123451
     },
-    joinNetworkExperiment () {
+    joinNetworkBoard () {
       console.log('join')
       this.shellID = null
       this.moduleCNRL = 'cnrl-001234543458'
@@ -420,7 +420,7 @@ export default {
       const peerChoices = {}
       peerChoices.genesis = this.actionKBundle.id
       peerChoices.question = this.actionKBundle.name
-      this.$store.dispatch('actionJoinExperiment', peerChoices)
+      this.$store.dispatch('actionJoinBoard', peerChoices)
       // this.closeModalJoin()
     },
     closeDashboard (dc) {

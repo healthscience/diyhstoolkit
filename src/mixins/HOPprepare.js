@@ -10,9 +10,9 @@
 * @version    $Id$
 */
 import EventEmitter from 'events'
-// import ToolkitUtility from '@/mixins/toolkitUtility.js'
-// const moment = require('moment')
-// const ToolUtility = new ToolkitUtility()
+import ToolkitUtility from '@/mixins/toolkitUtility.js'
+const moment = require('moment')
+const ToolUtility = new ToolkitUtility()
 
 class HOPprepare extends EventEmitter {
   constructor () {
@@ -25,9 +25,11 @@ class HOPprepare extends EventEmitter {
   * @method savePrepare
   *
   */
-  savePrepare = function (input, boardmods) {
+  savePrepare = function (input, boardmods, liveRefContIndex, livePeerRefContIndex) {
     let checkPosition = this.checkPositionObject(input)
     let connectRefContracts = this.prepHOPmodules(input, boardmods)
+    // expand ref contract hashes if require --> do this via HOP & xlibrary
+    // let expandedModules = this.expandRefContract(input.nxp, connectRefContracts, liveRefContIndex, livePeerRefContIndex)
     let outMessageHOP = {}
     outMessageHOP.futureTimeCheck = false
     outMessageHOP.board = checkPosition
@@ -72,15 +74,27 @@ class HOPprepare extends EventEmitter {
   *
   */
   prepHOPmodules = function (update, networkPeerExpModules) {
+    console.log('modules')
+    console.log(update)
     // build the safeFLOW-ECS input bundle
     let matchExp = {}
     for (let nxp of networkPeerExpModules) {
+      console.log(nxp)
       if (nxp.key === update) {
         matchExp = nxp
       }
     }
     return matchExp
-    /*
+  }
+
+  /**
+  * expand the ref contract hash to full contract
+  * @method expandRefContract
+  *
+  */
+  expandRefContract = function (update, matchExp, liveRefContIndex, livePeerRefContIndex) {
+    console.log(update)
+    console.log(liveRefContIndex)
     let futureTimeCheck = false
     // prepare ECS inputs- lookup peer selected module options
     let peerOptions = []
@@ -129,7 +143,8 @@ class HOPprepare extends EventEmitter {
         pmod.value.info.visualise = peerDataRC
         peerOptions.push(pmod)
       }
-    } */
+    }
+    return peerOptions
   }
 }
 

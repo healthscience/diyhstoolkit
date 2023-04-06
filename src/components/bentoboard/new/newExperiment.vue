@@ -22,7 +22,7 @@
     <new-networkexperiment v-show="isModalNewNetworkExperiment" @closeNnxp="closeModalNewN1">
       <template v-slot:header>
       <!-- The code below goes into the header slot -->
-        NEW N=1 Network Experiment
+        NEW BOARD
       </template>
       <template v-slot:body>
       <!-- The code below goes into the header slot -->
@@ -107,6 +107,8 @@ export default {
       console.log('open DaMaHub Library')
       this.$store.dispatch('actionLibraryStart', true)
       this.isModalNLib = true
+      // close the create button
+      this.newtypeShow = !this.newtypeShow
     },
     closeModalNLib () {
       this.isModalNLib = false

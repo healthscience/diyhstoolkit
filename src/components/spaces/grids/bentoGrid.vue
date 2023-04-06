@@ -40,7 +40,7 @@
                         </div>
                       </div>
                       <div id="remove-message" v-if="messageRemove === true">
-                        Are you sure you want to remove Network Experiment {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Yes</a>  No
+                        Are you sure you want to remove Board {{ removeNXPid }}?  <a href="#" id="confirm-remove" @click.prevent="removeConfirmDashboard">Yes</a>  No
                       </div>
                     </div>
                   </div>

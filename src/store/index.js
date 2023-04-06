@@ -793,10 +793,14 @@ const store = new Vuex.Store({
       // keep track of HOP out messages
       console.log('prep start NEW HOP OUT message--xxxxxxxxxxxxxxxxx')
       console.log(update)
+      console.log(this.state.networkPeerExpModules)
+      console.log(this.state.liveRefContIndex)
       // context.commit('SET_HOPOUT_MESSAGE', update)
       // console.log(update)
       // set the minimap in position store module
-      let prepOutHOP = HopprepareUtility.savePrepare(update.nxp, this.state.networkPeerExpModules)
+      let prepOutHOP = HopprepareUtility.savePrepare(update.nxp, this.state.networkPeerExpModules, this.state.liveRefContIndex, this.state.livePeerRefContIndex)
+      console.log('prepare NXP module and moudles')
+      console.log(prepOutHOP)
       // set
       context.commit('SET_SPACE_SHOW', false)
       // let futureTimeCheck = false
@@ -808,7 +812,7 @@ const store = new Vuex.Store({
         let ECSbundle = {}
         let boardOut = {}
         boardOut.key = prepOutHOP.modules.key
-        boardOut.value = prepOutHOP.modules.value
+        boardOut.value = prepOutHOP.modules // value  may need from different data coming in???
         ECSbundle.exp = boardOut // this.state.HOPrequestLive[prepOutHOP.board]
         ECSbundle.modules = prepOutHOP.modules.modules
         // send message to PeerLink for safeFLOW
@@ -821,6 +825,7 @@ const store = new Vuex.Store({
         console.log('OUTmesssage+++++++++OUT+FIRST++++++')
         console.log(message)
         const safeFlowMessage = JSON.stringify(message)
+        // console.log(safeFlowMessage)
         Vue.prototype.$socket.send(safeFlowMessage)
       } else {
         console.log('first is a future time')
@@ -830,34 +835,37 @@ const store = new Vuex.Store({
       // keep track of HOP out messages
       console.log('start extra LAYOUT NEW HOP OUT message--xxxxxxxxxxxxxxxxx')
       console.log(update)
-      // context.commit('SET_HOPOUT_MESSAGE', update)
-      // console.log(update)
-      // set the minimap in position store module
-      let prepOutHOP = {} // HopprepareUtility.savePrepare(update.nxp, this.state.networkPeerExpModules)
-      // set
-      // context.commit('SET_SPACE_SHOW', false)
-      // let futureTimeCheck = false
-      // context.commit('SET_LIVE_NXP', update.nxp)
-      // context.commit('SET_NXP_MODULED', update.nxp)
-      // context.commit('SET_Dashboard_NXP', update.nxp)
-      // context.commit('setNXPprogressUpdate', update.nxp)
-      let ECSbundle = {}
-      let boardOut = {}
-      boardOut.key = prepOutHOP.modules.key
-      boardOut.value = prepOutHOP.modules.value
-      ECSbundle.exp = boardOut // this.state.HOPrequestLive[prepOutHOP.board]
-      ECSbundle.modules = prepOutHOP.modules.modules
-      // send message to PeerLink for safeFLOW
-      let message = {}
-      message.type = 'safeflow'
-      message.reftype = 'ignore'
-      message.action = 'networkexperiment'
-      message.data = ECSbundle
-      message.jwt = this.state.jwttoken
-      console.log('EXTRA LAOYT HOP OUTmesssage+++EXTRA +++++')
-      console.log(message)
-      const safeFlowMessage = JSON.stringify(message)
-      Vue.prototype.$socket.send(safeFlowMessage)
+      for (let mod of update.modules) {
+        console.log(mod)
+        // context.commit('SET_HOPOUT_MESSAGE', update)
+        // console.log(update)
+        // set the minimap in position store module
+        let prepOutHOP = HopprepareUtility.savePrepare(update.board, this.state.networkPeerExpModules)
+        // set
+        // context.commit('SET_SPACE_SHOW', false)
+        // let futureTimeCheck = false
+        // context.commit('SET_LIVE_NXP', update.nxp)
+        // context.commit('SET_NXP_MODULED', update.nxp)
+        // context.commit('SET_Dashboard_NXP', update.nxp)
+        // context.commit('setNXPprogressUpdate', update.nxp)
+        let ECSbundle = {}
+        let boardOut = {}
+        boardOut.key = prepOutHOP.modules.key
+        boardOut.value = prepOutHOP.modules.value
+        ECSbundle.exp = boardOut // this.state.HOPrequestLive[prepOutHOP.board]
+        ECSbundle.modules = prepOutHOP.modules.modules
+        // send message to PeerLink for safeFLOW
+        let message = {}
+        message.type = 'safeflow'
+        message.reftype = 'ignore'
+        message.action = 'updatenetworkexperiment'
+        message.data = ECSbundle
+        message.jwt = this.state.jwttoken
+        console.log('EXTRA LAOYT HOP OUTmesssage+++EXTRA +++++')
+        console.log(message)
+        const safeFlowMessage = JSON.stringify(message)
+        Vue.prototype.$socket.send(safeFlowMessage)
+      }
     },
     async actionVisUpdate (context, update) {
       console.log('vistoolbar+++++++++++++++++++UPdateAction')

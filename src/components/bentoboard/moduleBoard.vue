@@ -13,7 +13,7 @@
       id="nxpDescription"
     >
       <slot name="body">
-        N=1 network experiment summary
+        Board summary
       </slot>
     </section>
     <!-- <footer class="board-footer">

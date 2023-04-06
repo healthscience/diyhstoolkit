@@ -33,6 +33,8 @@ export default {
       this.$store.dispatch('actionSpaceListShow', true)
     },
     joinBoard () {
+      // call library if not alreay asked for
+      this.$store.dispatch('actionLibraryStart', true)
       this.$store.dispatch('actionLifeview', 'publicexperiments')
       this.$store.dispatch('actionSpaceList', 'public')
       this.$store.dispatch('actionSpaceJoinListShow', false)

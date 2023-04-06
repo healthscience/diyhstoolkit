@@ -94,6 +94,7 @@ export default {
         } else if (backJSON.type === 'experiment-new') {
           // what is the state of the experiment Genesis or Joined?
           if (backJSON.contract.concept.state === 'joined') {
+            console.log('joined new exp')
             // set the state of the experiment for the dashboard
             // set the exeriment status object i.e. add to list
             // context.commit('SET_EXP_JOINLIST', joinNXP)
@@ -137,55 +138,58 @@ export default {
             this.state.NXPexperimentList.data.push(newExpGenesisDataItem)
             // need to set toolbar settings TODO
           }
-        } else if (backJSON.contract.refcontract === 'experiment-join') {
+        } else if (backJSON.contract === 'new-joinboard') {
+          console.log('newyly joined')
+          console.log(backJSON)
           // what is the state of the experiment Genesis or Joined?
-          if (backJSON.contract.concept.state === 'joined') {
-            // set the state of the experiment for the dashboard
-            // set the exeriment status object i.e. add to list
-            // context.commit('SET_EXP_JOINLIST', joinNXP)
-            // SET_EXP_JOINLIST (state, inVerified)
-            // set state for experiment just joined
-            let experBundle = {}
-            experBundle.cnrl = backJSON.key
-            experBundle.status = false
-            experBundle.active = false
-            experBundle.contract = backJSON.contract
-            experBundle.modules = backJSON.expanded
-            let objectPropC = backJSON.key
-            Vue.set(this.state.experimentStatus, objectPropC, experBundle)
-            // set local state exp expaneded
-            let newFormed = {}
-            newFormed.key = backJSON.key
-            newFormed.value = backJSON.contract
-            let addExpMod = {}
-            addExpMod.exp = newFormed
-            addExpMod.modules = backJSON.expanded
-            this.state.networkPeerExpModules.push(addExpMod)
-            // standard from key value
-            let standardExp = {}
-            standardExp.exp = backJSON
-            standardExp.modules = backJSON.expanded
-            // need to add to joined list of experiments
-            let newExpJoinedDataItem = ToolUtility.prepareExperimentSummarySingle(standardExp)
-            Vue.set(this.state.joinedNXPlist, 'data', [])
-            this.state.joinedNXPlist.data.push(newExpJoinedDataItem)
-          } else {
-            // genesis contract
-            let newFormed = {}
-            newFormed.key = backJSON.key
-            newFormed.value = backJSON.contract
-            let standardExp = {}
-            standardExp.exp = newFormed
-            standardExp.modules = backJSON.expanded
-            // add to local modules ref contract list
-            this.state.networkExpModules.push(standardExp)
-            let newExpGenesisDataItem = ToolUtility.prepareExperimentSummarySingleGenesis(standardExp)
-            this.state.NXPexperimentList.data.push(newExpGenesisDataItem)
-            // need to set toolbar settings TODO
-          }
+          // set the state of the experiment for the dashboard
+          // set the exeriment status object i.e. add to list
+          // context.commit('SET_EXP_JOINLIST', joinNXP)
+          // SET_EXP_JOINLIST (state, inVerified)
+          // set state for experiment just joined
+          let experBundle = {}
+          experBundle.cnrl = backJSON.key
+          experBundle.status = false
+          experBundle.active = false
+          experBundle.contract = backJSON.data.board.contract
+          experBundle.modules = backJSON.data.modules
+          let objectPropC = backJSON.key
+          Vue.set(this.state.experimentStatus, objectPropC, experBundle)
+          // set local state exp expaneded
+          /* let newFormed = {}
+          newFormed.key = backJSON.key
+          newFormed.value = backJSON.data.board.contract.modules */
+          let addExpMod = {}
+          addExpMod.key = backJSON.key // rename key
+          addExpMod.modules = backJSON.data.board.contract.modules // backJSON.data.modules
+          this.state.networkPeerExpModules.push(addExpMod)
+          // standard from key value
+          let standardExp = {}
+          standardExp.exp = backJSON.key
+          standardExp.modules = backJSON.data.modules
+          // need to add to joined list of experiments
+          let newExpJoinedDataItem = ToolUtility.prepareExperimentSummarySingle(standardExp)
+          Vue.set(this.state.joinedNXPlist, 'columns', newExpJoinedDataItem.columns)
+          Vue.set(this.state.joinedNXPlist, 'data', [])
+          this.state.joinedNXPlist.data.push(newExpJoinedDataItem.data)
+        } else if (backJSON.contract === 'new-genesisboard') {
+          // genesis contract
+          console.log('new genesisi board module')
+          console.log(backJSON)
+          let newFormed = {}
+          newFormed.key = backJSON.key
+          newFormed.value = backJSON.contract
+          let standardExp = {}
+          standardExp.exp = newFormed
+          standardExp.modules = backJSON.expanded
+          // add to local modules ref contract list
+          this.state.networkExpModules.push(standardExp)
+          let newExpGenesisDataItem = ToolUtility.prepareExperimentSummarySingleGenesis(standardExp)
+          this.state.NXPexperimentList.data.push(newExpGenesisDataItem)
+          // need to set toolbar settings TODO
         }
       } else if (backJSON.type === 'bentospaces-list') {
-        console.log('bentospace solospace LIST INFO')
+        console.log('bentospace LIST INFO')
         console.log(backJSON)
         // the callback will be called whenever any of the watched object properties
         // now need to ask for data for the active bentospace NXP's
@@ -224,13 +228,11 @@ export default {
       } else if (backJSON.type === 'solospaces-list') {
         console.log('solopace start list +++++++++++')
         console.log(backJSON)
-        // set in solospace  NB need to keep track of per board UUID
+        // set in solospace  NB need to keep track of per board UUID, get solospace to ask HOP for new data
         if (backJSON?.data?.value !== undefined) {
           this.dispatch('actionSavedLayout', backJSON.data.value.initialgrid, { root: true })
           this.dispatch('actionSavedSoloZoom', backJSON.data.value.solozoom, { root: true })
         }
-        // base board module vis will be return but need to ask HOP for data for the others modules saved ie unique compute and results IDs
-
       } else if (backJSON.type === 'bbai-reply') {
         // flow messages to ai helper
         let date = new Date()
@@ -662,6 +664,7 @@ export default {
         } else {
           // check for none data  e.g. bug, error, goes wrong cannot return data for display
           if (backJSON.data === 'none') {
+            console.log('no data for HOP return1')
             // switch off progress message and inform toolkit
             let setnxpProgress = { text: 'Experiment in progress', active: false }
             Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -747,6 +750,7 @@ export default {
               }
             }
           } else {
+            console.log('Yes HOP data returned')
             // switch off nxp Progress message
             let setnxpProgress = { text: 'Experiment in progress', active: true }
             Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -771,6 +775,7 @@ export default {
               let displayDataUpdate = VisualUtility.addVisData(matchVisModuleType, this.state.moduleGrid[backJSON.context.moduleorder.visualise.key], this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], backJSON)
               // update setting grid
               if (displayDataUpdate.update.grid.length > 0) {
+                console.log('update grid not new2')
                 for (let modG of displayDataUpdate.update.grid) {
                   // set new grid
                   this.state.moduleGrid[displayDataUpdate.module].push(modG)
@@ -810,7 +815,7 @@ export default {
                 }
               } else {
                 // switch off the update message for update
-                // console.log('switch off update message+++++++++++++++++++++++++++++++++++++')
+                console.log('switch off update message+3')
                 let setProgress = {}
                 setProgress = { text: 'Updating visualisation', active: false }
                 Vue.set(this.state.visProgress[backJSON.context.moduleorder.visualise.key], backJSON.data.context.triplet.device, setProgress)
@@ -826,14 +831,17 @@ export default {
               }
             } else {
               // set experiment progress message
+              console.log('routne 4')
               let setnxpProgress = { text: 'Experiment in progress', active: true }
               Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
               // prepare the module grid and data extract
               displayModulesReady = VisualUtility.displayPrepareModules(matchExpRefContract.modules, backJSON)
               // set the module GRID items
               for (let modG of backJSON.context.input.value.modules) {
-                Vue.set(this.state.moduleGrid, modG, displayModulesReady.grid[modG])
+                Vue.set(this.state.moduleGrid, modG.key, displayModulesReady.grid[modG.key])
               }
+              // set the solospace start as empty
+              this.dispatch('actionSavedLayout', {}, { root: true })
               // update vis toolsbars and data
               let moduleList = Object.keys(displayModulesReady.data)
               for (let modID of moduleList) {
@@ -876,14 +884,16 @@ export default {
                 }
                 // set the data for visualisation
                 if (backJSON.data !== 'none') {
+                  console.log('4 go ahead and set data')
                   Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'data', displayModulesReady.data[modID].data)
                   Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][modID], 'prime', displayModulesReady.data[modID].prime)
-                  let setnxpProgress = { text: 'Experiment in progress', active: false }
+                  let setnxpProgress = { text: 'Board in progress', active: false }
                   Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
                 } else {
+                  console.log('no data cliamed 4')
                   this.state.ecsMessageLive = 'no data available'
                   // set experiment progress message off
-                  let setnxpProgress = { text: 'Experiment in progress', active: false }
+                  let setnxpProgress = { text: 'Board in progress', active: false }
                   Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
                   // still setup module content to fix or add info try again?
                   // let matchContrastStart = ToolUtility.matchModuleRefcontractID(modID, this.state.experimentStatus[backJSON.context.input.key].modules)
@@ -912,6 +922,7 @@ export default {
         console.log(backJSON)
         // prepare PEER JOINED LIST
         let gridPeer = ToolUtility.prepareJoinedNXPlist(backJSON.data)
+        console.log(gridPeer)
         this.state.joinedNXPlist = gridPeer
         this.state.networkPeerExpModules = backJSON.data
         // setup UI settings for spaces grid
@@ -963,6 +974,7 @@ export default {
         // tell toolkit ref contracts are active
         state.startPeerRefContracts.push('peeref')
         // prepare PEER JOINED LIST
+        console.log('join3')
         let gridPeer = ToolUtility.prepareBentoSpaceJoinedNXPlist(this.state.networkPeerExpModules)
         this.state.joinedNXPlist = gridPeer
         // now ask for the data & list top 10 public library join options
@@ -1653,7 +1665,7 @@ export default {
         this.state.refcontractCompute = []
       }
     },
-    actionJoinExperiment (context, update) {
+    actionJoinBoard (context, update) {
       // perform validation checks
       // map experiment refcont to genesis contract
       // make first module contracts for this peer to record start and other module refs with new computations
@@ -1666,6 +1678,8 @@ export default {
         validJoinInput = true
       }
       if (validJoinInput === true) {
+        console.log('joined status')
+        console.log(this.state.joinNXPselected)
         // send to Library to create new experiment and modules for peer
         let dataChoices = {}
         dataChoices.exp = genesisExpRefCont
