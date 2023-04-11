@@ -840,8 +840,10 @@ export default {
               for (let modG of backJSON.context.input.value.modules) {
                 Vue.set(this.state.moduleGrid, modG.key, displayModulesReady.grid[modG.key])
               }
-              // set the solospace start as empty
-              this.dispatch('actionSavedLayout', {}, { root: true })
+              // set the solospace start as empty if none set
+              if (!this.state.solopositionSpace.initialGrid) {
+                this.dispatch('actionSavedLayout', {}, { root: true })
+              }
               // update vis toolsbars and data
               let moduleList = Object.keys(displayModulesReady.data)
               for (let modID of moduleList) {

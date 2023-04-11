@@ -99,21 +99,23 @@ PositionUtility.prototype.startPositionSpace = function (nxpID, spaceCoord, setu
 *
 */
 PositionUtility.prototype.startPositionCellspace = function (mcount, cells, spaceCoord, setupType) {
-  let cellCount = cells.length
   let cellPostions = []
-  // are setting up coords for first time or from save bentospace?
-  if (setupType === 'cell') {
-    // make sure each cell has a unquie space
-    for (let cl of cells) {
-      let coord = {}
-      coord.x = 200 // * (cellCount * mcount)
-      coord.y = 200 * (cellCount * mcount)
-      coord.cell = cl
-      cellPostions.push(coord)
-      cellCount++
+  if (cells !== undefined) {
+    let cellCount = cells.length
+    // are setting up coords for first time or from save bentospace?
+    if (setupType === 'cell') {
+      // make sure each cell has a unquie space
+      for (let cl of cells) {
+        let coord = {}
+        coord.x = 200 // * (cellCount * mcount)
+        coord.y = 200 * (cellCount * mcount)
+        coord.cell = cl
+        cellPostions.push(coord)
+        cellCount++
+      }
+    } else {
+      // cellPostions.push(coord)
     }
-  } else {
-    // cellPostions.push(coord)
   }
   return cellPostions
 }

@@ -49,12 +49,15 @@ export default {
         console.log('no layout info.  use postion standard')
         // first time setup solospace
         let modHash = Object.keys(inVerified.position)
+        console.log(modHash)
         let modCount = 1
         Vue.set(state.liveSpaceCoord, inVerified.board, {})
         Vue.set(state.initialGrid, inVerified.board, {})
         for (let mitem of modHash) {
           Vue.set(state.initialGrid[inVerified.board], mitem, [])
           Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
+          // check mitem is string
+          console.log(typeof mitem)
           let positionTrack = state.ctx.startPositionCellspace(modCount, inVerified.position[mitem], { x: 200, y: 300 }, 'cell')
           modCount++
           Vue.set(state.liveSpaceCoord[inVerified.board], mitem, positionTrack)
