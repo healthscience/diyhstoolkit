@@ -249,6 +249,8 @@ const store = new Vuex.Store({
     SET_NXP_MODULED: (state, inVerified) => {
       // match to NXP contract to get array of modules
       // set the order of the modules
+      console.log('setm odules')
+      console.log(inVerified)
       let modulesPerNXP = []
       for (let lnxp of state.networkPeerExpModules) {
         if (lnxp.key === inVerified) {

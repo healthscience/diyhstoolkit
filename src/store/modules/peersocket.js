@@ -161,7 +161,7 @@ export default {
           newFormed.value = backJSON.data.board.contract.modules */
           let addExpMod = {}
           addExpMod.key = backJSON.key // rename key
-          addExpMod.modules = backJSON.data.board.contract.modules // backJSON.data.modules
+          addExpMod.modules = backJSON.data.modules // backJSON.data.board.contract.modules // backJSON.data.modules
           this.state.networkPeerExpModules.push(addExpMod)
           // standard from key value
           let standardExp = {}

@@ -45,68 +45,86 @@ export default {
       console.log(inVerified)
       console.log(state.savedLayout)
       // check save location info?
-      if (Object.keys(state.savedLayout.start).length === 0) {
-        console.log('no layout info.  use postion standard')
-        // first time setup solospace
-        let modHash = Object.keys(inVerified.position)
-        console.log(modHash)
-        let modCount = 1
-        Vue.set(state.liveSpaceCoord, inVerified.board, {})
-        Vue.set(state.initialGrid, inVerified.board, {})
-        for (let mitem of modHash) {
-          Vue.set(state.initialGrid[inVerified.board], mitem, [])
-          Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
-          // check mitem is string
-          console.log(typeof mitem)
-          let positionTrack = state.ctx.startPositionCellspace(modCount, inVerified.position[mitem], { x: 200, y: 300 }, 'cell')
-          modCount++
-          Vue.set(state.liveSpaceCoord[inVerified.board], mitem, positionTrack)
-          Vue.set(state.initialGrid[inVerified.board], mitem, positionTrack)
-          state.ctx.miniMapSoloLocations(state.initialGrid[inVerified.board][mitem])
-        }
-      } else {
-        let arrA = Object.keys(inVerified.position)
-        let arrB = Object.keys(state.savedLayout.start[inVerified.board])
-        // compare what data is already here ie module data and what to ask for starting layout?
-        let differenceStart = arrA.filter(x => !arrB.includes(x)).concat(arrB.filter(x => !arrA.includes(x)))
-        console.log('differ')
-        console.log(differenceStart)
-        // ask HOP for data
-        let soloNeededMod = {}
-        soloNeededMod.board = inVerified.board
-        soloNeededMod.modules = differenceStart
-        this.dispatch('actionStartLayout', soloNeededMod, { root: true })
-        let layoutCheck = []
-        if (state.savedLayout?.start !== undefined) {
-          layoutCheck = Object.keys(state.savedLayout.start[inVerified.board])
-          Vue.set(state.liveSpaceCoord, inVerified.board, {})
-          Vue.set(state.initialGrid, inVerified.board, {})
-        } else {
-          layoutCheck = []
-        }
-        if (layoutCheck.length > 0) {
-          for (let mitem of layoutCheck) {
-            Vue.set(state.initialGrid[inVerified.board], mitem, [])
-            Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
-            Vue.set(state.liveSpaceCoord[inVerified.board], mitem, state.savedLayout.start[inVerified.board][mitem])
-            Vue.set(state.initialGrid[inVerified.board], mitem, state.savedLayout.start[inVerified.board][mitem])
-            state.ctx.miniMapSoloStartLoc(state.savedLayout.start[inVerified.board][mitem])
-          }
-        } else {
+      if (state.savedLayout.start) {
+        if (Object.keys(state.savedLayout.start).length === 0) {
+          console.log('no layout info.  use postion standard')
           // first time setup solospace
           let modHash = Object.keys(inVerified.position)
+          console.log(modHash)
           let modCount = 1
           Vue.set(state.liveSpaceCoord, inVerified.board, {})
           Vue.set(state.initialGrid, inVerified.board, {})
           for (let mitem of modHash) {
             Vue.set(state.initialGrid[inVerified.board], mitem, [])
             Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
+            // check mitem is string
+            console.log(typeof mitem)
             let positionTrack = state.ctx.startPositionCellspace(modCount, inVerified.position[mitem], { x: 200, y: 300 }, 'cell')
             modCount++
             Vue.set(state.liveSpaceCoord[inVerified.board], mitem, positionTrack)
             Vue.set(state.initialGrid[inVerified.board], mitem, positionTrack)
             state.ctx.miniMapSoloLocations(state.initialGrid[inVerified.board][mitem])
           }
+        } else {
+          let arrA = Object.keys(inVerified.position)
+          let arrB = Object.keys(state.savedLayout.start[inVerified.board])
+          // compare what data is already here ie module data and what to ask for starting layout?
+          let differenceStart = arrA.filter(x => !arrB.includes(x)).concat(arrB.filter(x => !arrA.includes(x)))
+          console.log('differ')
+          console.log(differenceStart)
+          // ask HOP for data
+          let soloNeededMod = {}
+          soloNeededMod.board = inVerified.board
+          soloNeededMod.modules = differenceStart
+          this.dispatch('actionStartLayout', soloNeededMod, { root: true })
+          let layoutCheck = []
+          if (state.savedLayout?.start !== undefined) {
+            layoutCheck = Object.keys(state.savedLayout.start[inVerified.board])
+            Vue.set(state.liveSpaceCoord, inVerified.board, {})
+            Vue.set(state.initialGrid, inVerified.board, {})
+          } else {
+            layoutCheck = []
+          }
+          if (layoutCheck.length > 0) {
+            for (let mitem of layoutCheck) {
+              Vue.set(state.initialGrid[inVerified.board], mitem, [])
+              Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
+              Vue.set(state.liveSpaceCoord[inVerified.board], mitem, state.savedLayout.start[inVerified.board][mitem])
+              Vue.set(state.initialGrid[inVerified.board], mitem, state.savedLayout.start[inVerified.board][mitem])
+              state.ctx.miniMapSoloStartLoc(state.savedLayout.start[inVerified.board][mitem])
+            }
+          } else {
+            // first time setup solospace
+            let modHash = Object.keys(inVerified.position)
+            let modCount = 1
+            Vue.set(state.liveSpaceCoord, inVerified.board, {})
+            Vue.set(state.initialGrid, inVerified.board, {})
+            for (let mitem of modHash) {
+              Vue.set(state.initialGrid[inVerified.board], mitem, [])
+              Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
+              let positionTrack = state.ctx.startPositionCellspace(modCount, inVerified.position[mitem], { x: 200, y: 300 }, 'cell')
+              modCount++
+              Vue.set(state.liveSpaceCoord[inVerified.board], mitem, positionTrack)
+              Vue.set(state.initialGrid[inVerified.board], mitem, positionTrack)
+              state.ctx.miniMapSoloLocations(state.initialGrid[inVerified.board][mitem])
+            }
+          }
+        }
+      } else {
+        console.log('no start solo space info')
+        // first time setup solospace
+        let modHash = Object.keys(inVerified.position)
+        let modCount = 1
+        Vue.set(state.liveSpaceCoord, inVerified.board, {})
+        Vue.set(state.initialGrid, inVerified.board, {})
+        for (let mitem of modHash) {
+          Vue.set(state.initialGrid[inVerified.board], mitem, [])
+          Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
+          let positionTrack = state.ctx.startPositionCellspace(modCount, inVerified.position[mitem], { x: 200, y: 300 }, 'cell')
+          modCount++
+          Vue.set(state.liveSpaceCoord[inVerified.board], mitem, positionTrack)
+          Vue.set(state.initialGrid[inVerified.board], mitem, positionTrack)
+          state.ctx.miniMapSoloLocations(state.initialGrid[inVerified.board][mitem])
         }
       }
     },
