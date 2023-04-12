@@ -41,16 +41,11 @@ export default {
       Vue.set(state.savedLayout, 'start', inVerified)
     },
     SET_INITAL_CELLS (state, inVerified) {
-      console.log('set save solospace layout and data')
-      console.log(inVerified)
-      console.log(state.savedLayout)
       // check save location info?
       if (state.savedLayout.start) {
         if (Object.keys(state.savedLayout.start).length === 0) {
-          console.log('no layout info.  use postion standard')
           // first time setup solospace
           let modHash = Object.keys(inVerified.position)
-          console.log(modHash)
           let modCount = 1
           Vue.set(state.liveSpaceCoord, inVerified.board, {})
           Vue.set(state.initialGrid, inVerified.board, {})
@@ -58,7 +53,6 @@ export default {
             Vue.set(state.initialGrid[inVerified.board], mitem, [])
             Vue.set(state.liveSpaceCoord[inVerified.board], mitem, [])
             // check mitem is string
-            console.log(typeof mitem)
             let positionTrack = state.ctx.startPositionCellspace(modCount, inVerified.position[mitem], { x: 200, y: 300 }, 'cell')
             modCount++
             Vue.set(state.liveSpaceCoord[inVerified.board], mitem, positionTrack)
@@ -70,8 +64,6 @@ export default {
           let arrB = Object.keys(state.savedLayout.start[inVerified.board])
           // compare what data is already here ie module data and what to ask for starting layout?
           let differenceStart = arrA.filter(x => !arrB.includes(x)).concat(arrB.filter(x => !arrA.includes(x)))
-          console.log('differ')
-          console.log(differenceStart)
           // ask HOP for data
           let soloNeededMod = {}
           soloNeededMod.board = inVerified.board
@@ -111,7 +103,6 @@ export default {
           }
         }
       } else {
-        console.log('no start solo space info')
         // first time setup solospace
         let modHash = Object.keys(inVerified.position)
         let modCount = 1
@@ -138,19 +129,14 @@ export default {
       console.log(inVerified)
     },
     SET_ADDSOLOCELL_POSITION: (state, inVerified) => {
-      console.log('add cel++++++++++++++++++++++l')
-      console.log(inVerified)
       let newCelladded = {}
       newCelladded.cell = {}
       newCelladded.cell.i = inVerified.mData.toString()
       newCelladded.x = 120
       newCelladded.y = 1900
-      console.log('new cell to add')
       state.initialGrid[inVerified.nxpCNRL][inVerified.moduleCNRL].push(newCelladded)
     },
     SET_COPYSOLOCELL_POSITION: (state, inVerified) => {
-      console.log('cell position set')
-      console.log(inVerified)
       let removeCopy = inVerified.moduleCNRL.slice(5)
       // match to box to place near by
       let keysMods = Object.keys(state.initialGrid[inVerified.nxpCNRL])
@@ -235,8 +221,6 @@ export default {
       Vue.set(state.dataFeedback, inVerified, '')
     },
     SET_ADD_SOLOSPACE (state, inVerified) {
-      // add to SoloSpace
-      console.log('solospace add')
       // need unquie identifer for grid
       let random = Math.random()
       let deviceUUID = random.toString()
@@ -289,7 +273,6 @@ export default {
         inVerified.mData = newCellNumber
         // this.dispatch('actionAddcell', inVerified, { root: true })
       } else {
-        console.log('bentospace')
         let modG = inVerified.mData + deviceUUID.slice(2, 8)
         let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': modG, static: false }
         state.boardModulesList[inVerified.moduleCNRL].push(newGriditem)
@@ -328,13 +311,9 @@ export default {
       }
     },
     SET_TRACK_OUT: (state, inVerified) => {
-      console.log('tracked OUT')
       state.trackOut.push(inVerified)
     },
     SET_COPY_UPDATE (state, inVerified) {
-      console.log('update copy with UUID+++++++SOLOSPACE++++++++++++')
-      console.log(inVerified)
-      console.log(state.initialGrid)
       // switch copy Module for now hash ID but keep all location info.
       // match outid to in ID
       let matchOutBack = {}
@@ -346,11 +325,8 @@ export default {
       // check if establish cell
       let existingCheck = Object.keys(matchOutBack)
       if (existingCheck.length === 0) {
-        console.log('existing')
         matchOutBack = inVerified.context
-        console.log('Existing cell ---> update visualisation+++++++')
         let updateModuleInfo = matchOutBack // inVerified
-        console.log(updateModuleInfo)
         // temp use outhash as module UUiD or use device and expand to array and loop over
         let copyMod = inVerified.context.input.outhash
         updateModuleInfo.moduleCNRL = copyMod
@@ -358,10 +334,6 @@ export default {
         // Vue.set(state.soloData, copyMod, {})
         // Vue.set(state.soloData[copyMod], 'data', [])
         // Vue.set(state.soloData[copyMod], 'prime', {})
-        console.log(state.soloData)
-        console.log(copyMod)
-        console.log(matchOutBack.mData)
-        console.log(inVerified.data)
         Vue.set(state.soloData[copyMod].data, matchOutBack.mData, inVerified.data)
         // state.soloData[copyMod].data.push(inVerified.data)
         let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
@@ -392,7 +364,6 @@ export default {
         // state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
         // state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
       } else {
-        console.log('from COPYPCOPYCPYCPY')
         state.liveCopy = matchOutBack.moduleCNRL
         state.liveTempOuthash = inVerified.context.input.outhash
         // is the match a copy or existing cell?
@@ -454,9 +425,7 @@ export default {
           state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
           state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
         } else {
-          console.log('Existing cell ---> update visualisation+++++++')
           let updateModuleInfo = matchOutBack // inVerified
-          console.log(updateModuleInfo)
           // temp use outhash as module UUiD or use device and expand to array and loop over
           let copyMod = inVerified.context.input.outhash
           updateModuleInfo.moduleCNRL = copyMod
@@ -464,10 +433,6 @@ export default {
           // Vue.set(state.soloData, copyMod, {})
           // Vue.set(state.soloData[copyMod], 'data', [])
           // Vue.set(state.soloData[copyMod], 'prime', {})
-          console.log(state.soloData)
-          console.log(copyMod)
-          console.log(matchOutBack.mData)
-          console.log(inVerified.data)
           Vue.set(state.soloData[copyMod].data, matchOutBack.mData, inVerified.data)
           // state.soloData[copyMod].data.push(inVerified.data)
           let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }

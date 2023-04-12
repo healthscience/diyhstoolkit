@@ -64,8 +64,8 @@ export default {
     SOCKET_ONMESSAGE (state, message) {
       let backJSON = {}
       backJSON = JSON.parse(message.data)
-      // console.log('****BB--INPUUTTT******')
-      // console.log(backJSON)
+      console.log('****BB--INPUUTTT******')
+      console.log(backJSON)
       if (backJSON.stored === true) {
         // success in saving reference contract
         // what type of save?
@@ -94,7 +94,6 @@ export default {
         } else if (backJSON.type === 'experiment-new') {
           // what is the state of the experiment Genesis or Joined?
           if (backJSON.contract.concept.state === 'joined') {
-            console.log('joined new exp')
             // set the state of the experiment for the dashboard
             // set the exeriment status object i.e. add to list
             // context.commit('SET_EXP_JOINLIST', joinNXP)
@@ -139,8 +138,6 @@ export default {
             // need to set toolbar settings TODO
           }
         } else if (backJSON.contract === 'new-joinboard') {
-          console.log('newyly joined')
-          console.log(backJSON)
           // what is the state of the experiment Genesis or Joined?
           // set the state of the experiment for the dashboard
           // set the exeriment status object i.e. add to list
@@ -174,8 +171,6 @@ export default {
           this.state.joinedNXPlist.data.push(newExpJoinedDataItem.data)
         } else if (backJSON.contract === 'new-genesisboard') {
           // genesis contract
-          console.log('new genesisi board module')
-          console.log(backJSON)
           let newFormed = {}
           newFormed.key = backJSON.key
           newFormed.value = backJSON.contract
@@ -187,10 +182,12 @@ export default {
           let newExpGenesisDataItem = ToolUtility.prepareExperimentSummarySingleGenesis(standardExp)
           this.state.NXPexperimentList.data.push(newExpGenesisDataItem)
           // need to set toolbar settings TODO
+        } else if (backJSON.type === 'solospaces') {
+          console.log('set Solospace saved layout info.')
+          this.dispatch('actionSavedLayout', backJSON.data.value.initialgrid, { root: true })
+          this.dispatch('actionSavedSoloZoom', backJSON.data.value.solozoom, { root: true })
         }
       } else if (backJSON.type === 'bentospaces-list') {
-        console.log('bentospace LIST INFO')
-        console.log(backJSON)
         // the callback will be called whenever any of the watched object properties
         // now need to ask for data for the active bentospace NXP's
         // first check if any bentospaces list is provided
@@ -226,8 +223,6 @@ export default {
           Vue.prototype.$socket.send(refCJSON)
         }
       } else if (backJSON.type === 'solospaces-list') {
-        console.log('solopace start list +++++++++++')
-        console.log(backJSON)
         // set in solospace  NB need to keep track of per board UUID, get solospace to ask HOP for new data
         if (backJSON?.data?.value !== undefined) {
           this.dispatch('actionSavedLayout', backJSON.data.value.initialgrid, { root: true })
@@ -1791,7 +1786,7 @@ export default {
       saveSpacePosition.data = soloLocHolder
       saveSpacePosition.jwt = this.state.jwttoken
       const saveJSONp = JSON.stringify(saveSpacePosition)
-      console.log('save solospace layout')
+      console.log('solospace update layout')
       console.log(saveSpacePosition)
       Vue.prototype.$socket.send(saveJSONp)
     },

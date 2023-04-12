@@ -106,7 +106,6 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
 *
 */
 VisualUtility.prototype.orderModules = function (modulesGrid, peerContext) {
-  console.log(modulesGrid)
   let newDisplayOrder = []
   if (peerContext === 'public') {
     // first match for question
@@ -136,7 +135,6 @@ VisualUtility.prototype.orderModules = function (modulesGrid, peerContext) {
   } else if (peerContext === 'private') {
     // first match for question
     for (let mod of modulesGrid) {
-      console.log(mod)
       if (mod.value.info.type === 'question') {
         newDisplayOrder.push(mod)
       }

@@ -74,12 +74,9 @@ class HOPprepare extends EventEmitter {
   *
   */
   prepHOPmodules = function (update, networkPeerExpModules) {
-    console.log('modules')
-    console.log(update)
     // build the safeFLOW-ECS input bundle
     let matchExp = {}
     for (let nxp of networkPeerExpModules) {
-      console.log(nxp)
       if (nxp.key === update) {
         matchExp = nxp
       }
@@ -93,8 +90,6 @@ class HOPprepare extends EventEmitter {
   *
   */
   expandRefContract = function (update, matchExp, liveRefContIndex, livePeerRefContIndex) {
-    console.log(update)
-    console.log(liveRefContIndex)
     let futureTimeCheck = false
     // prepare ECS inputs- lookup peer selected module options
     let peerOptions = []

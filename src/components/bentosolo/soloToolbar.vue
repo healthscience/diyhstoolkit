@@ -14,7 +14,7 @@
         <button class="save-space" @click.prevent="combineSelected()">+  +</button>
       </div>
       <div id="space-save">
-        <button class="save-space" @click.prevent="saveSpaceLayout()">save layout</button>
+        <button class="save-space" @click.prevent="saveSoloSpaceLayout()">save layout</button>
       </div>
       <div id="replicate-status" v-if="replicataStatus === true">
         <div class="rep-status">Replication in progess</div>
@@ -109,7 +109,7 @@ export default {
     viewRoutines () {
       console.log('rounte patterns / reminders')
     },
-    saveSpaceLayout () {
+    saveSoloSpaceLayout () {
       this.$store.dispatch('actionSaveSoloSpaceCells', this.board)
     },
     combineSelected () {
