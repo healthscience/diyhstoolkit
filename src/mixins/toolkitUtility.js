@@ -57,7 +57,6 @@ ToolkitUtility.prototype.prepareLifeboardList = function (lifeboardIN) {
 *
 */
 ToolkitUtility.prototype.prepareBentoSpaceJoinedNXPlist = function (peerExpModules) {
-  console.log('priviate joined 1')
   let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
   let gridDatapeer = this.prepareBentoSpaceExperimentSummary(peerExpModules)
   let gridPeer = {}
@@ -72,7 +71,6 @@ ToolkitUtility.prototype.prepareBentoSpaceJoinedNXPlist = function (peerExpModul
 *
 */
 ToolkitUtility.prototype.prepareJoinedNXPlist = function (peerExpModules) {
-  console.log('prive jonied 2')
   let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
   let gridDatapeer = this.prepareExperimentSummary(peerExpModules)
   let gridPeer = {}
@@ -137,8 +135,6 @@ ToolkitUtility.prototype.prepareExperimentSummary = function (peerExpModules) {
 *
 */
 ToolkitUtility.prototype.prepareExperimentSummarySingle = function (peerExpModules) {
-  console.log('joined colums')
-  console.log(peerExpModules)
   let gridColumns = ['id', 'name', 'description', 'time', 'dapps', 'device', 'action']
   let gridDatapeer = {}
   let question2 = {}

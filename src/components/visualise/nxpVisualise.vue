@@ -1,5 +1,5 @@
 <template>
-  <div id="visualise-nxp">vvv
+  <div id="visualise-nxp">
     <div id="prime-visualise" v-if="visPrepareStatus !== undefined">
       <progress-vismessage v-if="visPrepareStatus.active === true" :progressMessage="visPrepareStatus" ></progress-vismessage>
       <div id="vis-chartbuilder">

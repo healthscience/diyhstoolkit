@@ -23,7 +23,13 @@ export default {
   },
   computed: {
     liveDevice: function () {
-      return this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data[this.mData]
+      let deviceLive = {}
+      for (let device of this.$store.state.NXPexperimentData[this.shellID][this.moduleCNRL].data) {
+        if (device.device_mac === this.mData) {
+          deviceLive = device
+        }
+      }
+      return deviceLive
     }
   },
   data: () => ({

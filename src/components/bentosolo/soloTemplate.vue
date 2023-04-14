@@ -323,7 +323,7 @@ export default {
 #dragwheelsolo-space {
   height: 98vh;
   width: 98vw;
-  overflow: hidden;
+  overflow: scroll;
   border: 0px dashed blue;
 }
 

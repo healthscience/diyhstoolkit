@@ -120,6 +120,8 @@ export default {
       }
     },
     dashLive: function () {
+      // console.log('dashLive UI loop')
+      // console.log(this.$store.state.liveDashList)
       if (this.$store.state.liveDashList === undefined) {
         return {}
       } else {
@@ -317,10 +319,10 @@ export default {
 }
 
 #dragwheel-space {
-  height: 81vh;
+  height: 8100vh;
   width: 98vw;
   border: 0px dashed blue;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 #dashboard-placeholder {

@@ -33,32 +33,40 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
   let gridPerModule = {}
   let moduleObject = {}
   for (let mod of modules) {
+    let deviceSet = entityData.data.context.triplet.device
     // need to match each modules to Component Data
     if (mod.value.type === 'question') {
       moduleObject.question = mod.key
-      let qgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: true }]
+      let qgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': deviceSet, static: true }]
       gridPerModule[mod.key] = qgrid // mod.grid
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-plain', 'text': 'Question', 'active': true }, 'grid': qgrid, 'data': [{ 'form': 'html' }, { 'content': mod.value.info.question.text }], 'message': 'compute-complete' }
     } else if (mod.value.type === 'device') {
-      moduleObject.device = mod.key
-      let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '2', static: false }]
+      moduleObject.device = entityData.data.context.triplet.device
+      // match specific device id to list
+      let deviceMatch = {}
+      for (let device of entityData.devices) {
+        if (device.device_mac === entityData.data.context.triplet.device) {
+          deviceMatch = device
+        }
+      }
+      let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': deviceSet, static: false }]
       gridPerModule[mod.key] = dgrid // mod.grid
-      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': dgrid, 'data': entityData.devices, 'message': 'compute-complete' }
+      testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': dgrid, 'data': deviceMatch, 'message': 'compute-complete' }
     } else if (mod.value.type === 'dapp') {
       moduleObject.dapp = mod.key
-      let ddgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }]
+      let ddgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': deviceSet, static: false }]
       gridPerModule[mod.key] = ddgrid // mod.grid
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-dapp', 'text': 'Dapp', 'active': true }, 'grid': ddgrid, 'data': [{ 'content': 'Gadgetbridge android' }, { 'content2': 'Xdrip android' }], 'message': 'compute-complete' }
     } else if (mod.value.type === 'data') {
       // moduleObject.data = mod.key
       // moduleObject.packaging = mod.value.info.data.key
-      let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '1', static: false }, { 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '2', static: false }]
+      let dgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': deviceSet, static: false }]
       gridPerModule[mod.key] = dgrid // mod.grid
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-112', 'vistype': 'nxp-device', 'text': 'Device', 'active': true }, 'grid': dgrid, 'data': entityData.devices, 'message': 'compute-complete' }
     } else if (mod.value.type === 'compute') {
       moduleObject.compute = mod.key
       moduleObject.computerefcont = mod.value.info.compute.key
-      let cgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': '0', static: false }]
+      let cgrid = [{ 'x': 0, 'y': 0, 'w': 8, 'h': 2, 'i': deviceSet, static: false }]
       gridPerModule[mod.key] = cgrid
       testDataBundle[mod.key] = { 'prime': { 'cnrl': 'cnrl-114', 'vistype': 'nxp-compute', 'text': 'Compute', 'active': true }, 'grid': cgrid, 'data': [{ data: 'none' }], 'message': 'compute-complete' }
     } else if (mod.value.type === 'Errors') {
@@ -70,11 +78,11 @@ VisualUtility.prototype.displayPrepareModules = function (modules, entityData) {
       let makeGrid = []
       let newGriditem = {}
       if (entityData.data !== 'none') {
-        newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': entityData.data.context.triplet.device, static: false }
+        newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': deviceSet, static: false }
       } else {
         // but does a device exist? entityData.devices[0].device_mac
         if (entityData.devices.length > 0) {
-          newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': entityData.devices[0].device_mac, static: false }
+          newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': deviceSet, static: false }
         } else {
           newGriditem = { 'x': 0, 'y': 0, 'w': 20, 'h': 14, 'i': 'none', static: false }
         }
@@ -183,7 +191,7 @@ VisualUtility.prototype.addVisData = function (visModule, liveGrid, existingData
     gridUpdate.push(newGriditem)
   }
   // add prime info context data placer
-  let updateVisData = {} // this.mergeDataSets(existingData, newData.data)
+  let updateVisData = newData.data // {} // this.mergeDataSets(existingData, newData.data)
   // update grid and chart data
   visPackageback.grid = gridUpdate
   visPackageback.data = updateVisData
