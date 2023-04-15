@@ -426,9 +426,6 @@ const store = new Vuex.Store({
       }
     }, */
     setVisProgressUpdate: (state, inVerified) => {
-      console.log('set progressIIIIIIIIIIIIIIIIIIIII')
-      console.log(inVerified)
-      console.log(state.visProgress)
       let setProgress = {}
       setProgress = { text: 'Updating visualisation', active: true }
       Vue.set(state.visProgress[inVerified.module], inVerified.device, setProgress)
@@ -792,15 +789,13 @@ const store = new Vuex.Store({
     async actionDashboardState (context, update) {
       // keep track of HOP out messages
       console.log('prep start NEW HOP OUT message--xxxxxxxxxxxxxxxxx')
-      console.log(update)
-      console.log(this.state.networkPeerExpModules)
-      console.log(this.state.liveRefContIndex)
+      // console.log(update)
+      // console.log(this.state.networkPeerExpModules)
+      // console.log(this.state.liveRefContIndex)
       // context.commit('SET_HOPOUT_MESSAGE', update)
       // console.log(update)
       // set the minimap in position store module
       let prepOutHOP = HopprepareUtility.savePrepare(update.nxp, this.state.networkPeerExpModules, this.state.liveRefContIndex, this.state.livePeerRefContIndex)
-      console.log('prepare NXP module and moudles')
-      console.log(prepOutHOP)
       // set
       context.commit('SET_SPACE_SHOW', false)
       // let futureTimeCheck = false
@@ -870,6 +865,7 @@ const store = new Vuex.Store({
     async actionVisUpdate (context, update) {
       console.log('vistoolbar+++++++++++++++++++UPdateAction')
       console.log(update)
+      console.log(this.state.visModuleHolder)
       // clear the cell feedback
       this.dispatch('actionClearCellFeedback', update.moduleCNRL, { root: true })
       // is the module a copy?
@@ -1011,8 +1007,8 @@ const store = new Vuex.Store({
       message.jwt = this.state.jwttoken
       console.log('NXPMessage+++++22222UPDATE++++OUT')
       console.log(message)
-      const safeFlowMessage = JSON.stringify(message)
-      Vue.prototype.$socket.send(safeFlowMessage)
+      // const safeFlowMessage = JSON.stringify(message)
+      // Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
       console.log('setup rogress paess supdate dudpadpa')
       console.log(progressContext)

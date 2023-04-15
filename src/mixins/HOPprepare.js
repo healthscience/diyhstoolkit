@@ -28,8 +28,6 @@ class HOPprepare extends EventEmitter {
   savePrepare = function (input, boardmods, liveRefContIndex, livePeerRefContIndex) {
     let checkPosition = this.checkPositionObject(input)
     let connectRefContracts = this.prepHOPmodules(input, boardmods)
-    // expand ref contract hashes if require --> do this via HOP & xlibrary
-    // let expandedModules = this.expandRefContract(input.nxp, connectRefContracts, liveRefContIndex, livePeerRefContIndex)
     let outMessageHOP = {}
     outMessageHOP.futureTimeCheck = false
     outMessageHOP.board = checkPosition
@@ -64,8 +62,6 @@ class HOPprepare extends EventEmitter {
     let timeContext = {}
     timeContext.device = update.mData
     timeContext.timerange = []
-    // context.commit('SET_CLEAR_TIMERANGE', timeContext)
-    // clear the time range for new NXP view
   }
 
   /**
@@ -85,7 +81,7 @@ class HOPprepare extends EventEmitter {
   }
 
   /**
-  * expand the ref contract hash to full contract
+  * expand the ref contract hash to full contract (NOW HOP DOED THIS)
   * @method expandRefContract
   *
   */

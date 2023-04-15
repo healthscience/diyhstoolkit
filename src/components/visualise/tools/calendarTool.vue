@@ -74,20 +74,6 @@ export default {
   computed: {
     timeRange: function () {
       return this.$store.state.setTimerange[this.mData]
-    },
-    activeComputeContract: function () {
-      let modulesMatch = this.$store.state.experimentStatus[this.shellID].modules
-      let computeContract = {}
-      for (let modC of modulesMatch) {
-        if (modC.value.type === 'compute') {
-          computeContract = modC
-        }
-      }
-      // set default last time set
-      // console.log('compute calandar tools')
-      // console.log(computeContract.value.info.controls)
-      // this.setDefaultTime(computeContract.value.info.controls.rangedate)
-      return computeContract.value.info.compute
     }
   },
   created () {
@@ -260,11 +246,12 @@ export default {
       contextK.mData = this.mData
       contextK.startperiodchange = seg.text.number
       contextK.startperiod = 0
-      contextK.rangechange = [] // this.timeRange
+      contextK.rangechange = []
       // check that time is selected
       if (contextK.startperiod !== 0) {
         console.log('no time present, prompt peer1')
       } else {
+        console.log(contextK)
         this.$store.dispatch('actionVisUpdate', contextK)
       }
     },
@@ -308,6 +295,7 @@ export default {
         feedbackDevice.message = 'please select a date'
         this.$store.dispatch('actionFeeback', feedbackDevice)
       } else {
+        console.log(contextK)
         this.$store.dispatch('actionVisUpdate', contextK)
       }
     }
