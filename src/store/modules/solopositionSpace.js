@@ -38,6 +38,7 @@ export default {
       state.ctx.mousePointer(inVerified)
     },
     SET_SAVED_LAYOUT: (state, inVerified) => {
+      console.log(inVerified)
       Vue.set(state.savedLayout, 'start', inVerified)
     },
     SET_INITAL_CELLS (state, inVerified) {
@@ -221,6 +222,8 @@ export default {
       Vue.set(state.dataFeedback, inVerified, '')
     },
     SET_ADD_SOLOSPACE (state, inVerified) {
+      console.log('add cell solospace COPY1')
+      console.log(inVerified)
       // need unquie identifer for grid
       let random = Math.random()
       let deviceUUID = random.toString()
@@ -228,6 +231,8 @@ export default {
       let spaceType = this.state.solospace.soloState.active
       if (spaceType === true) {
         let newCellNumber = 0
+        // set the compHolder for date
+        this.dispatch('actionSetCompHolder', inVerified, { root: true })
         // need to add new visualise module and give it unique compute contract or update to unqiue
         // identify base module to be copied
         let modKeys = Object.keys(state.soloData)
@@ -246,7 +251,7 @@ export default {
                 state.boardModulesList[inVerified.nxpCNRL].push(copyMod)
                 state.copyModuleList.push(copyMod)
                 Vue.set(state.soloData, copyMod, {})
-                Vue.set(state.dataFeedback, copyMod, {})
+                Vue.set(state.dataFeedback, copyMod, { message: 'copied' })
                 Vue.set(state.soloData[copyMod], 'data', {})
                 Vue.set(state.soloData[copyMod], 'prime', {})
                 Vue.set(state.soloData[copyMod].data, newCellNumber, state.soloData[modl].data[cell])
@@ -312,6 +317,12 @@ export default {
     },
     SET_TRACK_OUT: (state, inVerified) => {
       state.trackOut.push(inVerified)
+      console.log('track out solo')
+      console.log(state.trackOut)
+    },
+    SET_REMOVETRACK_OUT: (state, inVerified) => {
+      let indexRem = state.trackOut.filter((el) => el.moduleCNRL !== inVerified.moduleCNRL)
+      state.trackOut = indexRem
     },
     SET_COPY_UPDATE (state, inVerified) {
       // switch copy Module for now hash ID but keep all location info.
@@ -325,6 +336,7 @@ export default {
       // check if establish cell
       let existingCheck = Object.keys(matchOutBack)
       if (existingCheck.length === 0) {
+        console.log('solo1')
         matchOutBack = inVerified.context
         let updateModuleInfo = matchOutBack // inVerified
         // temp use outhash as module UUiD or use device and expand to array and loop over
@@ -364,6 +376,7 @@ export default {
         // state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
         // state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
       } else {
+        console.log('solo2')
         state.liveCopy = matchOutBack.moduleCNRL
         state.liveTempOuthash = inVerified.context.input.outhash
         // is the match a copy or existing cell?
@@ -391,6 +404,22 @@ export default {
           // temp use outhash as module UUiD or use device and expand to array and loop over
           let copyMod = inVerified.context.input.outhash
           updateModuleInfo.moduleCNRL = copyMod
+          console.log(inVerified)
+          if (inVerified.context.moduleorder.compute.value.type === 'compute') {  // contract or value  is consistent?
+            // compModuleHolder
+            console.log('----2---compute back set date update')
+            // remove the copy compModuleHolder
+            Vue.delete(this.state.compModuleHolder, 'copy-' + inVerified.context.moduleorder.visualise.key)
+            let startCompControls = {}
+            startCompControls.date = inVerified.context.moduleorder.compute.value.info.controls.date
+            // set to vis module ID and device ID
+            let liveDevice = inVerified.data.context.triplet.device
+            let modUpdate = this.state.compModuleHolder[inVerified.context.moduleorder.visualise.key]
+            modUpdate[liveDevice] = startCompControls
+            Vue.set(this.state.compModuleHolder, copyMod, {})
+            Vue.set(this.state.compModuleHolder, copyMod, modUpdate)
+            console.log(this.state.compModuleHolder)
+          }
           // add to solospace holder
           Vue.set(state.soloData, copyMod, {})
           Vue.set(state.soloData[copyMod], 'data', [])
@@ -425,6 +454,7 @@ export default {
           state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
           state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
         } else {
+          console.log('solo3')
           let updateModuleInfo = matchOutBack // inVerified
           // temp use outhash as module UUiD or use device and expand to array and loop over
           let copyMod = inVerified.context.input.outhash
@@ -525,6 +555,9 @@ export default {
     },
     actionOuthashTrack (context, update) {
       context.commit('SET_TRACK_OUT', update)
+    },
+    actionOuthashRemove (context, update) {
+      context.commit('SET_REMOVETRACK_OUT', update)
     },
     actionUpdateCopy (context, update) {
       context.commit('SET_COPY_UPDATE', update)

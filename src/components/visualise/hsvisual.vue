@@ -2,7 +2,7 @@
   <div id="visual-view" ref="visualView">
     <div id="grid-visual">
       <div class="visual-item" id="bentobox-space">
-        <div id="grid-bentobox">cccc
+        <div id="grid-bentobox">
           <div class="grid-item-chart" v-if="networkcollection !== undefined && networkcollection.active !== false">
             <reactive :chartData="networkcollection" :options="options"></reactive>
           </div>

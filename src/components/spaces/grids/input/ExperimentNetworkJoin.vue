@@ -373,6 +373,7 @@ export default {
       this.shellContract = expCNRL
       this.actionKBundle = NXPcontract
       if (NXPcontract.action === 'View') {
+        console.log('hop first time')
         this.$store.dispatch('actionDashboardState', expCNRL)
         this.isModalDashboardVisible = true
       } else {

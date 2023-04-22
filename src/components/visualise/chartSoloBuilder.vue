@@ -1,7 +1,7 @@
 <template>
   <div id="vis-toolkit"> Device: {{ mData }}
-    <div id="cell-feedback">
-      {{ cellFeedback }}
+    <div id="cell-feedback" v-if="cellFeedback !== null && cellFeedback?.message">
+      {{ cellFeedback.message }}
     </div>
     <div id="diy-tools">
       <div id="chart-type">

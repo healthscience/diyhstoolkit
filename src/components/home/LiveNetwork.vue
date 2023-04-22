@@ -27,8 +27,6 @@ export default {
       return this.$store.state.experimentListshow
     },
     peerExperimentListlive: function () {
-      console.log('live boards private')
-      console.log(this.$store.state.joinedNXPlist)
       return this.$store.state.joinedNXPlist
     },
     networkNXPListlive: function () {

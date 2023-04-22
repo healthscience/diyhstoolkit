@@ -107,6 +107,7 @@ const store = new Vuex.Store({
       setTimeFormat: null
     },
     visModuleHolder: {},
+    compModuleHolder: {},
     newNXPfeedback: '',
     newNXPfeedbackActive: false,
     isModalNewNetworkExperiment: false,
@@ -443,6 +444,9 @@ const store = new Vuex.Store({
     },
     SET_TIME_RANGE: (state, inVerified) => {
       Vue.set(state.setTimerange, inVerified.device, inVerified.timerange)
+      // keep track of setting per module toolbar / calendar
+      // Vue.set(state.moduleHolder, inVerified.module, {})
+      // Vue.set(state.moduleHolder[inVerified.module][inVerified.device], '', inVerified.timerange)
     },
     SET_CLEAR_TIMERANGE: (state, inVerified) => {
       Vue.set(state.setTimerange, inVerified.device, [])
@@ -788,7 +792,7 @@ const store = new Vuex.Store({
     },
     async actionDashboardState (context, update) {
       // keep track of HOP out messages
-      console.log('prep start NEW HOP OUT message--xxxxxxxxxxxxxxxxx')
+      console.log('xxxxxx---start NEW HOP OUT message--xxxxxxxxxx')
       // console.log(update)
       // console.log(this.state.networkPeerExpModules)
       // console.log(this.state.liveRefContIndex)
@@ -828,7 +832,7 @@ const store = new Vuex.Store({
     },
     async actionStartLayout (context, update) {
       // keep track of HOP out messages
-      console.log('start extra LAYOUT NEW HOP OUT message--xxxxxxxxxxxxxxxxx')
+      console.log('xx---extra LAYOUT NEW HOP OUT message--xxxx')
       console.log(update)
       for (let mod of update.modules) {
         console.log(mod)
@@ -863,14 +867,13 @@ const store = new Vuex.Store({
       }
     },
     async actionVisUpdate (context, update) {
-      console.log('vistoolbar+++++++++++++++++++UPdateAction')
+      console.log('xxxxx---vistoolbar++++++UPdateAction')
       console.log(update)
-      console.log(this.state.visModuleHolder)
+      // console.log(this.state.visModuleHolder)
       // clear the cell feedback
       this.dispatch('actionClearCellFeedback', update.moduleCNRL, { root: true })
       // is the module a copy?
       let copyStatus = update.moduleCNRL.slice(0, 4)
-      console.log(copyStatus)
       this.state.ecsMessageLive = ''
       // perform checks for missing input data to form ECS-out bundle
       // TODO
@@ -881,7 +884,7 @@ const store = new Vuex.Store({
       let entityUUID = this.state.entityUUIDsummary[update.nxpCNRL].data[update.nxpCNRL].shellID // this.state.entityUUIDReturn
       // prepare info. to update library ref contracts
       let updateContract = {}
-      // the visulisation and compute module contract need updating
+      // the visulisation and compute module contracts need updating
       // is this a future time input?
       if (update.mData === 'future') {
         context.commit('SET_HELP_STATUS', update)
@@ -910,16 +913,14 @@ const store = new Vuex.Store({
       } else {
         nxpModules = this.state.entityUUIDsummary[update.nxpCNRL].data[update.nxpCNRL].modules
       }
-      console.log('modules for board')
-      console.log(nxpModules)
       let updateModules = []
       let newStartTime = []
       for (let mmod of nxpModules) {
         if (mmod.value.type === 'compute') {
-          // get the latest refcontract and update per Peer select ie. time, change of compute contract???
+          // get the latest refcontract and update per Peer select ie. time, change of compute contract?
           // update the Compute RefContract
           mmod.value.automation = false
-          newStartTime = ToolUtility.prepareTime(this.state.timeStartperiod, update)
+          newStartTime = ToolUtility.prepareTime(this.state.compModuleHolder[update.moduleCNRL][update.mData].date, update)
           context.commit('setTimeAsk', newStartTime[0])
           // what type of context update?
           let updateSettings = {}
@@ -930,9 +931,8 @@ const store = new Vuex.Store({
           }
           // what device has seen selected
           updateSettings = ContextOut.prepareSettingsDevices(updateSettings, update.mData)
-          console.log(updateSettings)
-          updateSettings.value.info.controls.date = update.startperiod
-          updateSettings.value.info.controls.rangedate = update.rangechange
+          // updateSettings.value.info.controls.date = update.startperiod
+          // updateSettings.value.info.controls.rangedate = update.rangechange
           updateModules.push(updateSettings)
           // update the devices asked for
           progressContext.device = update.mData
@@ -970,16 +970,13 @@ const store = new Vuex.Store({
       let copyCheck = update.moduleCNRL.slice(0, 4)
       let outHash = ''
       if (copyCheck !== 'copy') {
-        console.log('exising hash')
         outHash = update.moduleCNRL
       } else {
-        console.log('new newnew hash')
         // form hashID for output
         outHash = hashObject(updateModules)
         // also need to tell solopace the outhash so know what to match incoming data to location
         update.outhash = outHash
       }
-      console.log(update.outhash)
       this.dispatch('actionOuthashTrack', update)
       // keep state of live modules
       updateContract.key = update.nxpCNRL
@@ -1007,11 +1004,9 @@ const store = new Vuex.Store({
       message.jwt = this.state.jwttoken
       console.log('NXPMessage+++++22222UPDATE++++OUT')
       console.log(message)
-      // const safeFlowMessage = JSON.stringify(message)
-      // Vue.prototype.$socket.send(safeFlowMessage)
+      const safeFlowMessage = JSON.stringify(message)
+      Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
-      console.log('setup rogress paess supdate dudpadpa')
-      console.log(progressContext)
       if (copyStatus === 'copy') {
         console.log('copy set in solospace')
       } else {

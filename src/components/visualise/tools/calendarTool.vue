@@ -3,7 +3,10 @@
     <div id="time-control-update">
       <div id="time-options" class="series-style">
         <div id="calendar-selector">
-          <date-picker class="select-caldate" v-model="calendarvalue" @change="calendarSelect()" :lang="lang" :range="rangeActive === true" ></date-picker>
+          <div id="date-selector-status">
+            <date-picker class="select-caldate"  v-model="calendarvalue"  value-type="format" format="YYYY-MM-DD" @change="calendarSelect" :lang="lang" :range="rangeActive === true" ></date-picker>
+            <div>{{ cellDate }}</div>
+          </div>
           <div id="time-calendar-tools">
             <div class="time-tools" id="select-range-type">
               <select v-model="selectedTimeBundle" @change.prevent="setTimeBundle()">
@@ -72,6 +75,18 @@ export default {
     mData: String
   },
   computed: {
+    updateTime: function () {
+      return this.$store.state.peersocket.testHolder
+    },
+    cellDate: function () {
+      this.startSetDate(this.$store.state.compModuleHolder[this.moduleCNRL][this.mData])
+      let dateLive = {}
+      if (this.$store.state.compModuleHolder !== undefined && this.$store.state.compModuleHolder[this.moduleCNRL][this.mData]) {
+        let updateDate = moment(this.$store.state.compModuleHolder[this.moduleCNRL][this.mData].date).format('YYYY-MM-DD')
+        dateLive = updateDate
+      }
+      return dateLive
+    },
     timeRange: function () {
       return this.$store.state.setTimerange[this.mData]
     }
@@ -79,6 +94,7 @@ export default {
   created () {
   },
   mounted () {
+    this.startSetDate(this.cellDate)
   },
   data: () => ({
     toolbar:
@@ -125,6 +141,7 @@ export default {
     time3: '',
     // custom lang
     calendarvalue: '',
+    startDate: '',
     rangeActive: false,
     lang: {
       days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -153,6 +170,12 @@ export default {
   methods: {
     setDefaultTime (dtime) {
       this.calendarvalue = dtime
+    },
+    startSetDate (startDate) {
+      if (startDate !== undefined && startDate.date) {
+        let updateDate = moment(startDate.date).format('YYYY-MM-DD')
+        this.calendarvalue = updateDate
+      }
     },
     calendarSelect () {
       // clear feedback if required
@@ -201,7 +224,6 @@ export default {
       }
     },
     setTimeBundle () {
-      // console.log('time bundle select format')
       if (this.selectedTimeBundle === 'range') {
         this.rangeActive = !this.rangeActive
         this.calendarToolMulti.active = false
@@ -235,6 +257,7 @@ export default {
     setShiftTimeData (seg) {
       // first clear the range of existing
       let timeContext = {}
+      timeContext.module = this.moduleCNRL
       timeContext.device = this.mData
       timeContext.timerange = []
       this.$store.dispatch('actionSetTimerange', timeContext)
@@ -251,7 +274,6 @@ export default {
       if (contextK.startperiod !== 0) {
         console.log('no time present, prompt peer1')
       } else {
-        console.log(contextK)
         this.$store.dispatch('actionVisUpdate', contextK)
       }
     },
@@ -266,10 +288,6 @@ export default {
     },
     updateKbundle (cm) {
       // prepare update for safeFLOW
-      console.log('Update from chart tools solo------------')
-      console.log(this.shellID)
-      console.log(this.moduleCNRL)
-      console.log(this.mData)
       let contextK = {}
       contextK.nxpCNRL = this.shellID
       contextK.moduleCNRL = this.moduleCNRL
@@ -289,13 +307,11 @@ export default {
       contextK.timeformat = this.selectedTimeFormat
       // check that time is selected
       if (contextK.rangechange.length === undefined || contextK.rangechange.length === 0) {
-        console.log('no time present, prompt peer2')
         let feedbackDevice = {}
         feedbackDevice.device = this.mData
         feedbackDevice.message = 'please select a date'
         this.$store.dispatch('actionFeeback', feedbackDevice)
       } else {
-        console.log(contextK)
         this.$store.dispatch('actionVisUpdate', contextK)
       }
     }
@@ -344,6 +360,11 @@ export default {
 #view-time {
   margin-top: 10px;
   font-size: 1.4em;
+}
+
+#date-selector-status {
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 #calendar-tools {

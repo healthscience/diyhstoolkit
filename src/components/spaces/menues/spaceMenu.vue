@@ -2,7 +2,7 @@
   <div id="space-menu-area">
     <div class="lifeflow-spacelist">
       <button class="flowlist-space" v-bind:class="{ active: spaceState === 'private' && spaceStateShow.state === true }" href="" @click.prevent="statusSpace('private')" >List</button>
-      <button type="button" class="flowlist-space" @click="joinBoard">Join</button>
+      <button type="button" class="flowlist-space" @click="joinBoard">Available</button>
       <button type="button" class="flowlist-space" @click="boardInvite">+ Invite</button>
     </div>
   </div>

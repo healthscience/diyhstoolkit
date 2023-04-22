@@ -10,9 +10,9 @@
         </div>
         <div class="cale-reply" id="cale-chat-right">
           <span class="right-chat">{{ aiResponse.time }}</span>
-          <div class="right-chat">{{ aiResponse.text }} ---
-            <span v-if="aiResponse.query">
-              <button id="new-query" @click.prevent="beebeeChartSpace(aiResponse.query)">query</button>
+          <div class="right-chat">{{ aiResponse.text }}
+            <span v-if="aiResponse.query === true">
+              --- <button id="new-query" @click.prevent="beebeeChartSpace(aiResponse.query)">query</button>
             </span>
           </div>
           <img class="right-chat-cale" src="../.././assets/logo.png" alt="bbAI">
