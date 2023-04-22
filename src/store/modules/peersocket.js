@@ -420,9 +420,14 @@ export default {
           for (let track of this._modules.root.state.solopositionSpace.trackOut) {
             console.log(track.outhash)
             console.log(backJSON.context.input.outhash)
-            if (track.outhash === backJSON.context.input.outhash) {
+            // also check if hyphon this will also be solo space module only
+            let hypthonCheck = backJSON.context.input.outhash.includes('-')
+            if (track.outhash === backJSON.context.input.outhash || hypthonCheck === false) {
               console.log('solospace handles update')
               this.dispatch('actionUpdateCopy', backJSON)
+            } else if (hypthonCheck === true) {
+              console.log('hype update')
+              this.dispatch('actionUpdateCell', backJSON)
             } else {
               console.log('boardspace')
               // need to remove

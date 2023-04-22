@@ -77,6 +77,8 @@ export default {
     },
     BoardstatusData: function () {
       // need to prepare into single array for drag drop to work
+      console.log('boardlist')
+      console.log(this.$store.state.solopositionSpace.boardModulesList)
       if (this.$store.state.solopositionSpace.boardModulesList === undefined) {
         return {}
       } else {

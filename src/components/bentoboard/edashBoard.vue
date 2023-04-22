@@ -108,10 +108,10 @@ export default {
       return this.$store.solopositionSpace.state.liveCopy
     },
     moduleContent: function () {
-      // console.log('modlue content')
-      // console.log(this.$store.state.NXPexperimentData[this.expCNRL])
       let contentModule = this.$store.state.NXPexperimentData[this.expCNRL]
-      if (contentModule === undefined) {
+      if (this.moduleCNRL.includes('-') === true) {
+        return false
+      } else if (contentModule === undefined) {
         return false
       } else if (this.moduleCNRL === this.$store.state.solopositionSpace.liveTempOuthash || this.moduleCNRL === this.$store.state.solopositionSpace.liveCopy) {
         return false

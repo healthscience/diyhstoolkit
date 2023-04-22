@@ -867,7 +867,7 @@ const store = new Vuex.Store({
       }
     },
     async actionVisUpdate (context, update) {
-      console.log('xxxxx---vistoolbar++++++UPdateAction')
+      console.log('xxxxx---vistoolbar++++++UPdate2')
       console.log(update)
       // console.log(this.state.visModuleHolder)
       // clear the cell feedback
@@ -977,6 +977,8 @@ const store = new Vuex.Store({
         // also need to tell solopace the outhash so know what to match incoming data to location
         update.outhash = outHash
       }
+      console.log('track hash out')
+      console.log(update)
       this.dispatch('actionOuthashTrack', update)
       // keep state of live modules
       updateContract.key = update.nxpCNRL
