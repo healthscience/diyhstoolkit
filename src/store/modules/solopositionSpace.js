@@ -418,7 +418,7 @@ export default {
           let updateModuleInfo = matchOutBack // inVerified
           // temp use outhash as module UUiD or use device and expand to array and loop over
           // format will be vis modules key - compute module key (note the compute key is unique not generic for board i.e. link compute module contract this gurantees uniqueness and how enough info to retrieve from library)
-          let copyMod = inVerified.context.moduleorder.visualise.key + '-' + inVerified.context.moduleorder.compute.key// inVerified.context.input.outhash
+          let copyMod = inVerified.context.moduleorder.visualise.key + '-' + inVerified.data.context.hash // use dataPrint for now inVerified.context.moduleorder.compute.key // inVerified.context.input.outhash
           updateModuleInfo.moduleCNRL = copyMod
           console.log(inVerified)
           if (inVerified.context.moduleorder.compute.value.type === 'compute') { // contract or value  is consistent?

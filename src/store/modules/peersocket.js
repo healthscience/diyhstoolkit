@@ -416,13 +416,13 @@ export default {
         // is the data for the Lifeboard(AI) or Board space or Solospace?
         // does the context hash match any existing visualsiation module?
         if (backJSON.context.input.outhash !== undefined) {
-          console.log('*****dataHASH on RETURN-route 1-------------')
+          console.log('***dataHASH on RETURN-route 1----')
           for (let track of this._modules.root.state.solopositionSpace.trackOut) {
             console.log(track.outhash)
             console.log(backJSON.context.input.outhash)
             // also check if hyphon this will also be solo space module only
             let hypthonCheck = backJSON.context.input.outhash.includes('-')
-            if (track.outhash === backJSON.context.input.outhash || hypthonCheck === false) {
+            if (track.outhash === backJSON.context.input.outhash && hypthonCheck === false) {
               console.log('solospace handles update')
               this.dispatch('actionUpdateCopy', backJSON)
             } else if (hypthonCheck === true) {
@@ -1929,15 +1929,37 @@ export default {
       saveSpacePosition.type = 'bentospace'
       saveSpacePosition.reftype = 'solospace'
       saveSpacePosition.action = 'save-position'
+      // need board, modules, dataprint? i.e. settings two ways of looking at this. 1. provide compute link contract that will be unique and mean KBLedger needs that at refence, 2.  save dataprint i.e. date, datatype, device info. and use that to input into HOP so SafeFlow-ECS can assess whether results exist before or it is a brand new?
+      // extract context for each uuid modue holder
+      let contextMod = []
+      // go over each board
+      let boardKeys = Object.keys(this.state.solopositionSpace.initialGrid)
+      for (let board of boardKeys) {
+        for (let gridID of Object.keys(this.state.solopositionSpace.initialGrid[board])) {
+          for (let dev of Object.keys(this.state.solopositionSpace.initialGrid[board][gridID])) {
+            // next match the device id to soloData context i.e. dataPrint triplet
+            if (this.state.solopositionSpace.soloData[gridID]?.prime?.text === 'Visualise') {
+              let cellID = this.state.solopositionSpace.initialGrid[board][gridID][dev].cell.i
+              let contextCell = {}
+              contextCell.mod = gridID
+              contextCell.context = this.state.solopositionSpace.soloData[gridID].data[cellID].context
+              contextMod.push(contextCell)
+            }
+          }
+        }
+      }
+      // console.log('just the context')
+      // console.log(contextMod)
       let soloLocHolder = {}
       soloLocHolder.initialgrid = this.state.solopositionSpace.initialGrid
       soloLocHolder.solozoom = this.state.solopositionSpace.soloZoom
+      soloLocHolder.context = contextMod
       saveSpacePosition.data = soloLocHolder
       saveSpacePosition.jwt = this.state.jwttoken
       console.log('solop spa ce layuo')
       console.log(saveSpacePosition)
-      const saveJSONp = JSON.stringify(saveSpacePosition)
-      Vue.prototype.$socket.send(saveJSONp)
+      // const saveJSONp = JSON.stringify(saveSpacePosition)
+      // Vue.prototype.$socket.send(saveJSONp)
     },
     actionSyncRequest (context, update) {
       const syncDataBundle = {}

@@ -792,7 +792,7 @@ const store = new Vuex.Store({
     },
     async actionDashboardState (context, update) {
       // keep track of HOP out messages
-      console.log('xxxxxx---start NEW HOP OUT message--xxxxxxxxxx')
+      console.log('xxxxxx---start1 NEW HOP OUT message--xxxxxxxxxx')
       // console.log(update)
       // console.log(this.state.networkPeerExpModules)
       // console.log(this.state.liveRefContIndex)
@@ -832,7 +832,7 @@ const store = new Vuex.Store({
     },
     async actionStartLayout (context, update) {
       // keep track of HOP out messages
-      console.log('xx---extra LAYOUT NEW HOP OUT message--xxxx')
+      console.log('xx---extra2 LAYOUT NEW HOP OUT message--xxxx')
       console.log(update)
       for (let mod of update.modules) {
         console.log(mod)
@@ -867,7 +867,7 @@ const store = new Vuex.Store({
       }
     },
     async actionVisUpdate (context, update) {
-      console.log('xxxxx---vistoolbar++++++UPdate2')
+      console.log('xxxxx3---vistoolbar++++++UPdate2')
       console.log(update)
       // console.log(this.state.visModuleHolder)
       // clear the cell feedback
