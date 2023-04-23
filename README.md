@@ -4,7 +4,7 @@ BentoBox - DS : Understand data that shapes the health of individuals, communiti
 
 ## Project setup
 
-This is a vue2 based desktop application that connects to HOP (<a href="https://www.healthscience.network">health oracle protocol</a>) via a secure socket.  This is not currently included in the installation process.  Install instructions: <a href="https://github.com/healthscience/hop">HOP install</a>
+This is a vue2 based desktop application that connects to HOP (<a href="https://www.healthscience.network">health oracle protocol</a>) via a secure socket.  This is not currently included in the installation process.  Install instructions: <a href="https://github.com/healthscience/hop">HOP install</a> or use the CLI in headless mode https://github.com/healthscience/hop-cli 
  
 Roadmap https://github.com/healthscience/hop/wiki  
 
