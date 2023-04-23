@@ -19,9 +19,9 @@ Understand the <a href="https://design.penpot.app/#/view/e8b3498a-41f9-8006-8001
 --------------------------------------
 
 
-Latest development branch
+Development branch
 
-git checkout peerspace
+git checkout bentotemplate
 
 --------------------------------------
 
