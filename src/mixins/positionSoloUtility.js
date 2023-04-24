@@ -57,8 +57,8 @@ PositionUtility.prototype.hideShowMinimap = function (status) {
 * @method setZoom
 *
 */
-PositionUtility.prototype.setZoom = function (amount) {
-  this.zoom = this.zoom + amount
+PositionUtility.prototype.setZoom = function (current, amount) {
+  this.zoom = current + amount
   return this.zoom
 }
 

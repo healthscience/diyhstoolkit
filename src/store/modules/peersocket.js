@@ -228,9 +228,11 @@ export default {
         }
       } else if (backJSON.type === 'solospaces-list') {
         console.log('soloapce 1')
+        console.log(backJSON)
         // set in solospace  NB need to keep track of per board UUID, get solospace to ask HOP for new data
         if (backJSON?.data?.value !== undefined) {
           this.dispatch('actionSavedLayout', backJSON.data.value.initialgrid, { root: true })
+          this.dispatch('actionSavedContext', backJSON.data.value.context, { root: true })
           this.dispatch('actionSavedSoloZoom', backJSON.data.value.solozoom, { root: true })
         }
       } else if (backJSON.type === 'bbai-reply') {
@@ -417,8 +419,9 @@ export default {
         // does the context hash match any existing visualsiation module?
         if (backJSON.context.input.outhash !== undefined) {
           console.log('***dataHASH on RETURN-route 1----')
+          console.log(this._modules.root.state.solopositionSpace.trackOut)
           for (let track of this._modules.root.state.solopositionSpace.trackOut) {
-            console.log(track.outhash)
+            console.log(track)
             console.log(backJSON.context.input.outhash)
             // also check if hyphon this will also be solo space module only
             let hypthonCheck = backJSON.context.input.outhash.includes('-')
@@ -426,7 +429,7 @@ export default {
               console.log('solospace handles update')
               this.dispatch('actionUpdateCopy', backJSON)
             } else if (hypthonCheck === true) {
-              console.log('hype update')
+              console.log('hyphon- update')
               this.dispatch('actionUpdateCell', backJSON)
             } else {
               console.log('boardspace')
@@ -1958,8 +1961,8 @@ export default {
       saveSpacePosition.jwt = this.state.jwttoken
       console.log('solop spa ce layuo')
       console.log(saveSpacePosition)
-      // const saveJSONp = JSON.stringify(saveSpacePosition)
-      // Vue.prototype.$socket.send(saveJSONp)
+      const saveJSONp = JSON.stringify(saveSpacePosition)
+      Vue.prototype.$socket.send(saveJSONp)
     },
     actionSyncRequest (context, update) {
       const syncDataBundle = {}

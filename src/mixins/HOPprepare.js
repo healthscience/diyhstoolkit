@@ -25,9 +25,24 @@ class HOPprepare extends EventEmitter {
   * @method savePrepare
   *
   */
-  savePrepare = function (input, boardmods, liveRefContIndex, livePeerRefContIndex) {
+  savePrepare = function (input, boardmods) {
     let checkPosition = this.checkPositionObject(input)
     let connectRefContracts = this.prepHOPmodules(input, boardmods)
+    let outMessageHOP = {}
+    outMessageHOP.futureTimeCheck = false
+    outMessageHOP.board = checkPosition
+    outMessageHOP.modules = connectRefContracts
+    return outMessageHOP
+  }
+
+  /**
+  * take save solospace mod context and add date, device, dt to compute contract
+  * @method saveSoloPrepare
+  *
+  */
+  saveSoloPrepare = function (input, boardmods, saveContext) {
+    let checkPosition = this.checkPositionObject(input)
+    let connectRefContracts = this.prepSoloHOPmodules(input, boardmods, saveContext)
     let outMessageHOP = {}
     outMessageHOP.futureTimeCheck = false
     outMessageHOP.board = checkPosition
@@ -75,6 +90,32 @@ class HOPprepare extends EventEmitter {
     for (let nxp of networkPeerExpModules) {
       if (nxp.key === update) {
         matchExp = nxp
+      }
+    }
+    return matchExp
+  }
+
+  /**
+  * build the SOLOSPACE modules for out HOP message
+  * @method prepSoloHOPmodules
+  *
+  */
+  prepSoloHOPmodules = function (update, networkPeerExpModules, saveContext) {
+    // build the safeFLOW-ECS input bundle
+    let matchExp = {}
+    for (let nxp of networkPeerExpModules) {
+      if (nxp.key === update) {
+        matchExp = nxp
+      }
+    }
+    console.log(saveContext)
+    for (let mod of matchExp.modules) {
+      if (mod.value.type === 'compute') {
+        // update the controls
+        mod.value.info.controls.date = saveContext.context.triplet.timeout
+        mod.value.info.controls.rangedate = []
+        mod.value.info.controls.rangedate.push(saveContext.context.triplet.timeout)
+        mod.value.info.controls.device = saveContext.context.triplet.device
       }
     }
     return matchExp

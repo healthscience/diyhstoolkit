@@ -41,7 +41,13 @@ export default {
       console.log(inVerified)
       Vue.set(state.savedLayout, 'start', inVerified)
     },
+    SET_SAVED_CONTEXT: (state, inVerified) => {
+      console.log(inVerified)
+      Vue.set(state.savedLayout, 'context', inVerified)
+    },
     SET_INITAL_CELLS (state, inVerified) {
+      console.log('solospace laout start1')
+      console.log(state.savedLayout.start)
       // check save location info?
       if (state.savedLayout.start) {
         if (Object.keys(state.savedLayout.start).length === 0) {
@@ -61,14 +67,25 @@ export default {
             state.ctx.miniMapSoloLocations(state.initialGrid[inVerified.board][mitem])
           }
         } else {
+          console.log('set initial cells solo')
           let arrA = Object.keys(inVerified.position)
           let arrB = Object.keys(state.savedLayout.start[inVerified.board])
           // compare what data is already here ie module data and what to ask for starting layout?
           let differenceStart = arrA.filter(x => !arrB.includes(x)).concat(arrB.filter(x => !arrA.includes(x)))
+          // match to the saved compute context
+          let matchContext = []
+          for (let saveContext of state.savedLayout.context) {
+            for (let dif of differenceStart) {
+              if (saveContext.mod === dif) {
+                matchContext.push(saveContext)
+              }
+            }
+          }
           // ask HOP for data
           let soloNeededMod = {}
           soloNeededMod.board = inVerified.board
           soloNeededMod.modules = differenceStart
+          soloNeededMod.context = matchContext
           this.dispatch('actionStartLayout', soloNeededMod, { root: true })
           let layoutCheck = []
           if (state.savedLayout?.start !== undefined) {
@@ -190,7 +207,7 @@ export default {
       state.soloZoom = inVerified
     },
     SET_SOLOZOOM_MAP: (state, inVerified) => {
-      let updateZoom = state.ctx.setZoom(inVerified)
+      let updateZoom = state.ctx.setZoom(state.soloZoom, inVerified)
       state.soloZoom = updateZoom
     },
     SET_CLEAR_POSITION: (state, inVerified) => {
@@ -250,7 +267,6 @@ export default {
                 updateModuleInfo.moduleCNRL = copyMod
                 this.dispatch('actionCopycell', updateModuleInfo)
                 // add copy as property of device and add as array
-                console.log(state.soloData)
                 state.boardModulesList[inVerified.nxpCNRL].push(copyMod)
                 state.copyModuleList.push(copyMod)
                 Vue.set(state.soloData, copyMod, {})
@@ -344,8 +360,6 @@ export default {
         }
       }
       // check if establish cell
-      console.log(inVerified)
-      console.log(matchOutBack)
       let existingCheck = Object.keys(matchOutBack)
       if (existingCheck.length === 0) {
         console.log('solo1')
@@ -353,7 +367,6 @@ export default {
         let updateModuleInfo = matchOutBack // inVerified
         // temp use outhash as module UUiD or use device and expand to array and loop over
         let copyMod = inVerified.context.input.outhash
-        console.log(copyMod)
         updateModuleInfo.moduleCNRL = copyMod
         // add to solospace holder
         // Vue.set(state.soloData, copyMod, {})
@@ -512,8 +525,9 @@ export default {
       }
     },
     SET_CELL_UPDATE (state, inVerified) {
+      // cell update could be first or upate?
       console.log('cell update')
-      console.log(inVerified)
+      // console.log(inVerified)
       let modVis = inVerified.context.input.outhash
       if (inVerified.context.moduleorder.compute.value.type === 'compute') { // contract or value  is consistent?
         // compModuleHolder
@@ -521,13 +535,16 @@ export default {
         startCompControls.date = inVerified.context.moduleorder.compute.value.info.controls.date
         // set to vis module ID and device ID
         let liveDevice = inVerified.data.context.triplet.device
-        let modUpdate = this.state.compModuleHolder[inVerified.context.moduleorder.visualise.key]
-        modUpdate[liveDevice] = startCompControls
+        let modUpdate = {} // this.state.compModuleHolder[inVerified.context.moduleorder.visualise.key]
+        modUpdate[liveDevice] = { date: startCompControls.date }
         Vue.set(this.state.compModuleHolder, modVis, {})
         Vue.set(this.state.compModuleHolder, modVis, modUpdate)
-        console.log(this.state.compModuleHolder)
       }
+      // add module to dispaly list
+      state.boardModulesList[inVerified.context.input.key].push(modVis)
       // update data
+      Vue.set(state.soloData, modVis, {})
+      Vue.set(state.soloData[modVis], 'data', {})
       Vue.set(state.soloData[modVis].data, inVerified.data.context.triplet.device, inVerified.data)
       // state.soloData[copyMod].data.push(inVerified.data)
       let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
@@ -590,6 +607,9 @@ export default {
     },
     actionSavedLayout (context, update) {
       context.commit('SET_SAVED_LAYOUT', update)
+    },
+    actionSavedContext (context, update) {
+      context.commit('SET_SAVED_CONTEXT', update)
     },
     actionAddcell (context, update) {
       context.commit('SET_ADDSOLOCELL_POSITION', update)
