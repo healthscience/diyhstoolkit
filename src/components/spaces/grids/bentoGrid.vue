@@ -113,6 +113,8 @@ export default {
       }
     },
     NXPstatusData: function () {
+      console.log('mode list')
+      console.log(this.$store.state.nxpModulelist)
       if (this.$store.state.nxpModulelist === undefined) {
         return {}
       } else {
@@ -120,8 +122,6 @@ export default {
       }
     },
     dashLive: function () {
-      // console.log('dashLive UI loop')
-      // console.log(this.$store.state.liveDashList)
       if (this.$store.state.liveDashList === undefined) {
         return {}
       } else {

@@ -228,7 +228,7 @@ export default {
         }
       } else if (backJSON.type === 'solospaces-list') {
         console.log('soloapce 1')
-        console.log(backJSON)
+        // console.log(backJSON)
         // set in solospace  NB need to keep track of per board UUID, get solospace to ask HOP for new data
         if (backJSON?.data?.value !== undefined) {
           this.dispatch('actionSavedLayout', backJSON.data.value.initialgrid, { root: true })
@@ -412,17 +412,14 @@ export default {
         }
       } else if (backJSON.type === 'newEntityRange') {
         console.log('$$$--SECOND-PART-----DATA RETURNED-----')
-        console.log(backJSON)
+        // console.log(backJSON)
         // console.log(state.backdatacount)
         // if (state.backdatacount < 3) {
         // is the data for the Lifeboard(AI) or Board space or Solospace?
         // does the context hash match any existing visualsiation module?
         if (backJSON.context.input.outhash !== undefined) {
           console.log('***dataHASH on RETURN-route 1----')
-          console.log(this._modules.root.state.solopositionSpace.trackOut)
           for (let track of this._modules.root.state.solopositionSpace.trackOut) {
-            console.log(track)
-            console.log(backJSON.context.input.outhash)
             // also check if hyphon this will also be solo space module only
             let hypthonCheck = backJSON.context.input.outhash.includes('-')
             if (track.outhash === backJSON.context.input.outhash && hypthonCheck === false) {
@@ -431,6 +428,8 @@ export default {
             } else if (hypthonCheck === true) {
               console.log('hyphon- update')
               this.dispatch('actionUpdateCell', backJSON)
+              // need to remove
+              this.dispatch('actionOuthashRemove', track, { root: true })
             } else {
               console.log('boardspace')
               // need to remove
@@ -567,7 +566,6 @@ export default {
                     modUpdate[liveDevice] = startCompControls
                     Vue.set(this.state.compModuleHolder, backJSON.context.moduleorder.visualise.key, {})
                     Vue.set(this.state.compModuleHolder, backJSON.context.moduleorder.visualise.key, modUpdate)
-                    console.log(this.state.compModuleHolder)
                     // test holder
                     // Vue.set(state.testHolder, backJSON.context.moduleorder.visualise.key, modUpdate)
                     // Vue.set(state.testHolder, backJSON.context.moduleorder.visualise.key, modUpdate)

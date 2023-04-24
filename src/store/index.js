@@ -775,28 +775,10 @@ const store = new Vuex.Store({
         mod = this.state.entityUUIDReturn[this.state.liveNXP].modules
       }
       console.log(mod)
-      // update existing ecs bundle send to peerLink
-      /* let ECSbundle = {}
-      ECSbundle.exp = update.nxpCNRL
-      ECSbundle.update = updateContract
-      // send message to PeerLink for safeFLOW
-      let message = {}
-      message.type = 'safeflow'
-      message.reftype = 'ignore'
-      message.action = 'updatenetworkexperiment'
-      message.data = ECSbundle
-      console.log('updateOUT###################')
-      console.log(message)
-      const safeFlowMessage = JSON.stringify(message) */
-      // Vue.prototype.$socket.send(safeFlowMessage)
     },
     async actionDashboardState (context, update) {
       // keep track of HOP out messages
       console.log('xxxxxx---start1 NEW HOP OUT message--xxxxxxxxxx')
-      // console.log(update)
-      // console.log(this.state.networkPeerExpModules)
-      // console.log(this.state.liveRefContIndex)
-      // context.commit('SET_HOPOUT_MESSAGE', update)
       // console.log(update)
       // set the minimap in position store module
       let prepOutHOP = HopprepareUtility.savePrepare(update.nxp, this.state.networkPeerExpModules, this.state.liveRefContIndex, this.state.livePeerRefContIndex)
@@ -821,8 +803,8 @@ const store = new Vuex.Store({
         message.action = 'networkexperiment'
         message.data = ECSbundle
         message.jwt = this.state.jwttoken
-        console.log('OUTmesssage+++++++++OUT+FIRST++++++')
-        console.log(message)
+        // console.log('OUTmesssage+++++++++OUT+FIRST++++++')
+        // console.log(message)
         const safeFlowMessage = JSON.stringify(message)
         // console.log(safeFlowMessage)
         Vue.prototype.$socket.send(safeFlowMessage)
@@ -832,10 +814,9 @@ const store = new Vuex.Store({
     },
     async actionStartLayout (context, update) {
       // keep track of HOP out messages
-      console.log('xx---extra2 LAYOUT NEW HOP OUT message--xxxx')
-      console.log(update)
+      // console.log('xx---extra2 LAYOUT NEW HOP OUT message--xxxx')
+      // console.log(update)
       for (let mod of update.modules) {
-        console.log(mod)
         // context.commit('SET_HOPOUT_MESSAGE', update)
         // console.log(update)
         // match to context
@@ -847,17 +828,7 @@ const store = new Vuex.Store({
         }
         // set the minimap in position store module
         let prepOutHOP = HopprepareUtility.saveSoloPrepare(update.board, this.state.networkPeerExpModules, savedContext)
-        console.log(prepOutHOP)
-        // set
-        // context.commit('SET_SPACE_SHOW', false)
-        // let futureTimeCheck = false
-        // context.commit('SET_LIVE_NXP', update.nxp)
-        // context.commit('SET_NXP_MODULED', update.nxp)
-        // context.commit('SET_Dashboard_NXP', update.nxp)
-        // context.commit('setNXPprogressUpdate', update.nxp)
-        console.log(this.state.entityUUIDsummary)
         let entityUUID = this.state.entityUUIDsummary[update.board].data[update.board].shellID
-        console.log('entity UUID')
         // track the solospace out
         this.dispatch('actionOuthashTrack', mod)
         let ECSbundle = {}
@@ -878,15 +849,15 @@ const store = new Vuex.Store({
         message.input = 'refUpdate'
         message.data = ECSbundle
         message.jwt = this.state.jwttoken
-        console.log('EXTRA LAOYT HOP OUTmesssage+++2++')
-        console.log(message)
+        // console.log('EXTRA LAOYT HOP OUTmesssage+++2++')
+        // console.log(message)
         const safeFlowMessage = JSON.stringify(message)
         Vue.prototype.$socket.send(safeFlowMessage)
       }
     },
     async actionVisUpdate (context, update) {
-      console.log('xxxxx3---vistoolbar++++++UPdate3')
-      console.log(update)
+      // console.log('xxxxx3---vistoolbar++++++UPdate3')
+      // console.log(update)
       // console.log(this.state.visModuleHolder)
       // clear the cell feedback
       this.dispatch('actionClearCellFeedback', update.moduleCNRL, { root: true })
@@ -995,8 +966,6 @@ const store = new Vuex.Store({
         // also need to tell solopace the outhash so know what to match incoming data to location
         update.outhash = outHash
       }
-      console.log('track hash out')
-      console.log(update)
       this.dispatch('actionOuthashTrack', update)
       // keep state of live modules
       updateContract.key = update.nxpCNRL
@@ -1022,15 +991,16 @@ const store = new Vuex.Store({
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.jwt = this.state.jwttoken
-      console.log('NXPMessage++++3333UPDATE++++OUT')
-      console.log(message)
+      // console.log('NXPMessage++++3333UPDATE++++OUT')
+      // console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
       if (copyStatus === 'copy') {
         console.log('copy set in solospace')
       } else {
-        context.commit('setVisProgressUpdate', progressContext)
+        // console.log(progressContext)
+        // context.commit('setVisProgressUpdate', progressContext)
       }
     },
     actionFutureOLD (context, update) {

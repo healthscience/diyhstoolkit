@@ -38,16 +38,13 @@ export default {
       state.ctx.mousePointer(inVerified)
     },
     SET_SAVED_LAYOUT: (state, inVerified) => {
-      console.log(inVerified)
       Vue.set(state.savedLayout, 'start', inVerified)
     },
     SET_SAVED_CONTEXT: (state, inVerified) => {
-      console.log(inVerified)
       Vue.set(state.savedLayout, 'context', inVerified)
     },
     SET_INITAL_CELLS (state, inVerified) {
       console.log('solospace laout start1')
-      console.log(state.savedLayout.start)
       // check save location info?
       if (state.savedLayout.start) {
         if (Object.keys(state.savedLayout.start).length === 0) {
@@ -240,7 +237,6 @@ export default {
     },
     SET_ADD_SOLOSPACE (state, inVerified) {
       console.log('add cell solospace COPY1')
-      console.log(inVerified)
       // need unquie identifer for grid
       let random = Math.random()
       let deviceUUID = random.toString()
@@ -343,8 +339,6 @@ export default {
     },
     SET_TRACK_OUT: (state, inVerified) => {
       state.trackOut.push(inVerified)
-      console.log('track out solo')
-      console.log(state.trackOut)
     },
     SET_REMOVETRACK_OUT: (state, inVerified) => {
       let indexRem = state.trackOut.filter((el) => el.moduleCNRL !== inVerified.moduleCNRL)
@@ -381,7 +375,6 @@ export default {
         setProgress = { text: 'Updating visualisation', active: false }
         // Vue.set(this.state.visProgress, copyMod, {})
         Vue.set(this.state.visProgress[copyMod], matchOutBack.mData, setProgress)
-        // console.log(this.state.visProgress)
         // set toolbars
         let setVisTools = {}
         setVisTools = { text: 'open tools', active: true }
@@ -403,8 +396,6 @@ export default {
         // state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
       } else {
         console.log('solo2')
-        console.log(inVerified)
-        console.log(matchOutBack)
         state.liveCopy = matchOutBack.moduleCNRL
         state.liveTempOuthash = inVerified.context.input.outhash
         // is the match a copy or existing cell?
@@ -433,7 +424,6 @@ export default {
           // format will be vis modules key - compute module key (note the compute key is unique not generic for board i.e. link compute module contract this gurantees uniqueness and how enough info to retrieve from library)
           let copyMod = inVerified.context.moduleorder.visualise.key + '-' + inVerified.data.context.hash // use dataPrint for now inVerified.context.moduleorder.compute.key // inVerified.context.input.outhash
           updateModuleInfo.moduleCNRL = copyMod
-          console.log(inVerified)
           if (inVerified.context.moduleorder.compute.value.type === 'compute') { // contract or value  is consistent?
             // compModuleHolder
             console.log('----2---compute back set date update')
@@ -447,7 +437,6 @@ export default {
             modUpdate[liveDevice] = startCompControls
             Vue.set(this.state.compModuleHolder, copyMod, {})
             Vue.set(this.state.compModuleHolder, copyMod, modUpdate)
-            console.log(this.state.compModuleHolder)
           }
           // add to solospace holder
           Vue.set(state.soloData, copyMod, {})
@@ -462,7 +451,6 @@ export default {
           setProgress = { text: 'Updating visualisation', active: false }
           Vue.set(this.state.visProgress, copyMod, {})
           Vue.set(this.state.visProgress[copyMod], matchOutBack.mData, setProgress)
-          // console.log(this.state.visProgress)
           // set toolbars
           let setVisTools = {}
           setVisTools = { text: 'open tools', active: true }
@@ -526,7 +514,7 @@ export default {
     },
     SET_CELL_UPDATE (state, inVerified) {
       // cell update could be first or upate?
-      console.log('cell update')
+      // console.log('cell update')
       // console.log(inVerified)
       let modVis = inVerified.context.input.outhash
       if (inVerified.context.moduleorder.compute.value.type === 'compute') { // contract or value  is consistent?
@@ -536,15 +524,18 @@ export default {
         // set to vis module ID and device ID
         let liveDevice = inVerified.data.context.triplet.device
         let modUpdate = {} // this.state.compModuleHolder[inVerified.context.moduleorder.visualise.key]
-        modUpdate[liveDevice] = { date: startCompControls.date }
-        Vue.set(this.state.compModuleHolder, modVis, {})
+        modUpdate[liveDevice] = startCompControls
+        // does the solo cell already exist?
+        if (this.state.compModuleHolder[modVis] === undefined) {
+          Vue.set(this.state.compModuleHolder, modVis, {})
+          Vue.set(state.soloData, modVis, {})
+          Vue.set(state.soloData[modVis], 'data', {})
+          // add module to dispaly list
+          state.boardModulesList[inVerified.context.input.key].push(modVis)
+        }
         Vue.set(this.state.compModuleHolder, modVis, modUpdate)
       }
-      // add module to dispaly list
-      state.boardModulesList[inVerified.context.input.key].push(modVis)
       // update data
-      Vue.set(state.soloData, modVis, {})
-      Vue.set(state.soloData[modVis], 'data', {})
       Vue.set(state.soloData[modVis].data, inVerified.data.context.triplet.device, inVerified.data)
       // state.soloData[copyMod].data.push(inVerified.data)
       let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
