@@ -19,6 +19,33 @@ module.exports = {
       fallbackLocale: 'zh',
       localeDir: 'locales',
       enableInSFC: true
+    },
+    electronBuilder: {
+      // preload: 'dist_electron/preload.js',
+      // Or, for multiple preload files:
+      // preload: { preload: 'dist_electron/preload.js' }
+      builderOptions:{
+        "win": {
+          "target": "NSIS",
+          "icon": "./public/assets/icon.ico"
+        },
+        "mac": {
+          "target": "default",
+          "icon": "./public/assets/icon.icns"
+        },
+        extraResources: [
+          {
+            "from": "hop/",
+            "to": "./hop"
+            // "filter": ["**/*"]
+          },
+          {
+            "from": "public/assets/icon.ico",
+            "to": "./assets/icon.ico"
+            // "filter": ["**/*"]
+          }
+        ]
+      }
     }
   }
 }
