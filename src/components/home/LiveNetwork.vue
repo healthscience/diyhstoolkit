@@ -1,6 +1,6 @@
 <template>
-  <div id="live-network-experiment">
-    <div id="show-nxplists" v-if="spaceType === 'Boards' && spaceStateShow === true">
+  <div id="live-network-experiment">show {{ spaceStateShow }}
+    <div id="show-nxplists" v-if="spaceType === 'Boards'">
       <list-contracts v-if="spaceState === 'private' && peerExperimentListlive.data?.length > 0"
         class="experiment-info"
         :experiments="peerExperimentListlive.data"

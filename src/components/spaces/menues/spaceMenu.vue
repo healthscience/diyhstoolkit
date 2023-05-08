@@ -1,9 +1,9 @@
 <template>
   <div id="space-menu-area">
     <div class="lifeflow-spacelist">
-      <button class="flowlist-space" v-bind:class="{ active: spaceState === 'private' && spaceStateShow.state === true }" href="" @click.prevent="statusSpace('private')" >List</button>
-      <button type="button" class="flowlist-space" @click="joinBoard">Available</button>
-      <button type="button" class="flowlist-space" @click="boardInvite">+ Invite</button>
+      <button class="flowlist-space" v-bind:class="{ active: spaceState === 'private' }" href="" @click.prevent="statusSpace('private')" >Boards</button>
+      <button type="button" class="flowlist-space" v-bind:class="{ active: spaceType === 'publicexperiments' }" @click="joinBoard">Available</button>
+      <button type="button" class="flowlist-space" v-bind:class="{ active: spaceType === 'invite'}" @click="boardInvite">Invite</button>
     </div>
   </div>
 </template>
@@ -20,6 +20,9 @@ export default {
     },
     spaceStateShow: function () {
       return this.$store.state.spaceStateShow
+    },
+    spaceType: function () {
+      return this.$store.state.spaceType
     }
   },
   data () {
@@ -30,7 +33,7 @@ export default {
     statusSpace (sp) {
       this.$store.dispatch('actionLifeview', 'Boards')
       this.$store.dispatch('actionSpaceList', sp)
-      this.$store.dispatch('actionSpaceListShow', true)
+      this.$store.dispatch('actionSpaceListShow')
     },
     joinBoard () {
       // call library if not alreay asked for
@@ -40,7 +43,6 @@ export default {
       this.$store.dispatch('actionSpaceJoinListShow', false)
     },
     boardInvite () {
-      console.log('invite peers to board')
       this.$store.dispatch('actionLifeview', 'invite')
     }
   }
@@ -51,6 +53,7 @@ export default {
 .lifeflow-spacelist {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  align-self: center;
 }
 
 .flowlist-showspace {
@@ -58,15 +61,15 @@ export default {
 }
 
 .flowlist-space {
-  font-size: 1.2em;
+  font-size: 1.1em;
   margin-left: 0.5em;
-  padding: 6px 14px;
+  padding: 6px 6px;
   margin-right: 1em;
   margin-left: 1em;
 }
 
 .flowlist-space.active {
-  font-size: 1.2em;
+  font-size: 1.1em;
   background-color: #4CAF50; /* Green */
   border: none;
   color: white;

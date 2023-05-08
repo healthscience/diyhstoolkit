@@ -599,11 +599,9 @@ const store = new Vuex.Store({
       state.spaceState = inVerified
     },
     SET_SPACE_SHOW (state, inVerified) {
-      if (inVerified === false) {
-        Vue.set(state.spaceStateShow, 'state', false)
-      } else {
-        Vue.set(state.spaceStateShow, 'state', !state.spaceStateShow.state)
-      }
+      console.log('space show')
+      console.log(inVerified)
+      Vue.set(state.spaceStateShow, 'state', !state.spaceStateShow.state)
       let textSpace = ''
       if (state.spaceStateShow.state === true) {
         textSpace = 'hide'
