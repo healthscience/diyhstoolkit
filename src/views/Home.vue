@@ -6,8 +6,8 @@
         <ul>
           <li>1. No-code Data Science</li>
           <li>2. AI supported Charts</li>
-          <li>3. Easy data aggregation</li>
-          <li>4. Build DML networks</li>
+          <li>3. Compare data</li>
+          <li>4. Build networks</li>
         </ul>
         <div id="interface">
           <div id="cale-ai">
