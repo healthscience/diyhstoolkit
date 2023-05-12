@@ -67,6 +67,10 @@ PositionUtility.prototype.setZoom = function (zoom) {
 *
 */
 PositionUtility.prototype.startPositionSpace = function (nxpID, spaceCoord, setupType) {
+  console.log('start postion boards')
+  console.log(nxpID)
+  console.log(spaceCoord)
+  console.log(setupType)
   let coord = {}
   // are setting up coords for first time or from save bentospace?
   if (setupType !== 'saved') {
@@ -85,7 +89,12 @@ PositionUtility.prototype.startPositionSpace = function (nxpID, spaceCoord, setu
     }
   } else {
     // set coord direct from bentospace saved info
-    coord = spaceCoord
+    // check for spaceCoords if non place next to last live board
+    if (spaceCoord === undefined) {
+      coord = { x: 600, y: 20 }
+    } else {
+      coord = spaceCoord
+    }
   }
   // need to both add and remove and change position
   this.liveSpaceCoord[nxpID] = coord

@@ -935,10 +935,20 @@ export default {
                     let setVisTools = {}
                     setVisTools = { text: 'open tools', active: true }
                     console.log(displayDataUpdate)
+                    console.log(modG.i)
+                    console.log(this.state.toolbarVisStatus)
+                    // check if module has toobarVis status set?
+                    if (this.state.toolbarVisStatus[displayDataUpdate.module] === undefined) {
+                      Vue.set(this.state.toolbarVisStatus, displayDataUpdate.module, {})
+                    }
                     Vue.set(this.state.toolbarVisStatus[displayDataUpdate.module], modG.i, setVisTools)
                     // set the open data toolbar
                     let setOPenDataToolbar = {}
                     setOPenDataToolbar = { text: 'open data', active: false }
+                    // check if module set?
+                    if (this.state.opendataTools[displayDataUpdate.module] === undefined) {
+                      Vue.set(this.state.opendataTools, displayDataUpdate.module, {})
+                    }
                     Vue.set(this.state.opendataTools[displayDataUpdate.module], modG.i, setOPenDataToolbar)
                     // set the data for the visualisation
                     Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][displayDataUpdate.module].data, modG.i, displayDataUpdate.update.data)
@@ -947,6 +957,10 @@ export default {
                     // set a placer for any subsequent updates
                     let setProgress = {}
                     setProgress = { text: 'Updating visualisation', active: false }
+                    // check if module set?
+                    if (this.state.visProgress[displayDataUpdate.module] === undefined) {
+                      Vue.set(this.state.visProgress, displayDataUpdate.module, {})
+                    }
                     Vue.set(this.state.visProgress[displayDataUpdate.module], modG.i, setProgress)
                   }
                   state.backdatacount++
@@ -1177,6 +1191,8 @@ export default {
           } else {
             bentospacePosition = state.libraryHolder.bentospacestart.data.value[assess]
           }
+          console.log('bentospace coord')
+          console.log(bentospacePosition)
           positionStartInfo.coord = bentospacePosition
           positionStartInfo.type = 'saved'
           // set active space

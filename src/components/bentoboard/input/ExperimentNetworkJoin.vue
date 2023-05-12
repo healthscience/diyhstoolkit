@@ -127,7 +127,7 @@
       </template>
       <template v-slot:submit-join>
         <div id="termsofjoin">
-          Terms: a private and autonomous set of contracts will be setup. This makes it possible to be compatible with others in the next work. To connect with peers in the next work needs further setup.
+          Terms: a private and autonomous set of contracts will be setup. This makes it possible to be compatible with others in the network. (To connect with peers coming soon)
         </div>
         <button id="joinsaveNetworkExperiment" @click.prevent="joinNetworkBoard()">Join The Board</button>
         <div id="join-feedback" v-if="joinFeedbackActive === true">
@@ -422,7 +422,6 @@ export default {
       peerChoices.genesis = this.actionKBundle.id
       peerChoices.question = this.actionKBundle.name
       this.$store.dispatch('actionJoinBoard', peerChoices)
-      // this.closeModalJoin()
     },
     closeDashboard (dc) {
       this.$store.dispatch('actionCloseDashboard', dc)
