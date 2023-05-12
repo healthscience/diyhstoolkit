@@ -896,6 +896,7 @@ export default {
               if (backJSON.context.moduleorder.compute.value.type === 'compute') {
                 // compModuleHolder
                 console.log('---1---compute data first')
+                console.log(backJSON)
                 let startCompControls = {}
                 startCompControls.date = backJSON.context.moduleorder.compute.value.info.controls.date
                 let modUpdate = this.state.compModuleHolder[backJSON.context.moduleorder.visualise.key]
@@ -933,6 +934,7 @@ export default {
                     // set toolbars
                     let setVisTools = {}
                     setVisTools = { text: 'open tools', active: true }
+                    console.log(displayDataUpdate)
                     Vue.set(this.state.toolbarVisStatus[displayDataUpdate.module], modG.i, setVisTools)
                     // set the open data toolbar
                     let setOPenDataToolbar = {}
@@ -973,7 +975,7 @@ export default {
               displayModulesReady = VisualUtility.displayPrepareModules(matchExpRefContract.modules, backJSON)
               // set the module GRID items
               for (let modG of backJSON.context.input.value.modules) {
-                Vue.set(this.state.moduleGrid, modG.key, displayModulesReady.grid[modG.key])
+                // Vue.set(this.state.moduleGrid, modG.key, displayModulesReady.grid[modG.key])
               }
               // set the solospace start as empty if none set
               if (!this.state.solopositionSpace.initialGrid) {

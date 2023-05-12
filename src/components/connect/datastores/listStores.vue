@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import ExperimentnetworkJoin from '@/components/spaces/grids/input/ExperimentNetworkReplicate.vue'
+import ExperimentnetworkJoin from '@/components/bentoboard/input/ExperimentNetworkReplicate.vue'
 
 export default {
   name: 'list-datastores',
