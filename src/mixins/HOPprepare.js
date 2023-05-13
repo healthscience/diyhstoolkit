@@ -108,7 +108,6 @@ class HOPprepare extends EventEmitter {
         matchExp = nxp
       }
     }
-    console.log(saveContext)
     for (let mod of matchExp.modules) {
       if (mod.value.type === 'compute') {
         // update the controls

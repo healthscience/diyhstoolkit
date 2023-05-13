@@ -44,10 +44,9 @@ export default {
       Vue.set(state.savedLayout, 'context', inVerified)
     },
     SET_INITAL_CELLS (state, inVerified) {
-      console.log('solospace laout start1')
       // check save location info?
       if (state.savedLayout.start) {
-        if (Object.keys(state.savedLayout.start).length === 0) {
+        if (state.savedLayout.start[inVerified.board] === undefined) {
           // first time setup solospace
           let modHash = Object.keys(inVerified.position)
           let modCount = 1
@@ -63,8 +62,9 @@ export default {
             Vue.set(state.initialGrid[inVerified.board], mitem, positionTrack)
             state.ctx.miniMapSoloLocations(state.initialGrid[inVerified.board][mitem])
           }
+        } else if (Object.keys(state.savedLayout.start[inVerified.board]).length === 0) {
+          console.log('live but 2')
         } else {
-          console.log('set initial cells solo')
           let arrA = Object.keys(inVerified.position)
           let arrB = Object.keys(state.savedLayout.start[inVerified.board])
           // compare what data is already here ie module data and what to ask for starting layout?
@@ -236,14 +236,12 @@ export default {
       Vue.set(state.dataFeedback, inVerified, '')
     },
     SET_ADD_SOLOSPACE (state, inVerified) {
-      console.log('add cell solospace COPY1')
       // need unquie identifer for grid
       let random = Math.random()
       let deviceUUID = random.toString()
       // path for bentospace  path for soloSpace
       let spaceType = this.state.solospace.soloState.active
       if (spaceType === true) {
-        console.log('true')
         let newCellNumber = 0
         // set the compHolder for date
         this.dispatch('actionSetCompHolder', inVerified, { root: true })
@@ -299,7 +297,6 @@ export default {
         inVerified.mData = newCellNumber
         // this.dispatch('actionAddcell', inVerified, { root: true })
       } else {
-        console.log('false')
         let modG = inVerified.mData + deviceUUID.slice(2, 8)
         let newGriditem = { 'x': 0, 'y': 0, 'w': 8, 'h': 20, 'i': modG, static: false }
         state.boardModulesList[inVerified.moduleCNRL].push(newGriditem)
@@ -356,7 +353,6 @@ export default {
       // check if establish cell
       let existingCheck = Object.keys(matchOutBack)
       if (existingCheck.length === 0) {
-        console.log('solo1')
         matchOutBack = inVerified.context
         let updateModuleInfo = matchOutBack // inVerified
         // temp use outhash as module UUiD or use device and expand to array and loop over
@@ -395,7 +391,6 @@ export default {
         // state.initialGrid[matchOutBack.nxpCNRL][matchOutBack.moduleCNRL].push(newCelladded)
         // state.boardModulesList[matchOutBack.nxpCNRL].push(copyMod)
       } else {
-        console.log('solo2')
         state.liveCopy = matchOutBack.moduleCNRL
         state.liveTempOuthash = inVerified.context.input.outhash
         // is the match a copy or existing cell?
@@ -536,6 +531,8 @@ export default {
         Vue.set(this.state.compModuleHolder, modVis, modUpdate)
       }
       // update data
+      console.log('update data')
+      console.log(inVerified.data)
       Vue.set(state.soloData[modVis].data, inVerified.data.context.triplet.device, inVerified.data)
       // state.soloData[copyMod].data.push(inVerified.data)
       let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }

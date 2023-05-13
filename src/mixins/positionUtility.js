@@ -67,10 +67,6 @@ PositionUtility.prototype.setZoom = function (zoom) {
 *
 */
 PositionUtility.prototype.startPositionSpace = function (nxpID, spaceCoord, setupType) {
-  console.log('start postion boards')
-  console.log(nxpID)
-  console.log(spaceCoord)
-  console.log(setupType)
   let coord = {}
   // are setting up coords for first time or from save bentospace?
   if (setupType !== 'saved') {
@@ -134,9 +130,6 @@ PositionUtility.prototype.startPositionCellspace = function (mcount, cells, spac
 PositionUtility.prototype.miniMapLocations = function () {
   const localthis = this
   function placeBBox (box, scale, zoom) {
-    console.log(box)
-    console.log(scale)
-    console.log(zoom)
     let xStart = box.x / (scale * zoom)
     let yStart = box.y / (scale * zoom)
     localthis.ctx.beginPath()
@@ -144,8 +137,6 @@ PositionUtility.prototype.miniMapLocations = function () {
     localthis.ctx.rect(xStart, yStart, 15, 30)
     localthis.ctx.stroke()
   }
-  console.log('live coords')
-  console.log(this.liveSpaceCoord)
   let liveBBox = Object.keys(this.liveSpaceCoord)
   liveBBox.forEach(
     element => placeBBox(this.liveSpaceCoord[element], this.scale, this.zoom))

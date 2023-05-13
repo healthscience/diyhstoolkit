@@ -113,8 +113,6 @@ export default {
       }
     },
     NXPstatusData: function () {
-      console.log('mode list')
-      console.log(this.$store.state.nxpModulelist)
       if (this.$store.state.nxpModulelist === undefined) {
         return {}
       } else {

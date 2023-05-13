@@ -186,21 +186,21 @@ export default {
           this.state.NXPexperimentList.data.push(newExpGenesisDataItem)
           // need to set toolbar settings TODO
         } else if (backJSON.type === 'solospaces') {
-          console.log('solopsac2')
-          console.log(backJSON)
           this.dispatch('actionSavedLayout', backJSON.data.value.initialgrid, { root: true })
           this.dispatch('actionSavedSoloZoom', backJSON.data.value.solozoom, { root: true })
         }
       } else if (backJSON.type === 'bentospaces-list') {
         // the callback will be called whenever any of the watched object properties
         // now need to ask for data for the active bentospace boards's
+        // set space zoom
+        this.state.activeScalevalue = backJSON.data.value.zoom
         // first check if any bentospaces list is provided
-        if (backJSON.data !== null) {
-          let bentospaceStartList = Object.keys(backJSON.data.value)
+        if (backJSON.data.layout !== null) {
+          let bentospaceStartList = Object.keys(backJSON.data.value.layout)
           Vue.set(this.state.livePeerRefContIndex, bentospaceStartList[0])
-          let saveDash = Object.keys(backJSON.data)
+          let saveDash = Object.keys(backJSON.data.value.layout)
           if (saveDash.length > 0) {
-            let boardKeys = Object.keys(backJSON.data.value)
+            let boardKeys = Object.keys(backJSON.data.value.layout)
             for (let bkey of boardKeys) {
             // put data in library holder
               Vue.set(state.libraryHolder, 'bentospacestart', backJSON)
@@ -227,7 +227,6 @@ export default {
           Vue.prototype.$socket.send(refCJSON)
         }
       } else if (backJSON.type === 'solospaces-list') {
-        console.log('soloapce 1')
         // console.log(backJSON)
         // set in solospace  NB need to keep track of per board UUID, get solospace to ask HOP for new data
         if (backJSON?.data?.value !== undefined) {
@@ -411,7 +410,7 @@ export default {
           Vue.set(this.state.compModuleHolder, modd.key, {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        console.log('$$$--SECOND-PART-----DATA RETURNED-----')
+        // console.log('$$$--SECOND-PART-----DATA RETURNED-----')
         // console.log(backJSON)
         // console.log(state.backdatacount)
         // if (state.backdatacount < 3) {
@@ -423,21 +422,17 @@ export default {
             // also check if hyphon this will also be solo space module only
             let hypthonCheck = backJSON.context.input.outhash.includes('-')
             if (track.outhash === backJSON.context.input.outhash && hypthonCheck === false) {
-              console.log('solospace handles update')
               this.dispatch('actionUpdateCopy', backJSON)
             } else if (hypthonCheck === true) {
-              console.log('hyphon- update')
               this.dispatch('actionUpdateCell', backJSON)
               // need to remove
               this.dispatch('actionOuthashRemove', track, { root: true })
             } else {
-              console.log('boardspace')
               // need to remove
               this.dispatch('actionOuthashRemove', track, { root: true })
               // this.dispatch('actionUpdateCopy', backJSON)
               // check for none data  e.g. bug, error, goes wrong cannot return data for display
               if (backJSON.data.data === 'none') {
-                console.log('no data again')
                 // switch off progress message and inform toolkit
                 let setnxpProgress = { text: 'Update in progress', active: false }
                 Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -451,7 +446,6 @@ export default {
                 if (gridBefore.length === 0) {
                   console.log('no grid before')
                 } else {
-                  console.log('yes grid but no data this time')
                   // set experiment progress message
                   let setnxpProgress = { text: 'Update in progress', active: true }
                   Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -465,8 +459,6 @@ export default {
                   // Vue.set(this.state.toolbarVisStatus, backJSON.context.moduleorder.visualise.key, {})
                   // Vue.set(this.state.visProgress, backJSON.context.moduleorder.visualise.key, {})
                   if (backJSON.context.moduleorder.compute.contract.type === 'compute') {
-                    console.log('computeHolder info------')
-                    console.log(backJSON.context.moduleorder.compute.contract.info.controls.date)
                     let startCompControls = {}
                     startCompControls.date = backJSON.context.moduleorder.compute.contract.info.controls.date
                     // let modUpdate = this.state.compModuleHolder[backJSON.context.moduleorder.visualise.key]
@@ -476,7 +468,6 @@ export default {
                   }
                   // form holder for vis toolbars
                   if (backJSON.context.moduleorder.visualise.key === 'Visualise') {
-                    console.log('prepare visuaivse-------')
                     // set the toolbars per vis module per device
                     let deviceP = backJSON.data.context.triplet.device
                     // set setting holder
@@ -512,11 +503,9 @@ export default {
                   // this.state.moduleGrid[backJSON.context.moduleorder.visualise.key].push(displayModulesReady.data[backJSON.context.moduleorder.visualise.key].prime)
                   // set the data for visualisation
                   if (backJSON.data.data !== 'none') {
-                    console.log('yes data to dispaly')
                     Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], 'data', displayModulesReady.data[backJSON.context.moduleorder.visualise.key].data)
                     Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], 'prime', displayModulesReady.data[backJSON.context.moduleorder.visualise.key].prime)
                   } else {
-                    console.log('no data twoowowowo---')
                     // this.state.ecsMessageLive = 'no data available'
                     // set experiment progress message off
                     let setnxpProgress = { text: 'Board in progress', active: false }
@@ -524,14 +513,12 @@ export default {
                     let setProgress = {}
                     setProgress = { text: 'Updating visualisation', active: false }
                     Vue.set(this.state.visProgress[backJSON.context.moduleorder.visualise.key], backJSON.data.context.triplet.device, setProgress)
-                    console.log('no data but tell UI ')
                     // still setup module content to fix or add info try again?
                     // Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], 'data', displayModulesReady.data[backJSON.context.moduleorder.visualise.key].data)
                     // Vue.set(this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], 'prime', displayModulesReady.data[backJSON.context.moduleorder.visualise.key].prime)
                   }
                 }
               } else {
-                console.log('data back++')
                 // switch off nxp Progress message
                 let setnxpProgress = { text: 'Board in progress', active: true }
                 Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -557,7 +544,6 @@ export default {
                   // compute setting i.e. date etc.
                   if (backJSON.context.moduleorder.compute.value.type === 'compute') {
                     // compModuleHolder
-                    console.log('----2---compute back set date update')
                     let startCompControls = {}
                     startCompControls.date = backJSON.context.moduleorder.compute.value.info.controls.date
                     // set to vis module ID and device ID
@@ -625,7 +611,6 @@ export default {
                     }
                   }
                 } else {
-                  console.log('no grid before--------------')
                   // set experiment progress message
                   let setnxpProgress = { text: 'Board in progress', active: true }
                   Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -719,7 +704,6 @@ export default {
             if (typeof gridBefore !== 'object') {
               console.log('not set shoud not happen')
             } else {
-              console.log('route2')
               // is this first time grid or adding to existing modules i.e. visual data but none to display?
               let deviceNew = false
               for (let gridi of this.state.moduleGrid[backJSON.context.moduleorder.visualise.key]) {
@@ -728,7 +712,6 @@ export default {
                 }
               }
               if (deviceNew === false && gridBefore.length !== 0) {
-                console.log('grid bfore false')
                 let setnxpProgressOff = { text: 'Board in progress', active: false }
                 Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgressOff)
                 let matchVisModuleType = ToolUtility.matchModuleType('visualise', matchExpRefContract.modules)
@@ -738,7 +721,6 @@ export default {
                 this.state.moduleGrid[backJSON.context.moduleorder.data.key].push(displayDataUpdate.update.grid[0])
                 // update setting grid
                 if (backJSON.context.moduleorder.compute.value.type === 'compute') {
-                  console.log('3 no data but dif device')
                   // no data no date set as today
                   let nowDate = moment()
                   let liveDate = moment(nowDate).startOf('day')
@@ -790,7 +772,6 @@ export default {
                   }
                 }
               } else {
-                console.log('route 2 berfore grid')
                 // set experiment progress message
                 let setnxpProgress = { text: 'Board in progress', active: true }
                 Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -868,7 +849,6 @@ export default {
               }
             }
           } else {
-            console.log('route3 data back')
             // switch off nxp Progress message
             let setnxpProgress = { text: 'Board in progress', active: true }
             Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
@@ -895,8 +875,6 @@ export default {
               // compute setting i.e. date etc.
               if (backJSON.context.moduleorder.compute.value.type === 'compute') {
                 // compModuleHolder
-                console.log('---1---compute data first')
-                console.log(backJSON)
                 let startCompControls = {}
                 startCompControls.date = backJSON.context.moduleorder.compute.value.info.controls.date
                 let modUpdate = this.state.compModuleHolder[backJSON.context.moduleorder.visualise.key]
@@ -934,9 +912,6 @@ export default {
                     // set toolbars
                     let setVisTools = {}
                     setVisTools = { text: 'open tools', active: true }
-                    console.log(displayDataUpdate)
-                    console.log(modG.i)
-                    console.log(this.state.toolbarVisStatus)
                     // check if module has toobarVis status set?
                     if (this.state.toolbarVisStatus[displayDataUpdate.module] === undefined) {
                       Vue.set(this.state.toolbarVisStatus, displayDataUpdate.module, {})
@@ -982,15 +957,14 @@ export default {
               }
             } else {
               // set experiment progress message
-              console.log('route4')
               let setnxpProgress = { text: 'Board in progress', active: true }
               Vue.set(this.state.nxpProgress, backJSON.context.input.key, setnxpProgress)
               // prepare the module grid and data extract
               displayModulesReady = VisualUtility.displayPrepareModules(matchExpRefContract.modules, backJSON)
               // set the module GRID items
-              for (let modG of backJSON.context.input.value.modules) {
-                // Vue.set(this.state.moduleGrid, modG.key, displayModulesReady.grid[modG.key])
-              }
+              // for (let modG of backJSON.context.input.value.modules) {
+              // Vue.set(this.state.moduleGrid, modG.key, displayModulesReady.grid[modG.key])
+              // }
               // set the solospace start as empty if none set
               if (!this.state.solopositionSpace.initialGrid) {
                 this.dispatch('actionSavedLayout', {}, { root: true })
@@ -1096,8 +1070,6 @@ export default {
           }
         }
       } else if (backJSON.type === 'peerprivate') {
-        console.log('private librayr back data-----------------')
-        // console.log(backJSON)
         // set the HOPholder to say data for this back
         Vue.set(state.HOPHolder, backJSON.board, {})
         Vue.set(state.HOPHolder, backJSON.board, 'request')
@@ -1173,7 +1145,6 @@ export default {
       Vue.prototype.$socket.send(refCJSONp)
     },
     UPDATE_HOP_HOLDER (state, update) {
-      console.log('hop e22222')
       // prepare UI supporting UI ready for return of HOP Data
       // console.log('new data back listenering--HOPHOLDER--xxxxxxxxxxxxxxxx')
       // console.log(update)
@@ -1186,13 +1157,11 @@ export default {
           positionStartInfo.nxp = assess
           // does a bentospace start place location exist?
           let bentospacePosition = {}
-          if (state.libraryHolder?.bentospacestart?.data?.value === undefined) {
+          if (state.libraryHolder?.bentospacestart?.data?.value.layout === undefined) {
             bentospacePosition = { x: 80, y: 40 }
           } else {
-            bentospacePosition = state.libraryHolder.bentospacestart.data.value[assess]
+            bentospacePosition = state.libraryHolder.bentospacestart.data.value.layout[assess]
           }
-          console.log('bentospace coord')
-          console.log(bentospacePosition)
           positionStartInfo.coord = bentospacePosition
           positionStartInfo.type = 'saved'
           // set active space
@@ -1369,8 +1338,6 @@ export default {
       this.state.refcontractPackaging = []
     },
     SET_COMPHOLDER_COPY (state, inVerified) {
-      console.log('set compHOer of CCOCOPYPCPYC')
-      console.log(inVerified)
       let modID = inVerified.moduleCNRL
       // let sourceVisMod = '6609e91c729d53e65529c6473b70d490397e2a31' // inVerified.moduleCNRL.slice()
       let startCompControls = {}
@@ -1379,11 +1346,8 @@ export default {
       let liveDevice = inVerified.mData
       let modUpdate = {} // this.state.compModuleHolder[sourceVisMod]
       modUpdate[liveDevice] = startCompControls
-      console.log(modUpdate)
-      console.log(modID)
       Vue.set(this.state.compModuleHolder, 'copy-' + modID, {})
       Vue.set(this.state.compModuleHolder, 'copy-' + modID, modUpdate)
-      console.log(this.state.compModuleHolder)
     },
     SET_TIMEFORMAT_STYLE (state, inVerified) {
       this.state.setTimeFormat = inVerified
@@ -1472,12 +1436,12 @@ export default {
       const localthis = this
       let saveDash = Object.keys(localthis.state.peersocket.libraryHolder.bentospacestart)
       if (saveDash.length > 0) {
-        if (localthis.state.peersocket.libraryHolder.bentospacestart.data.value !== null) {
-          let nxpList = Object.keys(localthis.state.peersocket.libraryHolder.bentospacestart.data.value)
+        if (localthis.state.peersocket.libraryHolder.bentospacestart.data.value.layout !== null) {
+          let nxpList = Object.keys(localthis.state.peersocket.libraryHolder.bentospacestart.data.value.layout)
           for (let nxp of nxpList) {
             let positionStartInfo = {}
             positionStartInfo.nxp = nxp
-            positionStartInfo.coord = localthis.state.peersocket.libraryHolder.bentospacestart.data.value[nxp]
+            positionStartInfo.coord = localthis.state.peersocket.libraryHolder.bentospacestart.data.value.layout[nxp]
             positionStartInfo.type = 'saved'
             // set active space
             localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
@@ -1488,7 +1452,7 @@ export default {
           for (let nxp of nxpList) {
             let positionStartInfo = {}
             positionStartInfo.nxp = nxp
-            positionStartInfo.coord = localthis.state.peersocket.libraryHolder.bentospacestart.data.value[nxp]
+            positionStartInfo.coord = localthis.state.peersocket.libraryHolder.bentospacestart.data.value.layout[nxp]
             positionStartInfo.type = 'saved'
             // set the active dash list
             localthis.dispatch('actionLiveNXPlist', localthis.state.joinedNXPlist.data, { root: true })
@@ -1938,7 +1902,10 @@ export default {
       saveSpacePosition.type = 'bentospace'
       saveSpacePosition.reftype = 'bentospace'
       saveSpacePosition.action = 'save-position'
-      saveSpacePosition.data = this.state.positionSpace.liveSpaceCoord
+      let spaceLayout = {}
+      spaceLayout.layout = this.state.positionSpace.liveSpaceCoord
+      spaceLayout.zoom = this.state.activeScalevalue
+      saveSpacePosition.data = spaceLayout
       saveSpacePosition.jwt = this.state.jwttoken
       const saveJSONp = JSON.stringify(saveSpacePosition)
       Vue.prototype.$socket.send(saveJSONp)
@@ -1967,7 +1934,8 @@ export default {
           }
         }
       }
-      // console.log('just the context')
+      console.log('just the context')
+      console.log(this.state.solopositionSpace.soloData)
       // console.log(contextMod)
       let soloLocHolder = {}
       soloLocHolder.initialgrid = this.state.solopositionSpace.initialGrid

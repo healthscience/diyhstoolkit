@@ -599,8 +599,6 @@ const store = new Vuex.Store({
       state.spaceState = inVerified
     },
     SET_SPACE_SHOW (state, inVerified) {
-      console.log('space show')
-      console.log(inVerified)
       Vue.set(state.spaceStateShow, 'state', !state.spaceStateShow.state)
       let textSpace = ''
       if (state.spaceStateShow.state === true) {
@@ -812,8 +810,7 @@ const store = new Vuex.Store({
     },
     async actionStartLayout (context, update) {
       // keep track of HOP out messages
-      // console.log('xx---extra2 LAYOUT NEW HOP OUT message--xxxx')
-      // console.log(update)
+      console.log('xx---extra2 LAYOUT NEW HOP OUT message--xxxx')
       for (let mod of update.modules) {
         // context.commit('SET_HOPOUT_MESSAGE', update)
         // console.log(update)
@@ -825,32 +822,34 @@ const store = new Vuex.Store({
           }
         }
         // set the minimap in position store module
-        let prepOutHOP = HopprepareUtility.saveSoloPrepare(update.board, this.state.networkPeerExpModules, savedContext)
-        let entityUUID = this.state.entityUUIDsummary[update.board].data[update.board].shellID
-        // track the solospace out
-        this.dispatch('actionOuthashTrack', mod)
-        let ECSbundle = {}
-        let boardOut = {}
-        boardOut.key = update.board
-        boardOut.entityUUID = entityUUID
-        boardOut.modules = prepOutHOP.modules.modules
-        boardOut.outhash = mod
-        boardOut.input = 'refUpdate'
-        ECSbundle.exp = boardOut // this.state.HOPrequestLive[prepOutHOP.board]
-        ECSbundle.update = boardOut
-        ECSbundle.outhash = 'refUpdate'
-        // send message to PeerLink for safeFLOW
-        let message = {}
-        message.type = 'safeflow'
-        message.reftype = 'ignore'
-        message.action = 'updatenetworkexperiment'
-        message.input = 'refUpdate'
-        message.data = ECSbundle
-        message.jwt = this.state.jwttoken
-        // console.log('EXTRA LAOYT HOP OUTmesssage+++2++')
-        // console.log(message)
-        const safeFlowMessage = JSON.stringify(message)
-        Vue.prototype.$socket.send(safeFlowMessage)
+        if (Object.keys(savedContext).length !== 0) {
+          let prepOutHOP = HopprepareUtility.saveSoloPrepare(update.board, this.state.networkPeerExpModules, savedContext)
+          let entityUUID = this.state.entityUUIDsummary[update.board].data[update.board].shellID
+          // track the solospace out
+          this.dispatch('actionOuthashTrack', mod)
+          let ECSbundle = {}
+          let boardOut = {}
+          boardOut.key = update.board
+          boardOut.entityUUID = entityUUID
+          boardOut.modules = prepOutHOP.modules.modules
+          boardOut.outhash = mod
+          boardOut.input = 'refUpdate'
+          ECSbundle.exp = boardOut // this.state.HOPrequestLive[prepOutHOP.board]
+          ECSbundle.update = boardOut
+          ECSbundle.outhash = 'refUpdate'
+          // send message to PeerLink for safeFLOW
+          let message = {}
+          message.type = 'safeflow'
+          message.reftype = 'ignore'
+          message.action = 'updatenetworkexperiment'
+          message.input = 'refUpdate'
+          message.data = ECSbundle
+          message.jwt = this.state.jwttoken
+          // console.log('EXTRA LAOYT HOP OUTmesssage+++2++')
+          // console.log(message)
+          const safeFlowMessage = JSON.stringify(message)
+          Vue.prototype.$socket.send(safeFlowMessage)
+        }
       }
     },
     async actionVisUpdate (context, update) {
