@@ -30,8 +30,8 @@
           <div id="spacesolo-shaper" >
             <div id="dragwheelsolo-space" @mousedown.middle.capture="grabSpace" @mouseup.middle="dropSpace" v-bind:class="{ dragging: grabMouse }" v-dragscroll.noleft.noright="true" @click="whereMinmap($event)">
               <div id="solo-placeholder"  @wheel="wheelScale($event)" v-bind:style="{ transform: 'scale(' + zoomscaleValue + ')' }">
-                <vue-draggable-resizable v-for="soloi of BoardstatusData" :key="soloi.id" id="solocellspace" data-no-dragscroll w="auto" h="auto" :parent="true"   @click.prevent="setActiveSolo(soloi)" @activated="onDragSolostartCallback(soloi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handlesolo'" :x=soloi.x :y=soloi.y>
-                <div class="drag-handlesolo" v-bind:class="{active: soloActivedrag === true }">
+                <vue-draggable-resizable v-for="soloi of BoardstatusData" :key="soloi.id" id="solocellspace" data-no-dragscroll w="auto" h="auto" :parent="true" @activated="onDragSolostartCallback(soloi)" @dragging="onDrag" @dragstop="onDragStop" @resizing="onResize" :grid="[60,60]" :drag-handle="'.drag-handlesolo'" :x=soloi.x :y=soloi.y>
+                <div class="drag-handlesolo" @click.prevent="setActiveSolo(soloi)"  v-bind:class="{active: soloPrimeCell[soloi.mod] === true }">
                 ---- CELL BAR ----
                 </div>
                 <solo-cells :board="sbboard" :moduleCNRL="soloi.mod" :cellposition="soloi.cell" :order="soloi.cell.i"></solo-cells>
@@ -178,7 +178,8 @@ export default {
       startCountPos: 0,
       startCountPosY: 0,
       liveModule: '',
-      liveOrder: ''
+      liveOrder: '',
+      soloPrimeCell: {}
     }
   },
   watch: {
@@ -251,8 +252,13 @@ export default {
     setActiveSolo (cellID) {
       this.liveModule = cellID.mod
       this.liveOrder = cellID.cell.i
+      // need to set vuex vairabe already reactive object TODO
       // only one active at a time
-      // this.$store.dispatch('actionActiveSoloSelect', nxpID)
+      let activeContext = {}
+      activeContext.board = this.sbboard
+      activeContext.module = cellID.mod
+      activeContext.device = cellID.cell.i
+      this.$store.dispatch('actionActiveSoloSelect', activeContext)
       // this.dragDashmove = nxpID
       // set this NXP as live
       // this.$store.dispatch('actionActiveSoloCell', nxpID)
@@ -289,9 +295,6 @@ export default {
       cellContext.order = this.liveOrder
       dbmove.cell = cellContext
       this.$store.dispatch('actionSoloBmove', dbmove)
-    },
-    soloActivedrag: function () {
-      return true
     }
   }
 }

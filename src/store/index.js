@@ -853,8 +853,8 @@ const store = new Vuex.Store({
       }
     },
     async actionVisUpdate (context, update) {
-      // console.log('xxxxx3---vistoolbar++++++UPdate3')
-      // console.log(update)
+      console.log('xxxxx3---vistoolbar++++++UPdate3')
+      console.log(update)
       // console.log(this.state.visModuleHolder)
       // clear the cell feedback
       this.dispatch('actionClearCellFeedback', update.moduleCNRL, { root: true })
@@ -988,8 +988,8 @@ const store = new Vuex.Store({
       message.type = 'safeflow'
       message.reftype = 'ignore'
       message.jwt = this.state.jwttoken
-      // console.log('NXPMessage++++3333UPDATE++++OUT')
-      // console.log(message)
+      console.log('NXPMessage++++3333UPDATE++++OUT')
+      console.log(message)
       const safeFlowMessage = JSON.stringify(message)
       Vue.prototype.$socket.send(safeFlowMessage)
       // need to start update message to keep peer informed
@@ -999,6 +999,9 @@ const store = new Vuex.Store({
         // console.log(progressContext)
         // context.commit('setVisProgressUpdate', progressContext)
       }
+    },
+    actionSoloLinkMode (context, update) {
+      console.log('link solo mode.  Which is conductor and make other match e.g. date')
     },
     actionFutureOLD (context, update) {
       // console.log('action future')

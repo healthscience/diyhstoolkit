@@ -7,11 +7,14 @@
       <div id="story-life">
           <button @click.prevent="viewStorytools" id="story-button">Story</button>
       </div>
-      <div id="routine-life">
+      <!--<div id="routine-life">
           <button @click.prevent="viewRoutines" href="" id="routine-button">Routines</button>
       </div>
       <div id="combine-list">
         <button class="save-space" @click.prevent="combineSelected()">+  +</button>
+      </div>-->
+      <div id="space-save">
+        <button class="save-space" @click.prevent="linkBBmode()" v-bind:class="{ linkactive: linkState }">link</button>
       </div>
       <div id="space-save">
         <button class="save-space" @click.prevent="saveSoloSpaceLayout()">save layout</button>
@@ -81,7 +84,8 @@ export default {
       zoomscaleStatus: false,
       // scale: 1,
       liveStorytools: true,
-      replicateDataStatus: false
+      replicateDataStatus: false,
+      linkState: false
     }
   },
   methods: {
@@ -115,6 +119,10 @@ export default {
     combineSelected () {
       console.log('look at combine list and merage to one chart')
       console.log(this.combinedList)
+    },
+    linkBBmode () {
+      this.linkState = !this.linkState
+      this.$store.dispatch('actionSoloLinkMode', true)
     }
   }
 }
@@ -176,6 +184,10 @@ export default {
 .scale-item.scalebuttons {
   height: 1.8em;
   border: 1px solid lightgrey;
+}
+
+.save-space.linkactive {
+  background-color: #10c018;
 }
 
 /*

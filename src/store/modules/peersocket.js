@@ -193,7 +193,10 @@ export default {
         // the callback will be called whenever any of the watched object properties
         // now need to ask for data for the active bentospace boards's
         // set space zoom
-        this.state.activeScalevalue = backJSON.data.value.zoom
+        console.log(backJSON)
+        if (backJSON.data !== null) {
+          this.state.activeScalevalue = backJSON.data.value.zoom
+        }
         // first check if any bentospaces list is provided
         if (backJSON.data.layout !== null) {
           let bentospaceStartList = Object.keys(backJSON.data.value.layout)
@@ -410,8 +413,8 @@ export default {
           Vue.set(this.state.compModuleHolder, modd.key, {})
         }
       } else if (backJSON.type === 'newEntityRange') {
-        // console.log('$$$--SECOND-PART-----DATA RETURNED-----')
-        // console.log(backJSON)
+        console.log('$$$--SECOND-PART-----DATA RETURNED-----')
+        console.log(backJSON)
         // console.log(state.backdatacount)
         // if (state.backdatacount < 3) {
         // is the data for the Lifeboard(AI) or Board space or Solospace?
@@ -458,9 +461,9 @@ export default {
                   // set the vis/calendar toolbar open
                   // Vue.set(this.state.toolbarVisStatus, backJSON.context.moduleorder.visualise.key, {})
                   // Vue.set(this.state.visProgress, backJSON.context.moduleorder.visualise.key, {})
-                  if (backJSON.context.moduleorder.compute.contract.type === 'compute') {
+                  if (backJSON.context.moduleorder.compute.value.type === 'compute') {
                     let startCompControls = {}
-                    startCompControls.date = backJSON.context.moduleorder.compute.contract.info.controls.date
+                    startCompControls.date = backJSON.context.moduleorder.compute.value.info.controls.date
                     // let modUpdate = this.state.compModuleHolder[backJSON.context.moduleorder.visualise.key]
                     // modUpdate[backJSON.data.context.triplet.device] = startCompControls
                     // Vue.set(this.state.compModuleHolder, backJSON.context.moduleorder.visualise.key, {})
@@ -542,7 +545,7 @@ export default {
                   // need to add data to vis module placer
                   let displayDataUpdate = VisualUtility.addVisData(matchVisModuleType, this.state.moduleGrid[backJSON.context.moduleorder.visualise.key], this.state.NXPexperimentData[backJSON.context.input.key][backJSON.context.moduleorder.visualise.key], backJSON)
                   // compute setting i.e. date etc.
-                  if (backJSON.context.moduleorder.compute.value.type === 'compute') {
+                  if (backJSON.context.moduleorder.compute?.value?.type === 'compute') {
                     // compModuleHolder
                     let startCompControls = {}
                     startCompControls.date = backJSON.context.moduleorder.compute.value.info.controls.date
@@ -1934,8 +1937,6 @@ export default {
           }
         }
       }
-      console.log('just the context')
-      console.log(this.state.solopositionSpace.soloData)
       // console.log(contextMod)
       let soloLocHolder = {}
       soloLocHolder.initialgrid = this.state.solopositionSpace.initialGrid
@@ -1943,8 +1944,8 @@ export default {
       soloLocHolder.context = contextMod
       saveSpacePosition.data = soloLocHolder
       saveSpacePosition.jwt = this.state.jwttoken
-      console.log('solop spa ce layuo')
-      console.log(saveSpacePosition)
+      // console.log('solop spa ce layuo')
+      // console.log(saveSpacePosition)
       const saveJSONp = JSON.stringify(saveSpacePosition)
       Vue.prototype.$socket.send(saveJSONp)
     },
