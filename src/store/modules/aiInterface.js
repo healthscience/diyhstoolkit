@@ -20,6 +20,7 @@ export default {
     {
       text: '... .. ...',
       time: '',
+      data: {},
       active: false
     },
     liveFutureCollection: { active: false }
@@ -61,14 +62,14 @@ export default {
         aiMessageout.action = 'question'
         aiMessageout.data = state.helpchatAsk
         aiMessageout.jwt = inVerified.token
-        const caleMessage = JSON.stringify(aiMessageout)
-        Vue.prototype.$socket.send(caleMessage)
+        const beebeeMessage = JSON.stringify(aiMessageout)
+        Vue.prototype.$socket.send(beebeeMessage)
       } else {
         // local AI
         let date = new Date()
         // get the time as a string
         let time = date.toLocaleTimeString()
-        Vue.set(state.caleaiReply, 'text', 'CALE is not connected')
+        Vue.set(state.caleaiReply, 'text', 'beebee is not connected')
         Vue.set(state.caleaiReply, 'time', time)
         Vue.set(state.caleaiReply, 'active', false)
       }

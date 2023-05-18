@@ -11,9 +11,9 @@
         <div class="cale-reply" id="cale-chat-right">
           <span class="right-chat">{{ aiResponse.time }}</span>
           <div class="right-chat">{{ aiResponse.text }}
-            <span v-if="aiResponse.query === true">
-              --- <button id="new-query" @click.prevent="beebeeChartSpace(aiResponse.query)">query</button>
-            </span>
+            <div v-if="aiResponse.query === true">
+              <span>Datatype: {{ aiResponse.data.library.text }} for month {{ aiResponse.data.time.words.day }} day {{ aiResponse.data.time.words.month }}</span>--- <button id="new-query" @click.prevent="beebeeChartSpace(aiResponse.data)">yes, produce chart</button>
+            </div>
           </div>
           <img class="right-chat-cale" src="../.././assets/logo.png" alt="bbAI">
         </div>
@@ -70,12 +70,12 @@ export default {
       this.$store.dispatch('actionHelpaskentry', true)
       this.askInput = ''
     },
-    beebeeChartSpace (board) {
+    beebeeChartSpace (query) {
       console.log('beebee chart dispaly')
-      console.log(board)
+      console.log(query)
       let spaceContext = {}
-      spaceContext.nxpCNRL = '0c3e5833d490ed0b0ccefa677e44e009a1ab2a12'
-      spaceContext.moduleCNRL = '370f110a0ae6d6fb3b53e667500e28e8849371e7'
+      spaceContext.nxpCNRL = query.library.board
+      spaceContext.moduleCNRL = query.library.mod
       spaceContext.moduleType = 'cnrl-114'
       spaceContext.mData = '3'
       this.$store.dispatch('actionVisSpaceAdd', spaceContext)

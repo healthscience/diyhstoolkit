@@ -238,14 +238,15 @@ export default {
           this.dispatch('actionSavedSoloZoom', backJSON.data.value.solozoom, { root: true })
         }
       } else if (backJSON.type === 'bbai-reply') {
-        // console.log('beebee reply')
-        // console.log(backJSON)
+        console.log('beebee reply')
+        console.log(backJSON)
         // flow messages to ai helper
         let date = new Date()
         // get the time as a string
         let time = date.toLocaleTimeString()
         Vue.set(this.state.aiInterface.caleaiReply, 'text', backJSON.data.text)
         Vue.set(this.state.aiInterface.caleaiReply, 'query', backJSON.data.query)
+        Vue.set(this.state.aiInterface.caleaiReply, 'data', backJSON.data.data)
         Vue.set(this.state.aiInterface.caleaiReply, 'time', time)
         Vue.set(this.state.aiInterface.caleaiReply, 'active', true)
       } else if (backJSON.type === 'lifeboard') {
