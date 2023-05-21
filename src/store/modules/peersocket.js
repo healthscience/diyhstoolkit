@@ -244,6 +244,7 @@ export default {
         let date = new Date()
         // get the time as a string
         let time = date.toLocaleTimeString()
+        Vue.set(this.state.aiInterface.caleaiReply, 'type', backJSON.data.type)
         Vue.set(this.state.aiInterface.caleaiReply, 'text', backJSON.data.text)
         Vue.set(this.state.aiInterface.caleaiReply, 'query', backJSON.data.query)
         Vue.set(this.state.aiInterface.caleaiReply, 'data', backJSON.data.data)

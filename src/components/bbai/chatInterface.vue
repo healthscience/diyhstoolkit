@@ -11,8 +11,14 @@
         <div class="cale-reply" id="cale-chat-right">
           <span class="right-chat">{{ aiResponse.time }}</span>
           <div class="right-chat">{{ aiResponse.text }}
-            <div v-if="aiResponse.query === true">
+            <div v-if="aiResponse.type === 'hopquery'">
               <span>Datatype: {{ aiResponse.data.library.text }} for month {{ aiResponse.data.time.words.day }} day {{ aiResponse.data.time.words.month }}</span>--- <button id="new-query" @click.prevent="beebeeChartSpace(aiResponse.data)">yes, produce chart</button>
+            </div>
+            <div v-else-if="aiResponse.type === 'upload'">
+              <button>start file upload</button>
+            </div>
+            <div v-else-if="aiResponse.query === false && aiResponse.type !== 'hello'">
+              {{ aiResponse.data }}
             </div>
           </div>
           <img class="right-chat-cale" src="../.././assets/logo.png" alt="bbAI">
