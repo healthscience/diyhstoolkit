@@ -192,11 +192,13 @@ const store = new Vuex.Store({
       education: { 'prime': { 'module': 'education', 'type': 'nxp-education' } },
       error: { 'prime': { 'module': 'error', 'type': 'nxp-errormgt' } },
       control: { 'prime': { 'module': 'control', 'type': 'nxp-control' } },
-      presecription: { 'prime': { 'module': 'prescription', 'type': 'nxp-prescription' } },
+      prescription: { 'prime': { 'module': 'prescription', 'type': 'nxp-prescription' } },
       lifestyle: { 'prime': { 'module': 'lifestyle', 'type': 'nxp-lifestylemedicine' } },
       communication: { 'prime': { 'module': 'communication', 'type': 'nxp-communication' } },
       clone: { 'prime': { 'module': 'clone', 'type': 'nxp-clone' } },
-      idea: { 'prime': { 'module': 'idea', 'type': 'nxp-idea' } }
+      idea: { 'prime': { 'module': 'idea', 'type': 'nxp-idea' } },
+      rhino: { 'prime': { 'module': 'rhino', 'type': 'nxp-rhino' } },
+      pricing: { 'prime': { 'module': 'pricing', 'type': 'nxp-pricing' } }
     },
     HOPrequestLive: {}
   },

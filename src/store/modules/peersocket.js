@@ -1584,13 +1584,13 @@ export default {
       dataCNRLbundle5.grid = []
       moduleContracts.push(dataCNRLbundle5)
       // CNRL implementation contract e.g. from mobile phone sqlite table structure
-      /* const dataCNRLbundle7 = {}
+      const dataCNRLbundle7 = {}
       dataCNRLbundle7.reftype = 'module'
       dataCNRLbundle7.type = 'education'
       dataCNRLbundle7.primary = 'genesis'
       dataCNRLbundle7.concept = ''
       dataCNRLbundle7.grid = []
-      moduleContracts.push(dataCNRLbundle7) */
+      moduleContracts.push(dataCNRLbundle7)
       /* const dataCNRLbundle8 = {}
       dataCNRLbundle8.reftype = 'module'
       dataCNRLbundle8.type = 'lifestyle'
@@ -1612,13 +1612,13 @@ export default {
       dataCNRLbundle10.concept = ''
       dataCNRLbundle10.grid = []
       moduleContracts.push(dataCNRLbundle10) */
-      /* const dataCNRLbundle11 = {}
+      const dataCNRLbundle11 = {}
       dataCNRLbundle11.reftype = 'module'
       dataCNRLbundle11.type = 'prescription'
       dataCNRLbundle11.primary = 'genesis'
       dataCNRLbundle11.concept = ''
       dataCNRLbundle11.grid = []
-      moduleContracts.push(dataCNRLbundle11) */
+      moduleContracts.push(dataCNRLbundle11)
       /* const dataCNRLbundle12 = {}
       dataCNRLbundle12.reftype = 'module'
       dataCNRLbundle12.type = 'communication'
@@ -1634,6 +1634,20 @@ export default {
       dataCNRLbundle13.concept = ''
       dataCNRLbundle13.grid = []
       moduleContracts.push(dataCNRLbundle13) */
+      const dataCNRLbundle14 = {}
+      dataCNRLbundle14.reftype = 'module'
+      dataCNRLbundle14.type = 'rhino'
+      dataCNRLbundle14.primary = 'genesis'
+      dataCNRLbundle14.concept = ''
+      dataCNRLbundle14.grid = []
+      moduleContracts.push(dataCNRLbundle14)
+      const dataCNRLbundle15 = {}
+      dataCNRLbundle15.reftype = 'module'
+      dataCNRLbundle15.type = 'pricing'
+      dataCNRLbundle15.primary = 'genesis'
+      dataCNRLbundle15.concept = ''
+      dataCNRLbundle15.grid = []
+      moduleContracts.push(dataCNRLbundle15)
       let tempModules = {}
       tempModules.type = 'library'
       tempModules.reftype = 'moduletemp'

@@ -66,6 +66,7 @@ import nxpDapp from '@/components/visualise/nxpDapp.vue'
 import nxpPlain from '@/components/visualise/plainBoard.vue'
 import nxpCompute from '@/components/visualise/nxpCompute.vue'
 import nxpVisualise from '@/components/visualise/nxpVisualise.vue'
+import nxpEducation from '@/components/visualise/nxpEducation.vue'
 // import learnReport from '@/components/reports/LearnReport'
 // import learnAction from '@/components/reports/LearnAction'
 
@@ -81,7 +82,8 @@ export default {
     nxpDapp,
     nxpCompute,
     nxpVisualise,
-    nxpPlain
+    nxpPlain,
+    nxpEducation
   },
   created: function () {
   },

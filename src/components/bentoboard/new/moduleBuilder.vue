@@ -50,7 +50,10 @@ import NxpSciencereview from '@/components/bentoboard/nxpSciencereview.vue'
 import nxpLifestylemedicine from '@/components/bentoboard/nxpLifestylemedicine.vue'
 import NxpPrescription from '@/components/bentoboard/nxpPrescription.vue'
 import NxpCommunicate from '@/components/bentoboard/nxpCommunicate.vue'
+import NxpEducation from '@/components/bentoboard/nxpEducation.vue'
 import NxpEvolve from '@/components/bentoboard/nxpEvolve.vue'
+import NxpRhino from '@/components/bentoboard/nxpRhino.vue'
+import NxpPricing from '@/components/bentoboard/nxpPricing.vue'
 
 export default {
   name: 'ModuleBuilder',
@@ -66,8 +69,11 @@ export default {
     NxpSciencereview,
     nxpLifestylemedicine,
     NxpPrescription,
+    NxpEducation,
     NxpCommunicate,
-    NxpEvolve
+    NxpEvolve,
+    NxpRhino,
+    NxpPricing
   },
   props: {
   },
