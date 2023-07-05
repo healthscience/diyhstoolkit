@@ -531,8 +531,50 @@ export default {
         Vue.set(this.state.compModuleHolder, modVis, modUpdate)
       }
       // update data
-      console.log('update data')
-      console.log(inVerified.data)
+      Vue.set(state.soloData[modVis].data, inVerified.data.context.triplet.device, inVerified.data)
+      // state.soloData[copyMod].data.push(inVerified.data)
+      let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
+      Vue.set(state.soloData[modVis], 'prime', contextPlacer)
+      // set the progress bar info
+      let setProgress = {}
+      setProgress = { text: 'Updating visualisation', active: false }
+      Vue.set(this.state.visProgress, modVis, {})
+      Vue.set(this.state.visProgress[modVis], inVerified.data.context.triplet.device, setProgress)
+      // console.log(this.state.visProgress)
+      // set toolbars
+      let setVisTools = {}
+      setVisTools = { text: 'open tools', active: true }
+      Vue.set(this.state.toolbarVisStatus, modVis, {})
+      Vue.set(this.state.toolbarVisStatus[modVis], inVerified.data.context.triplet.device, setVisTools)
+      // set the open data tools
+      let setOPenDataToolbar = { text: 'open data', active: false }
+      Vue.set(this.state.opendataTools, modVis, {})
+      Vue.set(this.state.opendataTools[modVis], inVerified.data.context.triplet.device, setOPenDataToolbar)
+    },
+    SET_CELL_DIRECTUPDATE (state, inVerified) {
+      // cell update could be first or upate?
+      // console.log('cell update')
+      // console.log(inVerified)
+      let modVis = inVerified.context.input.outhash
+      if (inVerified.context.moduleorder.compute.contract.type === 'compute') { // contract or value  is consistent?
+        // compModuleHolder
+        let startCompControls = {}
+        startCompControls.date = inVerified.context.moduleorder.compute.contract.info.controls.date
+        // set to vis module ID and device ID
+        let liveDevice = inVerified.data.context.triplet.device
+        let modUpdate = {} // this.state.compModuleHolder[inVerified.context.moduleorder.visualise.key]
+        modUpdate[liveDevice] = startCompControls
+        // does the solo cell already exist?
+        if (this.state.compModuleHolder[modVis] === undefined) {
+          Vue.set(this.state.compModuleHolder, modVis, {})
+          Vue.set(state.soloData, modVis, {})
+          Vue.set(state.soloData[modVis], 'data', {})
+          // add module to dispaly list
+          state.boardModulesList[inVerified.context.input.key].push(modVis)
+        }
+        Vue.set(this.state.compModuleHolder, modVis, modUpdate)
+      }
+      // update data
       Vue.set(state.soloData[modVis].data, inVerified.data.context.triplet.device, inVerified.data)
       // state.soloData[copyMod].data.push(inVerified.data)
       let contextPlacer = { 'cnrl': 'cnrl-114', 'vistype': 'nxp-visualise', 'text': 'Visualise', 'active': true }
@@ -625,6 +667,9 @@ export default {
     },
     actionUpdateCell (context, update) {
       context.commit('SET_CELL_UPDATE', update)
+    },
+    actionDirectUpdateCell (context, update) {
+      context.commit('SET_CELL_DIRECTUPDATE', update)
     },
     actionSavedSoloZoom (context, update) {
       context.commit('SET_STARTSOLO_ZOOM', update)

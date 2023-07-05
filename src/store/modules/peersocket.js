@@ -422,17 +422,24 @@ export default {
         // is the data for the Lifeboard(AI) or Board space or Solospace?
         // does the context hash match any existing visualsiation module?
         if (backJSON.context.input.outhash !== undefined) {
-          console.log('***dataHASH on RETURN-route 1----')
+          let nonSolo = false
+          if (this._modules.root.state.solopositionSpace.trackOut.length === 0) {
+            nonSolo = true
+          }
           for (let track of this._modules.root.state.solopositionSpace.trackOut) {
+            console.log('star looooop track')
             // also check if hyphon this will also be solo space module only
             let hypthonCheck = backJSON.context.input.outhash.includes('-')
             if (track.outhash === backJSON.context.input.outhash && hypthonCheck === false) {
+              console.log('r--one')
               this.dispatch('actionUpdateCopy', backJSON)
             } else if (hypthonCheck === true) {
+              console.log('r--two')
               this.dispatch('actionUpdateCell', backJSON)
               // need to remove
               this.dispatch('actionOuthashRemove', track, { root: true })
             } else {
+              console.log('r--three')
               // need to remove
               this.dispatch('actionOuthashRemove', track, { root: true })
               // this.dispatch('actionUpdateCopy', backJSON)
@@ -686,6 +693,11 @@ export default {
               }
             }
           }
+          // check if just normal return of HOP query data
+          if (nonSolo === true) {
+            this.dispatch('actionDirectUpdateCell', backJSON)
+          }
+
         } else {
           // check for none data  e.g. bug, error, goes wrong cannot return data for display
           if (backJSON.data.data === 'none') {
