@@ -1,5 +1,9 @@
 # diy-toolkit
 
+NOTE: this version is now discontinued. Latest bentobox-ds Toolkit code at https://github.com/healthscience/bentoboxds
+
+We learnt much from this alpha. Thank you to all that provided feedback over its lifetime.
+
 BentoBox - DS : Understand data that shapes the health of individuals, communities & nature. A peer to peer toolkit with a non-coding graphical interface for performing data science.  This includes charting data and performing computations. An aspiring decentraised collective intelligence tool. See video <a href="https://www.youtube.com/channel/UCoCgnBkZpB2oMn1Qa2nXKeg/playlists">demo</a>
 
 ## Project setup
